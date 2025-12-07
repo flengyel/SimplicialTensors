@@ -1,0 +1,53 @@
+% Header.tex
+
+%\documentclass[11pt]{article}  % unused with elsarticle
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{url}
+\usepackage{framed}
+\usepackage[toc,page]{appendix}
+\usepackage{float}
+\usepackage{comment}
+\usepackage{tikz-cd}
+
+\includecomment{show} % Show the 'show' environment content (for drafts, etc.)
+\excludecomment{hide} % Hide the 'hide' environment content (for unwritten portions)
+% reverse these for the final version, if desired
+
+% --- Theorem Styles ---
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+% --- Custom Commands ---
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+
+% Stirling numbers of the second kind
+\newcommand{\StirlingII}[2]{\genfrac{\{}{\}}{0pt}{}{#1}{#2}}
+
+% Normalized and degenerate submodules (Moore normalization with d_0 as differential)
+\newcommand{\Norm}[1]{N_{#1}} % \Norm{n} = \bigcap_{i=1}^n \ker d_i
+
+% --- Algebraic categories ---
+\newcommand{\sMod}{\mathrm{sMod}}  % simplicial R-modules
+\newcommand{\Ch}{\mathrm{Ch}}      % chain complexes
+
+% --- Math operators ---
+\DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Cone}{Cone}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\rank}{rank}
+
+% Hyperref last
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue]{hyperref}

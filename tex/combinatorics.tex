@@ -1,0 +1,152 @@
+% ============================================
+% Combinatorics.tex
+% ============================================
+
+\section{Combinatorics and Classification}
+\label{sec:combinatorics}
+
+We apply the combinatorial characterization of the horn kernel (Section~\ref{sec:horns}) to classify the DSTM $X_\bullet(\vec s; A)$ and derive exact rank formulas.
+
+\subsection{Classification Theorem}
+
+We establish the main classification result based on the tensor order $k$ and the simplicial dimension $n=\min(\vec{s})-1$.
+
+
+\begin{definition}[Strict Algebraic $n$-Hypergroupoid]\label{def:n-hypergroupoid}
+A simplicial module $X_\bullet$ is a \textbf{strict algebraic $n$-hypergroupoid} if fillers are unique in dimensions strictly greater than $n$, and not unique in dimension $n$. That is:
+\begin{enumerate}
+    \item $R_{p,j}(X) = 0$ for all $p>n$ and all $j$.
+    \item $R_{n,j}(X) \ne 0$ for at least one $j$.
+\end{enumerate}
+\end{definition}
+
+
+\begin{remark}[Relation to Duskin--Glenn]\label{rem:nlab-hypergroupoid}
+Condition~\emph{(1)} in Definition~\ref{def:n-hypergroupoid} is exactly the
+$n$-hypergroupoid condition of Duskin--Glenn (as in the $n$Lab definition):
+all horns in dimensions $p>n$ admit unique fillers. Condition~\emph{(2)}
+adds a non-uniqueness requirement in dimension $n$: there exists $j$ with
+$R_{n,j}(X)\neq 0$. Thus a strict algebraic $n$-hypergroupoid in our sense is
+an $n$-hypergroupoid in which horn fillers are non-unique in dimension $n$
+and unique in all dimensions $p>n$.
+\end{remark}
+
+
+\begin{theorem}[Hypergroupoid Classification]\label{thm:classification}
+$X_\bullet(\vec{s};A)$ is a strict algebraic $n$-hypergroupoid if and only if $k=n$.
+\end{theorem}
+\begin{proof}
+We use the criterion established in Corollary~\ref{cor:missing_indices_existence}: $R_{p,j} \ne 0 \iff k \ge p$.
+
+Condition (1) requires $R_{p,j}=0$ for all $p>n$. This is equivalent to $k < p$ for all $p \ge n+1$. This holds if and only if $k < n+1$, i.e., $k \le n$.
+
+Condition (2) requires $R_{n,j}\ne 0$. This is equivalent to $k \ge n$.
+
+$X_\bullet$ is a strict algebraic $n$-hypergroupoid if and only if both conditions hold: $(k \le n) \land (k \ge n)$, which is equivalent to $k=n$.
+\end{proof}
+
+\subsection{Rank Formulas via Inclusion-Exclusion}
+
+We analyze the ranks of the components of the DSTM. Since $X_p(\vec{s};A)$ is a free $A$-module and the normalization projections are defined over $\mathbb{Z}$ (Remark~\ref{rem:EM_idempotents}), the ranks of the submodules $R_{p,j}, N_p, D_p$ are independent of the ring $A$.
+
+Let $N_a=n_a-1$. Recall $n=\min_a N_a$.
+
+\begin{proposition}[Rank of $R_{p,j}$]\label{prop:rank-IE}
+Let $F_j=[p]\setminus\{j\}$. The rank of $R_{p,j}(X)$ is
+\[
+\rank R_{p,j}
+=\sum_{t=0}^{p}(-1)^t\binom{p}{t}\prod_{a=1}^k(M_a(p)+1-t).
+\]
+\end{proposition}
+
+\begin{proof}
+By Theorem~\ref{thm:support_characterization} and Proposition~\ref{prop:missing_indices}, the rank is the count of $m\in I_p$ such that $\operatorname{im}(m)\supseteq F_j$. We use inclusion--exclusion on $I_p = \prod [M_a(p)]$.
+
+For a subset $S\subseteq F_j$ with $|S|=t$, we count the indices $m\in I_p$ such that $\operatorname{im}(m) \cap S = \emptyset$. Since $M_a(p) \ge p$, $S \subseteq [M_a(p)]$. The number of choices for the $a$-th component is $|[M_a(p)] \setminus S| = M_a(p)+1-t$. The total count of such indices is $\prod_{a=1}^k (M_a(p)+1-t)$.
+
+Since $|F_j|=p$, the inclusion--exclusion principle yields the formula for the count of indices covering $F_j$.
+\end{proof}
+
+We analyze the normalized complex $(N_\bullet, d_0)$. The cycles are $Z_p(N_\bullet) = \ker(d_0: N_p \to N_{p-1}) = \bigcap_{i=0}^p \ker d_i$.
+
+\begin{corollary}[Rank of $Z_p(N_\bullet)$]\label{cor:rank-Zp}
+The rank of the normalized cycles $Z_p(N_\bullet)$ is
+\[
+\rank Z_p(N_\bullet) = \sum_{t=0}^{p+1}(-1)^t\binom{p+1}{t}\prod_{a=1}^k(M_a(p)+1-t).
+\]
+\end{corollary}
+
+\begin{proof}
+$Z_p(N_\bullet)$ is spanned by basis elements $E_m$ such that $\operatorname{im}(m) \supseteq [p]$. The formula follows by applying inclusion--exclusion with the covered set $[p]$ (size $p+1$).
+\end{proof}
+
+
+\subsection{Constant Shape and Stirling Numbers}
+
+If the shape is constant, then $n_a = n+1$ for all $a$, where $n$ is the
+simplicial dimension. In this case $N_a = n$ and hence $M_a(p) = p$ for all $a$.
+
+The formulas simplify using the Stirling numbers of the second kind
+$\StirlingII{k}{m}$ (see, e.g., Stanley~\cite{StanleyEC1}).
+
+
+\begin{theorem}[Ranks for Constant Shape]\label{thm:Stirling}
+If $M_a(p)=p$ for all $a$ (i.e., $I_p=[p]^k$), the ranks of the components of the Moore complex in degree $p$ are:
+\begin{align*}
+\operatorname{Rank} Z_p(N_\bullet) &= (p+1)!\,\StirlingII{k}{p+1}, \\
+\operatorname{Rank} N_p(X) &= p!\,\StirlingII{k}{p} + (p+1)!\,\StirlingII{k}{p+1}.
+\end{align*}
+\end{theorem}
+
+\begin{proof}
+We interpret these ranks in terms of finite differences of the polynomial $P(x)=x^k$.
+
+The rank of $Z_p(N_\bullet)$ specializes to
+\[
+\sum_{t=0}^{p+1}(-1)^t\binom{p+1}{t}(p+1-t)^k = \Delta^{p+1}(x^k)\big|_{x=0}.
+\]
+Using the expansion $x^k=\sum_{m}\StirlingII{k}{m}x^{\underline m}$. The operator acts by $\Delta^{p+1}(x^{\underline m}) = m^{\underline{p+1}} x^{\underline{m-p-1}}$. Evaluating at $x=0$, only the term $m=p+1$ contributes (since $0^{\underline 0}=1$ and $0^{\underline{j}}=0$ for $j>0$), yielding $(p+1)!\,\StirlingII{k}{p+1}$.
+
+The rank of $N_p(X) = R_{p,0}$ specializes to
+\[
+\sum_{t=0}^{p}(-1)^t\binom{p}{t}(p+1-t)^k = \Delta^{p}(x^k)\big|_{x=1}.
+\]
+Evaluating $\Delta^{p}(x^{\underline m}) = m^{\underline p} x^{\underline{m-p}}$ at $x=1$. The term $1^{\underline{j}}$ is $1$ if $j=0$ or $j=1$, and $0$ if $j\ge 2$.
+If $m=p$, the contribution is $p! \StirlingII{k}{p}$.
+If $m=p+1$, the contribution is $(p+1)! \StirlingII{k}{p+1}$.
+\end{proof}
+
+\subsection{Boundaries and Contractibility}
+
+We analyze the boundaries $B_p(N_\bullet) = \operatorname{im}(d_0: N_{p+1} \to N_p)$.
+
+\begin{proposition}[Non-triviality of Boundaries]\label{prop:Bn}
+$B_p(N_\bullet)\ne 0$ if and only if $k\ge p+1$.
+\end{proposition}
+
+\begin{proof}
+If $k < p+1$, then $N_{p+1}(X)=0$ by Corollary~\ref{cor:missing_indices_existence} (since $N_{p+1}=R_{p+1,0}$), so $B_p(N_\bullet)=0$.
+
+If $k\ge p+1$, we construct a non-zero boundary. We seek $T \in N_{p+1}(X)$ such that $d_0(T) \ne 0$.
+We require an index $m\in I_{p+1}$ such that $E_m \in N_{p+1}(X)$ and $d_0(E_m) \ne 0$.
+$E_m \in N_{p+1}(X)$ requires $\operatorname{im}(m) \supseteq \{1, \dots, p+1\}$.
+$d_0(E_m) \ne 0$ requires $m \in \operatorname{im}(\Delta_0^{p+1})$, which is equivalent to $0 \notin \operatorname{im}(m)$.
+Thus we seek $m$ such that $\operatorname{im}(m)=\{1,\dots,p+1\}$. Since $k\ge p+1$, such an $m$ exists. Since $M_a(p+1) \ge p+1$, $m \in I_{p+1}$.
+Therefore $B_p(N_\bullet) \ne 0$.
+\end{proof}
+
+The DSTM $X_\bullet$ is contractible (Theorem~\ref{thm:contractible}). Consequently, $H_*(X_\bullet)=0$, implying $Z_p(N_\bullet) = B_p(N_\bullet)$ for all $p$. The differential $d_0: N_{p+1} \to N_p$ maps surjectively onto $Z_p(N_\bullet)$ with kernel $Z_{p+1}(N_\bullet)$.
+
+\begin{proposition}[Rank Consistency Check]
+The rank formulas derived satisfy the consistency condition required by contractibility (Rank-Nullity):
+\[
+\operatorname{Rank} N_{p+1}(X) = \operatorname{Rank} Z_{p+1}(N_\bullet) + \operatorname{Rank} Z_p(N_\bullet).
+\]
+\end{proposition}
+\begin{proof}
+We verify the identity using the formulas from Theorem~\ref{thm:Stirling} in the constant shape case.
+\begin{align*}
+\operatorname{Rank} Z_{p+1} + \operatorname{Rank} Z_p &= (p+2)!\,\StirlingII{k}{p+2} + (p+1)!\,\StirlingII{k}{p+1}.
+\end{align*}
+This matches the formula for $\operatorname{Rank} N_{p+1}(X)$ derived in Theorem~\ref{thm:Stirling} (by replacing $p$ with $p+1$). The consistency for the general shape case follows because the complex is defined and contractible over $\mathbb{Z}$.
+\end{proof} 

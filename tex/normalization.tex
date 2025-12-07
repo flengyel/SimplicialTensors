@@ -1,0 +1,89 @@
+% ============================================
+% Normalization.tex
+% ============================================
+
+\section{Normalization and the Moore Filler}
+\label{sec:normalization}
+
+We review the normalization of simplicial modules. Let $X_\bullet$ be a simplicial $A$-module.
+
+\subsection{The Normalization Theorem}
+
+\begin{definition}[Normalized and degenerate submodules]\label{def:normalized_degenerate}
+The \textbf{normalized submodule} in degree $p$ is $N_p(X):=\bigcap_{i=1}^{p}\ker d_i\subseteq X_p$.
+The \textbf{degenerate submodule} in degree $p$ is $D_p(X):=\sum_{r=0}^{p-1}\operatorname{im}(s_r)\subseteq X_p$.
+\end{definition}
+
+By the normalization theorem, the homology of $X_\bullet$ is isomorphic to the homology of its normalized (Moore) complex $(N_\bullet(X), d_0)$.
+
+
+\begin{theorem}[Normalization theorem / Dold-Kan Correspondence]\label{thm:EZ}
+For every $p\ge0$ there is a functorial direct sum decomposition
+\[
+X_p\cong N_p(X)\oplus D_p(X).
+\]
+There is a functorial projection $\pi_p:X_p\to N_p(X)$ with $\ker(\pi_p)=D_p(X)$. Moreover, $X_p$ decomposes as a direct sum of images of $N_q(X)$ under iterated degeneracies (Eilenberg--Zilber decomposition):
+\[
+X_p \;=\; \bigoplus_{q=0}^{p}\ \bigoplus_{\substack{0\le i_1<\cdots<i_{p-q}\le p-1}} s_{i_{p-q}}\cdots s_{i_1}\,N_{q}(X).
+\]
+\emph{Refs.:} Dold~\cite{Dold1958}; Kan~\cite{Kan1958}; May~\cite{MaySimplicial}; Weibel~\cite[Thm 8.3.8, Cor 8.4.2]{Weibel}; Goerss--Jardine~\cite[III.2]{GoerssJardine}.
+\end{theorem}
+
+\begin{remark}[Eilenberg--Mac Lane idempotents]\label{rem:EM_idempotents}
+The decomposition is established by the \textbf{Eilenberg--Mac Lane idempotents}. The projection onto $N_p(X)$ corresponding to the convention $(N_\bullet, d_0)$ is given explicitly by $\pi_p = (\operatorname{id} - s_{p-1}d_p) \cdots (\operatorname{id} - s_0d_1)$. These operators rely only on the simplicial identities and are thus functorial for any simplicial module.
+\emph{Refs.:} Mac Lane~\cite[Ch.~VIII, §6]{MacLaneHomology};  Weibel~\cite[Thm 8.3.8]{Weibel}.
+\end{remark}
+
+\subsection{The Moore Horn Filler Algorithm}
+
+\begin{definition}[Horn space]
+Fix $p\ge 1$ and $j\in\{0,\dots,p\}$. Let $F_j = [p]\setminus\{j\}$. The space of compatible $(p,j)$-horns, $\operatorname{Horns}(p,j)$, is the submodule of $\prod_{i\in F_j}X_{p-1}$ defined by the compatibility conditions $d_i x_\ell = d_{\ell-1} x_i$ for $i<\ell$ in $F_j$.
+\end{definition}
+
+The horn map is $\Phi_j:X_p\to \prod_{i\in F_j}X_{p-1}$, defined by $\Phi_j(T)=(d_iT)_{i\in F_j}$. Its image lies in $\operatorname{Horns}(p,j)$, and its kernel is the horn kernel $R_{p,j}(X)=\bigcap_{i\in F_j}\ker d_i$.
+
+\begin{proposition}[Exactness of the Horn Sequence]\label{prop:3term}
+The sequence
+\[
+0\longrightarrow R_{p,j}(X) \longrightarrow X_p \xrightarrow{\ \Phi_j\ } \operatorname{Horns}(p,j) \longrightarrow 0
+\]
+is exact. The surjectivity of $\Phi_j$ (the Kan condition in the abelian setting) is established by an explicit iterative construction (the Moore filler algorithm) which yields a filler in the degenerate submodule $D_p(X)$.
+\end{proposition}
+
+\begin{proof}
+Exactness at $R_{p,j}(X)$ and $X_p$ is by definition. The surjectivity of $\Phi_j$ and the construction of a degenerate filler is standard; see e.g., Weibel~\cite[Lemma~8.2.6]{Weibel} or Duskin~\cite[Lemma 3.1]{Duskin1979}.
+\end{proof}
+
+We detail the algorithm used in the proof of Proposition~\ref{prop:3term}.
+
+\begin{definition}[Moore Filler Map]\label{def:moore_filler}
+The \textbf{Moore filler map} $\mu_j: \operatorname{Horns}(p,j) \to D_p(X)$ is defined iteratively for a horn $H=(x_i)_{i\in F_j}$.
+
+\emph{Phase I (Ascending indices $i<j$).} Initialize $T^{(-1)} := 0$. For $i=0,\dots,j-1$:
+\[
+T^{(i)} := T^{(i-1)} + s_i\bigl(x_i - d_i T^{(i-1)}\bigr).
+\]
+
+\emph{Phase II (Descending indices $i>j$).} Initialize $U^{(p+1)} := T^{(j-1)}$. For $i=p,\dots,j+1$:
+\[
+U^{(i)} := U^{(i+1)} + s_{i-1}\bigl(x_i - d_i U^{(i+1)}\bigr).
+\]
+
+\emph{Output.} $\mu_j(H) := U^{(j+1)}$.
+\end{definition}
+
+By construction, $\mu_j(H) \in D_p(X)$. The map $\mu_j$ provides an explicit right inverse (section) to $\Phi_j$.
+
+
+\begin{corollary}\label{cor:horn_decomp_general}
+The Moore filler map $\mu_j$ induces a direct sum decomposition
+\[
+X_p = R_{p,j}(X) \oplus \operatorname{Im}(\mu_j).
+\]
+Furthermore, $\operatorname{Im}(\mu_j) \subseteq D_p(X)$.
+\end{corollary}
+
+
+\begin{proof}
+Since $\mu_j$ is a section of $\Phi_j$ ($\Phi_j \circ \mu_j = \mathrm{id}$), the exact sequence in Proposition~\ref{prop:3term} splits, yielding the decomposition. The inclusion follows from Definition~\ref{def:moore_filler}.
+\end{proof} 

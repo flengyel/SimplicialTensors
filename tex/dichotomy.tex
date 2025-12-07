@@ -1,0 +1,157 @@
+% Homological dichotomy
+\section{Homology Dichotomy and Classification}
+\label{sec:dichotomy}
+
+\subsection{The Horn Complex}
+
+Fix $j\in[n]$. Define the linear maps
+\[
+\Phi_j:X_n\longrightarrow \bigoplus_{i\ne j}X_{n-1},\qquad
+\Phi_j(T)=(d_iT)_{i\ne j},
+\]
+\[
+\Psi:\bigoplus_{i\ne j}X_{n-1}\longrightarrow \bigoplus_{\substack{i<m\\ i,m\ne j}}X_{n-2},\qquad
+\Psi((x_i))=(d_i x_m - d_{m-1} x_i)_{i<m}.
+\]
+
+\begin{proposition}\label{prop:horn-complex}
+The sequence
+\[
+C^{\mathrm{horn}}_j:\qquad
+0\longrightarrow X_n \xrightarrow{\ \partial_2=\Phi_j\ } \bigoplus_{i\ne j}X_{n-1}\xrightarrow{\ \partial_1=\Psi\ } \bigoplus_{i<m,\,i,m\ne j}X_{n-2}\longrightarrow 0
+\]
+is a chain complex (indexed homologically with $X_n$ in degree $2$). Moreover,
+\[
+H_2\bigl(C^{\mathrm{horn}}_j\bigr)\ \cong\ R_{n,j},
+\qquad
+H_1\bigl(C^{\mathrm{horn}}_j\bigr)=0.
+\]
+\end{proposition}
+
+\begin{proof}
+$\partial_1\circ\partial_2=0$ by the simplicial identities $d_i d_m=d_{m-1}d_i$ for $i<m$.
+Since the complex starts in degree $2$, $H_2=\ker\partial_2=R_{n,j}$.
+The kernel of $\partial_1$ is the space of compatible horns
+$\operatorname{Horns}(n,j)$; by the existence of fillers (Proposition~\ref{prop:3term}),
+$\operatorname{im}\partial_2=\operatorname{Horns}(n,j)$.
+Thus $H_1 = \ker\partial_1 / \operatorname{im}\partial_2 = 0$.
+\end{proof}
+
+\begin{theorem}[Short exact sequence in the horn kernel]\label{thm:short-exact}
+The face map $d_j:R_{n,j}\to X_{n-1}$ induces a natural short exact sequence
+\[
+0\longrightarrow Z_n\longrightarrow R_{n,j} \xrightarrow{\,d_j\,} d_j(R_{n,j})\longrightarrow 0.
+\]
+\end{theorem}
+
+\begin{proof}
+The kernel of $d_j|_{R_{n,j}}$ is
+$R_{n,j}\cap\ker d_j = \bigcap_{i\ne j}\ker d_i \cap \ker d_j = Z_n$.
+\end{proof}
+
+\subsection{The Classification Dichotomy}
+
+We use the ranks established in Section~\ref{sec:combinatorics}.
+
+\begin{corollary}[Filler dichotomy]\label{cor:dichotomy}
+The ranks of $R_{n,j}$ and $Z_n$ (Proposition~\ref{prop:rank-IE}, Corollary~\ref{cor:rank-Zp}) determine the following classification based on the tensor order $k$:
+\begin{enumerate}
+\item If $k<n$, then $R_{n,j}=0$ (fillers are unique in dimension $n$).
+\item If $k=n$, then $R_{n,j}\neq 0$ and $Z_n=0$. Hence $R_{n,j}\cong d_j(R_{n,j})$.
+\item If $k\ge n+1$, then $Z_n\neq 0$ and $Z_n$ injects canonically into $R_{n,j}$.
+\end{enumerate}
+\end{corollary}
+
+\begin{corollary}[Constant shape ranks]\label{cor:rank-constant-shape-revised}
+For the constant shape $\vec{s} = (n+1, \ldots, n+1)$, the ranks are given by Theorem~\ref{thm:Stirling}:
+\[
+\operatorname{rank} Z_n = (n+1)! \StirlingII{k}{n+1},
+\]
+\[
+\operatorname{rank} R_{n,j} = n! \StirlingII{k}{n} + (n+1)! \StirlingII{k}{n+1}.
+\]
+In particular:
+\begin{itemize}
+\item $Z_n \neq 0$ if and only if $k \geq n+1$.
+\item $R_{n,j} \neq 0$ if and only if $k \geq n$.
+\end{itemize}
+\end{corollary}
+
+\begin{remark}[Moore filler vs.\ $T$]
+For the horn $\Lambda^n_j(T)$, Moore’s filler $T'$ satisfies $T'=T$ if and only if $T \in D_n$: the “only if” direction holds because $T'$ is always degenerate (Definition~\ref{def:moore_filler}), and the “if” direction follows from Lemma~\ref{lem:horn-nondeg}, since in that case $T-T'$ lies in $R_{n,j}\cap D_n=\{0\}$. If $k<n$, then $R_{n,j}=0$, so $T'=T$ always holds (and $D_n=X_n$). If $k\ge n$ and $T \notin D_n$, then $T-T'\in R_{n,j}\setminus\{0\}$ and is supported on the missing indices (Theorem~\ref{thm:support_characterization}).
+\end{remark}
+
+\subsection{Interpretation as Algebraic \texorpdfstring{$n$}{n}-Hypergroupoids}
+
+We adapt the definition of Duskin (1979) and Glenn (1982).
+
+\begin{definition}[Algebraic $n$-hypergroupoid]
+A simplicial module $X_\bullet$ is an \textbf{algebraic $n$-hypergroupoid} if horn fillers are unique in dimensions $p>n$. It is \textbf{strict} if it is not an $(n-1)$-hypergroupoid (i.e., fillers in dimension $n$ are not unique).
+\end{definition}
+
+\begin{proposition}
+A simplicial module $X_\bullet$ is an algebraic $n$-hypergroupoid if and only if $R_{p,j}(X)=0$ for all $p>n$ and all $j$.
+\end{proposition}
+\begin{proof}
+Simplicial modules are Kan complexes (fillers always exist, e.g., Proposition~\ref{prop:3term}). As observed in Section~\ref{sec:horns}, the set of fillers of a given horn is an affine torsor modeled on $R_{p,j}$, hence a singleton if and only if $R_{p,j}=0$.
+\end{proof}
+
+Applying the criterion of Corollary~\ref{cor:missing_indices_existence} to the DSTM
+$X_\bullet(\vec s;A)$ with simplicial dimension $n$ yields the hypergroupoid
+classification of Theorem~\ref{thm:classification}: $X_\bullet(\vec s;A)$ is a strict
+algebraic $n$-hypergroupoid if and only if the tensor order $k$ equals $n$.
+
+\subsection{The Subcomplex of Normalized Cycles}
+
+We analyze the subcomplex formed by the normalized cycles $Z_r(N_\bullet)$. 
+In the DSTM, $Z_r(N_\bullet)$ is spanned by basis elements $E_m$ such that $\operatorname{im}(m) \supseteq [r]$.
+
+\begin{lemma}\label{lem:normalized-cycle-subcomplex}
+The family $(Z_r(N_\bullet))_{r\ge 0}$ forms a chain subcomplex of $(X_\bullet, \partial)$. Furthermore, the differential on this subcomplex is zero:
+\[
+\partial_r\bigl(Z_r(N_\bullet)\bigr)=0,\qquad
+H_r\!\bigl(Z_\bullet(N_\bullet)\bigr)\cong Z_r(N_\bullet).
+\]
+There is a short exact sequence of chain complexes
+\begin{equation}\label{eq:short-exact}
+0\longrightarrow Z_\bullet(N_\bullet) \longrightarrow X_\bullet \longrightarrow X_\bullet/Z_\bullet(N_\bullet) \longrightarrow 0.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+By definition, $Z_r(N_\bullet) = \bigcap_{i=0}^r \ker d_i$.
+If $x \in Z_r(N_\bullet)$, then $d_i(x)=0$ for all $i$. Therefore the boundary
+$\partial_r(x) = \sum (-1)^i d_i(x) = 0$. This confirms that
+$Z_\bullet(N_\bullet)$ is a chain subcomplex with zero differential.
+The homology of a complex with zero differential is the complex itself.
+\end{proof}
+
+\begin{corollary}[Quotient homology]\label{cor:normalized-cycle-quotient}
+For the DSTM $X_\bullet(\vec{s};A)$, which is contractible by Theorem~\ref{thm:contractible}, 
+the short exact sequence of chain complexes \eqref{eq:short-exact} induces isomorphisms
+\[
+H_r\!\bigl(X_\bullet/Z_\bullet(N_\bullet)\bigr)\ \cong\ H_{r-1}\!\bigl(Z_\bullet(N_\bullet)\bigr) \cong Z_{r-1}(N_\bullet)
+\]
+for all $r\ge 1$.
+\end{corollary}
+
+\begin{proof}
+By Theorem~\ref{thm:contractible}, the DSTM $X_\bullet(\vec{s};A)$ is contractible, hence
+$H_r(X_\bullet)=0$ for all $r\ge 0$.
+Taking homology of the short exact sequence \eqref{eq:short-exact} gives a long exact sequence
+\[
+\cdots\to H_r(Z_\bullet(N_\bullet))\to H_r(X_\bullet)\to
+H_r(X_\bullet/Z_\bullet(N_\bullet))\to H_{r-1}(Z_\bullet(N_\bullet))\to\cdots.
+\]
+The differential on $Z_\bullet(N_\bullet)$ is zero, so
+$H_r(Z_\bullet(N_\bullet))\cong Z_r(N_\bullet)$ for all $r$.
+Using $H_r(X_\bullet)=0$ and exactness, we obtain
+\[
+H_r\!\bigl(X_\bullet/Z_\bullet(N_\bullet)\bigr)\ \cong\ H_{r-1}\!\bigl(Z_\bullet(N_\bullet)\bigr)
+\cong Z_{r-1}(N_\bullet).
+\]
+\end{proof}
+
+\begin{remark}[Homology spheres]
+For a normalized cycle $C\in Z_n(N_\bullet)$, the generated simplicial subobject $\langle C \rangle \subseteq X_\bullet$ (the degeneracy-closure) provides an algebraic model of the $n$-sphere. If $C$ is primitive (e.g., a basis element $E_m$ over a PID $A$), $\langle C \rangle$ is isomorphic to the simplicial sphere $A[\Delta^n]/\operatorname{Sk}_{n-1}(A[\Delta^n])$. It satisfies $H_n(\langle C \rangle)\cong A$ and $H_m(\langle C \rangle)=0$ for $m\ne n$. (See Weibel~\cite[Exercise 8.3.4]{Weibel}.)
+\end{remark}

@@ -1,0 +1,244 @@
+\section{Combinatorial Hodge Theory and Effective Resistance}
+\label{sec:hodge}
+
+We develop Hodge theory on the chain complex $(X_\bullet(\vec{s}; K), \partial)$ of the Diagonal Simplicial Tensor Module. 
+The DSTM provides an ambient space for generalized tensor homology. In this section, we work over a subfield $K\subseteq \mathbb{R}$ and equip 
+each $X_p$ with the standard inner product making the tensor basis $\{E_m\}_{m \in I_p}$ orthonormal.
+
+\subsection{The Combinatorial Laplacian}
+
+\begin{definition}[Adjoint and Laplacian]
+The \textbf{coboundary operator} $\partial_p^*: X_{p-1} \to X_p$ is the adjoint of the boundary $\partial_p$ with respect to the standard inner product.
+The \textbf{combinatorial Laplacian} $\Delta_p: X_p \to X_p$ is defined by the Hodge formula:
+\[
+\Delta_p := \Delta_p^{\mathrm{down}} + \Delta_p^{\mathrm{up}} := \partial_p^*\partial_p + \partial_{p+1}\partial_{p+1}^*.
+\]
+\end{definition}
+
+\noindent \textbf{Note:} We follow the standard convention that $\Delta_p^{\mathrm{down}} = \partial_p^*\partial_p$ (passing through $X_{p-1}$) and $\Delta_p^{\mathrm{up}} = \partial_{p+1}\partial_{p+1}^*$ (passing through $X_{p+1}$). The operator $\Delta_p$ is self-adjoint and positive semidefinite.
+
+\begin{theorem}[Hodge Decomposition Theorem]
+There is an orthogonal direct sum decomposition of the chain space:
+\[
+X_p = \operatorname{im}(\partial_{p+1}) \oplus \operatorname{im}(\partial_p^*) \oplus \ker(\Delta_p).
+\]
+The space of \textbf{harmonic forms} $\mathcal{H}_p := \ker(\Delta_p)$ corresponds to the homology:
+\[
+\mathcal{H}_p = \ker(\partial_p) \cap \ker(\partial_{p+1}^*) \cong H_p(X_\bullet).
+\]
+\end{theorem}
+
+\begin{remark}
+This constitutes a combinatorial Hodge decomposition for the DSTM. It generalizes the graph-theoretic decomposition of Eckmann~\cite{Eckmann1944} and the simplicial decomposition of Horak--Jost~\cite{HorakJost2013}.
+\end{remark}
+
+\subsection{Effective Resistance on the Ambient DSTM}
+
+\begin{proposition}[Invertibility of the Laplacian]\label{prop:laplacian-invertible}
+For all $p \ge 0$, the Laplacian $\Delta_p$ on the ambient DSTM $X_\bullet(\vec{s}; K)$ is invertible.
+\end{proposition}
+
+\begin{proof}
+The DSTM is contractible (Theorem~\ref{thm:contractible}), implying $H_p(X_\bullet) = 0$ for all $p$. By the Hodge theorem, $\ker(\Delta_p) \cong H_p(X_\bullet) = \{0\}$. Since $\Delta_p$ is a self-adjoint operator on a finite-dimensional space with trivial kernel, it is positive definite and invertible.
+\end{proof}
+
+\begin{definition}[Green's Operator]
+For $p \ge 0$, the \textbf{Green's operator} is the inverse Laplacian $G_p := \Delta_p^{-1}$.
+\end{definition}
+
+\begin{remark}[Metric Dependence]
+While the contracting homotopy $H$ of Theorem~\ref{thm:contractible} satisfies $\partial H + H\partial = \mathrm{id}$,
+the Green's operator $G_p$ depends on the metric structure. Generally, $G_p \neq H_{p-1}H_{p-1}^* + H_p^*H_p$; they capture distinct geometric data.
+\end{remark}
+
+\begin{definition}[Effective Resistance]
+For $p \ge 0$ and any chains $x,y\in X_p$, the \textbf{effective resistance} is
+\[
+R_p(x, y) := \langle x - y, G_p(x - y) \rangle.
+\]
+Since $\Delta_p$ is positive definite, this defines a genuine metric (the \textbf{resistance distance}) on $X_p$ given by $d_p(x,y) := \sqrt{R_p(x,y)}$.
+\end{definition}
+
+\begin{proposition}[Symmetry Invariance]
+The effective resistance $R_p$ and the induced distance $d_p$ are invariant under the action of the stabilizer group $\operatorname{Stab}(\vec{s})$.
+\end{proposition}
+
+\begin{proof}
+The boundary maps $\partial_p$ are $\operatorname{Stab}(\vec{s})$-equivariant (Lemma~\ref{lem:equivariance-stab}), and the standard inner product is invariant under permutation of axes. Thus, $\Delta_p$ and $G_p$ commute with the group action.
+\end{proof}
+
+\subsection{\texorpdfstring{Example: Shape $(2,2)$}{Example: Shape (2,2)}}\label{ex:hodge_22}
+
+We detail the Hodge structure for $\vec{s} = (2,2)$ ($n=1, k=2$). $X_1$ is the space of $2\times 2$ matrices ($R_1=4$). We identify $X_0 \cong K$ (basis $E_{00}^{(0)}$).
+
+\textbf{Step 1: Down Laplacian ($\Delta_1^{\mathrm{down}} = \partial_1^* \partial_1$).}
+The boundary $\partial_1 = d_0 - d_1$ acts on the basis as:
+$\partial_1 E_{00} = -1, \partial_1 E_{11} = 1$, and $\partial_1 E_{01} = \partial_1 E_{10} = 0$.
+The matrix representation is:
+\[
+[\Delta_1^{\mathrm{down}}] =
+\begin{pmatrix}
+1 & 0 & 0 & -1 \\
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+-1 & 0 & 0 & 1
+\end{pmatrix}.
+\]
+
+\textbf{Step 2: Up Laplacian ($\Delta_1^{\mathrm{up}} = \partial_2 \partial_2^*$).}
+Using the adjoint faces $d_i^*$, we calculate the Gram matrix of the vectors $\partial_2^*(E_m)$ in $X_2$.
+For $E_{01}$, the adjoint $\partial_2^*(E_{01})$ is a sum of 3 orthogonal basis vectors (due to distinct images under index maps), so its squared norm is 3.
+For $E_{00}$, an \textbf{index collision} occurs: $d_1^*(E_{00}) = d_2^*(E_{00})$. This causes cancellation in the alternating sum $\partial_2^* = d_0^* - d_1^* + d_2^*$, resulting in a single term $\partial_2^*(E_{00}) = E_{11}^{(2)}$, which has squared norm 1.
+\[
+[\Delta_1^{\mathrm{up}}] =
+\begin{pmatrix}
+1 & 0 & 0 & 1 \\
+0 & 3 & 0 & 0 \\
+0 & 0 & 3 & 0 \\
+1 & 0 & 0 & 1
+\end{pmatrix}.
+\]
+
+\textbf{Step 3: Total Laplacian and Green's Operator.}
+Summing the matrices yields a diagonal Laplacian:
+\[
+[\Delta_1] = [\Delta_1^{\mathrm{down}}] + [\Delta_1^{\mathrm{up}}] = \operatorname{diag}(2, 3, 3, 2).
+\]
+Inverting gives the Green's operator:
+\[
+[G_1] = \operatorname{diag}\bigl(1/2,\, 1/3,\, 1/3,\, 1/2\bigr).
+\]
+
+\textbf{Step 4: Resistance Distances.}
+\begin{align*}
+R(E_{00}, E_{11}) &= \langle E_{00}-E_{11}, G_1(E_{00}-E_{11}) \rangle = 1/2 + 1/2 = 1. \\
+R(E_{01}, E_{10}) &= \langle E_{01}-E_{10}, G_1(E_{01}-E_{10}) \rangle = 1/3 + 1/3 = 2/3.
+\end{align*}
+\emph{Geometric Interpretation:} The resistance distance between off-diagonal basis elements ($\sqrt{2/3} \approx 0.816$) is strictly smaller than between diagonal elements ($1$). This reflects the higher connectivity of the off-diagonal terms in the simplicial 2-skeleton.
+
+\subsection{Hodge Theory on Generated Submodules}
+
+For a generated submodule $\langle T \rangle$, we restrict the theory to the orthogonal complement of the kernel.
+
+\begin{definition}[Projected Laplacian and Invariants]
+Let $C_p := \ker(f_{T,p})^\perp \cong \langle T \rangle_p$. The \textbf{projected Laplacian} is
+\[
+\Delta_p^C := \partial_{p+1}^C (\partial_{p+1}^C)^* + (\partial_p^C)^* \partial_p^C,
+\]
+where $\partial^C$ is the compressed boundary map.
+We define spectral invariants for the tensor orbit $\langle T \rangle$:
+\begin{enumerate}
+    \item \textbf{Betti Numbers:} $\beta_p(\langle T \rangle) := \dim \ker(\Delta_p^C)$.
+    \item \textbf{Hodge Spectrum:} $\operatorname{Spec}(\Delta_p^C)$ (the multiset of eigenvalues of $\Delta_p^C$).
+    \item \textbf{Spectral Gap:} $\lambda_1(\Delta_p^C)$, the smallest positive eigenvalue of $\Delta_p^C$ (if any).
+    \item \textbf{Kirchhoff Index:} $Kf_p(\langle T \rangle) := \operatorname{Tr}\bigl((\Delta_p^C)^\dagger\bigr)$.
+\end{enumerate}
+\end{definition}
+
+For $x,y \in C_p$ we can similarly define an \emph{effective resistance pseudometric}
+\[
+R_p^C(x,y) := \langle x-y, (\Delta_p^C)^\dagger(x-y)\rangle,
+\]
+where $(\Delta_p^C)^\dagger$ denotes the Moore–Penrose pseudoinverse. This is a genuine
+metric on the orthogonal complement of $\ker(\Delta_p^C)$ and a pseudometric on $C_p$,
+hence on $\langle T\rangle_p$.
+
+
+
+\begin{remark}[Spectral theory of tensors]
+Unlike classical spectral graph theory, which studies the spectrum of $T$
+(or of a graph Laplacian) as a linear operator on functions on the vertex set,
+our construction attaches spectral data to the \emph{generated simplicial submodule}
+$\langle T\rangle_\bullet \subseteq X_\bullet$.
+
+For fixed $T$, the isomorphism
+$\langle T\rangle_\bullet \cong C_\bullet / K(T)_\bullet$
+(Proposition~\ref{prop:isomorphism-classes-and-orbits}) shows that the projected
+Laplacians $\Delta_p^C$ depend functorially on the kernel sequence $K(T)_\bullet$.
+Hence the Betti numbers $\beta_p(\langle T\rangle)$, Hodge spectra
+$\operatorname{Spec}(\Delta_p^C)$, spectral gaps $\lambda_1(\Delta_p^C)$ and
+Kirchhoff indices $Kf_p(\langle T\rangle)$ are invariants of the isomorphism
+class of $\langle T\rangle_\bullet$ and, equivalently, of the corresponding kernel
+sequence.
+
+Via the moduli map $\Psi\colon \mathcal U \to \mathcal M(\vec s)$
+from Section~\ref{sec:generated}, these spectral invariants define (typically
+non-constant) algebraic functions on the moduli space $\mathcal M(\vec s)$.
+In particular, for threshold shapes such as $\vec s=(3,3)$
+(Example~\ref{ex:shape_33}), they vary non-trivially with the parameters
+$[v_{00}:v_{11}:v_{22}] \in \mathbb{P}^2$.
+\end{remark}
+
+\subsection{\texorpdfstring{Example: The Petersen Graph ($k=2$)}{Example: The Petersen Graph (k=2)}} 
+\label{ex:petersen}
+
+We illustrate the recovery of classical spectral graph theory in the case $k=2$.
+Let $P$ be the Petersen graph and let $T$ be a tensor encoding its adjacency matrix
+(as in Section~\ref{sec:generated}).
+The generated submodule $\langle T \rangle$ has chain groups naturally isomorphic to
+the usual vertex and edge chain groups of $P$, and the projected Laplacians
+$\Delta_0^C$ and $\Delta_1^C$ coincide with the standard vertex and edge graph Laplacians.
+
+\begin{itemize}
+    \item \textbf{Dimensions and Betti numbers.}
+    $P$ has $|V|=10$ vertices and $|E|=15$ edges.
+    The graph is connected, so $\beta_0=1$.
+    The first Betti number is the cyclomatic number
+    $\beta_1 = |E| - |V| + 1 = 15 - 10 + 1 = 6$.
+    \item \textbf{Laplacian spectra.}
+    The projected vertex Laplacian $\Delta_0^C$ has spectrum
+    $\{0^{(1)}, 2^{(5)}, 5^{(4)}\}$.
+    The projected edge Laplacian $\Delta_1^C$ has spectrum
+    $\{0^{(6)}, 2^{(5)}, 5^{(4)}\}$; the six zero eigenvalues correspond to the
+    $6$-dimensional cycle space $H_1$.
+    \item \textbf{Effective resistance.}
+    In our normalization, the (degree-$0$) Kirchhoff index is
+    \[
+      Kf_0(\langle T\rangle) = \operatorname{Tr}\bigl((\Delta_0^C)^\dagger\bigr)
+        = \sum_{\lambda>0} \frac{1}{\lambda}
+        = 5\cdot\frac{1}{2} + 4\cdot\frac{1}{5} = 3.3
+    \]
+    The Green’s operator $(\Delta_0^C)^\dagger$ yields the usual effective resistance
+    between pairs of vertices, and the higher-degree operators $(\Delta_1^C)^\dagger$
+    encode the corresponding effective resistances on edges.
+\end{itemize}
+
+
+
+\subsection{DSTM Foster Identity}
+
+We derive a higher-dimensional analog of Foster's Reactance Theorem, relating diagonal resistances to the rank of the complex.
+
+\begin{definition}[Diagonal Resistance]
+Let $T_p = \partial_p^* (\partial_p^*)^\dagger$ be the orthogonal projection onto $\operatorname{im}(\partial_p^*)$. For a basis element $E_m \in X_p$, the \textbf{diagonal resistance} is
+\[
+r_{E_m} := \langle T_p E_m, E_m \rangle.
+\]
+\end{definition}
+
+\begin{theorem}[DSTM Foster Identity]\label{thm:foster}
+For the DSTM $X_\bullet(\vec{s}; K)$ and any degree $p \ge 1$:
+\[
+\sum_{m \in I_p} r_{E_m} = |I_{p-1}| - \operatorname{rank}(\partial_{p-1}^*).
+\]
+\end{theorem}
+
+\begin{proof}
+The sum of diagonal resistances is the trace of the projection $T_p$, which equals $\operatorname{rank}(\partial_p^*)$. By the rank-nullity theorem applied to the Hodge decomposition of $X_{p-1}$ (and using $H_{p-1}=0$):
+\[
+|I_{p-1}| = \operatorname{rank}(\partial_p) + \operatorname{rank}(\partial_{p-1}^*).
+\]
+Since $\operatorname{rank}(\partial_p) = \operatorname{rank}(\partial_p^*)$, we substitute to get $\operatorname{rank}(\partial_p^*) = |I_{p-1}| - \operatorname{rank}(\partial_{p-1}^*)$.
+\end{proof}
+
+\begin{corollary}
+For $p=1$, since $\partial_0^*=0$, we have $\sum_{m \in I_1} r_{E_m} = |I_0|$.
+For the constant shape $\vec{s}=(N, \dots, N)$, this sum is exactly 1.
+\end{corollary}
+
+\begin{proof}
+For constant shape $\vec{s}=(N, \dots, N)$, we have $M_a(0)=0$ for all $a$
+(cf.~Section~\ref{sec:combinatorics}). Thus $I_0 = \{ (0, \dots, 0) \}$ and
+$|I_0|=1$.
+\end{proof}
+

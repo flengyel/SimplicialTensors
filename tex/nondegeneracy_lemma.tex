@@ -1,0 +1,109 @@
+\section{The Horn Non-Degeneracy Lemma and Decomposition}
+\label{sec:hornnondegeneracylemma}
+
+We establish that the horn kernel and the degenerate submodule intersect trivially. This ensures the Horn decomposition is compatible with the standard decomposition of simplicial modules.
+
+\begin{lemma}[Horn Non-Degeneracy]\label{lem:horn-nondeg}
+For any simplicial module $X_\bullet$, any degree $p\ge1$, and any $j\in[p]$,
+\[
+R_{p,j}(X)\cap D_p(X)=\{0\}.
+\]
+\end{lemma}
+
+\begin{proof}
+We filter the degenerate submodule $D_p(X)$ by the maximum index of the degeneracy operators. For $0\le r\le p-1$, set
+\[
+H_r:=\sum_{i=0}^{r}\operatorname{im}(s_i)\subseteq X_p, \quad
+H'_r:=\sum_{i=0}^{r}\operatorname{im}(s_i)\subseteq X_{p-1},
+\]
+and set $H_{-1}=H'_{-1}=\{0\}$. Note that $D_p(X)=H_{p-1}$.
+
+Let $x\in R_{p,j}(X)\cap D_p(X)$ and assume $x\neq 0$. Choose $m\ge0$ minimal such that $x\in H_m$. Then we can write
+\[
+x=s_m(z)+y,\qquad z\in X_{p-1},\ \ y\in H_{m-1}.
+\]
+If we can show $z\in H'_{m-1}$, then $z=\sum_{i=0}^{m-1}s_i(u_i)$. Using the identity $s_m s_i=s_i s_{m-1}$ for $i<m$, we obtain
+\[
+s_m(z)=\sum_{i=0}^{m-1}s_m s_i(u_i)=\sum_{i=0}^{m-1}s_i s_{m-1}(u_i)\in H_{m-1}.
+\]
+This implies $x\in H_{m-1}$, contradicting the minimality of $m$. Thus, it suffices to prove $z\in H'_{m-1}$.
+
+We split the proof into cases based on the index $j$.
+
+\emph{Case 1: $j\neq m+1$.}
+Since $m+1\le p$ and $m+1\neq j$, we have $d_{m+1}(x)=0$.
+\[
+0 = d_{m+1}(x) = d_{m+1}s_m(z) + d_{m+1}(y) = z + d_{m+1}(y),
+\]
+where we used $d_{m+1}s_m = \mathrm{id}$. Since $y \in H_{m-1}$, we write $y=\sum_{i=0}^{m-1} s_i(w_i)$. For $i<m$, the identity $d_{m+1}s_i = s_i d_m$ holds, so
+\[
+d_{m+1}(y) = \sum_{i=0}^{m-1} s_i d_m(w_i) \in H'_{m-1}.
+\]
+Hence $z = -d_{m+1}(y) \in H'_{m-1}$, as required.
+
+\emph{Case 2: $j = m+1$.}
+In this case, the face maps $d_0, \dots, d_m$ all annihilate $x$ (since $j=m+1$). Since $x \in H_m$, we may write $x$ as a sum $x = \sum_{i=0}^m s_i(w_i)$ for some coefficients $w_i \in X_{p-1}$. (Note that $z$ from the setup corresponds to $w_m$).
+
+We prove by induction on $k$ (for $0 \le k \le m$) that $w_k \in H'_{m-1}$.
+
+\emph{Base step ($k=0$):} Consider $d_0(x)=0$.
+\[
+0 = \sum_{i=0}^m d_0 s_i(w_i) = d_0 s_0(w_0) + \sum_{i=1}^m d_0 s_i(w_i).
+\]
+Using $d_0 s_0 = \mathrm{id}$ and $d_0 s_i = s_{i-1} d_0$ for $i \ge 1$:
+\[
+0 = w_0 + \sum_{i=1}^m s_{i-1} d_0(w_i).
+\]
+The sum consists of terms in $\operatorname{im}(s)$, so $w_0 \in H'_{m-1}$.
+
+\emph{Inductive step:} Assume $w_0, \dots, w_{k-1} \in H'_{m-1}$ for some $1 \le k \le m$. Consider $d_k(x)=0$.
+\[
+0 = \sum_{i=0}^m d_k s_i(w_i).
+\]
+We split the sum into four parts based on the index $i$:
+\begin{enumerate}
+    \item $i < k-1$: $d_k s_i(w_i) = s_i d_{k-1}(w_i) \in H'_{m-1}$.
+    \item $i = k-1$: $d_k s_{k-1}(w_{k-1}) = w_{k-1}$ (using $d_k s_{k-1} = \mathrm{id}$). By the inductive hypothesis, $w_{k-1} \in H'_{m-1}$.
+    \item $i = k$: $d_k s_k(w_k) = w_k$ (using $d_k s_k = \mathrm{id}$).
+    \item $i > k$: $d_k s_i(w_i) = s_{i-1} d_k(w_i) \in H'_{m-1}$.
+\end{enumerate}
+Substituting these into the equation yields
+\[
+0 = (\text{terms in } H'_{m-1}) + w_{k-1} + w_k + (\text{terms in } H'_{m-1}).
+\]
+Solving for $w_k$, we see that $w_k$ is a sum of elements in $H'_{m-1}$. Thus $w_k \in H'_{m-1}$.
+
+By induction, $w_m \in H'_{m-1}$. Since $z=w_m$, we have $z \in H'_{m-1}$.
+
+In all cases, we conclude $z \in H'_{m-1}$, which contradicts the minimality of $m$ unless $x=0$.
+\end{proof}
+
+\begin{theorem}[Horn decomposition]\label{thm:decomp_p}
+For any simplicial module $X_\bullet$, any $p\ge 1$, and any $j\in[p]$, the Moore filler map $\mu_j$ (Definition~\ref{def:moore_filler}) is a section of the horn map $\Phi_j$, and
+\[
+X_p = R_{p,j}(X) \oplus \operatorname{im}(\mu_j),
+\qquad \operatorname{im}(\mu_j)\subseteq D_p(X).
+\]
+In particular, the horn kernel $R_{p,j}(X)$ is a direct summand of $X_p$, complementary to a degenerate summand.
+\end{theorem}
+
+\begin{proof}
+By construction (Definition~\ref{def:moore_filler}) and Proposition~\ref{prop:3term},
+$\mu_j$ is a section of $\Phi_j$, i.e.\ $\Phi_j\circ\mu_j=\mathrm{id}_{\operatorname{Horns}(p,j)}$.
+Thus the short exact sequence in Proposition~\ref{prop:3term} splits, and we obtain
+\[
+X_p = R_{p,j}(X) \oplus \operatorname{im}(\mu_j).
+\]
+Each step in the definition of $\mu_j$ adds a degeneracy, so $\operatorname{im}(\mu_j)\subseteq D_p(X)$.
+Lemma~\ref{lem:horn-nondeg} ensures that the intersection of these summands is trivial ($R_{p,j}(X) \cap \operatorname{im}(\mu_j) = \{0\}$), 
+confirming that the decomposition is compatible with the standard degenerate filtration.
+\end{proof}
+
+\begin{remark}[Normalization Conventions]
+Theorem~\ref{thm:decomp_p} generalizes the classical Normalization Theorem (Theorem~\ref{thm:EZ}). Standard conventions for the Moore complex (or normalized chain complex) vary:
+\begin{enumerate}
+    \item $N_p^{(0)}(X) = \bigcap_{i=0}^{p-1} \ker d_i = R_{p,p}(X)$.
+    \item $N_p^{(1)}(X) = \bigcap_{i=1}^{p} \ker d_i = R_{p,0}(X)$.
+\end{enumerate}
+In this paper we adopt the second convention $N_p(X)=N_p^{(1)}(X)=R_{p,0}(X)$. Our horn decomposition encompasses both as the cases $j=p$ and $j=0$ respectively.
+\end{remark}

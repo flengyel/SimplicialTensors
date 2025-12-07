@@ -1,0 +1,249 @@
+45 Patch Control
+
+1
+1
+1
+dstm.tex
+74
+13
+10
+
+header.tex
+TeX
+1060091 0 -1 0 -1 1502 441 441 3292 1466 1 1 636 594 -1 -1 0 0 1729 -1 -1 1729 1 0 1502 -1  0 0 0
+combinatorics.tex
+TeX
+1060091 0 -1 0 -1 188 147 147 1918 652 1 1 546 165 -1 -1 0 0 8002 -1 -1 8002 1 0 188 -1  0 -1 0
+nondegeneracy_lemma.tex
+TeX:UNIX
+1158395 0 -1 0 -1 4618 147 147 3746 655 1 1 336 363 -1 -1 0 0 58 -1 -1 58 1 0 4618 -1  0 -1 0
+dichotomy.tex
+TeX:UNIX
+17935611 1 -1 0 -1 7477 49 49 3648 557 1 1 171 693 -1 -1 0 0 7477 -1 -1 7477 1 0 7477 -1  0 -1 0
+equivariant_homotopy.tex
+TeX
+1060091 0 -1 3967 -1 3968 98 98 3697 606 1 1 2601 363 -1 -1 0 0 59 -1 -1 59 1 0 3968 -1  0 -1 0
+normalization.tex
+TeX
+1060859 0 -1 0 -1 4362 147 147 2878 847 1 1 906 396 -1 -1 0 0 4701 -1 -1 4701 1 0 4362 -1  0 -1 0
+preliminaries.tex
+TeX:UNIX
+1159163 0 -1 57 -1 978 49 49 2483 749 1 1 1206 429 -1 -1 0 0 2485 -1 -1 2485 1 0 978 -1  0 -1 0
+dstm.tex
+TeX
+135277819 0 -1 537 -1 804 245 245 3844 753 1 1 171 528 -1 -1 0 0 41 -1 -1 41 1 0 804 -1  0 -1 0
+generated_subobjects.tex
+TeX:UNIX
+1158395 0 -1 3365 -1 3926 49 49 3648 557 1 1 171 693 -1 -1 0 0 64 -1 -1 64 1 0 3926 -1  0 -1 0
+horns.tex
+TeX
+1060091 0 -1 0 -1 9095 245 245 3844 753 1 1 726 396 -1 -1 0 0 45 -1 -1 45 1 0 9095 -1  0 -1 0
+hodge_theory.tex
+TeX:UNIX
+269593851 0 -1 10000 -1 10182 0 0 3599 508 1 1 966 594 -1 -1 0 0 12014 -1 -1 12014 1 0 10182 -1  0 -1 0
+abstract.tex
+TeX:UNIX
+1159163 0 -1 0 -1 17 147 147 2878 847 1 1 171 33 -1 -1 0 0 1784 -1 -1 1784 1 0 17 -1  0 -1 0
+introduction.tex
+TeX:UNIX
+1159163 0 -1 5916 -1 5906 196 196 2927 896 1 1 486 363 -1 -1 0 0 192 -1 -1 192 1 0 5906 -1  0 -1 0
+Normalization_previous_full_proof.tex
+TeX
+269495547 0 -1 0 -1 0 0 0 3599 508 1 1 171 0 -1 -1 0 0 -1 -1 -1 -1 1 0 0 -1  0 -1 0
+Outline.tex
+TeX
+1060091 2 -1 2713 -1 2717 0 0 3644 513 1 1 2796 330 -1 -1 0 0 41 -1 -1 41 1 0 2717 -1  0 0 0
+SupportCharacterization.tex
+TeX
+269496315 0 -1 4684 -1 4688 294 294 3025 994 1 1 1596 660 -1 -1 0 0 5873 -1 -1 5873 1 0 4688 -1  0 -1 0
+:\Users\fleng\vscode\NYCT-Talk\NYCT-Talk11.tex
+TeX
+1060091 1 -1 31375 -1 31981 147 147 1918 652 1 1 171 594 -1 -1 0 0 22 -1 -1 22 1 0 31981 -1  0 -1 0
+CartesianPromonoidalKernel.tex
+TeX
+269495547 1 -1 0 -1 20109 49 49 2855 1155 1 1 171 693 -1 -1 0 0 29 -1 -1 29 1 0 20109 -1  0 -1 0
+:\Users\fleng\vscode\NYCT-Talk\NYCT-Talk10.tex
+TeX
+269495547 0 -1 36237 -1 36670 245 245 3296 873 1 1 171 18843 -1 -1 0 0 22 -1 -1 22 1 0 36670 -1  0 -1 0
+:\Users\fleng\vscode\NYCT-Talk\NYCT-Talk10_slides_patch.tex
+TeX:UNIX
+1158395 0 -1 0 -1 0 0 0 1771 505 1 1 171 -6237 -1 -1 0 0 -1 -1 -1 -1 1 0 0 -1  0 -1 0
+:\Users\fleng\vscode\NYCT-Talk\NYCT-Talk9.tex
+TeX
+269495547 1 -1 31467 -1 31584 245 245 3296 873 1 1 171 429 -1 -1 0 0 22 -1 -1 22 1 0 31584 -1  0 -1 0
+:\Users\fleng\vscode\NYCT-Talk\NYCT-Talk8.tex
+TeX
+269495547 0 -1 2824 -1 2820 245 245 3296 873 1 1 1296 495 -1 -1 0 0 22 -1 -1 22 1 0 2820 -1  0 -1 0
+:\Users\fleng\vscode\NYCT-Talk\NYCT-Talk7.tex
+TeX
+269495547 0 -1 37125 -1 37131 245 245 3296 873 1 1 876 1221 -1 -1 0 0 -1 -1 -1 -1 1 0 37131 -1  0 -1 0
+:\Users\fleng\vscode\NYCT-Talk\NYCT-Talk6.tex
+TeX
+269495547 0 -1 36487 -1 37300 147 147 3198 775 1 1 741 825 -1 -1 0 0 42329 -1 -1 42329 1 0 37300 -1  0 -1 0
+:\Users\fleng\vscode\NYCT-Talk\NYCT-Talk5.tex
+TeX
+269495547 0 -1 38757 -1 39050 147 147 3198 775 1 1 291 25740 -1 -1 0 0 22 -1 -1 22 1 0 39050 -1  0 -1 0
+NYCT-Talk3.tex
+TeX
+1060091 0 -1 2639 -1 3751 147 147 3198 775 1 1 921 33 -1 -1 0 0 23278 -1 -1 23278 1 0 3751 -1  0 -1 0
+:\Users\fleng\vscode\NYCT-Talk\NYCT-Talk4.tex
+TeX
+269495547 0 -1 0 -1 31564 147 147 3198 775 1 1 351 528 -1 -1 0 0 -1 -1 -1 -1 1 0 31564 -1  0 -1 0
+:\Users\fleng\vscode\NYCT-Talk\NYCT-Talk2.tex
+TeX
+269495547 0 -1 0 -1 0 147 147 3198 775 1 1 171 0 -1 -1 0 0 20902 -1 -1 20902 1 0 0 -1  0 -1 0
+:\Users\fleng\vscode\NYCT-Talk\NYCT-Talk.tex
+TeX
+269495547 4 -1 6589 -1 6590 147 147 3198 775 1 1 501 132 -1 -1 0 0 29706 -1 -1 29706 1 0 6590 -1  0 -1 0
+HornsMissingIndices.tex
+TeX
+1060859 0 -1 4623 -1 4623 98 98 2532 798 1 1 171 462 -1 -1 0 0 35 -1 -1 35 1 0 4623 -1  0 -1 0
+CartesianPromonoidalKernel.bib
+BibTeX
+1048818 0 0 1 49 2 147 147 1914 774 1 1 186 561 -1 -1 0 0 2 0 0 2 1 0 2 49  0 -1 0
+PromonoidalDayConvolution.tex
+TeX
+1060859 0 -1 17269 -1 1278 294 294 3025 994 1 1 1776 792 -1 -1 0 0 29 -1 -1 29 1 0 1278 -1  0 -1 0
+HomologyDichotomy.tex
+TeX
+269496315 0 147 8 -1 4935 0 0 2731 700 1 1 606 264 -1 -1 0 0 23 -1 -1 23 1 0 4935 -1  0 -1 0
+hadamard-delta.bib
+BibTeX:UNIX
+1147122 0 78 1 55 1 98 98 2904 1204 1 1 171 1122 -1 -1 0 0 -1 -1 -1 -1 1 0 1 55  0 -1 0
+:\Users\fleng\vscode\efficient-defection\paper\efficient_defection_v23.tex
+TeX
+269496315 0 -1 12497 -1 12604 245 245 3506 945 1 1 171 561 -1 -1 0 0 29 -1 -1 29 1 0 12604 -1  0 -1 0
+P:\Projects\sSet\TorsorOfFillersLemma_Revised.tex
+TeX
+1060859 0 -1 0 -1 8686 49 49 1906 579 1 1 456 3300 -1 -1 0 0 29 -1 -1 29 1 0 8686 -1  0 -1 0
+P:\Projects\sSet\n_hypergroupod_conjecture\Gemini_Notes\Gemini51.png
+Binary
+273809634 0 0 1 0 1 294 294 3555 994 1 0 146 0 -1 -1 0 0 -1 -1 -1 -1 1 0 1 0  0 0 0
+P:\Projects\sSet\n_hypergroupod_conjecture\Gemini_Notes\Gemini01.pdf
+DATA
+273744114 0 0 1 0 1 245 245 3506 945 1 0 146 0 -1 -1 0 0 -1 -1 -1 -1 1 0 1 0  0 0 0
+:\Users\fleng\vscode\efficient-defection\paper\efficient_defection_v22.tex
+TeX
+1060859 0 -1 0 -1 0 294 294 3555 994 1 1 171 0 -1 -1 0 0 29 -1 -1 29 1 0 0 -1  0 -1 0
+:\Users\fleng\vscode\efficient-defection\paper\efficient_defection_v21.bib
+BibTeX
+1049586 0 75 12 75 33 343 343 3457 1363 1 1 696 693 -1 -1 0 0 36 0 0 36 1 0 33 75  0 -1 0
+:\Users\fleng\vscode\efficient-defection\paper\efficient_defection_v21.tex
+TeX
+1060859 0 -1 5341 -1 11185 294 294 3408 1314 1 1 1236 858 -1 -1 0 0 29 -1 -1 29 1 0 11185 -1  0 -1 0
+P:\Projects\GameTheory\EfficientDefection_v20.tex
+TeX
+269496315 0 -1 0 -1 0 294 294 3408 1314 1 1 171 0 -1 -1 0 0 -1 -1 -1 -1 1 0 0 -1  0 -1 0
+P:\Projects\GameTheory\EfficientDefection_v16.tex
+TeX
+269496315 0 -1 19602 -1 22906 0 0 3114 1020 1 1 1551 297 -1 -1 0 0 29 -1 -1 29 1 0 22906 -1  0 -1 0
+P:\Projects\GameTheory\EfficientDefection.tex
+TeX:UNIX
+269594619 0 -1 0 -1 0 392 392 3506 1412 1 1 171 0 -1 -1 0 0 29 -1 -1 29 1 0 0 -1  0 -1 0
+P:\Projects\GameTheory\efficient_defection_main.tex
+TeX:UNIX
+269594619 0 -1 0 -1 12155 441 441 3555 1461 1 1 531 594 -1 -1 0 0 0 -1 -1 0 1 0 12155 -1  0 -1 0
+P:\Projects\sSet\nondegeneracy-of-missing-index-basis-tensors.tex
+TeX
+17838075 0 -1 11021 -1 12200 343 343 3457 1363 1 1 171 1419 -1 -1 0 0 29 -1 -1 29 1 0 12200 -1  0 -1 0
+P:\Projects\sSet\n_hypergroupoid_conjecture_arXiv_version_13July2025.tex
+TeX
+269496315 0 -1 541 -1 679 343 343 2053 1068 1 1 186 297 -1 -1 0 0 29 -1 -1 29 1 0 679 -1  0 -1 0
+P:\Projects\sSet\TorsorOfFillersLemma.tex
+TeX
+1060859 1 -1 639 -1 4103 441 441 3555 1461 1 1 171 1419 -1 -1 0 0 29 -1 -1 29 1 0 4103 -1  0 -1 0
+P:\Projects\sSet\n_hypergroupoids_19May2025.tex
+TeX
+1060859 0 -1 129 -1 569 0 0 529 454 1 1 411 528 -1 -1 0 0 23 -1 -1 23 1 0 569 -1  0 -1 0
+P:\Projects\sSet\ChatGPT_Recap_from_Canvas_18July2025.md
+TeX:MD
+17838075 0 -1 0 -1 604 147 147 3261 1167 1 1 1146 429 -1 -1 0 0 42 -1 -1 42 1 0 604 -1  0 0 0
+P:\LaTeX\EffectiveKanFibrations\Malcev.tex
+TeX:UNIX
+1159163 1 -1 0 -1 623 294 294 3408 1314 1 1 171 330 -1 -1 0 0 102 -1 -1 102 1 0 623 -1  0 -1 0
+P:\LaTeX\EffectiveKanFibrations\Main.bbl
+TeX:AUX
+1060850 0 0 1 0 1 343 343 3457 1363 1 0 146 0 -1 -1 0 0 26 0 0 26 1 0 1 0  0 0 0
+:\Users\fleng\mytexmf\tex\latex\mystylefiles\amsthm_defs.sty
+TeX:STY
+1060850 0 0 1 0 1 0 0 3114 1020 1 0 146 0 -1 -1 0 0 18 0 0 18 1 0 1 0  0 0 0
+P:\LaTeX\EffectiveKanFibrations\Main.tex
+TeX:UNIX
+269594619 0 -1 0 -1 83 245 245 3359 1265 1 1 411 99 -1 -1 0 0 26 -1 -1 26 1 0 83 -1  0 -1 0
+P:\Projects\sSet\n_hypergroupoid_conjecture_crosschecked_13July2025.tex
+TeX
+1060859 0 -1 0 -1 15509 294 294 1469 1019 1 1 471 297 -1 -1 0 0 29 -1 -1 29 1 0 15509 -1  0 -1 0
+P:\Projects\sSet\homotopy_homology_lemma_20July2025.tex
+TeX
+1060859 0 -1 825 -1 825 196 196 3261 1263 1 1 171 726 -1 -1 0 0 29 -1 -1 29 1 0 825 -1  0 -1 0
+P:\Projects\sSet\ChatGPT_Recap_from_Canvas_18July2025.tex
+TeX
+269496315 0 -1 0 -1 42 147 147 3261 1167 1 1 801 0 -1 -1 0 0 -1 -1 -1 -1 1 0 42 -1  0 0 0
+P:\Projects\sSet\n_hypergroupoids_19June2025.tex
+TeX
+269496315 0 -1 8644 -1 8640 98 98 1808 863 1 1 171 4752 -1 -1 0 0 23 -1 -1 23 1 0 8640 -1  0 -1 0
+P:\Projects\sSet\n_hypergroupoids_19June2025.pdf
+DATA
+273678578 0 0 1 0 1 98 98 3212 1118 1 0 146 0 -1 -1 0 0 -1 -1 -1 -1 1 0 1 0  0 0 0
+P:\Projects\sSet\n_hypergroupoid_conjecture_crosschecked_resubmitted_13July2025.tex
+TeX
+1060859 0 -1 0 -1 17332 0 0 1710 765 1 1 171 1056 -1 -1 0 0 29 -1 -1 29 1 0 17332 -1  0 -1 0
+P:\Projects\sSet\n_hypergroupoid_conjecture_revised_resubmitted_13July2025.tex
+TeX
+1060859 0 -1 0 -1 21367 147 147 1857 912 1 1 171 1056 -1 -1 0 0 29 -1 -1 29 1 0 21367 -1  0 -1 0
+P:\Projects\sSet\n_hypergroupoid_conjecture_map_reduce_version_13July2025.tex
+TeX:AUX
+1060850 0 0 1 310 1 196 196 1906 961 1 0 146 990 -1 -1 0 0 1 637 637 1 1 0 1 310  0 0 0
+P:\Projects\sSet\n_hypergroupoid_conjecture_technical_report_13July2025.tex
+TeX
+1060859 0 -1 0 -1 22930 294 294 2004 1019 1 1 381 198 -1 -1 0 0 -1 -1 -1 -1 1 0 22930 -1  0 -1 0
+P:\Projects\sSet\n_hypergroupoids_18June2025.tex
+TeX
+269496315 0 -1 0 -1 11434 0 0 529 454 1 1 1236 495 -1 -1 0 0 23 -1 -1 23 1 0 11434 -1  0 -1 0
+P:\Projects\sSet\dinatural_transformations.tex
+TeX
+1060859 0 -1 22 -1 64 49 49 1224 814 1 1 471 66 -1 -1 0 0 23 -1 -1 23 1 0 64 -1  0 -1 0
+P:\Projects\sSet\n_hypergroupoid_conjecture_13July2025.tex
+TeX
+269496315 0 -1 0 -1 19579 196 196 1371 961 1 1 171 1056 -1 -1 0 0 -1 -1 -1 -1 1 0 19579 -1  0 -1 0
+P:\Projects\sSet\n_hypergroupoid_conjecture_neutral_13July2025.tex
+TeX
+1060859 1 -1 0 -1 19710 245 245 1420 1010 1 1 171 1063 -1 -1 0 0 -1 -1 -1 -1 1 0 19710 -1  0 -1 0
+P:\Projects\sSet\n_hypergroupoid_conjecture_12APR2025.tex
+TeX:UNIX
+1159163 1 -1 6128 -1 6903 98 98 1273 863 1 1 171 924 -1 -1 0 0 23 -1 -1 23 1 0 6903 -1  0 -1 0
+P:\LaTeX\CATS202407162044.tex
+TeX:UNIX
+269594619 0 -1 0 -1 0 98 98 1175 1103 1 1 171 0 -1 -1 0 0 39 -1 -1 39 1 0 0 -1  0 -1 0
+P:\LaTeX\trimble_lie_operad.tex
+TeX:UNIX
+1159163 0 -1 0 -1 0 49 49 2240 1069 1 1 171 0 -1 -1 0 0 23 -1 -1 23 1 0 0 -1  0 -1 0
+:\Users\fleng\Downloads\n_hypergroupoid_conjecture_final_corrected_chain_dual.tex
+TeX:UNIX
+269594619 1 -1 7857 -1 7978 441 441 3187 1535 1 1 171 792 -1 -1 0 0 0 -1 -1 0 1 0 7978 -1  0 -1 0
+:\Users\fleng\mytexmf\tex\latex\templates\template.tex
+TeX
+1060859 0 -1 490 -1 682 98 98 2844 1192 1 1 276 561 -1 -1 0 0 39 -1 -1 39 1 0 682 -1  0 -1 0
+:\Program Files\WinEdt Team\WinEdt 11\Config\Upgrade\Import.edt
+ASCII:EDT
+269494266 7 21 1 20 1 0 0 2648 1256 1 0 146 660 -1 -1 0 0 47 0 0 47 1 0 1 20  0 0 0
+:\Users\fleng\mytexmf\tex\latex\templates\eisvogel.latex
+DATA:UNIX
+273776882 0 0 1 0 1 49 49 2795 1143 1 0 146 0 -1 -1 0 0 3 0 0 3 1 0 1 0  0 0 0
+
+*dstm.tex
+>
+*header.tex
+*abstract.tex
+*introduction.tex
+*preliminaries.tex
+*horns.tex
+*normalization.tex
+*combinatorics.tex
+*nondegeneracy_lemma.tex
+*generated_subobjects.tex
+*dichotomy.tex
+*hodge_theory.tex
+*equivariant_homotopy.tex
+*dstm
+<
