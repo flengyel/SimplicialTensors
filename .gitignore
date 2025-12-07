@@ -161,3 +161,58 @@ cython_debug/
 
 # VS Code rubbish
 .vscode/launch.json
+
+
+
+# LaTeX auxiliary files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.xdv
+*.dvi
+*.synctex
+
+# Indexing and Glossary files
+*.idx
+*.ilg
+*.ind
+*.ist
+*.glo
+*.glg
+*.gls
+*.acn
+*.acr
+
+# Beamer specific files
+*.nav
+*.snm
+*.vrb
+
+# Biblatex/Biber auxiliary files
+*-blx.bib
+*-blx.aux
+
+# Output files (Optional: uncomment if you do not want to track compiled PDFs)
+# *.pdf
+# *.ps
+
+# Editor backup and temporary files
+*~
+*.bak
+*.tmp
+*.swp
+.vscode/
+
+# OS specific files
+.DS_Store
+Thumbs.db
