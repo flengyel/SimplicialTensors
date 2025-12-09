@@ -71,6 +71,26 @@ s_i^p(T) &:= T\circ \Sigma_i^p.
 \end{align*}
 \end{definition}
 
+\begin{remark}[Matrices in the constant shape case]\label{rem:matrices-constant-shape}
+If $k=2$ and $\vec s=(N,N)$ is constant, then $n=N-1$ and
+\[
+M_a(p) = n_a-1-n+p = p \qquad (a=1,2).
+\]
+Hence
+\[
+I_p = [p]^2
+\qquad\text{and}\qquad
+X_p(\vec s;A) = A^{[p]^2} \cong A^{(p+1)\times(p+1)}.
+\]
+In particular,
+\[
+X_{N-1}(\vec s;A) \cong A^{[N-1]^2} \cong A^{N\times N},
+\]
+so an $N\times N$ matrix may be viewed as a simplex in degree $N-1$ of $X_\bullet(\vec s;A)$.
+This identification will be used when we regard adjacency matrices of graphs on $N$ vertices as elements of $X_{N-1}(\vec s;A)$.
+\end{remark}
+
+
 \subsection{Axis Symmetries and Permutations of Tensor Factors}
 
 For a shape $\vec s=(n_1,\dots,n_k)$, define its stabilizer

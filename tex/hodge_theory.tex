@@ -143,65 +143,25 @@ where $(\Delta_p^C)^\dagger$ denotes the Moore–Penrose pseudoinverse. This is 
 metric on the orthogonal complement of $\ker(\Delta_p^C)$ and a pseudometric on $C_p$,
 hence on $\langle T\rangle_p$.
 
-
-
-\begin{remark}[Spectral theory of tensors]
-Unlike classical spectral graph theory, which studies the spectrum of $T$
-(or of a graph Laplacian) as a linear operator on functions on the vertex set,
-our construction attaches spectral data to the \emph{generated simplicial submodule}
-$\langle T\rangle_\bullet \subseteq X_\bullet$.
-
-For fixed $T$, the isomorphism
-$\langle T\rangle_\bullet \cong C_\bullet / K(T)_\bullet$
+\begin{remark}[Spectral invariants of generated submodules]
+For a fixed tensor $T$, the isomorphism
+\[
+\langle T\rangle_\bullet \;\cong\; C_\bullet / K(T)_\bullet
+\]
 (Proposition~\ref{prop:isomorphism-classes-and-orbits}) shows that the projected
-Laplacians $\Delta_p^C$ depend functorially on the kernel sequence $K(T)_\bullet$.
-Hence the Betti numbers $\beta_p(\langle T\rangle)$, Hodge spectra
-$\operatorname{Spec}(\Delta_p^C)$, spectral gaps $\lambda_1(\Delta_p^C)$ and
-Kirchhoff indices $Kf_p(\langle T\rangle)$ are invariants of the isomorphism
-class of $\langle T\rangle_\bullet$ and, equivalently, of the corresponding kernel
-sequence.
-
-Via the moduli map $\Psi\colon \mathcal U \to \mathcal M(\vec s)$
-from Section~\ref{sec:generated}, these spectral invariants define (typically
-non-constant) algebraic functions on the moduli space $\mathcal M(\vec s)$.
-In particular, for threshold shapes such as $\vec s=(3,3)$
-(Example~\ref{ex:shape_33}), they vary non-trivially with the parameters
-$[v_{00}:v_{11}:v_{22}] \in \mathbb{P}^2$.
+Laplacians $\Delta_p^C$ are determined functorially by the kernel sequence
+$K(T)_\bullet$.
+In particular, the Betti numbers $\beta_p(\langle T\rangle)$ and the spectra
+$\operatorname{Spec}(\Delta_p^C)$ are invariants of the isomorphism class of
+$\langle T\rangle_\bullet$, and hence of the point $\Psi(T)$ in the moduli space
+$\mathcal M(\vec s)$ from Section~\ref{sec:generated}.
+Traces of natural functions of $\Delta_p^C$ (for example the Foster-type sums
+from Theorem~\ref{thm:foster}) therefore define algebraic functions on
+$\mathcal M(\vec s)$.
+For shapes such as $\vec s=(3,3)$ (Example~\ref{ex:shape_33}), these functions
+vary non-trivially with the parameters $[v_{00}:v_{11}:v_{22}] \in \mathbb{P}^2$.
 \end{remark}
 
-\subsection{\texorpdfstring{Example: The Petersen Graph ($k=2$)}{Example: The Petersen Graph (k=2)}} 
-\label{ex:petersen}
-
-We illustrate the recovery of classical spectral graph theory in the case $k=2$.
-Let $P$ be the Petersen graph and let $T$ be a tensor encoding its adjacency matrix
-(as in Section~\ref{sec:generated}).
-The generated submodule $\langle T \rangle$ has chain groups naturally isomorphic to
-the usual vertex and edge chain groups of $P$, and the projected Laplacians
-$\Delta_0^C$ and $\Delta_1^C$ coincide with the standard vertex and edge graph Laplacians.
-
-\begin{itemize}
-    \item \textbf{Dimensions and Betti numbers.}
-    $P$ has $|V|=10$ vertices and $|E|=15$ edges.
-    The graph is connected, so $\beta_0=1$.
-    The first Betti number is the cyclomatic number
-    $\beta_1 = |E| - |V| + 1 = 15 - 10 + 1 = 6$.
-    \item \textbf{Laplacian spectra.}
-    The projected vertex Laplacian $\Delta_0^C$ has spectrum
-    $\{0^{(1)}, 2^{(5)}, 5^{(4)}\}$.
-    The projected edge Laplacian $\Delta_1^C$ has spectrum
-    $\{0^{(6)}, 2^{(5)}, 5^{(4)}\}$; the six zero eigenvalues correspond to the
-    $6$-dimensional cycle space $H_1$.
-    \item \textbf{Effective resistance.}
-    In our normalization, the (degree-$0$) Kirchhoff index is
-    \[
-      Kf_0(\langle T\rangle) = \operatorname{Tr}\bigl((\Delta_0^C)^\dagger\bigr)
-        = \sum_{\lambda>0} \frac{1}{\lambda}
-        = 5\cdot\frac{1}{2} + 4\cdot\frac{1}{5} = 3.3
-    \]
-    The Green’s operator $(\Delta_0^C)^\dagger$ yields the usual effective resistance
-    between pairs of vertices, and the higher-degree operators $(\Delta_1^C)^\dagger$
-    encode the corresponding effective resistances on edges.
-\end{itemize}
 
 
 
