@@ -38,7 +38,8 @@ Since $K[\Delta^n]$ is generated in degree $n$, any simplicial submodule is
 determined by its components up to degree $n$.
 \end{remark}
 
-\begin{proposition}[Isomorphism classes and kernel sequences]\label{prop:isomorphism-classes-and-orbits}
+
+\begin{proposition}[Quotients and generated submodules]\label{prop:isomorphism-classes-and-orbits}
 For each $T\in X_n(\vec{s};K)$, the realization map
 $f_T:C_\bullet\to X_\bullet(\vec s;K)$ induces an isomorphism
 \[
@@ -46,16 +47,6 @@ C_\bullet / K(T)_\bullet \xrightarrow{\ \cong\ } \langle T\rangle_\bullet.
 \]
 In particular, all invariants of the generated submodule $\langle T\rangle_\bullet$
 can be computed from its kernel sequence $K(T)_\bullet \subseteq C_\bullet$.
-
-The simplicial automorphism group
-$\operatorname{Aut}_{\mathrm{simp}}(C_\bullet)$ acts on kernel sequences by
-\[
-\varphi\cdot K_\bullet := \varphi^{-1}\bigl(K_\bullet\bigr),
-\qquad
-\varphi\in\operatorname{Aut}_{\mathrm{simp}}(C_\bullet),
-\]
-and if $K(T_2)_\bullet = \varphi\cdot K(T_1)_\bullet$ for some
-$\varphi$, then $\langle T_1\rangle_\bullet \cong \langle T_2\rangle_\bullet$.
 \end{proposition}
 
 \begin{proof}
@@ -65,19 +56,9 @@ simplicial map
 C_\bullet/K(T)_\bullet \longrightarrow \langle T\rangle_\bullet
 \]
 which is an isomorphism in each degree, because $K(T)_p = \ker(f_{T,p})$ and
-$\langle T\rangle_p = \operatorname{im}(f_{T,p})$. This proves the first claim.
-
-For the second claim, suppose $K(T_2)_\bullet = \varphi^{-1}(K(T_1)_\bullet)$ for some
-$\varphi\in\operatorname{Aut}_{\mathrm{simp}}(C_\bullet)$. Then $\varphi$ induces
-an isomorphism of quotients
-\[
-C_\bullet/K(T_2)_\bullet \xrightarrow{\ \cong\ } C_\bullet/K(T_1)_\bullet,
-\]
-and composing with the degreewise isomorphisms
-$C_\bullet/K(T_i)_\bullet \xrightarrow{\cong} \langle T_i\rangle_\bullet$ for
-$i=1,2$ yields an isomorphism
-$\langle T_2\rangle_\bullet \cong \langle T_1\rangle_\bullet$.
+$\langle T\rangle_p = \operatorname{im}(f_{T,p})$.
 \end{proof}
+
 
 
 
