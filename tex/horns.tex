@@ -126,6 +126,7 @@ By Theorem~\ref{thm:support_characterization}, $R_{p,j} \ne \{0\}$ iff $M_{p,j} 
 
 \subsection{\texorpdfstring{The $\ell$-free Subspace}{The l-free Subspace}}
 
+Fix a degree $p\ge 0$ and an index $0\le \ell\le p$.
 The combinatorial characterization of $\operatorname{im}(\Delta_\ell^p)$ yields a structural property of the face maps.
 
 \begin{definition}[$\ell$-free subspace]
@@ -142,6 +143,9 @@ The face map $d_\ell^p$ induces a linear isomorphism
 d_\ell^p:\ X_p^{(\ell\text{-free})}\ \xrightarrow{\ \cong\ }\ X_{p-1}.
 \]
 \end{corollary}
+
+
+
 \begin{proof}
 By the proof of Proposition~\ref{prop:missing_indices}, $m \in \operatorname{im}(\Delta_\ell^p) \iff \ell \notin \operatorname{im}(m)$. Thus $X_p^{(\ell\text{-free})}$ is spanned by $\{E_{m} \mid m \in \operatorname{im}(\Delta_\ell^p)\}$. By the Injectivity Lemma~\ref{lem:injectivity}, $d_\ell^p$ is injective on this subspace. Since $\Delta_\ell^p: I_{p-1} \to \operatorname{im}(\Delta_\ell^p)$ is a bijection, Lemma~\ref{lem:face_action} shows that $d_\ell^p$ maps the basis of $X_p^{(\ell\text{-free})}$ bijectively onto the basis of $X_{p-1}$.
 \end{proof}

@@ -1,6 +1,4 @@
-% Header.tex
-
-%\documentclass[11pt]{article}  % unused with elsarticle
+% header.tex
 
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,amsthm}
@@ -11,9 +9,10 @@
 \usepackage{comment}
 \usepackage{tikz-cd}
 
-\includecomment{show} % Show the 'show' environment content (for drafts, etc.)
-\excludecomment{hide} % Hide the 'hide' environment content (for unwritten portions)
-% reverse these for the final version, if desired
+% Show/hide environments for drafts
+\includecomment{show}  % show contents of 'show'
+\excludecomment{hide}  % hide contents of 'hide'
+% Reverse these for the final version if desired.
 
 % --- Theorem Styles ---
 \newtheorem{theorem}{Theorem}[section]
@@ -35,7 +34,7 @@
 % Stirling numbers of the second kind
 \newcommand{\StirlingII}[2]{\genfrac{\{}{\}}{0pt}{}{#1}{#2}}
 
-% Normalized and degenerate submodules (Moore normalization with d_0 as differential)
+% Normalized submodules (Moore normalization with d_0 as differential)
 \newcommand{\Norm}[1]{N_{#1}} % \Norm{n} = \bigcap_{i=1}^n \ker d_i
 
 % --- Algebraic categories ---
@@ -48,6 +47,7 @@
 \DeclareMathOperator{\Cone}{Cone}
 \DeclareMathOperator{\Aut}{Aut}
 \DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Stab}{Stab}
 
 % Hyperref last
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue]{hyperref}
