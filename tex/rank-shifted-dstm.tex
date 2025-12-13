@@ -1,0 +1,165 @@
+\section{Rank-Shifted DSTM and Hodge Structure}
+
+Let $A$ be a commutative ring and $k\in\mathbb{Z}^+$. A \emph{shape} is a
+$k$-tuple $\vec s = (n_1,\dots,n_k)$ with $n_a\in\mathbb{Z}^+$. Set
+\[
+n := \min_a(n_a) - 1.
+\]
+
+\subsection{Base DSTM}
+
+For $p\ge 0$ and $1\le a\le k$ define
+\[
+M_a(p) := n_a - 1 - n + p.
+\]
+Since $n_a-1\ge n$, we have $M_a(p)\ge p$ for all $a,p$. The degree-$p$
+index set is
+\[
+I_p := \prod_{a=1}^k [M_a(p)],
+\qquad [M_a(p)] := \{0,1,\dots,M_a(p)\}.
+\]
+We write $X_p(\vec s;A) := A^{I_p}$ for the free $A$-module of
+functions $I_p\to A$.
+
+For $0\le i\le p$ the \emph{index cofaces} and \emph{codegeneracies} are
+\[
+\Delta_i^p := \prod_{a=1}^k \delta_i^{M_a(p)} : I_{p-1}\to I_p,
+\qquad
+\Sigma_i^p := \prod_{a=1}^k \sigma_i^{M_a(p)} : I_{p+1}\to I_p,
+\]
+where $\delta_i^q:[q-1]\hookrightarrow[q]$ is the standard coface
+(injection missing $i$) and $\sigma_i^q:[q+1]\twoheadrightarrow[q]$ is
+the standard codegeneracy (surjection repeating $i$). These satisfy the
+cosimplicial identities componentwise, hence define a functor
+$I_\bullet:\Delta\to\mathbf{Set}$.
+
+\begin{definition}[Diagonal Simplicial Tensor Module]
+The \emph{Diagonal Simplicial Tensor Module} (DSTM) associated to
+$(\vec s,A)$ is the simplicial $A$-module
+\[
+X_\bullet(\vec s;A) := A^{(-)}\circ I_\bullet:\Delta^{\mathrm{op}}\to\mathbf{Mod}_A.
+\]
+In degree $p$ we have $X_p(\vec s;A) = A^{I_p}$. The face and
+degeneracy maps are given by precomposition:
+\[
+d_i^p(T) := T\circ\Delta_i^p,\qquad
+s_i^p(T) := T\circ\Sigma_i^p.
+\]
+The associated chain complex $(X_\bullet,\partial)$ has
+$\partial_p := \sum_{i=0}^p (-1)^i d_i^p$.
+\end{definition}
+
+\subsection{Rank-Shifted DSTM}
+
+We now define a family of ``rank-shifted'' DSTMs that enlarge the index
+sets in each degree.
+
+\begin{definition}[Rank-$r$ shift]\label{def:rank_shifted_dstm}
+For an integer $r\ge 0$ and degree $p\ge 0$ set
+\[
+M_a^{(r)}(p) := M_a(p) + r = n_a - 1 - n + p + r,
+\]
+and
+\[
+I_p^{(r)} := \prod_{a=1}^k [M_a^{(r)}(p)].
+\]
+Define $X_p^{(r)}(\vec s;A) := A^{I_p^{(r)}}$.
+
+The index cofaces and codegeneracies are
+\[
+\Delta_{i}^{(r),p} := \prod_{a=1}^k \delta_i^{M_a^{(r)}(p)} :
+  I_{p-1}^{(r)} \to I_p^{(r)},
+\qquad
+\Sigma_{i}^{(r),p} := \prod_{a=1}^k \sigma_i^{M_a^{(r)}(p)} :
+  I_{p+1}^{(r)} \to I_p^{(r)}.
+\]
+These define a cosimplicial object $I_\bullet^{(r)}:\Delta\to\mathbf{Set}$,
+and the \emph{rank-$r$ DSTM} is
+\[
+X_\bullet^{(r)}(\vec s;A) := A^{(-)}\circ I_\bullet^{(r)}.
+\]
+\end{definition}
+
+Thus $X_p^{(r)}(\vec s;A)$ is a free $A$-module of rank
+$\lvert I_p^{(r)}\rvert$, strictly larger than $\lvert I_p\rvert$ when
+$r>0$. The simplicial degree $p$ is unchanged, but the ``axis length''
+in each degree has increased.
+
+\begin{remark}[Contrast with degree shifts]
+Do \emph{not} confuse $X_\bullet^{(r)}(\vec s;A)$ with the simplicial
+module defined by a degree shift
+\[
+Y_d^{(r)} := X_{d+r}(\vec s;A),\quad d\ge 0,
+\]
+with faces and degeneracies inherited from $X_\bullet$. The latter is
+just a reindexing of degrees and is homotopy equivalent to $X_\bullet$.
+By contrast, the rank-shifted DSTM changes the index sets $I_p$ in each
+degree and genuinely modifies the combinatorics and homotopy type.
+\end{remark}
+
+\subsection{Hodge Structure on the Rank-Shifted DSTM}
+
+For Hodge theory we work over a subfield $K\subseteq\mathbb{R}$ and endow
+each $X_p^{(r)}(\vec s;K)$ with the standard inner product.
+
+\begin{definition}[Inner product, adjoint, Laplacian]
+For each $p\ge 0$, declare the standard basis
+$\{E_m\}_{m\in I_p^{(r)}}$ of $X_p^{(r)}(\vec s;K)$ to be orthonormal.
+This gives a Hilbert space structure
+\[
+\langle E_m, E_{m'}\rangle = \delta_{m,m'}.
+\]
+
+Let $\partial_p^{(r)}: X_p^{(r)}\to X_{p-1}^{(r)}$ be the boundary
+operator. Its adjoint with respect to this inner product is
+\[
+(\partial_p^{(r)})^*: X_{p-1}^{(r)} \to X_p^{(r)}.
+\]
+
+The \emph{combinatorial Laplacian} in degree $p$ is
+\[
+\Delta_p^{(r)} := (\partial_{p+1}^{(r)})(\partial_{p+1}^{(r)})^*
+                 + (\partial_p^{(r)})^* \partial_p^{(r)}
+  : X_p^{(r)} \to X_p^{(r)}.
+\]
+\end{definition}
+
+Since each $X_p^{(r)}$ is finite-dimensional over $K$ and
+$\Delta_p^{(r)}$ is self-adjoint and positive semidefinite, we obtain
+the usual Hodge decomposition.
+
+\begin{proposition}[Hodge decomposition for $X_\bullet^{(r)}$]
+For each $p\ge 0$ there is an orthogonal direct sum decomposition
+\[
+X_p^{(r)} = \operatorname{im}(\partial_{p+1}^{(r)}) \;\oplus\;
+            \operatorname{im}\bigl((\partial_p^{(r)})^*\bigr) \;\oplus\;
+            \ker(\Delta_p^{(r)}).
+\]
+Moreover
+\[
+\ker(\Delta_p^{(r)}) = \ker(\partial_p^{(r)}) \cap
+                       \ker\bigl((\partial_{p+1}^{(r)})^*\bigr)
+\]
+is canonically isomorphic to the homology
+$H_p(X_\bullet^{(r)}) := \ker\partial_p^{(r)}/\operatorname{im}\partial_{p+1}^{(r)}$.
+\end{proposition}
+
+\begin{remark}[What changes with $r$?]
+For $r=0$ (the untwisted DSTM) one can construct an explicit
+shift-and-truncate chain contraction $H$ showing that
+$H_p(X_\bullet^{(0)})=0$ for all $p$; equivalently,
+$\ker(\Delta_p^{(0)})=\{0\}$ and each $\Delta_p^{(0)}$ is invertible.
+
+For $r>0$, the rank-shift enlarges the index sets in degree $0$ and
+breaks the specific chain homotopy $H$ used in the untwisted case.
+We therefore do not know a priori whether
+$\ker(\Delta_p^{(r)})$ is trivial. The main experimental question is:
+for given $(\vec s,r)$, do the harmonic spaces
+$\ker(\Delta_p^{(r)})$ vanish, and if not, what are their ranks and
+spectra?
+
+In particular, for $k=2$ and constant shape $\vec s=(N,N)$, one can
+embed adjacency matrices of graphs on $N$ vertices into a fixed degree
+of $X_\bullet^{(r)}(\vec s;K)$ and study the Hodge spectra of the
+subcomplex generated by such tensors as $r$ varies.
+\end{remark}

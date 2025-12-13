@@ -105,7 +105,6 @@ $T$, and are the source of rank loss in the symbolic matrices
 $M_{T_{\mathrm{sym}},p}$.
 
 
-
 \subsection{The Moduli Map and Grassmannians}
 
 Let $\mathcal{V} = \{v_u\}_{u \in I_n}$ be indeterminates and
@@ -127,20 +126,25 @@ for all $p$.
 The \textbf{Grassmannian associated to the shape} $\vec s$ is
 \[
 \operatorname{Gr}(\vec s)
-:= \prod_{p:\ K'_p(\vec s)>0} \operatorname{Gr}\bigl(K'_p(\vec{s}), K[\Delta^n]_p\bigr).
+:= \prod_{\substack{0\le p\le n\\ K'_p(\vec s)>0}}
+   \operatorname{Gr}\bigl(K'_p(\vec{s}), K[\Delta^n]_p\bigr).
 \]
-By Remark~\ref{rem:finite_generation}, this product involves at most
-$n+1$ factors ($0\le p \le n$).
+By Remark~\ref{rem:finite_generation}, a simplicial submodule of
+$C_\bullet=K[\Delta^n]$ is determined by its components in degrees
+$0\le p\le n$, so recording the kernels $K(T)_p=\ker f_{T,p}$ in this
+range determines the entire kernel sequence $K(T)_\bullet$.
 
 The \textbf{Moduli Map} $\Psi$ is the algebraic map:
 \[
 \Psi: \mathcal{U} \longrightarrow \operatorname{Gr}(\vec s),
 \quad
-T \mapsto (\ker f_{T,p})_{p}.
+T \mapsto (\ker f_{T,p})_{0\le p\le n}.
 \]
+
 The \textbf{Moduli Space of Kernel Sequences} $\mathcal{M}(\vec s)$ is
 the image $\Psi(\mathcal{U})$.
 \end{definition}
+
 
 \subsection{Injectivity Analysis and Examples}
 
@@ -251,6 +255,76 @@ embedding, these bilinear equations in the Plücker coordinates become
 linear equations in the homogeneous coordinates of the tensor product
 space.
 \end{proof}
+
+\begin{proposition}[Determinantal structure of the incidence variety]\label{prop:determinantal}
+Let $C_p := K[\Delta^n]_p$. On $\operatorname{Gr}(\vec s)$, let
+$\mathcal{S}_p \subset C_p \otimes \mathcal{O}_{\operatorname{Gr}(\vec s)}$
+denote the pullback of the tautological rank-$K'_p(\vec s)$ subbundle on
+$\operatorname{Gr}(K'_p(\vec s),C_p)$ along the projection
+$\operatorname{Gr}(\vec s) \to \operatorname{Gr}(K'_p(\vec s),C_p)$, and
+let $\mathcal{S}_{p-1}$ be defined similarly in degree $p-1$.
+
+For each pair $(p,i)$ with $K'_p(\vec s)>0$, the face map
+$d_i : C_p \to C_{p-1}$ induces a morphism of vector bundles
+\[
+\varphi_{p,i} : \mathcal{S}_p \longrightarrow
+ \bigl(C_{p-1} \otimes \mathcal{O}_{\operatorname{Gr}(\vec s)}\bigr)
+/\,\mathcal{S}_{p-1}.
+\]
+Then the incidence variety $\mathbf{Gr}^{\mathrm{simp}}(\vec s)$ is the
+scheme-theoretic intersection
+\[
+\mathbf{Gr}^{\mathrm{simp}}(\vec s)
+ = \bigcap_{p,i} \{\,\varphi_{p,i} = 0\,\},
+\]
+i.e.\ it is the intersection of the rank-$0$ determinantal loci of the
+bundle maps $\varphi_{p,i}$. In particular, $\mathbf{Gr}^{\mathrm{simp}}(\vec s)$
+is a determinantal subvariety of $\operatorname{Gr}(\vec s)$.
+\end{proposition}
+
+\begin{proof}
+A point of $\operatorname{Gr}(\vec s)$ is a tuple of subspaces
+$(K_p)_p$ with $K_p \subset C_p$ and $\dim K_p = K'_p(\vec s)$ whenever
+$K'_p(\vec s)>0$. By construction of the tautological subbundle,
+the fiber $(\mathcal{S}_p)_x$ over a point $x$ corresponding to
+$(K_p)_p$ is exactly $K_p$, and similarly $(\mathcal{S}_{p-1})_x = K_{p-1}$.
+
+The fixed linear map $d_i : C_p \to C_{p-1}$ induces a morphism of
+vector bundles
+\[
+d_i \otimes \mathrm{id} : C_p \otimes \mathcal{O}_{\operatorname{Gr}(\vec s)}
+ \longrightarrow C_{p-1} \otimes \mathcal{O}_{\operatorname{Gr}(\vec s)}.
+\]
+Composing with the quotient map
+$C_{p-1} \otimes \mathcal{O}_{\operatorname{Gr}(\vec s)}
+ \twoheadrightarrow (C_{p-1} \otimes \mathcal{O}_{\operatorname{Gr}(\vec s)})/\mathcal{S}_{p-1}$
+and restricting to $\mathcal{S}_p \subset C_p \otimes \mathcal{O}$ gives
+a bundle map
+\[
+\varphi_{p,i} : \mathcal{S}_p \to
+ (C_{p-1} \otimes \mathcal{O}_{\operatorname{Gr}(\vec s)})/\mathcal{S}_{p-1}.
+\]
+
+At a point $x=(K_p)_p$, the fiber map
+$(\varphi_{p,i})_x : K_p \to C_{p-1}/K_{p-1}$ is the composition
+\[
+K_p \hookrightarrow C_p \xrightarrow{d_i} C_{p-1} \twoheadrightarrow C_{p-1}/K_{p-1}.
+\]
+Thus $(\varphi_{p,i})_x = 0$ if and only if $d_i(K_p) \subseteq K_{p-1}$.
+By definition, $\mathbf{Gr}^{\mathrm{simp}}(\vec s)$ is the locus of tuples satisfying
+these inclusions for all $(p,i)$.
+
+In local trivializations, $\varphi_{p,i}$ is represented by a matrix of regular functions,
+and the condition $(\varphi_{p,i})_x=0$ corresponds to the vanishing of all entries
+(all $1\times 1$ minors).
+Globally, this condition defines the zero locus of the section $\varphi_{p,i}$ of the bundle
+$\mathcal{H}om(\mathcal{S}_p, \mathcal{Q}_{p-1})$, where we define the quotient bundle
+$\mathcal{Q}_{p-1} := (C_{p-1} \otimes \mathcal{O}_{\operatorname{Gr}(\vec s)})/\mathcal{S}_{p-1}$.
+In terms of homogeneous coordinates, this condition is bilinear in the Plücker coordinates
+of the factors (and thus linear in the Segre coordinates), confirming that
+$\mathbf{Gr}^{\mathrm{simp}}(\vec s)$ is a determinantal subvariety.
+\end{proof}
+
 
 \subsection{Homology of Generated Subobjects}
 

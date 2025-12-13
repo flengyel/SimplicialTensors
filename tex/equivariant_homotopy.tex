@@ -23,13 +23,17 @@ T(m-\vec{1}) & \text{if } \forall a: m_a > 0.
 \]
 \end{definition}
 
+
+
 \begin{lemma}\label{lem:homotopy_identities}
-The operator $H$ satisfies the following identities for $p\ge 0$:
+The operator $H$ satisfies the following identities:
 \begin{enumerate}
-    \item $d_0^{p+1} H_p = \mathrm{id}_{X_p}$.
-    \item $d_i^{p+1} H_p = H_{p-1} d_{i-1}^p$ for $i>0$.
+    \item For all $p\ge 0$, $d_0^{p+1} H_p = \mathrm{id}_{X_p}$.
+    \item For all $p\ge 1$ and all $i>0$, $d_i^{p+1} H_p = H_{p-1} d_{i-1}^p$.
 \end{enumerate}
 \end{lemma}
+
+
 \begin{proof}
 Let $T \in X_p$ and $m \in I_p$.
 
@@ -60,7 +64,8 @@ hence $\Delta_i^p(m)-\vec{1} = \Delta_{i-1}^p(m-\vec{1})$ when all $m_a>0$,
 and the two expressions agree.
 
 
-\textbf{Case $p=0$:} We verify $d_1^1 H_0 = H_{-1} d_0^0 = 0$.
+\textbf{Case $p=0$:} We verify $d_1^1 H_0 = 0$.
+
 Let $m \in I_0$. By Remark \ref{rem:index_bounds}, there exists $a_0$ such that $m_{a_0}=0$.
 $d_1 H_0(T)(m) = H_0(T)(\Delta_1(m))$.
 The $a_0$-th coordinate of $\Delta_1(m)$ is $\delta_1(m_{a_0}) = \delta_1(0)$. Since $i=1>0$, $\delta_1(0)=0$.
