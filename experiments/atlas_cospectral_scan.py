@@ -3,7 +3,7 @@
 atlas_cospectral_scan.py
 
 Scan the NetworkX Graph Atlas for adjacency-cospectral, non-isomorphic pairs
-and compute the mod-2 DSTM-inspired adjacency-boundary rank distributions.
+and compute the mod-2 adjacency-boundary rank distributions.
 
 Boundary over GF(2):
   ∂T := sum_{k=0}^{N-1} d_k(T)  (mod 2),
