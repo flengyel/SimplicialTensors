@@ -6,7 +6,7 @@
 \subsection{The Horn Complex}
 
 In this subsection we assume $n\ge 2$; for $n<2$ the horn complex in low degrees degenerates and the corresponding homology statements are easily checked directly.
-Fix $j\in[n]$. Define the linear maps
+Fix $j\in[n]$. Define the linear maps (identifying $\bigoplus_{i\ne j}X_{n-1}\cong \prod_{i\ne j}X_{n-1}$):
 \[
 \Phi_j:X_n\longrightarrow \bigoplus_{i\ne j}X_{n-1},\qquad
 \Phi_j(T)=(d_iT)_{i\ne j},
@@ -43,13 +43,13 @@ Thus $H_1 = \ker\partial_1 / \operatorname{im}\partial_2 = 0$.
 \begin{theorem}[Short exact sequence in the horn kernel]\label{thm:short-exact}
 The face map $d_j:R_{n,j}\to X_{n-1}$ induces a natural short exact sequence
 \[
-0\longrightarrow Z_n\longrightarrow R_{n,j} \xrightarrow{\,d_j\,} d_j(R_{n,j})\longrightarrow 0.
+0\longrightarrow Z_n(N_\bullet)\longrightarrow R_{n,j} \xrightarrow{\,d_j\,} d_j(R_{n,j})\longrightarrow 0.
 \]
 \end{theorem}
 
 \begin{proof}
 The kernel of $d_j|_{R_{n,j}}$ is
-$R_{n,j}\cap\ker d_j = \bigcap_{i\ne j}\ker d_i \cap \ker d_j = Z_n$.
+$R_{n,j}\cap\ker d_j = \bigcap_{i\ne j}\ker d_i \cap \ker d_j = Z_n(N_\bullet)$.
 \end{proof}
 
 \subsection{The Classification Dichotomy}
@@ -57,31 +57,32 @@ $R_{n,j}\cap\ker d_j = \bigcap_{i\ne j}\ker d_i \cap \ker d_j = Z_n$.
 We use the ranks established in Section~\ref{sec:combinatorics}.
 
 \begin{corollary}[Filler dichotomy]\label{cor:dichotomy}
-The ranks of $R_{n,j}$ and $Z_n$ (Proposition~\ref{prop:rank-IE}, Corollary~\ref{cor:rank-Zp}) determine the following classification based on the tensor order $k$:
+The ranks of $R_{n,j}$ and $Z_n(N_\bullet)$ (Proposition~\ref{prop:rank-IE}, Corollary~\ref{cor:rank-Zp}) determine the following classification based on the tensor order $k$:
 \begin{enumerate}
 \item If $k<n$, then $R_{n,j}=0$ (fillers are unique in dimension $n$).
-\item If $k=n$, then $R_{n,j}\neq 0$ and $Z_n=0$. Hence $R_{n,j}\cong d_j(R_{n,j})$.
-\item If $k\ge n+1$, then $Z_n\neq 0$ and $Z_n$ injects canonically into $R_{n,j}$.
+\item If $k=n$, then $R_{n,j}\neq 0$ and $Z_n(N_\bullet)=0$. Hence $R_{n,j}\cong d_j(R_{n,j})$.
+\item If $k\ge n+1$, then $Z_n(N_\bullet)\neq 0$ and $Z_n(N_\bullet)$ injects canonically into $R_{n,j}$.
 \end{enumerate}
 \end{corollary}
 
 \begin{corollary}[Constant shape ranks]\label{cor:rank-constant-shape-revised}
 For the constant shape $\vec{s} = (n+1, \ldots, n+1)$, the ranks are given by Theorem~\ref{thm:Stirling}:
 \[
-\operatorname{rank} Z_n = (n+1)! \StirlingII{k}{n+1},
+\rank Z_n(N_\bullet) = (n+1)! \StirlingII{k}{n+1},
 \]
 \[
-\operatorname{rank} R_{n,j} = n! \StirlingII{k}{n} + (n+1)! \StirlingII{k}{n+1}.
+\rank R_{n,j} = n! \StirlingII{k}{n} + (n+1)! \StirlingII{k}{n+1}.
 \]
 In particular:
 \begin{itemize}
-\item $Z_n \neq 0$ if and only if $k \geq n+1$.
+\item $Z_n(N_\bullet) \neq 0$ if and only if $k \geq n+1$.
 \item $R_{n,j} \neq 0$ if and only if $k \geq n$.
 \end{itemize}
 \end{corollary}
 
 \begin{remark}[Moore filler vs.\ $T$]
-For the horn $\Lambda^n_j(T)$, Moore’s filler $T'$ satisfies $T'=T$ if and only if $T \in D_n$: the “only if” direction holds because $T'$ is always degenerate (Definition~\ref{def:moore_filler}), and the “if” direction follows from Lemma~\ref{lem:horn-nondeg}, since in that case $T-T'$ lies in $R_{n,j}\cap D_n=\{0\}$. If $k<n$, then $R_{n,j}=0$, so $T'=T$ always holds (and $D_n=X_n$). If $k\ge n$ and $T \notin D_n$, then $T-T'\in R_{n,j}\setminus\{0\}$ and is supported on the missing indices (Theorem~\ref{thm:support_characterization}).
+Write $\Lambda^n_j(T):=\Phi_j(T)\in \operatorname{Horns}(n,j)$ for the $(n,j)$-horn of $T$.
+Moore’s filler $T'$ satisfies $T'=T$ if and only if $T \in D_n$: the “only if” direction holds because $T'$ is always degenerate (Definition~\ref{def:moore_filler}), and the “if” direction follows from Lemma~\ref{lem:horn-nondeg}, since in that case $T-T'$ lies in $R_{n,j}\cap D_n=\{0\}$. If $k<n$, then $R_{n,j}=0$, so $T'=T$ always holds (and $D_n=X_n$). If $k\ge n$ and $T \notin D_n$, then $T-T'\in R_{n,j}\setminus\{0\}$ and is supported on the missing indices (Theorem~\ref{thm:support_characterization}).
 \end{remark}
 
 \subsection{Interpretation as Algebraic \texorpdfstring{$n$}{n}-Hypergroupoids}
@@ -106,7 +107,7 @@ algebraic $n$-hypergroupoid if and only if the tensor order $k$ equals $n$.
 
 \subsection{The Subcomplex of Normalized Cycles}
 
-We analyze the subcomplex formed by the normalized cycles $Z_r(N_\bullet)$. 
+We analyze the subcomplex formed by the normalized cycles $Z_r(N_\bullet)$.
 In the DSTM, $Z_r(N_\bullet)$ is spanned by basis elements $E_m$ such that $\operatorname{im}(m) \supseteq [r]$.
 
 \begin{lemma}\label{lem:normalized-cycle-subcomplex}
@@ -130,7 +131,7 @@ The homology of a complex with zero differential is the complex itself.
 \end{proof}
 
 \begin{corollary}[Quotient homology]\label{cor:normalized-cycle-quotient}
-For the DSTM $X_\bullet(\vec{s};A)$, which is contractible by Theorem~\ref{thm:contractible}, 
+For the DSTM $X_\bullet(\vec{s};A)$, which is contractible by Theorem~\ref{thm:contractible},
 the short exact sequence of chain complexes \eqref{eq:short-exact} induces isomorphisms
 \[
 H_r\!\bigl(X_\bullet/Z_\bullet(N_\bullet)\bigr)\ \cong\ H_{r-1}\!\bigl(Z_\bullet(N_\bullet)\bigr) \cong Z_{r-1}(N_\bullet)
@@ -156,5 +157,5 @@ H_r\!\bigl(X_\bullet/Z_\bullet(N_\bullet)\bigr)\ \cong\ H_{r-1}\!\bigl(Z_\bullet
 \end{proof}
 
 \begin{remark}[Homology spheres]
-For a normalized cycle $C\in Z_n(N_\bullet)$, the generated simplicial subobject $\langle C \rangle \subseteq X_\bullet$ (the degeneracy-closure) provides an algebraic model of the $n$-sphere. If $C$ is primitive (e.g., a basis element $E_m$ over a PID $A$), $\langle C \rangle$ is isomorphic to the simplicial sphere $A[\Delta^n]/\operatorname{Sk}_{n-1}(A[\Delta^n])$. It satisfies $H_n(\langle C \rangle)\cong A$ and $H_m(\langle C \rangle)=0$ for $m\ne n$. (See Weibel~\cite[Exercise 8.3.4]{Weibel}.)
+For a normalized cycle $C\in Z_n(N_\bullet)$, the generated simplicial subobject $\langle C \rangle \subseteq X_\bullet$ (the degeneracy-closure) provides an algebraic model of the $n$-sphere. If $C$ is primitive (e.g., a basis element $E_m$ over a PID $A$), $\langle C \rangle$ is isomorphic to the simplicial sphere $A[\sDelta^n]/\operatorname{Sk}_{n-1}(A[\sDelta^n])$. It satisfies $H_n(\langle C \rangle)\cong A$ and $H_m(\langle C \rangle)=0$ for $m\ne n$. (See Weibel~\cite[Exercise 8.3.4]{Weibel}.)
 \end{remark}

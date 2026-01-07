@@ -21,9 +21,9 @@ A simplicial module $X_\bullet$ is a \textbf{strict algebraic $n$-hypergroupoid}
 \end{definition}
 
 
-\begin{remark}[Relation to Duskin--Glenn]\label{rem:nlab-hypergroupoid}
+\begin{remark}[Relation to Duskin and Glenn]\label{rem:nlab-hypergroupoid}
 Condition~\emph{(1)} in Definition~\ref{def:n-hypergroupoid} is exactly the
-$n$-hypergroupoid condition of Duskin--Glenn (as in the $n$Lab definition):
+$n$-hypergroupoid condition of Duskin and Glenn:
 all horns in dimensions $p>n$ admit unique fillers. Condition~\emph{(2)}
 adds a non-uniqueness requirement in dimension $n$: there exists $j$ with
 $R_{n,j}(X)\neq 0$. Thus a strict algebraic $n$-hypergroupoid in our sense is
@@ -95,8 +95,8 @@ $\StirlingII{k}{m}$ (see, e.g., Stanley~\cite{StanleyEC1}).
 \begin{theorem}[Ranks for Constant Shape]\label{thm:Stirling}
 If $M_a(p)=p$ for all $a$ (i.e., $I_p=[p]^k$), the ranks of the components of the Moore complex in degree $p$ are:
 \begin{align*}
-\operatorname{Rank} Z_p(N_\bullet) &= (p+1)!\,\StirlingII{k}{p+1}, \\
-\operatorname{Rank} N_p(X) &= p!\,\StirlingII{k}{p} + (p+1)!\,\StirlingII{k}{p+1}.
+\rank Z_p(N_\bullet) &= (p+1)!\,\StirlingII{k}{p+1}, \\
+\rank N_p(X) &= p!\,\StirlingII{k}{p} + (p+1)!\,\StirlingII{k}{p+1}.
 \end{align*}
 \end{theorem}
 
@@ -107,7 +107,9 @@ The rank of $Z_p(N_\bullet)$ specializes to
 \[
 \sum_{t=0}^{p+1}(-1)^t\binom{p+1}{t}(p+1-t)^k = \Delta^{p+1}(x^k)\big|_{x=0}.
 \]
-Using the expansion $x^k=\sum_{m}\StirlingII{k}{m}x^{\underline m}$. The operator acts by $\Delta^{p+1}(x^{\underline m}) = m^{\underline{p+1}} x^{\underline{m-p-1}}$. Evaluating at $x=0$, only the term $m=p+1$ contributes (since $0^{\underline 0}=1$ and $0^{\underline{j}}=0$ for $j>0$), yielding $(p+1)!\,\StirlingII{k}{p+1}$.
+Using the expansion $x^k=\sum_{m=0}^{k}\StirlingII{k}{m}x^{\underline m}$.
+The operator acts by $\Delta^{p+1}(x^{\underline m}) = m^{\underline{p+1}} x^{\underline{m-p-1}}$. 
+Evaluating at $x=0$, only the term $m=p+1$ contributes (since $0^{\underline 0}=1$ and $0^{\underline{j}}=0$ for $j>0$), yielding $(p+1)!\,\StirlingII{k}{p+1}$.
 
 The rank of $N_p(X) = R_{p,0}$ specializes to
 \[
@@ -150,5 +152,15 @@ We verify the identity using the formulas from Theorem~\ref{thm:Stirling} in the
 \begin{align*}
 \operatorname{Rank} Z_{p+1} + \operatorname{Rank} Z_p &= (p+2)!\,\StirlingII{k}{p+2} + (p+1)!\,\StirlingII{k}{p+1}.
 \end{align*}
-This matches the formula for $\operatorname{Rank} N_{p+1}(X)$ derived in Theorem~\ref{thm:Stirling} (by replacing $p$ with $p+1$). The consistency for the general shape case follows because the complex is defined and contractible over $\mathbb{Z}$.
+This matches the formula for $\operatorname{Rank} N_{p+1}(X)$ derived in Theorem~\ref{thm:Stirling} (by replacing $p$ with $p+1$). 
+
+
+For general shape, the identity follows directly from the inclusion--exclusion formulas and the relation
+$M_a(p+1)=M_a(p)+1$: writing $A_p(t):=\prod_{a=1}^k(M_a(p)+1-t)$, Pascal's identity
+$\binom{p+2}{t}=\binom{p+1}{t}+\binom{p+1}{t-1}$ gives
+\[
+\rank Z_{p+1}=\sum_{t=0}^{p+2}(-1)^t\binom{p+2}{t}A_{p+1}(t)
+=\sum_{t=0}^{p+1}(-1)^t\binom{p+1}{t}A_{p+1}(t)-\sum_{u=0}^{p+1}(-1)^u\binom{p+1}{u}A_p(u),
+\]
+i.e. $\rank Z_{p+1}=\rank N_{p+1}-\rank Z_p$.
 \end{proof}

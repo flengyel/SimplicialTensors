@@ -28,7 +28,7 @@ T(m-\vec{1}) & \text{if } \forall a: m_a > 0.
 \begin{lemma}\label{lem:homotopy_identities}
 The operator $H$ satisfies the following identities:
 \begin{enumerate}
-    \item For all $p\ge 0$, $d_0^{p+1} H_p = \mathrm{id}_{X_p}$.
+    \item For all $p\ge 0$, $d_0^{p+1} H_p = \operatorname{id}_{X_p}$.
     \item For all $p\ge 1$ and all $i>0$, $d_i^{p+1} H_p = H_{p-1} d_{i-1}^p$.
 \end{enumerate}
 \end{lemma}
@@ -76,29 +76,48 @@ Thus $d_1^1 H_0 = 0$.
 \begin{theorem}\label{thm:contractible}
 The diagonal simplicial module $X_\bullet(\vec s; A)$ is contractible.
 \end{theorem}
-\begin{proof}
-We verify the chain contraction identity $\partial_{p+1} H_p + H_{p-1} \partial_p = \mathrm{id}$.
-Using Lemma \ref{lem:homotopy_identities} (valid for all $p\ge 0$):
-\begin{align*}
-\partial_{p+1} H_p &= d_0 H_p + \sum_{i=1}^{p+1} (-1)^i d_i H_p \\
-                  &= \mathrm{id} + \sum_{i=1}^{p+1} (-1)^i H_{p-1} d_{i-1}^p.
-\end{align*}
 
-Re-indexing the sum ($j=i-1$):
+\begin{proof}
+We verify the chain contraction identity
+\[
+\partial_{p+1} H_p + H_{p-1} \partial_p = \operatorname{id}_{X_p}
+\qquad(p\ge 0).
+\]
+
+\textbf{Base case $p=0$.}
+Here $\partial_0=0$ and $H_{-1}=0$. Also $\partial_1 = d_0^1 - d_1^1$. Thus
+\[
+\partial_1 H_0
+= (d_0^1 - d_1^1)H_0
+= d_0^1 H_0 - d_1^1 H_0
+= \operatorname{id}_{X_0} - 0
+= \operatorname{id}_{X_0},
+\]
+using Lemma~\ref{lem:homotopy_identities}(1) for $p=0$ and Lemma~\ref{lem:homotopy_identities}(2) in the special $p=0$ verification (i.e.\ $d_1^1 H_0=0$).
+Therefore
+\[
+\partial_1 H_0 + H_{-1}\partial_0 = \operatorname{id}_{X_0}.
+\]
+
+\textbf{Inductive case $p\ge 1$.}
+Using Lemma~\ref{lem:homotopy_identities}:
+\begin{align*}
+\partial_{p+1} H_p
+&= d_0^{p+1} H_p + \sum_{i=1}^{p+1} (-1)^i d_i^{p+1} H_p \\
+&= \operatorname{id}_{X_p} + \sum_{i=1}^{p+1} (-1)^i H_{p-1} d_{i-1}^p.
+\end{align*}
+Re-indexing with $j=i-1$ gives
 \begin{align*}
 \sum_{i=1}^{p+1} (-1)^i H_{p-1} d_{i-1}^p
-  &= \sum_{j=0}^{p} (-1)^{j+1} H_{p-1} d_j^p
-   = -\, H_{p-1} \partial_p.
+&= \sum_{j=0}^{p} (-1)^{j+1} H_{p-1} d_j^p \\
+&= -\,H_{p-1}\partial_p.
 \end{align*}
-
-(This holds even for $p=0$, as $\partial_0=0$ and $H_{-1}=0$).
-Substituting back, we obtain
+Substituting back yields
 \[
-\partial_{p+1} H_p + H_{p-1} \partial_p \;=\; \mathrm{id}_{X_p},
+\partial_{p+1} H_p + H_{p-1}\partial_p = \operatorname{id}_{X_p}.
 \]
-so $H$ is a chain contraction of $X_\bullet(\vec s;A)$.
+Thus $H$ is a chain contraction of $X_\bullet(\vec s;A)$.
 \end{proof}
-
 
 
 % ============================
@@ -120,16 +139,16 @@ H_p(\sigma\cdot T)=\sigma\cdot H_p(T).
 \begin{proof}
 Let $T\in X_p$, $\sigma\in \operatorname{Stab}(\vec{s})$, and $m\in I_{p+1}$. We compare $H_p(\sigma\cdot T)(m)$ and $(\sigma\cdot H_p(T))(m)$. By definition of the action, $(\sigma\cdot H_p(T))(m) = H_p(T)(\sigma^{-1}m)$.
 
-The definition of $H_p$ depends on the presence of zero coordinates. Since permutation only changes the positions of the coordinates, the condition "$\exists a: m_a=0$" is equivalent to "$\exists b: (\sigma^{-1}m)_b=0$".
+The definition of $H_p$ depends on the presence of zero coordinates. 
 
 Case 1: $\exists a: m_a = 0$.
 In this case, $H_p(\sigma\cdot T)(m) = 0$. Since $\sigma^{-1}m$ also contains a zero coordinate, $H_p(T)(\sigma^{-1}m) = 0$.
 
 Case 2: $\forall a: m_a > 0$.
 In this case, $\sigma^{-1}m$ is also strictly positive.
-\begin{align*} H_p(\sigma\cdot T)(m) &= (\sigma\cdot T)(m-\vec{1}) \\ &= T(\sigma^{-1}(m-\vec{1})). \end{align*}
+\begin{align*} H_p(\sigma\cdot T)(m) &= (\sigma\cdot T)(m-\vec{1}) = T(\sigma^{-1}(m-\vec{1})). \end{align*}
 On the other hand,
-\begin{align*} (\sigma\cdot H_p(T))(m) &= H_p(T)(\sigma^{-1}m) \\ &= T((\sigma^{-1}m)-\vec{1}). \end{align*}
+\begin{align*} (\sigma\cdot H_p(T))(m) &= H_p(T)(\sigma^{-1}m) = T((\sigma^{-1}m)-\vec{1}). \end{align*}
 The equality holds because the shift operation commutes with permutation: $\sigma^{-1}(m-\vec{1}) = (\sigma^{-1}m)-\vec{1}$.
 Therefore, $H_p$ is equivariant under the action of $\operatorname{Stab}(\vec{s})$.
 \end{proof}
@@ -156,46 +175,62 @@ Furthermore, since $\min(m) \le \min_a M_a(p)$ for any $m\in I_p$, we have $\mat
 \end{definition}
 
 
+
 \begin{lemma}[Behavior of $\partial$ and $H$ w.r.t.\ $\mathcal{F}^\bullet$]\label{lem:shifted_filtration}
-The differential $\partial$ and the homotopy $H$ preserve the shifted depth filtration (filtration degree 0). For all $p\ge 0$ and $t\in\mathbb{Z}$:
+The differential $\partial$ and the homotopy $H$ preserve the shifted depth filtration (filtration degree $0$). For all $t\in\mathbb{Z}$:
 \begin{enumerate}
-    \item $d_i^p(\mathcal{F}^t X_p) \subseteq \mathcal{F}^t X_{p-1}$ for all $i\in\{0,\dots,p\}$.
-    \item $H_p(\mathcal{F}^t X_p) \subseteq \mathcal{F}^t X_{p+1}$.
+    \item For all $p\ge 1$ and all $i\in\{0,\dots,p\}$,
+    \[
+    d_i^p(\mathcal{F}^t X_p) \subseteq \mathcal{F}^t X_{p-1}.
+    \]
+    \item For all $p\ge 0$,
+    \[
+    H_p(\mathcal{F}^t X_p) \subseteq \mathcal{F}^t X_{p+1}.
+    \]
 \end{enumerate}
 \end{lemma}
 
 \begin{proof}
-(1) Let $T \in \mathcal{F}^t X_p$. We want to show $d_i^p(T) \in \mathcal{F}^t X_{p-1}$. Let $m \in I_{p-1}$. We must show that if $\min(m) < t+p-1$, then $d_i^p(T)(m)=0$.
-$d_i^p(T)(m) = T(\Delta_i^p(m))$.
-The coface maps satisfy $\delta_i(x) \le x+1$ for all $i, x$.
-Thus $\min(\Delta_i^p(m)) \le \min(m)+1$.
-If $\min(m) < t+p-1$, then $\min(\Delta_i^p(m)) < t+p$.
-Since $T \in \mathcal{F}^t X_p$, $T(\Delta_i^p(m))=0$. Thus $d_i^p(T) \in \mathcal{F}^t X_{p-1}$.
+(1) Let $p\ge 1$ and let $T \in \mathcal{F}^t X_p$. We show $d_i^p(T) \in \mathcal{F}^t X_{p-1}$.
+Let $m \in I_{p-1}$. If $\min(m) < t+p-1$, then
+\[
+d_i^p(T)(m) = T(\Delta_i^p(m)).
+\]
+For each coordinate, the coface map satisfies $\delta_i(x)\le x+1$, hence
+\[
+\min(\Delta_i^p(m)) \le \min(m)+1.
+\]
+If $\min(m) < t+p-1$, then $\min(\Delta_i^p(m)) < t+p$, and since $T\in\mathcal{F}^t X_p$ we have
+$T(\Delta_i^p(m))=0$. Therefore $d_i^p(T)\in \mathcal{F}^t X_{p-1}$.
 
-(2) Let $T \in \mathcal{F}^t X_p$. We want to show $H_p(T) \in \mathcal{F}^t X_{p+1}$. Let $m \in I_{p+1}$. We must show that if $\min(m) < t+p+1$, then $H_p(T)(m)=0$.
-
-If $\min(m)=0$, $H_p(T)(m)=0$ by definition.
-If $\min(m)>0$, $H_p(T)(m)=T(m-\vec{1})$.
-If $\min(m) < t+p+1$, then $\min(m-\vec{1}) = \min(m)-1 < t+p$.
-Since $T \in \mathcal{F}^t X_p$, $T(m-\vec{1})=0$. Thus $H_p(T) \in \mathcal{F}^t X_{p+1}$.
+(2) Let $p\ge 0$ and let $T \in \mathcal{F}^t X_p$. We show $H_p(T) \in \mathcal{F}^t X_{p+1}$.
+Let $m \in I_{p+1}$. If $\min(m)=0$, then $H_p(T)(m)=0$ by definition of $H$.
+If $\min(m)>0$, then $H_p(T)(m)=T(m-\vec{1})$. If $\min(m) < t+p+1$, then
+\[
+\min(m-\vec{1}) = \min(m)-1 < t+p,
+\]
+so $T(m-\vec{1})=0$ because $T\in\mathcal{F}^t X_p$. Hence $H_p(T)\in \mathcal{F}^t X_{p+1}$.
 \end{proof}
+
 
 \begin{proposition}[Spectral sequence collapses at $E_1$]\label{prop:E1collapse_shifted}
 Let $\mathcal{F}^\bullet$ be the shifted depth filtration. The spectral sequence of the filtered complex $(X_\bullet,\partial,\mathcal{F}^\bullet)$ satisfies
 \[
 E_1^{t,q}=0\qquad\text{for all }t,q.
 \]
-Hence it collapses at the $E_1$–-page.
+Hence it collapses at the $E_1$-page.
 \end{proposition}
 
 \begin{proof}
-By Lemma \ref{lem:shifted_filtration}, $(X_\bullet,\partial,\mathcal{F}^\bullet)$ is a filtered complex, as $\partial$ has filtration degree 0. 
+
+By Lemma~\ref{lem:shifted_filtration}, for $p\ge 1$ the differential $\partial_p$ has filtration degree $0$, and since $\partial_0=0$ the filtered complex $(X_\bullet,\partial,\mathcal{F}^\bullet)$ is well-defined.
+
 Let $E_0 = \operatorname{gr}_{\mathcal{F}}(X_\bullet)$ be the associated graded complex, with differential $d^0$ induced by $\partial$.
 
 By Lemma \ref{lem:shifted_filtration}, the homotopy operator $H$ also has filtration degree 0. It induces a map $[H]$ on $E_0$.
-The chain contraction identity $\partial H+H\partial=\mathrm{id}$ holds in the filtered complex. Since all operators involved preserve the filtration, the identity descends to the associated graded complex:
+The chain contraction identity $\partial H+H\partial=\operatorname{id}$ holds in the filtered complex. Since all operators involved preserve the filtration, the identity descends to the associated graded complex:
 \[
-d^0 [H] + [H] d^0 = [\mathrm{id}] = \mathrm{id}_{E_0}.
+d^0 [H] + [H] d^0 = [\operatorname{id}] = \operatorname{id}_{E_0}.
 \]
 This shows that the complex $(E_0, d^0)$ is contractible via the homotopy $[H]$. Therefore, its homology is trivial.
 The $E_1$ term is defined as the homology of $(E_0, d^0)$. We conclude $E_1 = H(E_0) = 0$.

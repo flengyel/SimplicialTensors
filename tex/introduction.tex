@@ -6,9 +6,12 @@ Fix a \textbf{shape} $\vec{s}=(n_1,\ldots,n_k)\in(\mathbb{Z}^+)^k$ and set $n=\m
 We construct the diagonal simplicial tensor module $X_\bullet(\vec{s};A)$ (DSTM), a simplicial $A$-module
 whose $p$-simplices are functions on cosimplicial index sets $I_p(\vec{s})\subseteq\mathbb{N}^k$.
 
-This construction generalizes Quillen's diagonal on a double simplicial group~\cite{Quillen1966}
-to $k$ commuting simplicial directions in the category $\mathbf{Mod}_A$ and is compatible with
-Dold--Kan normalization in the sense of Dold, Kan, May, Weibel, and Goerss--Jardine~\cite{Dold1958,Kan1958,MaySimplicial,Weibel,GoerssJardine}.
+
+
+This construction generalizes Quillen's diagonal on a double semi-simplicial group~\cite{Quillen1966}:
+it is the restriction $p\mapsto(p,\ldots,p)$ of a $k$-fold simplicial $A$-module in $\mathbf{Mod}_A$
+(Remark~\ref{rem:kfold}), and is compatible with Dold--Kan normalization~\cite{Dold1958,Kan1958,Weibel}.
+
 
 
 In particular, the diagonal simplicial module $X_\bullet(\vec{s};A)$ is obtained from
@@ -21,6 +24,7 @@ for all commutative rings $A$.
 
 
 
+
 We analyze the horn kernels
 \[
 R_{p,j}(X)=\bigcap_{i\neq j}\ker\bigl(d_i:X_p\to X_{p-1}\bigr),
@@ -28,12 +32,11 @@ R_{p,j}(X)=\bigcap_{i\neq j}\ker\bigl(d_i:X_p\to X_{p-1}\bigr),
 and show that their combinatorics controls the homotopy-theoretic behavior of the DSTM.
 For the simplicial dimension $n=\min(\vec{s})-1$ we prove that $X_\bullet(\vec{s};A)$ is
 a strict algebraic $n$-hypergroupoid in this sense if and only if the tensor order satisfies $k=n$.
-The transition from non-unique to unique
-horn fillers occurs exactly at $p=n$, and this threshold is determined by the tensor order.
+The transition from non-unique to unique horn fillers occurs at $p=k$ (hence at $p=n$ in the strict case $k=n$).
 
 
 
-We briefly outline the main aspects of the paper: combinatorics and classification of the DSTM, 
+We briefly outline the main aspects of the paper: combinatorics and classification of the DSTM,
 and the algebraic geometry of generated submodules.
 
 
@@ -42,7 +45,7 @@ and the algebraic geometry of generated submodules.
 
 In the abelian setting of simplicial modules, horn fillers always exist (the Kan condition is automatic).
 The obstruction to the uniqueness of fillers is captured by the horn kernel $R_{p,j}$.
-Following terminology from Duskin--Glenn~\cite{Duskin1979,Glenn1982} and the $n$Lab,
+Following terminology from Duskin and Glenn~\cite{Duskin1979,Glenn1982},
 a simplicial module is a \textbf{strict algebraic $n$-hypergroupoid} if fillers are unique
 in dimensions strictly greater than $n$ ($R_{p,j}=0$ for $p>n$), and non-unique in dimension $n$ ($R_{n,j}\ne 0$).
 
@@ -64,12 +67,12 @@ When $A$ is an infinite field $K$, we work throughout with submodules generated 
 we do not attempt to parametrize arbitrary subcomplexes. Such a generated submodule $\langle T \rangle$ is
 encoded by its kernel sequence
 \[
-K(T)_\bullet := (\ker f_{T,p})_p \subseteq K[\Delta^n]_\bullet,
+K(T)_\bullet := (\ker f_{T,p})_p \subseteq K[\sDelta^n]_\bullet,
 \]
 where $f_T$ is the realization map from Section~\ref{sec:generated}.
 
 We define a moduli map $\Psi$ from a Zariski-open locus $\mathcal{U} \subset X_n(\vec{s};K)$
-to a product of Grassmannians by sending $T$ to the collection of subspaces $K(T)_p \subseteq K[\Delta^n]_p$.
+to a product of Grassmannians by sending $T$ to the collection of subspaces $K(T)_p \subseteq K[\sDelta^n]_p$.
 The image $\mathcal{M}(\vec{s})$ lies within a closed incidence subvariety defined by simplicial compatibility
 conditions, which we show are linear in the Segre--Pl\"ucker coordinates.
 This reduces the classification of these generated submodules to the geometry of these incidence conditions
@@ -88,6 +91,6 @@ Section~\ref{sec:hornnondegeneracylemma} proves the Horn Non-Degeneracy Lemma an
 decomposition $X_n = R_{n,j} \oplus D_n$.
 Section~\ref{sec:dichotomy} develops the homology dichotomy and the hypergroupoid classification.
 Section~\ref{sec:generated} develops the algebraic geometry of generated submodules.
-\ref{app:filtration} proves contractibility via an explicit equivariant homotopy.
+In \ref{app:filtration} we prove contractibility via an explicit equivariant homotopy.
 
 

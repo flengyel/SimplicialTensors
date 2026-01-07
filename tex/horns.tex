@@ -65,7 +65,10 @@ d_i^p(T) = \sum_{m \in \operatorname{im}(\Delta_i^p)} a_{m} d_i^p(E_{m}),
 since $d_i^p(E_{m})=0$ if $m \notin \operatorname{im}(\Delta_i^p)$ (Lemma~\ref{lem:face_action}). By the Injectivity Lemma~\ref{lem:injectivity}, the set $\{d_i^p(E_{m}) \mid m \in \operatorname{im}(\Delta_i^p)\}$ consists of distinct standard basis elements in $X_{p-1}$, hence is $A$-linearly independent.
 
 Thus $d_i^p(T)=0$ if and only if $a_{m} = 0$ for all $m \in \operatorname{im}(\Delta_i^p)$.
+Equivalently, $T$ is an $A$-linear combination of the $E_m$ with $m\notin \operatorname{im}(\Delta_i^p)$, which proves the stated basis description of $\ker(d_i^p)$.
 \end{proof}
+
+
 
 \subsection{Missing Indices and the Support Characterization}
 
@@ -78,12 +81,20 @@ Let $M_{p,j} \subset I_p$ denote the set of missing indices.
 \end{definition}
 
 \begin{theorem}[Support Characterization / Horn Kernel Basis]\label{thm:support_characterization}
-The horn kernel $R_{p,j}$ is a free $A$-module with basis $\{E_m\}_{m \in M_{p,j}}$. Consequently, if $T_1$ and $T_2$ are two fillers of the same horn, their difference is supported on the missing indices: $\operatorname{supp}(T_1-T_2) \subseteq M_{p,j}$.
+The horn kernel $R_{p,j}$ is a free $A$-module with basis $\{E_m\}_{m \in M_{p,j}}$. 
+Consequently, if $T_1$ and $T_2$ are two fillers of the same horn, their difference 
+is supported on the missing indices: $\operatorname{supp}(T_1-T_2) \subseteq M_{p,j}$.
 \end{theorem}
 \begin{proof}
 By Theorem~\ref{thm:kernel_basis}, $\ker(d_i^p)$ is the coordinate subspace spanned by the basis
 $B_i = \{E_m \mid m \notin \operatorname{im}(\Delta_i^p)\}$.
-The horn kernel $R_{p,j}$ is the intersection of these coordinate subspaces for $i\in F_j$. The intersection of coordinate subspaces is spanned by the intersection of their bases, $\bigcap_{i\in F_j} B_i$.
+The horn kernel $R_{p,j}$ is the intersection of these coordinate subspaces for $i\in F_j$.
+Since each $\operatorname{span}_A(B_i)$ consists exactly of those tensors whose coefficients vanish outside $B_i$, 
+their intersection consists of those tensors whose coefficients vanish outside $\bigcap_{i\in F_j} B_i$, i.e. it is 
+$\operatorname{span}_A\!\bigl(\bigcap_{i\in F_j} B_i\bigr)$.
+
+
+
 An element $E_m$ lies in this intersection if and only if $m \notin \operatorname{im}(\Delta_i^p)$ for all $i\in F_j$, which defines $M_{p,j}$.
 The consequence regarding the support of the difference follows because $T_1-T_2 \in R_{p,j}$.
 \end{proof}
@@ -121,12 +132,18 @@ By Theorem~\ref{thm:support_characterization}, $R_{p,j} \ne \{0\}$ iff $M_{p,j} 
 
 ($\Rightarrow$) If $m \in M_{p,j}$, then $k \ge |\operatorname{im}(m)| \ge |F_j| = p$.
 
-($\Leftarrow$) Suppose $k \ge p$. Let $F_j = \{f_1, \dots, f_p\}$. Define $m = (f_1, \dots, f_p, 0, \dots, 0) \in \mathbb{N}^k$. Since $M_a(p)\ge p$, we have $[p]^k \subseteq I_p$, so $m \in I_p$. Since $\operatorname{im}(m) \supseteq F_j$, $m \in M_{p,j}$.
+
+($\Leftarrow$) Suppose $k \ge p$. Let $F_j = \{f_1, \dots, f_p\}$. Set
+\[
+m := (f_1, \dots, f_p, 0, \dots, 0)\in [p]^k \subseteq I_p.
+\]
+Then $\operatorname{im}(m) \supseteq F_j$, so $m \in M_{p,j}$.
 \end{proof}
+
 
 \subsection{\texorpdfstring{The $\ell$-free Subspace}{The l-free Subspace}}
 
-Fix a degree $p\ge 0$ and an index $0\le \ell\le p$.
+Fix a degree $p\ge 1$ and an index $0\le \ell\le p$.
 The combinatorial characterization of $\operatorname{im}(\Delta_\ell^p)$ yields a structural property of the face maps.
 
 \begin{definition}[$\ell$-free subspace]
@@ -147,25 +164,47 @@ d_\ell^p:\ X_p^{(\ell\text{-free})}\ \xrightarrow{\ \cong\ }\ X_{p-1}.
 
 
 \begin{proof}
-By the proof of Proposition~\ref{prop:missing_indices}, $m \in \operatorname{im}(\Delta_\ell^p) \iff \ell \notin \operatorname{im}(m)$. Thus $X_p^{(\ell\text{-free})}$ is spanned by $\{E_{m} \mid m \in \operatorname{im}(\Delta_\ell^p)\}$. By the Injectivity Lemma~\ref{lem:injectivity}, $d_\ell^p$ is injective on this subspace. Since $\Delta_\ell^p: I_{p-1} \to \operatorname{im}(\Delta_\ell^p)$ is a bijection, Lemma~\ref{lem:face_action} shows that $d_\ell^p$ maps the basis of $X_p^{(\ell\text{-free})}$ bijectively onto the basis of $X_{p-1}$.
+By the proof of Proposition~\ref{prop:missing_indices}, $m \in \operatorname{im}(\Delta_\ell^p) \iff \ell \notin \operatorname{im}(m)$. 
+Thus $X_p^{(\ell\text{-free})}$ is spanned by $\{E_{m} \mid m \in \operatorname{im}(\Delta_\ell^p)\}$. 
+By the Injectivity Lemma~\ref{lem:injectivity}, $d_\ell^p$ is injective on this subspace. 
+Since $\Delta_\ell^p: I_{p-1} \to \operatorname{im}(\Delta_\ell^p)$ is a bijection, Lemma~\ref{lem:face_action} 
+shows that $d_\ell^p$ maps the basis of $X_p^{(\ell\text{-free})}$ bijectively onto the basis of $X_{p-1}$.
 \end{proof}
 
 \subsection{Genericity}
 
-Let $T' = \mu_j(\Phi_j(T))$ be the Moore filler of $T$ (see Section~\ref{sec:normalization}). The difference $T-T'$ lies in $R_{p,j}$. By Theorem~\ref{thm:support_characterization}, $\operatorname{supp}(T-T') \subseteq M_{p,j}$.
+Fix $p\ge 1$ and $0\le j\le p$, and assume $A$ is an infinite field and $k\ge p$.
+
+For $T\in X_p$, set
+\[
+T' := \mu_j(\Phi_j(T)),
+\]
+the Moore filler of the horn $\Phi_j(T)$ (Section~\ref{sec:normalization}). Then $\Phi_j(T')=\Phi_j(T)$, hence
+$T-T'\in R_{p,j}$. By Theorem~\ref{thm:support_characterization}, $\operatorname{supp}(T-T') \subseteq M_{p,j}$.
 
 \begin{definition}[Generic Tensor]
-Assume $A$ is an integral domain. A tensor $T\in X_p$ is called \textbf{$(p,j)$-generic} if the difference $T-T'$ has maximal support: $\operatorname{supp}(T-T')=M_{p,j}$. (This requires $k\ge p$).
+A tensor $T\in X_p$ is called \textbf{$(p,j)$-generic} if the difference $T-T'$ has maximal support: 
+$\operatorname{supp}(T-T')=M_{p,j}$. (This requires $k\ge p$).
 \end{definition}
 
 
 \begin{proposition}[Generic Locus]\label{prop:generic_locus}
-Assume $A$ is an integral domain and $k\ge p$. The set of $(p,j)$-generic tensors forms a Zariski-open subset $\mathcal{U}_{p,j} \subset X_p$. If moreover $A$ is infinite, then $\mathcal{U}_{p,j}$ is non-empty.
+Assume $A$ is an infinite field and $k\ge p$. The set of $(p,j)$-generic tensors forms a Zariski-open subset $\mathcal{U}_{p,j} \subset X_p$.
 \end{proposition}
 
 
 \begin{proof}
-Let $R(T) = T-T'$. The map $T\mapsto T'$ is $A$-linear (as $\mu_j$ and $\Phi_j$ are linear), hence $R(T)$ is $A$-linear. Write $R(T) = \sum_{m\in M_{p,j}} c_m(T) E_m$. Each coefficient $c_m(T)$ is a linear form in the entries of $T$.
+Define the $A$-linear endomorphism
+\[
+R := \operatorname{id}_{X_p} - \mu_j\circ\Phi_j : X_p\to X_p.
+\]
+Then $R(T)=T-\mu_j(\Phi_j(T))=T-T' \in R_{p,j}$. Write
+\[
+R(T) = \sum_{m\in M_{p,j}} c_m(T)\,E_m.
+\]
+Each coefficient $c_m(T)$ is an $A$-linear form in the entries of $T$.
+
+
 
 We show that $c_m(T)$ is not identically zero. Consider $T=E_m$ for $m\in M_{p,j}$. Since $E_m \in R_{p,j}$, its horn is $\Phi_j(E_m)=0$. The Moore filler of the zero horn is $T'=\mu_j(0)=0$.
 Then $R(E_m) = E_m$, so $c_m(E_m)=1$.
@@ -174,5 +213,5 @@ The generic locus is defined by the non-vanishing of these forms:
 \[
 \mathcal{U}_{p,j}\ :=\ \{\,T\in X_p:\ c_m(T)\neq 0\text{ for all }m\in M_{p,j}\,\}.
 \]
-The complement is the union of the zero loci of the non-zero forms $c_m$, hence a finite union of proper linear subspaces. Therefore $\mathcal{U}_{p,j}$ is Zariski-open. If $A$ is infinite, a finite union of proper linear subspaces cannot equal $X_p$, so $\mathcal{U}_{p,j}$ is non-empty.
+The complement is the union of the zero loci of the non-zero forms $c_m$, hence a finite union of proper linear subspaces. Therefore $\mathcal{U}_{p,j}$ is Zariski-open. 
 \end{proof} 
