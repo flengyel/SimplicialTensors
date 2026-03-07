@@ -3,7 +3,7 @@ from typing import Tuple, List, Dict, Any
 import matplotlib.pyplot as plt
 
 # Import the boundary operator and face functions
-from .tensor_ops import (bdry, face, dimen, random_real_matrix)
+from simplicial_tensors.tensor_ops import (bdry, face, dimen, random_real_matrix)
 
 
 def compute_discrepancy(a: np.ndarray) -> np.ndarray:
@@ -80,9 +80,9 @@ def check_relative_error(a: np.ndarray, b: np.ndarray, epsilon: float = 1e-6) ->
     diff_norm = np.linalg.norm(a - b)
     
     if a_norm < epsilon:  # Handle near-zero a
-        return diff_norm < epsilon
+        return bool(diff_norm < epsilon)
     
-    return diff_norm / a_norm < epsilon
+    return bool(diff_norm / a_norm < epsilon)
 
 
 def is_permutation_matrix(matrix):
@@ -522,3 +522,6 @@ def main():
     
     print("\nPerforming statistical analysis of discrepancy patterns...")
     analyze_discrepancy_patterns(num_samples=100, size=5)
+
+if __name__ == "__main__":
+    main()

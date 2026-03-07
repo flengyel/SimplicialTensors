@@ -8,7 +8,7 @@ the `tensor_ops` module.
 
 import numpy as np
 import itertools
-from .tensor_ops import is_degen
+from simplicial_tensors.tensor_ops import is_degen
 import logging
 import datetime
 

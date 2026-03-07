@@ -3,7 +3,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from .tensor_ops import bdry, is_degen, n_hypergroupoid_comparison, n_hypergroupoid_conjecture, horn, filler
+from simplicial_tensors.tensor_ops import bdry, is_degen, n_hypergroupoid_comparison, n_hypergroupoid_conjecture, horn, filler
 
 def main():
     

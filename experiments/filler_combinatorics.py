@@ -24,8 +24,8 @@ import sympy as sp
 import numpy as np
 import itertools
 import math # For math.factorial
-from .symbolic_tensor_ops import SymbolicTensor
-from .tensor_ops import n_hypergroupoid_conjecture
+from simplicial_tensors.symbolic_tensor_ops import SymbolicTensor
+from simplicial_tensors.tensor_ops import n_hypergroupoid_conjecture
 
 
 # Helper, can be standalone or a method of SymbolicTensor
@@ -459,3 +459,5 @@ def main():
     
     
     
+if __name__ == "__main__":
+    main()

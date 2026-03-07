@@ -1,5 +1,5 @@
 import numpy as np
-from .tensor_ops import bdry, face  # your library
+from simplicial_tensors.tensor_ops import bdry, face  # your library
 
 def perm_matrix_from_sigma(sigma):
     """P_sigma with (P)[i,j]=1 iff i = sigma(j)."""

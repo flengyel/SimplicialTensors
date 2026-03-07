@@ -1,10 +1,11 @@
 # examples of range tensors
 import numpy as np
-from .tensor_ops import range_tensor, n_hypergroupoid_conjecture, horn, face 
-from .tensor_ops import reconstruct_range_tensor_from_horn, filler, is_degen, bdry  
+from simplicial_tensors.tensor_ops import (range_tensor, n_hypergroupoid_conjecture, 
+                                           horn, face, reconstruct_range_tensor_from_horn, 
+                                           filler, is_degen, bdry ) 
 from typing import Tuple
 
-def print_range_tensor(shape: Tuple[int]) -> None:
+def print_range_tensor(shape: Tuple[int, ...]) -> None:
     relation = "<" if n_hypergroupoid_conjecture(shape) else ">="
     print(f"shape = {shape}, degree = {len(shape)} {relation} s_dim = {min(shape)-1}")
     print(f"range_tensor(shape={shape}) \n{range_tensor(shape)}\n")
