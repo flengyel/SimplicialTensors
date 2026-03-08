@@ -98,3 +98,6 @@ def main():
         count_basis_tensors_for_shape(shape)
     
     
+if __name__ == "__main__":
+    main()
+
