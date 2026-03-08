@@ -27,3 +27,6 @@ def main():
     print("Filler:", f)
     print("Counterexample and filler agree:", np.array_equal(counterexample,f))
     
+if __name__ == "__main__":
+    main()
+
