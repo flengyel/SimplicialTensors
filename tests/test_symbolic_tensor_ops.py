@@ -85,6 +85,30 @@ def test_n_hypergroupoid_comparison():
     except SimplicialException:
         result = None
     assert conjecture == result or result is None
+def test_n_hypergroupoid_comparison_no_inner_horns():
+    T = SymbolicTensor((2, 2))
+    assert T.n_hypergroupoid_comparison() is True
+
+
+def test_n_hypergroupoid_comparison_checks_each_inner_horn(monkeypatch):
+    shape = (4, 4, 4, 4)
+    T = SymbolicTensor(shape)
+    original_filler = SymbolicTensor.filler
+
+    def patched_filler(self, horn_list, k):
+        # Keep the last inner-horn filler equal to the original tensor.
+        if self.shape == shape and k == 2:
+            return SymbolicTensor.from_tensor(self.tensor.copy())
+        # Create an alternative filler for a different inner horn by changing
+        # an entry that does not affect the horn faces for k=1.
+        if self.shape == shape and k == 1:
+            out = SymbolicTensor.from_tensor(self.tensor.copy())
+            out.tensor[(0, 2, 3, 0)] = out.tensor[(0, 2, 3, 0)] + sp.Integer(1)
+            return out
+        return original_filler(self, horn_list, k)
+
+    monkeypatch.setattr(SymbolicTensor, "filler", patched_filler)
+    assert T.n_hypergroupoid_comparison() is False
 
 def test_bdry_squared_zero():
     for _ in range(5):

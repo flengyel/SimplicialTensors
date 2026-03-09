@@ -220,28 +220,28 @@ class SymbolicTensor:
                             print(f"Disagreement at face {j}, index {idx}: {diff}")
                         raise SimplicialException(f"Original horn and filler horn disagree at face {j}, position {idx}.")
 
-        monomial_count = lambda expr: len(expr.as_ordered_terms()) if expr != 0 else 0
-        differences = []
-        indices_with_correction_terms = 0
-        for idx in np.ndindex(self.shape):
-            orig = self.tensor[idx]
-            fill = filler_i.tensor[idx]
-            diff = sp.simplify(orig - fill)
-            if diff != 0:
-                count = monomial_count(fill)
-                differences.append((idx, orig, fill, count))
-                indices_with_correction_terms += 1
+            monomial_count = lambda expr: len(expr.as_ordered_terms()) if expr != 0 else 0
+            differences = []
+            indices_with_correction_terms = 0
+            for idx in np.ndindex(self.shape):
+                orig = self.tensor[idx]
+                fill = filler_i.tensor[idx]
+                diff = sp.simplify(orig - fill)
+                if diff != 0:
+                    count = monomial_count(fill)
+                    differences.append((idx, orig, fill, count))
+                    indices_with_correction_terms += 1
 
-        if differences:
-            if verbose:
-                print("Multiple fillers exist. The original tensor and the filler differ at the following indices:")
-                for idx, orig, fill, count in differences:
-                    print(f"  At index {idx}:")
-                    print(f"    Original: {sp.pretty(orig)}")
-                    print(f"    Filler:   {sp.pretty(fill)}")
-                    print(f"    Monomial count: {count}")
-                print(f"    Indices with correction terms: {indices_with_correction_terms}")
-            return False
+            if differences:
+                if verbose:
+                    print("Multiple fillers exist. The original tensor and the filler differ at the following indices:")
+                    for idx, orig, fill, count in differences:
+                        print(f"  At index {idx}:")
+                        print(f"    Original: {sp.pretty(orig)}")
+                        print(f"    Filler:   {sp.pretty(fill)}")
+                        print(f"    Monomial count: {count}")
+                    print(f"    Indices with correction terms: {indices_with_correction_terms}")
+                return False
 
         if verbose:
             print("Unique filler.")
