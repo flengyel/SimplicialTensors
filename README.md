@@ -53,7 +53,6 @@ Project metadata currently declares:
 ## Quick Start
 
 ```python
-import numpy as np
 from simplicial_tensors.tensor_ops import face, degen, bdry, range_tensor
 
 t = range_tensor((4, 4, 4))
@@ -74,25 +73,15 @@ pytest -q
 
 - `src/simplicial_tensors/`: package source modules
 - `tests/`: automated test suite
-- `examples/`: runnable small demos
 - `experiments/`: research and exploratory scripts/artifacts
 - `docs/`: project and experiment documentation
+- `logs/`, `plots/`, `tex/`: generated artifacts and paper materials
 
 ## Experiments Documentation
 
-Each git-tracked file under `experiments/` is documented in:
-
-- [docs/experiments_catalog.md](docs/experiments_catalog.md)
-
-Several experiments also have dedicated deep-dive docs in `docs/` (for example `horn_map_reduce.md`, `degenerate_counterexample.md`, `verify_injective_face_map.md`).
-
-## Example Script
-
-Run the current lightweight example:
-
-```bash
-python examples/ab_mlp_demo.py
-```
+- Every git-tracked `experiments/*.py` and `experiments/*.sage` script has a dedicated page at `docs/<script_stem>.md`.
+- A complete inventory of all git-tracked files under `experiments/` is maintained in [docs/experiments_catalog.md](docs/experiments_catalog.md).
+- Notebook and artifact files are documented in the catalog and linked to dedicated docs when applicable.
 
 ## Notes
 
@@ -102,3 +91,4 @@ python examples/ab_mlp_demo.py
 ## License
 
 This repository is distributed under the GPLv3 (see [LICENSE](LICENSE)).
+
