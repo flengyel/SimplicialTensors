@@ -102,8 +102,8 @@ def main():
     
     print("\n-------------------------------------------")
     if all_passed:
-        print("✅ Overall Result: The filler algorithm appears to be degenerate-preferring.")
+        print("PASS: Overall Result: The filler algorithm appears to be degenerate-preferring.")
     else:
-        print("❌ Overall Result: The filler algorithm is NOT degenerate-preferring.")
+        print("FAIL: Overall Result: The filler algorithm is NOT degenerate-preferring.")
 if __name__ == "__main__":
     main()

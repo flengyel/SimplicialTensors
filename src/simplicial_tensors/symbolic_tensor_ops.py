@@ -425,9 +425,9 @@ def test_symbolic_n_hypergroupoid(shape: Tuple[int, ...], verbose=True):
             print(f"Conjecture predicts unique fillers: {conjecture}")
             print(f"Filler uniqueness observed: {comparison}")
             if conjecture == comparison:
-                print("✔️  The n-hypergroupoid conjecture is confirmed for this shape.")
+                print("PASS: The n-hypergroupoid conjecture is confirmed for this shape.")
             else:
-                print("❌  Observation does not match conjecture prediction.")
+                print("FAIL: Observation does not match conjecture prediction.")
 
         return conjecture, comparison, sym_tensor
 
