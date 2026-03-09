@@ -120,3 +120,5 @@ def main():
         print("✅ Overall Result: The filler algorithm appears to be degenerate-preferring.")
     else:
         print("❌ Overall Result: The filler algorithm is NOT degenerate-preferring.")
+if __name__ == "__main__":
+    main()

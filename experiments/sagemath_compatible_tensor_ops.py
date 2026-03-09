@@ -498,3 +498,5 @@ def main():
     for d in range(2, 7):
         shape = build_shape(d)
         conjecture, comparison, sym_tensor = test_symbolic_n_hypergroupoid(shape)
+if __name__ == "__main__":
+    main()

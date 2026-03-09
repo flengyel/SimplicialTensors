@@ -134,3 +134,5 @@ def test_petersen_permutation_cocycles(n=10, num_trials=20):
 def main():
     test_petersen_permutation_cocycles(n=10, num_trials=50)
     test_random_zero_one_cocycles(n=10, num_trials=20)
+if __name__ == "__main__":
+    main()

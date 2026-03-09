@@ -234,3 +234,5 @@ def main():
     else:
         print("\n❌ FAILURE: Discrepancy found between homological model and combinatorial formula.")
     
+if __name__ == "__main__":
+    main()

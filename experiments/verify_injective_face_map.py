@@ -126,3 +126,5 @@ def main():
         logging.info("OVERALL RESULT: PASSED. Injectivity premise holds for all tested cases.")
     else:
         logging.info("OVERALL RESULT: FAILED. Injectivity premise FAILED for one or more cases.")
+if __name__ == "__main__":
+    main()

@@ -154,3 +154,7 @@ def main():
         print("✅ All tested shapes passed the constraint verification.")
     else:
         print("❌ Some shapes failed the constraint verification.")
+
+if __name__ == '__main__':
+    main()
+

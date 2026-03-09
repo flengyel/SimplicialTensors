@@ -68,3 +68,5 @@ def run_n_cycle_tests(min_n: int = 3, max_n: int = 15):
 
 def main():
     run_n_cycle_tests(3, 15)
+if __name__ == "__main__":
+    main()

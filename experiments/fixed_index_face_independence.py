@@ -85,3 +85,7 @@ def main():
     
     # Test Case 3: A non-constant shape tensor
     test_face_map_linear_independence(shape=(3, 4, 5), face_index=1)
+
+if __name__ == '__main__':
+    main()
+

@@ -161,3 +161,5 @@ def main():
     verify_unique_down_to_order(shape=(4,4,4), outer_horns=False)
     verify_unique_down_to_order(shape=(8,10,12), outer_horns=True)
     verify_unique_down_to_order(shape=(7,7,7,7,7), outer_horns=False)   
+if __name__ == "__main__":
+    main()

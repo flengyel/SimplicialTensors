@@ -67,3 +67,7 @@ def main():
         for j in range(len(shape)):
             hom_dim = compute_homology_dimension(shape, j)
             print(f"shape={shape}, axis={j}, simplex_dim={dim}, homology_dim={hom_dim}")
+
+if __name__ == '__main__':
+    main()
+

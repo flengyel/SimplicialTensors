@@ -95,3 +95,5 @@ def main():
         missing_indices = compute_missing_indices_dask(shape, horn_j)
         print(f"\nFor shape = {shape} and horn_j = {horn_j}:")
         print(f"There are {len(missing_indices)} missing indices.")
+if __name__ == "__main__":
+    main()

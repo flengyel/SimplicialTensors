@@ -53,3 +53,5 @@ shape = (7,7,7)
 print_range_tensor(shape)
 reconstructed = reconstruct_range_tensor_from_horn(shape, proceed_anyway=True, verbose=True)
 print(f"Range tensor of shape {shape} can be reconstructed from any of its horns: {reconstructed}\n")
+if __name__ == "__main__":
+    main()

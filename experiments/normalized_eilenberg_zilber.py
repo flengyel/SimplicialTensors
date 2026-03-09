@@ -176,3 +176,5 @@ def main():
             else:
                 print(f"\n❌ FAILURE: The generated basis is linearly dependent.")
     
+if __name__ == "__main__":
+    main()

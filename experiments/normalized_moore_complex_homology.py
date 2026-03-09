@@ -167,3 +167,5 @@ def main():
         n = min(shape) - 1
         vals = [relative_homology_dimension(shape, j) for j in range(n + 1)]
         print(f"Shape {shape}, n={n}: H_n rel dims = {vals}")
+if __name__ == "__main__":
+    main()

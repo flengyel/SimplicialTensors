@@ -93,3 +93,5 @@ def main():
         n_s_val = min(shape) - 1
         k_val = len(shape)
         print(f"n_s={n_s_val}, k={k_val}, Shape={shape}")
+if __name__ == "__main__":
+    main()

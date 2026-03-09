@@ -117,3 +117,5 @@ def main():
     run_many_trials(trials=100, n=7, directed=True, mod2=False)
     # Over Z2 (mod 2):
     run_many_trials(trials=100, n=7, directed=True, mod2=True)
+if __name__ == "__main__":
+    main()

@@ -78,3 +78,5 @@ def main():
     if homology_basis:
         print("\nExample basis tensor (one of 12):")
         print(homology_basis[0])
+if __name__ == "__main__":
+    main()
