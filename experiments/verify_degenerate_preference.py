@@ -1,7 +1,7 @@
 import numpy as np
 import itertools
 from typing import Tuple, List, Union, Any
-from .tensor_ops import (
+from simplicial_tensors.tensor_ops import (
         degen,
         horn,
         filler,

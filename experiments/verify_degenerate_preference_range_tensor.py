@@ -4,7 +4,7 @@ import itertools
 # We will use functions from your existing tensor_ops.py script.
 # Ensure tensor_ops.py is in the same directory.
 try:
-    from .tensor_ops import (
+    from simplicial_tensors.tensor_ops import (
         face,
         degen,
         horn,
