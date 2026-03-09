@@ -1,45 +1,69 @@
 # `sagemath_compatible_tensor_ops.py` documentation
 
-## Location
-- Script: `experiments/sagemath_compatible_tensor_ops.py`
+## Locations
+- Package module: `src/simplicial_tensors/sagemath_compatible_tensor_ops.py`
+- Experiment entrypoint wrapper: `experiments/sagemath_compatible_tensor_ops.py`
 
 ## Purpose
-This script provides a symbolic tensor implementation (`SymbolicTensor`) for simplicial operations and runs symbolic horn/filler checks from `main()`.
+This module provides a SageMath-oriented symbolic tensor implementation (`SymbolicTensor`) for simplicial operations.
 
-It defines symbolic versions of:
-- `face`, `degen`, `bdry`, `horn`, `filler`,
-- symbolic degeneracy checks,
-- horn filler uniqueness comparison,
-- helper checks for symbol support in horns.
+The package module is the implementation source. The experiment file is a thin wrapper that imports and runs the package module's `main()`.
+
+## Runtime backend behavior
+- Preferred backend: SageMath symbolic API (`sage.all.var`, `sage.all.simplify`).
+- Fallback backend: SymPy, used only when Sage is unavailable so the module remains importable in standard Python environments.
 
 ## Core operations
-- `face(i)`: removes index `i` from each axis.
-- `degen(k)`: duplicates index `k` on each axis.
-- `bdry()`: alternating sum of faces.
-- `horn(k)`: all faces with the `k`-th face replaced by a zero symbolic tensor.
-- `filler(horn_list, k)`: Moore-style horn filler construction.
-- `n_hypergroupoid_comparison(...)`: for each selected horn, verifies horn consistency and checks whether filler equals original tensor.
+`SymbolicTensor` implements:
+- tensor construction with symbolic entries (`range`, `zeros`, `ones`),
+- `face(i)`, `degen(k)`, `bdry()`,
+- `horn(k)`, `filler(horn_list, k)`,
+- symbolic degeneracy check `is_degen()`,
+- filler uniqueness check `n_hypergroupoid_comparison(...)`,
+- arithmetic (`__add__`, `__sub__`) and symbolic helpers (`simplify`, `subs`).
 
-## What `main()` runs
-1. Builds a symbolic `(3,3)` tensor and evaluates horn/filler comparison.
-2. Runs `check_symbolic_corrections(...)` for horn index `1`.
-3. Sweeps shapes `build_shape(k)` for `k=3..5` and all horn indices.
-4. Runs additional checks on shape `(4,5,6)` and on `build_shape(d)` for `d=2..6`.
+## Uniqueness comparison algorithm
+For each selected horn index:
+1. Construct horn and candidate filler.
+2. Verify non-missing horn faces are reproduced exactly.
+3. Compare filler with original tensor entrywise.
+4. If any entry differs for that horn, return `False`.
+5. If all selected horns match exactly, return `True`.
 
-## Outputs
-The script prints:
-- conjecture prediction vs observed filler uniqueness,
-- symbolic tensor/filler displays,
-- per-shape horn check summaries,
-- correction-symbol diagnostics from `check_symbolic_corrections(...)`.
+This is a per-horn check, so each inner horn is validated independently.
 
-## Logging
-- No file logging is configured.
-- All output is written to standard output.
+## Outputs and logging
+- No file logger is configured.
+- Verbose diagnostics are printed to standard output when `verbose=True`.
+- Non-verbose mode returns booleans/exceptions without extra logging.
 
 ## Run
 From repository root:
 
 ```powershell
 .\.venv\Scripts\python.exe experiments\sagemath_compatible_tensor_ops.py
+```
+
+Direct package import:
+
+```powershell
+.\.venv\Scripts\python.exe -c "import simplicial_tensors.sagemath_compatible_tensor_ops as m; print(m.HAVE_SAGE)"
+```
+
+SageMath execution (recommended for Sage backend):
+
+```bash
+sage -python -m pytest -q tests/test_sagemath_compatible_tensor_ops.py
+```
+## Recommended Direct Check (SageMath 10.7+)
+Run this from repository root in a SageMath 10.7+ environment:
+
+```bash
+sage -python -m pytest -q tests/test_sagemath_compatible_tensor_ops.py
+```
+
+Optional backend confirmation:
+
+```bash
+sage -python -c "import simplicial_tensors.sagemath_compatible_tensor_ops as m; print('HAVE_SAGE=', m.HAVE_SAGE)"
 ```
