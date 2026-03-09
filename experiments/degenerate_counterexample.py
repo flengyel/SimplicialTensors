@@ -16,9 +16,15 @@ def main():
                                 [6, 5, 6],
                                 [6, 2, 5]] ).transpose()
     print(f"Counterexample with degenerate boundary: {counterexample}")
-    print(f"bdry(counterexample): {bdry(counterexample)}")
-    print(f"is_degen(bdry(counterexample)): {is_degen(bdry(counterexample))}")
-    comparison = n_hypergroupoid_comparison(counterexample, verbose=True)
+    boundary = bdry(counterexample)
+    boundary_is_degen = is_degen(boundary)
+    print(f"bdry(counterexample): {boundary}")
+    print(f"is_degen(bdry(counterexample)): {boundary_is_degen}")
+    if boundary_is_degen:
+        print("Degenerate boundary detected; comparison skipped (precondition fails).")
+        comparison = None
+    else:
+        comparison = n_hypergroupoid_comparison(counterexample, verbose=True)
     conjecture = n_hypergroupoid_conjecture(counterexample.shape, verbose=True)
     print("Conjecture:", conjecture, "Comparison:", comparison)
     h = horn(counterexample, 1)
@@ -29,4 +35,3 @@ def main():
     
 if __name__ == "__main__":
     main()
-
