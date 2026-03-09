@@ -1,46 +1,48 @@
-# `degenerate_counterexample.py` documentation
+# Degenerate Counterexample
 
-## Location
-- Script: `experiments/degenerate_counterexample.py`
-- Core APIs used: `src/simplicial_tensors/tensor_ops.py`
+## Source
 
-## Purpose
-This experiment demonstrates a case where the hypothesis
-"the boundary is non-degenerate" is violated.
+```text
+experiments/degenerate_counterexample.py
+```
 
-It uses a fixed tensor and checks:
-- its boundary via `bdry(...)`
-- whether that boundary is degenerate via `is_degen(...)`
-- how the experiment proceeds when the boundary precondition fails
+## Type
 
-## What the script does
-1. Builds a hard-coded tensor named `counterexample` (shape `(3, 8)` after transpose).
-2. Computes and prints:
-   - the tensor,
-   - `bdry(counterexample)`,
-   - `is_degen(bdry(counterexample))`.
-3. If the boundary is degenerate, prints:
-   - `Degenerate boundary detected; comparison skipped (precondition fails).`
-   and sets `comparison = None`.
-4. Otherwise, runs `n_hypergroupoid_comparison(counterexample, verbose=True)`.
-5. Runs `n_hypergroupoid_conjecture(counterexample.shape, verbose=True)`.
-6. Computes and prints `horn(counterexample, 1)` and `filler(h, 1)`, then checks equality with the original tensor.
+Python script
 
-## Important behavior
-`n_hypergroupoid_comparison(...)` still enforces a non-degenerate-boundary precondition by default and would raise `SimplicialException("Degenerate boundary.")` if called directly with degenerate boundary input.
+## Research Goal
 
-This experiment now guards that call and reports the degenerate-boundary condition instead of raising.
+Investigates degenerate-versus-nondegenerate behavior of tensors and fillers, including edge cases and counterexample candidates.
 
-## Running the experiment
-From the repository root:
+## Theoretical Anchors
+
+- tex/nondegeneracy_lemma.tex (Horn Non-Degeneracy Lemma).
+- tex/normalization.tex (normalized/degenerate decomposition X_p = N_p ⊕ D_p).
+- tex/dichotomy.tex (impact on filler uniqueness and cycle structure).
+
+## Typical Workflow
+
+1. Configure shape/order/parameter choices directly in the script.
+2. Run the script to evaluate identities or invariants associated with its target phenomenon.
+3. Compare printed or saved outputs against the theorem-level expectations listed above.
+
+## How To Run
 
 ```bash
-pip install -e .
 python experiments/degenerate_counterexample.py
 ```
 
-If you are not using an editable install, set import path explicitly:
+## Inputs
 
-```bash
-PYTHONPATH=src python experiments/degenerate_counterexample.py
-```
+- Tensor shape data or graph/permutation objects defined in-script.
+- The core simplicial_tensors implementation in src/simplicial_tensors.
+- Optional scientific/python ecosystem dependencies required by the script.
+
+## Outputs
+
+- Counterexample candidates, decomposition checks, and degeneracy classification logs.
+
+## Interpretation Guidance
+
+Use this script as computational evidence for manuscript-level claims, not as a standalone proof. Cross-check discrepancies against the cited TeX sections and their formal statements.
+

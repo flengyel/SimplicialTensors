@@ -1,64 +1,48 @@
-# `sagemath_compatible_tensor_ops.py` documentation
+# Sagemath Compatible Tensor Ops
 
-## Locations
-- Package module: `src/simplicial_tensors/sagemath_compatible_tensor_ops.py`
-- Experiment entrypoint wrapper: `experiments/sagemath_compatible_tensor_ops.py`
+## Source
 
-## Purpose
-This module provides a SageMath-oriented symbolic tensor implementation (`SymbolicTensor`) for simplicial operations.
-
-The package module is the implementation source. The experiment file is a thin wrapper that imports and runs the package module's `main()`.
-
-## Runtime backend behavior
-- Preferred backend: SageMath symbolic API (`sage.all.var`, `sage.all.simplify`).
-- Fallback backend: SymPy, used only when Sage is unavailable so the module remains importable in standard Python environments.
-
-## Core operations
-`SymbolicTensor` implements:
-- tensor construction with symbolic entries (`range`, `zeros`, `ones`),
-- `face(i)`, `degen(k)`, `bdry()`,
-- `horn(k)`, `filler(horn_list, k)`,
-- symbolic degeneracy check `is_degen()`,
-- filler uniqueness check `n_hypergroupoid_comparison(...)`,
-- arithmetic (`__add__`, `__sub__`) and symbolic helpers (`simplify`, `subs`).
-
-## Uniqueness comparison algorithm
-For each selected horn index:
-1. Construct horn and candidate filler.
-2. Verify non-missing horn faces are reproduced exactly.
-3. Compare filler with original tensor entrywise.
-4. If any entry differs for that horn, return `False`.
-5. If all selected horns match exactly, return `True`.
-
-This is a per-horn check, so each inner horn is validated independently.
-
-## Outputs and logging
-- No file logger is configured.
-- Verbose diagnostics are printed to standard output when `verbose=True`.
-- Non-verbose mode returns booleans/exceptions without extra logging.
-
-## Run
-From repository root:
-
-```powershell
-.\.venv\Scripts\python.exe experiments\sagemath_compatible_tensor_ops.py
+```text
+experiments/sagemath_compatible_tensor_ops.py
 ```
 
-Direct package import:
+## Type
 
-```powershell
-.\.venv\Scripts\python.exe -c "import simplicial_tensors.sagemath_compatible_tensor_ops as m; print(m.HAVE_SAGE)"
-```
+Python script
 
-## Recommended Direct Check (SageMath 10.7+)
-Run this from repository root in a SageMath 10.7+ environment:
+## Research Goal
+
+Provides symbolic/Sage-based computation paths mirroring core DSTM operations to validate exact identities over symbolic coefficient domains.
+
+## Theoretical Anchors
+
+- tex/preliminaries.tex (definition of X_p(s;A) via index sets).
+- tex/normalization.tex (normalization theorem and Moore filler algorithm).
+- tex/combinatorics.tex (rank/cycle formulas used for symbolic checks).
+
+## Typical Workflow
+
+1. Configure shape/order/parameter choices directly in the script.
+2. Run the script to evaluate identities or invariants associated with its target phenomenon.
+3. Compare printed or saved outputs against the theorem-level expectations listed above.
+
+## How To Run
 
 ```bash
-sage -python -m pytest -q tests/test_sagemath_compatible_tensor_ops.py
+python experiments/sagemath_compatible_tensor_ops.py
 ```
 
-Optional backend confirmation:
+## Inputs
 
-```bash
-sage -python -c "import simplicial_tensors.sagemath_compatible_tensor_ops as m; print('HAVE_SAGE=', m.HAVE_SAGE)"
-```
+- Tensor shape data or graph/permutation objects defined in-script.
+- The core simplicial_tensors implementation in src/simplicial_tensors.
+- Optional scientific/python ecosystem dependencies required by the script.
+
+## Outputs
+
+- Symbolic identities, exact kernel computations, and reproducible Sage session outputs.
+
+## Interpretation Guidance
+
+Use this script as computational evidence for manuscript-level claims, not as a standalone proof. Cross-check discrepancies against the cited TeX sections and their formal statements.
+

@@ -1,94 +1,48 @@
-# `petersen_brd_right_cosets.py` documentation
+# Petersen Brd Right Cosets
 
-## Location
-- Script: `experiments/petersen_brd_right_cosets.py`
+## Source
 
-## Purpose
-This script computes the exact mod-2 boundary-rank distribution (BRD) for the Petersen graph under the vertical simplicial boundary used in the rank-shifted bisimplicial DSTM / total-decalage model.
+```text
+experiments/petersen_brd_right_cosets.py
+```
 
-For each relabeling of vertices, it computes the rank over `F_2` of the vertical boundary matrix and tabulates how often each rank occurs.
+## Type
 
-## Mathematical Model
-- Graph: Petersen graph with `N = 10` vertices and `15` edges.
-- Vertex model: vertices are the 2-subsets of `{0,1,2,3,4}` (Kneser labeling).
-- Edge rule: two vertices are adjacent iff the two 2-subsets are disjoint.
+Python script
 
-Adjacency matrices are encoded as integer row bitmasks.
+## Research Goal
 
-### Vertical Faces and Boundary
-For an `N x N` adjacency matrix `T`, the vertical face `d_k^v(T)` is principal deletion of row/column `k` with reindexing.
+Computes graph-derived simplicial statistics (including boundary-rank style invariants) for cospectral/non-isomorphic comparisons and structural scans.
 
-The mod-2 vertical boundary is:
+## Theoretical Anchors
 
-`partial_v(T) = sum_{k=0}^{N-1} d_k^v(T)` over `F_2`.
+- tex/horns.tex (kernel-support interpretation of omitted faces).
+- tex/combinatorics.tex (rank counting framework and inclusion-exclusion viewpoint).
+- tex/generated_subobjects.tex (realization matrices and rank-loss/collision perspective).
 
-In code, this is implemented as XOR of all principal deletions.
+## Typical Workflow
 
-### Boundary Rank
-The script computes `rank_{F_2}(partial_v(T))` using bit-level Gaussian elimination on row bitmasks.
+1. Configure shape/order/parameter choices directly in the script.
+2. Run the script to evaluate identities or invariants associated with its target phenomenon.
+3. Compare printed or saved outputs against the theorem-level expectations listed above.
 
-## Group-Theoretic Reduction
-Let `A` be the Petersen adjacency matrix and let relabelings act by:
-
-`A^p = P_p A P_p^T`, with convention `p[i] = new label of old vertex i`.
-
-The script builds `Aut(P)` from the induced `S_5` action on 2-subsets and obtains `|Aut(P)| = 120`.
-
-Because `A^{p sigma} = A^p` for `sigma in Aut(P)`, the boundary-rank value is constant on right cosets of `S_10 / Aut(P)`.
-
-So it is exact to enumerate a right transversal only:
-- `|S_10 / Aut(P)| = 10! / 120 = 30240` representatives.
-
-SymPy is used for:
-- permutation groups,
-- right coset transversal generation,
-- induced permutation handling.
-
-## Algorithm
-1. Build Petersen adjacency row bitmasks from the Kneser model.
-2. Build `Aut(P)` as induced permutations of 2-subsets.
-3. Enumerate a right transversal of `S_10 / Aut(P)`.
-4. For each representative:
-   - relabel adjacency matrix,
-   - compute `partial_v`,
-   - compute `rank_{F_2}`.
-5. Accumulate:
-   - unweighted counts over coset representatives,
-   - weighted counts over all `10!` labelings by multiplying each bucket by `|Aut(P)|`.
-
-## Built-In Checks
-Before BRD computation, `verify_basic_facts()` asserts:
-- `|Aut(P)| = 120`,
-- transversal size equals `10! / 120`.
-
-## Output
-The script prints:
-- graph size summary,
-- automorphism-group size,
-- right-coset count,
-- BRD over right-coset representatives,
-- BRD over all `10!` labelings,
-- total-labelings consistency check.
-
-Current output:
-- Unweighted (right-coset transversal):
-  - rank `4`: `376`
-  - rank `6`: `8496`
-  - rank `8`: `21368`
-- Weighted (all labelings):
-  - rank `4`: `45120`
-  - rank `6`: `1019520`
-  - rank `8`: `2564160`
-- Total check: `3628800` (equals `10!`).
-
-## Logging
-This script does not configure file logging.
-All reporting is printed to standard output.
-
-## Run
-From repository root:
+## How To Run
 
 ```bash
-.venv/Scripts/python.exe experiments/petersen_brd_right_cosets.py
+python experiments/petersen_brd_right_cosets.py
 ```
+
+## Inputs
+
+- Tensor shape data or graph/permutation objects defined in-script.
+- The core simplicial_tensors implementation in src/simplicial_tensors.
+- Optional scientific/python ecosystem dependencies required by the script.
+
+## Outputs
+
+- Enumerations, rank distributions, cospectral pair comparisons, and optional saved summaries.
+
+## Interpretation Guidance
+
+Use this script as computational evidence for manuscript-level claims, not as a standalone proof. Cross-check discrepancies against the cited TeX sections and their formal statements.
 

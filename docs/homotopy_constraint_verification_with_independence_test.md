@@ -1,54 +1,48 @@
-# `homotopy_constraint_verification_with_independence_test.py` documentation
+# Homotopy Constraint Verification With Independence Test
 
-## Location
-- Script: `experiments/homotopy_constraint_verification_with_independence_test.py`
+## Source
 
-## Purpose
-This script performs two empirical checks over standard basis tensors:
-1. linear independence of non-zero face images for each fixed face map,
-2. horn-constraint equivalence between combinatorial missing indices and direct face-zero constraints.
+```text
+experiments/homotopy_constraint_verification_with_independence_test.py
+```
 
-## Algorithm
-### Step 1: Linear independence check
-For each tested `shape` and face index `i` in `0..dimen(shape_tensor)`:
-1. Enumerate basis tensors `E_m`.
-2. Compute `face(E_m, i)`.
-3. Keep non-zero face images and flatten them to vectors.
-4. Form a matrix of those vectors.
-5. Compare matrix rank to number of vectors.
-- Equal: reports independent.
-- Not equal: reports dependent.
+## Type
 
-### Step 2: Constraint equivalence check
-For each tested `shape` and horn index `j` in `0..dimen(shape_tensor)`:
-1. Compute `expected_indices = compute_missing_indices_dask(shape, j)`.
-2. Enumerate all basis indices `m`.
-3. For every face index `i != j`, collect indices where `face(E_m, i)` is zero.
-4. Intersect those sets across all `i != j`.
-5. Compare the intersection with `expected_indices`.
+Python script
+
+## Research Goal
+
+Verifies chain-homotopy identities and compatibility constraints used to prove contractibility and filtration compatibility.
+
+## Theoretical Anchors
+
+- tex/equivariant_homotopy.tex (explicit homotopy operator H and identities).
+- tex/normalization.tex (Moore filler decomposition and exact horn sequence).
+- tex/dichotomy.tex (induced homological consequences of contractibility).
+
+## Typical Workflow
+
+1. Configure shape/order/parameter choices directly in the script.
+2. Run the script to evaluate identities or invariants associated with its target phenomenon.
+3. Compare printed or saved outputs against the theorem-level expectations listed above.
+
+## How To Run
+
+```bash
+python experiments/homotopy_constraint_verification_with_independence_test.py
+```
+
+## Inputs
+
+- Tensor shape data or graph/permutation objects defined in-script.
+- The core simplicial_tensors implementation in src/simplicial_tensors.
+- Optional scientific/python ecosystem dependencies required by the script.
 
 ## Outputs
-The script prints:
-- section headers for both steps,
-- per-case counts and rank results in Step 1,
-- per-case combinatorial/constraint counts in Step 2,
-- pass/fail status per case,
-- final summary lines for each step.
 
-## Logging
-- No file logger is configured.
-- All reporting is written to standard output.
+- Identity checks, mismatch reports, and supporting numeric/symbolic evidence for homotopy constraints.
 
-## Run
-From repository root, either use editable install:
+## Interpretation Guidance
 
-```powershell
-.\.venv\Scripts\python.exe experiments\homotopy_constraint_verification_with_independence_test.py
-```
+Use this script as computational evidence for manuscript-level claims, not as a standalone proof. Cross-check discrepancies against the cited TeX sections and their formal statements.
 
-Or run with explicit source path:
-
-```powershell
-$env:PYTHONPATH = 'src'
-.\.venv\Scripts\python.exe experiments\homotopy_constraint_verification_with_independence_test.py
-```

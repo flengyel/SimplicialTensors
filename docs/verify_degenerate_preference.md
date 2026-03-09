@@ -1,40 +1,48 @@
-# `verify_degenerate_preference.py` documentation
+# Verify Degenerate Preference
 
-## Location
-- Script: `experiments/verify_degenerate_preference.py`
+## Source
 
-## Purpose
-This script tests whether `filler(horn(...))` returns the known degenerate tensor produced by `degen(...)`.
+```text
+experiments/verify_degenerate_preference.py
+```
 
-It runs a grid of cases over:
-- a 2D base tensor (`2x2` standard basis matrix),
-- a 3D base tensor (`3x3x3` standard basis tensor),
-- every valid degeneracy index,
-- every horn index of the degenerated tensor.
+## Type
 
-## Algorithm
-For each `(base_tensor, degeneracy_index, horn_index)` case:
-1. Build `T_degen = degen(base_tensor, degeneracy_index)`.
-2. Build horn `H = horn(T_degen, horn_index)`.
-3. Compute `T_fill = filler(H, horn_index)`.
-4. Compare `T_fill` with `T_degen` using `np.array_equal`.
+Python script
 
-The script reports per-case pass/fail and then prints one overall pass/fail summary.
+## Research Goal
+
+Investigates degenerate-versus-nondegenerate behavior of tensors and fillers, including edge cases and counterexample candidates.
+
+## Theoretical Anchors
+
+- tex/nondegeneracy_lemma.tex (Horn Non-Degeneracy Lemma).
+- tex/normalization.tex (normalized/degenerate decomposition X_p = N_p ⊕ D_p).
+- tex/dichotomy.tex (impact on filler uniqueness and cycle structure).
+
+## Typical Workflow
+
+1. Configure shape/order/parameter choices directly in the script.
+2. Run the script to evaluate identities or invariants associated with its target phenomenon.
+3. Compare printed or saved outputs against the theorem-level expectations listed above.
+
+## How To Run
+
+```bash
+python experiments/verify_degenerate_preference.py
+```
+
+## Inputs
+
+- Tensor shape data or graph/permutation objects defined in-script.
+- The core simplicial_tensors implementation in src/simplicial_tensors.
+- Optional scientific/python ecosystem dependencies required by the script.
 
 ## Outputs
-- Section headers for 2D and 3D test phases.
-- Per-case status lines for each `(degeneracy, horn)` pair.
-- Final summary line:
-  - `PASS: Overall Result: ...` or
-  - `FAIL: Overall Result: ...`
 
-## Logging
-- No file logging is configured.
-- All output is written to standard output.
+- Counterexample candidates, decomposition checks, and degeneracy classification logs.
 
-## Run
-From repository root:
+## Interpretation Guidance
 
-```powershell
-.\.venv\Scripts\python.exe experiments\verify_degenerate_preference.py
-```
+Use this script as computational evidence for manuscript-level claims, not as a standalone proof. Cross-check discrepancies against the cited TeX sections and their formal statements.
+

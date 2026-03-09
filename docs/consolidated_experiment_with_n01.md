@@ -2,31 +2,47 @@
 
 ## Source
 
-$s
+```text
+experiments/consolidated_experiment_with_n01.py
+```
 
 ## Type
 
 Python script
 
-## Purpose
+## Research Goal
 
-This document tracks the experiment script $s and its role in exploratory simplicial-tensor workflows.
+Performs targeted computational checks of combinatorial identities and structural invariants on explicit tensor families.
+
+## Theoretical Anchors
+
+- tex/horns.tex (missing-index characterization and face-kernel basis).
+- tex/combinatorics.tex (rank and finite-difference formulas).
+- tex/normalization.tex (decomposition through Moore filler map).
+
+## Typical Workflow
+
+1. Configure shape/order/parameter choices directly in the script.
+2. Run the script to evaluate identities or invariants associated with its target phenomenon.
+3. Compare printed or saved outputs against the theorem-level expectations listed above.
 
 ## How To Run
 
-`ash
+```bash
 python experiments/consolidated_experiment_with_n01.py
-`
+```
 
 ## Inputs
 
-- Parameters and constants defined directly in the script.
-- Local package modules from src/simplicial_tensors.
+- Tensor shape data or graph/permutation objects defined in-script.
+- The core simplicial_tensors implementation in src/simplicial_tensors.
+- Optional scientific/python ecosystem dependencies required by the script.
 
 ## Outputs
 
-- Console output and, depending on script logic, generated artifacts (for example plots or intermediate files).
+- Consistency checks, discrepancy reports, and compact experiment summaries.
 
-## Notes
+## Interpretation Guidance
 
-- This script lives under xperiments/ and is research-oriented rather than part of the stable package API.
+Use this script as computational evidence for manuscript-level claims, not as a standalone proof. Cross-check discrepancies against the cited TeX sections and their formal statements.
+

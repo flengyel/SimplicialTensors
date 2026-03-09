@@ -1,48 +1,48 @@
-# `homotopy_constraint_verification.py` documentation
+# Homotopy Constraint Verification
 
-## Location
-- Script: `experiments/homotopy_constraint_verification.py`
+## Source
 
-## Purpose
-This script validates a combinatorial horn-index characterization by direct tensor-face computation.
+```text
+experiments/homotopy_constraint_verification.py
+```
 
-For each tested tensor shape and horn index `j`, it compares two sets:
-- `compute_missing_indices_dask(shape, j)` from `horn_map_reduce.py`
-- the set of basis indices `m` such that `d_i(E_m) = 0` for every face `i != j`
+## Type
 
-## Algorithm
-For each `(shape, horn_j)`:
-1. Compute `n = min(shape) - 1` and skip if `horn_j` is out of range.
-2. Compute `expected_indices = compute_missing_indices_dask(shape, horn_j)`.
-3. Enumerate all multi-indices `m` in the shape.
-4. For each horn face index `i` (`0..n`, excluding `horn_j`):
-   - Build standard basis tensor `E_m`.
-   - Compute `face(E_m, i)`.
-   - Collect `m` where the face is the zero tensor.
-5. Intersect these zero-face index sets over all `i != horn_j`.
-6. Compare the intersection against `expected_indices` and report pass/fail.
+Python script
+
+## Research Goal
+
+Verifies chain-homotopy identities and compatibility constraints used to prove contractibility and filtration compatibility.
+
+## Theoretical Anchors
+
+- tex/equivariant_homotopy.tex (explicit homotopy operator H and identities).
+- tex/normalization.tex (Moore filler decomposition and exact horn sequence).
+- tex/dichotomy.tex (induced homological consequences of contractibility).
+
+## Typical Workflow
+
+1. Configure shape/order/parameter choices directly in the script.
+2. Run the script to evaluate identities or invariants associated with its target phenomenon.
+3. Compare printed or saved outputs against the theorem-level expectations listed above.
+
+## How To Run
+
+```bash
+python experiments/homotopy_constraint_verification.py
+```
+
+## Inputs
+
+- Tensor shape data or graph/permutation objects defined in-script.
+- The core simplicial_tensors implementation in src/simplicial_tensors.
+- Optional scientific/python ecosystem dependencies required by the script.
 
 ## Outputs
-The script prints:
-- per-case headers with shape and horn index,
-- counts from the combinatorial method and constraint method,
-- per-case pass/fail result,
-- final overall summary.
 
-## Logging
-- No file logger is configured.
-- All reporting is written to standard output.
+- Identity checks, mismatch reports, and supporting numeric/symbolic evidence for homotopy constraints.
 
-## Run
-From repository root, either use editable install:
+## Interpretation Guidance
 
-```powershell
-.\.venv\Scripts\python.exe experiments\homotopy_constraint_verification.py
-```
+Use this script as computational evidence for manuscript-level claims, not as a standalone proof. Cross-check discrepancies against the cited TeX sections and their formal statements.
 
-Or run with explicit source path:
-
-```powershell
-$env:PYTHONPATH = 'src'
-.\.venv\Scripts\python.exe experiments\homotopy_constraint_verification.py
-```

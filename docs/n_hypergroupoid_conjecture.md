@@ -2,31 +2,47 @@
 
 ## Source
 
-$s
+```text
+experiments/n_hypergroupoid_conjecture.py
+```
 
 ## Type
 
 Python script
 
-## Purpose
+## Research Goal
 
-This document tracks the experiment script $s and its role in exploratory simplicial-tensor workflows.
+Tests the strict algebraic n-hypergroupoid criterion by sampling shapes/orders and comparing observed filler uniqueness to the k-versus-n threshold.
+
+## Theoretical Anchors
+
+- tex/combinatorics.tex (Hypergroupoid Classification theorem).
+- tex/horns.tex (criterion R_{p,j} != 0 iff k >= p).
+- tex/dichotomy.tex (filler dichotomy by order regime).
+
+## Typical Workflow
+
+1. Configure shape/order/parameter choices directly in the script.
+2. Run the script to evaluate identities or invariants associated with its target phenomenon.
+3. Compare printed or saved outputs against the theorem-level expectations listed above.
 
 ## How To Run
 
-`ash
+```bash
 python experiments/n_hypergroupoid_conjecture.py
-`
+```
 
 ## Inputs
 
-- Parameters and constants defined directly in the script.
-- Local package modules from src/simplicial_tensors.
+- Tensor shape data or graph/permutation objects defined in-script.
+- The core simplicial_tensors implementation in src/simplicial_tensors.
+- Optional scientific/python ecosystem dependencies required by the script.
 
 ## Outputs
 
-- Console output and, depending on script logic, generated artifacts (for example plots or intermediate files).
+- Pass/fail traces of predicted versus observed uniqueness across sampled shapes.
 
-## Notes
+## Interpretation Guidance
 
-- This script lives under xperiments/ and is research-oriented rather than part of the stable package API.
+Use this script as computational evidence for manuscript-level claims, not as a standalone proof. Cross-check discrepancies against the cited TeX sections and their formal statements.
+

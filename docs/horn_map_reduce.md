@@ -1,67 +1,48 @@
-# `horn_map_reduce.py` documentation
+# Horn Map Reduce
 
-## Location
-- Script: `experiments/horn_map_reduce.py`
+## Source
 
-## Purpose
-This script computes and validates the set of "missing" multi-indices for a chosen horn face in the tensor horn-indexing model used by this script.
+```text
+experiments/horn_map_reduce.py
+```
 
-It focuses on indices that contain every horn face index except the omitted one (`horn_j`), using Dask for filtered map/reduce-style processing.
+## Type
 
-## Dependencies
-- `dask.bag`
-- Python standard library: `itertools`, `functools.reduce`, `typing`
+Python script
 
-## Core Function
-- `compute_missing_indices_dask(shape: Tuple[int, ...], horn_j: int) -> Set[Tuple[int, ...]]`
+## Research Goal
 
-Behavior:
-1. Let `order_k = len(shape)` and `dim_n = min(shape) - 1`.
-2. Return `set()` immediately when:
-   - `shape` is empty, or
-   - `order_k < dim_n`.
-3. Validate `horn_j` is in `[0, dim_n]`.
-4. Build horn face indices `horn_faces = [k for k in range(dim_n + 1) if k != horn_j]`.
-5. Generate all tensor indices via Cartesian product over `shape`.
-6. Use Dask bag filtering to keep only indices containing all values in `horn_faces`.
-7. Compute and return the final set.
+Analyzes horn kernels, missing-index structure, and filler reconstruction behavior in concrete computational settings.
 
-## What `main()` does
-1. Runs a small example: `shape=(2,2), horn_j=1`.
-   - Compares against an expected set and asserts equality.
-2. Runs a 3D example: `shape=(4,4,4), horn_j=0`.
-   - Compares against `set(itertools.permutations([1,2,3]))` and asserts equality.
-3. Runs a larger example: `shape=(10,10,10), horn_j=2`.
-   - Prints count and performs a sanity check when non-empty.
-4. Iterates over multiple shapes with fixed `horn_j=1` and prints count of missing indices for each.
+## Theoretical Anchors
 
-## Output
-The script prints:
-- computed missing-index sets for the two asserted examples,
-- assertion pass messages,
-- count summary for the large example,
-- count summary for a list of additional shapes.
+- tex/horns.tex (support characterization and missing-index criterion).
+- tex/normalization.tex (Moore filler map and split exact sequence).
+- tex/nondegeneracy_lemma.tex (R_{p,j} ∩ D_p = {0} and horn decomposition).
 
-Observed current run output includes these counts:
-- `(2,2)` -> `3`
-- `(3,3,3)` -> `12`
-- `(3,5)` -> `2`
-- `(3,3,5)` -> `16`
-- `(3,3,3,5)` -> `74`
-- `(3,3,3,3,5)` -> `280`
-- `(3,4,5,6)` -> `144`
-- `(3,3,3,3,3,5)` -> `962`
-- `(3,3,3,3,3,3,5)` -> `3136`
-- `(3,3,3,3,3,3,3,5)` -> `9914`
+## Typical Workflow
 
-## Logging
-This script does not configure file or structured logging.
-All runtime reporting is printed to standard output.
+1. Configure shape/order/parameter choices directly in the script.
+2. Run the script to evaluate identities or invariants associated with its target phenomenon.
+3. Compare printed or saved outputs against the theorem-level expectations listed above.
 
-## Run
-From repository root:
+## How To Run
 
 ```bash
-.venv/Scripts/python.exe experiments/horn_map_reduce.py
+python experiments/horn_map_reduce.py
 ```
+
+## Inputs
+
+- Tensor shape data or graph/permutation objects defined in-script.
+- The core simplicial_tensors implementation in src/simplicial_tensors.
+- Optional scientific/python ecosystem dependencies required by the script.
+
+## Outputs
+
+- Horn compatibility diagnostics, filler comparisons, and kernel-support measurements.
+
+## Interpretation Guidance
+
+Use this script as computational evidence for manuscript-level claims, not as a standalone proof. Cross-check discrepancies against the cited TeX sections and their formal statements.
 
