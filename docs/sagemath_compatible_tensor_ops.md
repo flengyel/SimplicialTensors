@@ -50,11 +50,6 @@ Direct package import:
 .\.venv\Scripts\python.exe -c "import simplicial_tensors.sagemath_compatible_tensor_ops as m; print(m.HAVE_SAGE)"
 ```
 
-SageMath execution (recommended for Sage backend):
-
-```bash
-sage -python -m pytest -q tests/test_sagemath_compatible_tensor_ops.py
-```
 ## Recommended Direct Check (SageMath 10.7+)
 Run this from repository root in a SageMath 10.7+ environment:
 
