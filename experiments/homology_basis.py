@@ -1,6 +1,6 @@
 import numpy as np
 from itertools import product
-from .tensor_ops import range_tensor, is_degen, dimen
+from simplicial_tensors.tensor_ops import range_tensor, is_degen, dimen
 
 
 def standard_basis_tensor(idx, shape):

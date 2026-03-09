@@ -23,7 +23,7 @@
 import sympy as sp
 import numpy as np
 from typing import Tuple, List, Union, Any
-from .tensor_ops import (order, dimen, n_hypergroupoid_conjecture, 
+from simplicial_tensors.tensor_ops import (order, dimen, n_hypergroupoid_conjecture, 
                        SimplicialException)  # Import the exception
 
 class SymbolicTensor:

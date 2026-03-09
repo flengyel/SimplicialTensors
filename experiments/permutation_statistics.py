@@ -22,7 +22,7 @@ from typing import Tuple, List, Dict, Any
 import matplotlib.pyplot as plt
 import argparse
 import os
-from .tensor_ops import bdry, face, dimen, random_real_matrix
+from simplicial_tensors.tensor_ops import bdry, face, dimen, random_real_matrix
 
 def compute_discrepancy(a: np.ndarray) -> np.ndarray:
     """

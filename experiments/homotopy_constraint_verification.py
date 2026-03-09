@@ -1,20 +1,9 @@
-import numpy as np
 import itertools
 
+import numpy as np
 
-# We will use functions from your existing scripts.
-# Ensure tensor_ops.py and horn_map_reduce.py are in the same directory.
-try:
-    from .tensor_ops import face
-    from .horn_map_reduce import compute_missing_indices_dask
-except ImportError as e:
-    print(f"Error: Could not import required functions. {e}")
-    print("Please ensure tensor_ops.py and horn_map_reduce.py are in the same directory.")
-    # Define dummy functions to avoid crashing the script
-    def face(m, i): return np.array([])
-    def dimen(t): return 0
-    def compute_missing_indices_dask(shape, horn_j): return set()
-
+from horn_map_reduce import compute_missing_indices_dask
+from simplicial_tensors.tensor_ops import face
 
 def standard_basis_tensor(idx, shape):
     """
@@ -102,10 +91,13 @@ def main():
     
     print("\n-------------------------------------------")
     if all_passed:
-        print("✅ All tested shapes passed the constraint verification.")
+        print("All tested shapes passed the constraint verification.")
     else:
-        print("❌ Some shapes failed the constraint verification.")
+        print("Some shapes failed the constraint verification.")
 
 if __name__ == '__main__':
     main()
+
+
+
 

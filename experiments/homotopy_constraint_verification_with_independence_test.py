@@ -1,20 +1,9 @@
-import numpy as np
 import itertools
 
-# We will use functions from your existing scripts.
-# Ensure tensor_ops.py and horn_map_reduce.py are in the same directory.
-try:
-    from .tensor_ops import face, dimen
-    from .horn_map_reduce import compute_missing_indices_dask
-except ImportError as e:
-    print(f"Error: Could not import required functions. {e}")
-    print("Please ensure tensor_ops.py and horn_map_reduce.py are in the same directory.")
-    # Define dummy functions to avoid crashing the script
-    def face(m, i): return np.array([])
-    def dimen(t): return min(t.shape) - 1 if t.shape else -1
-    # CORRECTED DUMMY FUNCTION SIGNATURE:
-    def compute_missing_indices_dask(shape, horn_j): return set()
+import numpy as np
 
+from horn_map_reduce import compute_missing_indices_dask
+from simplicial_tensors.tensor_ops import dimen, face
 
 def standard_basis_tensor(idx, shape):
     """
@@ -132,9 +121,9 @@ def main():
     
     print("\n-------------------------------------------")
     if li_passed:
-        print("✅ Linear independence premise holds for all tested cases.")
+        print("Linear independence premise holds for all tested cases.")
     else:
-        print("❌ Linear independence premise FAILED for one or more cases.")
+        print("Linear independence premise FAILED for one or more cases.")
     
     
     print("\n\n======================================================")
@@ -151,10 +140,15 @@ def main():
     
     print("\n-------------------------------------------")
     if constraints_passed:
-        print("✅ All tested shapes passed the constraint verification.")
+        print("All tested shapes passed the constraint verification.")
     else:
-        print("❌ Some shapes failed the constraint verification.")
+        print("Some shapes failed the constraint verification.")
 
 if __name__ == '__main__':
     main()
+
+
+
+
+
 

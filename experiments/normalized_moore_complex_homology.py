@@ -1,6 +1,6 @@
 import numpy as np
 from collections import deque
-from .tensor_ops import face, degen, bdry, is_degen, random_tensor
+from simplicial_tensors.tensor_ops import face, degen, bdry, is_degen, random_tensor
 from scipy.linalg import null_space
 
 # Generate a unique key for caching simplices

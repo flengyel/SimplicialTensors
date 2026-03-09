@@ -1,17 +1,8 @@
-import numpy as np
 import itertools
 
-# We will use the 'face' function from your tensor_ops.py file.
-# Ensure tensor_ops.py is in the same directory as this script.
-try:
-    from .tensor_ops import face
-except ImportError:
-    print("Error: Could not import 'face' from tensor_ops.py.")
-    print("Please ensure tensor_ops.py is in the same directory.")
-    # Define a dummy function to avoid crashing the script
-    def face(m, i):
-        print("DUMMY FACE FUNCTION: tensor_ops.py not found.")
-        return np.array([])
+import numpy as np
+
+from simplicial_tensors.tensor_ops import face
 
 def standard_basis_tensor(idx, shape):
     """
@@ -88,4 +79,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 

@@ -1,28 +1,16 @@
 import numpy as np
 import itertools
 
-# We will use functions from your existing tensor_ops.py script.
-# Ensure tensor_ops.py is in the same directory.
-try:
-    from simplicial_tensors.tensor_ops import (
+from simplicial_tensors.tensor_ops import (
         face,
         degen,
         horn,
         filler,
         is_degen,
         dimen,
-        range_tensor # Added range_tensor for more robust testing
+        range_tensor
     )
-except ImportError as e:
-    print(f"Error: Could not import required functions from tensor_ops.py. {e}")
-    # CORRECTED: Dummy functions now match the actual signatures
-    def face(m: np.ndarray, i: int) -> np.ndarray: return np.array([])
-    def degen(z: np.ndarray, k: int) -> np.ndarray: return np.array([])
-    def horn(m: np.ndarray, k: int) -> np.ndarray: return np.array([])
-    def filler(horn: np.ndarray, k: int) -> np.ndarray: return np.array([])
-    def is_degen(a: np.ndarray) -> bool: return False
-    def dimen(t: np.ndarray) -> int: return 0
-    def range_tensor(shape): return np.zeros(shape)
+
 
 
 def verify_degenerate_preference(non_degenerate_base, degeneracy_index, horn_index):
@@ -122,3 +110,5 @@ def main():
         print("❌ Overall Result: The filler algorithm is NOT degenerate-preferring.")
 if __name__ == "__main__":
     main()
+
+

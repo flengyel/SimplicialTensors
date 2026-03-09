@@ -22,7 +22,7 @@
 import numpy as np
 import random
 from typing import Tuple # , List, Union, Any
-from .tensor_ops import (n_hypergroupoid_conjecture, n_hypergroupoid_comparison, 
+from simplicial_tensors.tensor_ops import (n_hypergroupoid_conjecture, n_hypergroupoid_comparison, 
                         bdry, degen, is_degen, ___SEED___, random_tensor, order, dimen, face) 
 
 

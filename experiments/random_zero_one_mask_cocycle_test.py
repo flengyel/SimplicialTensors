@@ -1,6 +1,6 @@
 from sympy import simplify
 from cochain_complex_memoized_mod2 import CochainComplex
-from .symbolic_tensor_ops import SymbolicTensor
+from simplicial_tensors.symbolic_tensor_ops import SymbolicTensor
 import numpy as np
 from collections import Counter, defaultdict
 from itertools import combinations

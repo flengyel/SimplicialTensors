@@ -21,8 +21,8 @@
 # Let's check with our code. Gemini produced the following Python code to construct the hypermatrix.
 
 import numpy as np
-from .tensor_ops import n_hypergroupoid_conjecture, n_hypergroupoid_comparison, is_degen, bdry, horn
-from .tensor_ops import face, kan_condition, filler
+from simplicial_tensors.tensor_ops import n_hypergroupoid_conjecture, n_hypergroupoid_comparison, is_degen, bdry, horn
+from simplicial_tensors.tensor_ops import face, kan_condition, filler
 
 
 a = np.array([0, 1, 2])

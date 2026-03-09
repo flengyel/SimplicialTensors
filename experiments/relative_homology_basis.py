@@ -1,7 +1,7 @@
 import sympy as sp
 import numpy as np
 from typing import Tuple, List
-from .symbolic_tensor_ops import SymbolicTensor
+from simplicial_tensors.symbolic_tensor_ops import SymbolicTensor
 # This file contains the function to construct the relative homology basis
 # for a given shape and index of the missing face in the horn.
 

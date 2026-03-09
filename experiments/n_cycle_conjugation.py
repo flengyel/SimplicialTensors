@@ -1,7 +1,7 @@
 # n_cycle_conjugation.py
 
 from sympy import simplify
-from .symbolic_tensor_ops import SymbolicTensor
+from simplicial_tensors.symbolic_tensor_ops import SymbolicTensor
 import numpy as np
 from collections import Counter
 
