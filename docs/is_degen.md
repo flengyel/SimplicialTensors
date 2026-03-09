@@ -50,3 +50,6 @@ Using `experiments/count_standard_basis_tensors.py` with shapes `(3,3)`, `(4,4)`
 - `(4,4)` produced `0` non-degenerate basis tensors (all `16` were degenerate), matching `k=2 < d=3`.
 - `(3,3)` and `(3,3,3)` produced non-degenerate basis tensors, consistent with `k >= d`.
 
+
+
+

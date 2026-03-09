@@ -50,3 +50,5 @@ Run full repository tests:
 ```powershell
 .\.venv\Scripts\python.exe -m pytest -q
 ```
+
+

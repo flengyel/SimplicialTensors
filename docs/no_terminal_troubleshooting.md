@@ -25,3 +25,6 @@ From there you can run `git status`, `pytest -q`, or any other commands describe
 ## Still stuck?
 
 If the workspace refuses to open a terminal, refresh the browser tab. As a last resort, close the session from the Codex dashboard and start a new one; each session automatically checks out the repository into `/workspace/Operations-Tensorielles-Simpliciales`.
+
+
+

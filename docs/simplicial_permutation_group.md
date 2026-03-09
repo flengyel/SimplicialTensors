@@ -14,7 +14,7 @@ Python script
 
 Studies permutation-action invariants and symmetry effects on simplicial tensor constructions.
 
-## Theoretical Anchors
+## Relevant Results in TeX Sources
 
 - tex/preliminaries.tex (Stab(s) action and equivariance under axis permutations).
 - tex/equivariant_homotopy.tex (equivariance of homotopy operator).
@@ -23,8 +23,8 @@ Studies permutation-action invariants and symmetry effects on simplicial tensor 
 ## Typical Workflow
 
 1. Configure shape/order/parameter choices directly in the script.
-2. Run the script to evaluate identities or invariants associated with its target phenomenon.
-3. Compare printed or saved outputs against the theorem-level expectations listed above.
+2. Run the script and record the checks it performs.
+3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
 
 ## How To Run
 
@@ -34,9 +34,9 @@ python experiments/simplicial_permutation_group.py
 
 ## Inputs
 
-- Tensor shape data or graph/permutation objects defined in-script.
-- The core simplicial_tensors implementation in src/simplicial_tensors.
-- Optional scientific/python ecosystem dependencies required by the script.
+- Inputs defined in the script (for example shapes, graphs, or permutations).
+- Functions imported from src/simplicial_tensors.
+- Optional dependencies required by the script.
 
 ## Outputs
 
@@ -44,5 +44,8 @@ python experiments/simplicial_permutation_group.py
 
 ## Interpretation Guidance
 
-Use this script as computational evidence for manuscript-level claims, not as a standalone proof. Cross-check discrepancies against the cited TeX sections and their formal statements.
+Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
+
+
+
 

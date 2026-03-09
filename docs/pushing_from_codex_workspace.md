@@ -105,3 +105,6 @@ git pull --ff-only
 
 Now both the Codex workspace and your local machine share the exact same repository name (`SimplicialTensors`) and commit history.
 
+
+
+
