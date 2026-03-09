@@ -354,7 +354,7 @@ def main() -> None:
 
     counts_cosets, counts_all = brd_histogram_over_right_cosets()
 
-    print("Petersen graph BRD using the mod-2 vertical boundary ∂_v")
+    print("Petersen graph BRD using the mod-2 vertical boundary partial_v")
     print("-------------------------------------------------------")
     print(f"Number of vertices              : {N}")
     print(f"Number of edges                 : {len(EDGES)}")

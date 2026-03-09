@@ -4,7 +4,7 @@
 - Script: `experiments/horn_map_reduce.py`
 
 ## Purpose
-This script computes and validates the set of "missing" multi-indices for a chosen horn face in a simplicial-style indexing setup.
+This script computes and validates the set of "missing" multi-indices for a chosen horn face in the tensor horn-indexing model used by this script.
 
 It focuses on indices that contain every horn face index except the omitted one (`horn_j`), using Dask for filtered map/reduce-style processing.
 
@@ -64,3 +64,4 @@ From repository root:
 ```bash
 .venv/Scripts/python.exe experiments/horn_map_reduce.py
 ```
+
