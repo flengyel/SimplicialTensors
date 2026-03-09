@@ -24,7 +24,7 @@ $$
 To work with these files on your own machine:
 
 1. Clone or update the repository (`git clone` the first time, otherwise `git pull`).
-2. Change into the `Operations-Tensorielles-Simpliciales` directory.
+2. Change into the `SimplicialTensors` directory.
 3. Install the package in editable mode:
 
    ```bash
@@ -38,7 +38,7 @@ You can then import modules via `import simplicial_tensors.tensor_ops`.
 The interactive demonstrations that used to live inside the library modules now reside in the `examples/` folder. After installing the project in editable mode (`pip install -e .`), run any example like so:
 
 ```bash
-python examples/tensor_ops.py
+python examples/ab_mlp_demo.py
 ```
 
 Each script imports the corresponding module under `simplicial_tensors` and calls its `main()` entry point.

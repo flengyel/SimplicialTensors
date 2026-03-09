@@ -172,3 +172,9 @@ def test_cyclic_commutes_with_face_same_index(seed):
             f"cyclic-face equivariance failed at i={i}, shape={shape}, d={d}"
         )
 
+
+def test_cyclic_handles_more_faces_than_axes() -> None:
+    t = np.arange(12).reshape(3, 4)
+    expected = np.transpose(t, (1, 0))
+    assert_array_equal(cyclic(t), expected)
+    assert_array_equal(cyclic_signed(t), expected)

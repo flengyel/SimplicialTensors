@@ -557,6 +557,23 @@ def test_bdry_bdry_mod1() -> None:
 
 
 
+
+def test_face_rejects_out_of_range_index() -> None:
+    with pytest.raises(IndexError):
+        face(range_tensor((3, 3)), 5)
+
+
+def test_horn_rejects_upper_bound_index() -> None:
+    t = range_tensor((3, 3))
+    with pytest.raises(ValueError):
+        horn(t, dimen(t) + 1)
+
+
+def test_filler_rejects_out_of_range_horn_index() -> None:
+    t = range_tensor((3, 3))
+    h = horn(t, 1)
+    with pytest.raises(ValueError):
+        filler(h, len(h))
 if __name__ == "__main__":
     pytest.main([__file__])
     exit(0)

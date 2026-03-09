@@ -110,6 +110,9 @@ def _face(m: np.ndarray, axes: Tuple[List[np.ndarray], ...], i: int) -> np.ndarr
 
 # i-ème face d'une matrice
 def face(m: np.ndarray, i: int) -> np.ndarray:
+    num_faces = min(m.shape) if m.ndim > 0 else 0
+    if not (0 <= i < num_faces):
+        raise IndexError(f"Face index {i} out of bounds for tensor shape {m.shape}.")
     axes = _dims(m)
     return _face(m, axes, i)
 
@@ -359,13 +362,13 @@ def cobdry(m: np.ndarray) -> np.ndarray:
            a = np.subtract(a, degen(m, i))
     return a
 
-# Fonction de cornet, donnée une matrice M et un indice k, 0 <= k <= dimen(M)+1 = min(M.shape).
+# Fonction de cornet, donnée une matrice M et un indice k, 0 <= k < dimen(M)+1 = min(M.shape).
 # Ceci retourne la liste des faces diagonales de M en ordre à l'exception de la k-ème.
 # La k-ème matrice est la matrice zéro de dimension (M.shape[0]-1)x(M.shape[1]-1)
 def horn(m: np.ndarray, k: int) -> np.ndarray:
     d = dimen(m)+1 
-    if k < 0 or k > d:
-        raise ValueError(k, "must be nonnegative and less than or equal to dim+1", d)
+    if k < 0 or k >= d:
+        raise ValueError(k, "must be nonnegative and less than dim+1", d)
     return np.array([face(m,i) if i != k else np.zeros(np.subtract(m.shape, np.array([1]))) for i in range(d)])
 
 # check the Kan condition
@@ -384,6 +387,8 @@ def kan_condition(w: np.ndarray, k: int) -> bool:
 # given a horn H which omits the k-th face
 # Here a k-horn has a zero matrix at the k-th position
 def filler(horn: np.ndarray, k: int) -> np.ndarray:
+    if not (0 <= k < len(horn)):
+        raise ValueError(f"Horn index {k} out of bounds for horn of length {len(horn)}.")
     g = degen(horn[k],0) # zero matrix at k-th position in Horn
     for r in range(k):
         u = np.subtract(face(g, r), horn[r])
@@ -606,21 +611,22 @@ def permute_tensor(T: np.ndarray, perm: Tuple[int, ...]) -> np.ndarray:
 
 def cyclic(t: np.ndarray) -> np.ndarray:
     """
-    Simplicial cycle on the *first* d+1 axes of t, where
-      d = dimen(t) = min(t.shape)-1.
-    Builds the explicit permutation
-      σ = (1,2,...,d,0, d+1, d+2, ..., k-1)
-    and applies it via permute_tensor.
+    Simplicial cycle on the first simplicial axes of t.
+
+    If dimen(t)+1 exceeds the number of axes, cycle all available axes.
     """
     from .tensor_ops import permute_tensor, dimen
 
     d = dimen(t)
     k = t.ndim
-    # the cycle on simplex‐axes 0..d:
+    simplex_axis_count = min(d + 1, k)
+    if simplex_axis_count <= 1:
+        return t.copy()
+
     sigma: Tuple[int, ...] = tuple(
-        list(range(1, d+1))  # 1→2→...→d
-        + [0]                # d→0
-        + list(range(d+1, k))  # leave the remaining axes alone
+        list(range(1, simplex_axis_count))
+        + [0]
+        + list(range(simplex_axis_count, k))
     )
     return permute_tensor(t, sigma)
 
@@ -776,4 +782,3 @@ def main():
         print(f" Difference tensor t - t':\n{t - t_prime}")
     
     
-

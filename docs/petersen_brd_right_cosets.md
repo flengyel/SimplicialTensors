@@ -63,7 +63,7 @@ Before BRD computation, `verify_basic_facts()` asserts:
 
 ## Output
 The script prints:
-- graph size data,
+- graph size summary,
 - automorphism-group size,
 - right-coset count,
 - BRD over right-coset representatives,
@@ -91,3 +91,4 @@ From repository root:
 ```bash
 .venv/Scripts/python.exe experiments/petersen_brd_right_cosets.py
 ```
+
