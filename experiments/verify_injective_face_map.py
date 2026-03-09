@@ -18,14 +18,7 @@ formatter = logging.Formatter('%(message)s') # Keep console output clean
 console_handler.setFormatter(formatter)
 logging.getLogger('').addHandler(console_handler)
 
-try:
-    from .tensor_ops import face, dimen
-except ImportError as e:
-    logging.error(f"Error: Could not import required functions from tensor_ops.py. {e}")
-    # Define dummy functions to avoid crashing the script
-    def face(m: np.ndarray, i: int) -> np.ndarray: return np.array([])
-    def dimen(t: np.ndarray) -> int: return min(t.shape) - 1 if t.shape else -1
-
+from simplicial_tensors.tensor_ops import face, dimen
 
 def standard_basis_tensor(idx, shape):
     """

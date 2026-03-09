@@ -44,9 +44,9 @@ This is a linear membership test in the span of degeneracy images.
 ## Notes and edge behavior
 - The decomposition is generally not unique; code returns one particular solution.
 - Current implementation treats tensors with `dimen(a) <= 0` as non-degenerate (`decompose_degen` returns `None`).
-- This method is stronger than the older direct-face comparison approach (kept in comments as obsolete).
 
 ## Quick consistency check (reduced run)
 Using `experiments/count_standard_basis_tensors.py` with shapes `(3,3)`, `(4,4)`, `(3,3,3)`:
 - `(4,4)` produced `0` non-degenerate basis tensors (all `16` were degenerate), matching `k=2 < d=3`.
 - `(3,3)` and `(3,3,3)` produced non-degenerate basis tensors, consistent with `k >= d`.
+

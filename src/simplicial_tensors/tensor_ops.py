@@ -160,14 +160,6 @@ def degen(z: np.ndarray, k: int) -> np.ndarray:
         z = np.insert(z, k, z[tuple(slices)], axis=axis)
     return z
 
-# Insufficient for simplicial modules
-# def is_degen(a: np.ndarray) -> bool:
-#    d = dimen(a) 
-#    for i in np.arange(d): # faces have simplicial dimension d
-#        if np.array_equal(a, degen(face(a, int(i)), int(i))):
-#            return True
-#    return False
-
 def _get_degeneracy_system_matrix(a: np.ndarray) -> np.ndarray:
     """
     Constructs the matrix representing the combined degeneracy operators.
@@ -310,9 +302,9 @@ def is_generator_numeric(a: np.ndarray) -> bool:
 
 def find_degen(a: np.ndarray) -> Union[Tuple[np.ndarray, int], None]:
     """
-    This function is obsolete due to its flawed premise. Use `decompose_degen`.
+    Compatibility shim for earlier call sites. Returns `None`.
     """
-    logging.warning("The function `find_degen` is deprecated and based on an incorrect definition of degeneracy.")
+    logging.warning("The function `find_degen` is a compatibility shim and returns `None`.")
     return None
 
 
@@ -784,3 +776,4 @@ def main():
         print(f" Difference tensor t - t':\n{t - t_prime}")
     
     
+
