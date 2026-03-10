@@ -1,94 +1,211 @@
 # SimplicialTensors
 
-Simplicial operations on matrices and higher-order tensors.
+Simplicial operations on matrices and higher-order tensors, with research scripts for diagonal simplicial tensor modules (DSTM), horn/filler behavior, and related combinatorics.
 
-## Overview
+## What This Repository Contains
 
-`SimplicialTensors` provides NumPy/SymPy-based implementations of core simplicial operators on diagonal tensor objects:
+This repository has two main layers:
 
-- face maps `d_i`
-- degeneracy maps `s_i`
-- boundary operators and related constructions
-- horn/filler utilities and symbolic variants
+1. Reusable library code in `src/simplicial_tensors`.
+2. Research scripts and computational studies in `experiments`.
 
-The package focuses on algebraic experimentation and verification workflows for simplicial tensor constructions.
+The core package implements simplicial operators on NumPy arrays (and symbolic analogues), including:
 
-## Mathematical Identities
+- Face maps `d_i`
+- Degeneracy maps `s_i`
+- Boundary/coboundary operators
+- Horn construction and filler computation
+- Utilities for testing the n-hypergroupoid uniqueness criterion on shapes/tensors
 
-The implementation targets the standard simplicial identities:
+The TeX sources in `tex` develop the mathematical framework around diagonal simplicial tensor modules and strict algebraic `n`-hypergroupoids.
 
-$$
-\begin{aligned}
-d_i d_j &= d_{j-1} d_i, && \text{if } i < j; \\
-s_i s_j &= s_j s_{i-1}, && \text{if } i > j; \\
-d_i s_j &=
-\begin{cases}
-s_{j-1} d_i, & \text{if } i < j; \\
-1, & \text{if } i \in \{j, j+1\}; \\
-s_j d_{i-1}, & \text{if } i > j+1.
-\end{cases}
-\end{aligned}
-$$
+## Mathematical Scope
+
+The implementation is aligned with standard simplicial identities and supports computational checks of statements used throughout the project, including:
+
+- `d_i d_j = d_{j-1} d_i` for `i < j`
+- `s_i s_j = s_{j+1} s_i` for `i <= j`
+- Mixed `d_i s_j` relations
+- `d^2 = 0` (boundary squared is zero)
+
+For this codebase, the shape-dependent heuristic/conjecture function is:
+
+- `n_hypergroupoid_conjecture(shape)` returns whether `order(shape) < dimen(shape)`
+
+and the computational check:
+
+- `n_hypergroupoid_comparison(tensor, ...)` compares reconstructed horns/fillers and can raise `SimplicialException` when assumptions fail (for example degenerate boundaries unless explicitly allowed).
+
+## Package Modules
+
+### `simplicial_tensors.tensor_ops`
+
+Primary numeric API (NumPy/SymPy-based), including:
+
+- Tensor constructors: `random_tensor`, `random_real_tensor`, `range_tensor`
+- Shape/index helpers: `get_index`, `dimen`, `order`
+- Simplicial maps: `face`, `hface`, `vface`, `degen`, `hdegen`, `vdegen`
+- Chain-level maps: `bdry`, `hbdry`, `vbdry`, `cobdry`, `bdry_n`, `bdry_mod1`
+- Horn/filler pipeline: `horn`, `kan_condition`, `filler`
+- Degeneracy analysis: `is_degen`, `decompose_degen`, `decompose_degen_numpy`
+- Conjecture/comparison helpers: `n_hypergroupoid_conjecture`, `n_hypergroupoid_comparison`
+- Tensor permutation/cycle helpers: `permute_tensor`, `random_axis_permutation`, `cyclic`, `cyclic_signed`
+
+### `simplicial_tensors.symbolic_tensor_ops`
+
+SymPy-backed symbolic tensor class:
+
+- `SymbolicTensor` with symbolic `face`, `degen`, `bdry`, `horn`, `filler`
+- Symbolic uniqueness checks and diagnostics
+
+### `simplicial_tensors.sagemath_compatible_tensor_ops`
+
+SageMath-friendly symbolic variant:
+
+- Uses Sage when available
+- Falls back to SymPy so imports still work outside Sage
+
+### `simplicial_tensors.cyclic_tensor_ops`
+
+Axis-specific cyclic/face/degeneracy helpers:
+
+- `face_axis`, `degen_axis`, `cyclic`, `cyclic_signed`
 
 ## Installation
 
-1. Clone the repository.
-2. Change into the project directory:
+### Requirements
 
-   ```bash
-   cd SimplicialTensors
-   ```
+- Python 3.10+
+- Core dependencies (declared in `pyproject.toml`):
+  - `numpy`
+  - `sympy`
+  - `scipy`
 
-3. Install in editable mode:
+### Editable install
 
-   ```bash
-   pip install -e .
-   ```
-
-Project metadata currently declares:
-
-- Python `>=3.10`
-- dependencies: `numpy`, `sympy`, `scipy`
+```bash
+python -m venv .venv
+. .venv/Scripts/activate  # PowerShell: .\.venv\Scripts\Activate.ps1
+pip install --upgrade pip
+pip install -e .
+```
 
 ## Quick Start
 
 ```python
-from simplicial_tensors.tensor_ops import face, degen, bdry, range_tensor
+import numpy as np
+from simplicial_tensors.tensor_ops import range_tensor, face, degen, bdry, horn, filler
 
 t = range_tensor((4, 4, 4))
-f = face(t, 1)
-s = degen(f, 1)
+f1 = face(t, 1)
+g1 = degen(f1, 1)
 b = bdry(t)
 
-print(t.shape, f.shape, s.shape, b.shape)
+h = horn(t, 1)
+t_prime = filler(h, 1)
+
+print("t:", t.shape)
+print("face:", f1.shape)
+print("degen(face):", g1.shape)
+print("bdry:", b.shape)
+print("horn length:", len(h))
+print("filler matches input:", np.array_equal(t, t_prime))
 ```
 
-## Run Tests
+## Reproducibility and Random Seeds
+
+`tensor_ops` exposes `___SEED___ = 123` and uses a module-level RNG stream.
+
+- `random_tensor(..., seed=None)` and `random_real_tensor(..., seed=None)` use the shared stream.
+- Passing an explicit `seed` creates a deterministic per-call generator.
+
+So repeated calls with the same explicit seed are reproducible, while calls without a seed advance the shared stream.
+
+## Tests
+
+Run all tests:
 
 ```bash
 pytest -q
 ```
 
+Test coverage includes:
+
+- Simplicial identities for numeric and symbolic tensors
+- Equivariance under tensor-axis permutations
+- Cyclic operator behavior
+- Graph-related equivariance checks
+- Package metadata and documentation coverage checks
+
+Sage-specific tests are present and skipped automatically unless Sage is available.
+
+To run Sage-specific tests explicitly:
+
+```bash
+sage -python -m pytest tests/test_sagemath_compatible_tensor_ops.py -q
+```
+
+## CI Quality Gates
+
+GitHub Actions (`.github/workflows/ci.yml`) runs:
+
+1. `quality` job (Python 3.12):
+   - Ruff fatal checks
+   - Mypy on selected core modules
+   - Bandit high-severity scan
+2. `tests` matrix job (Python 3.10, 3.11, 3.12), dependent on `quality`
+
+Local equivalents:
+
+```bash
+ruff check src tests --exclude src/simplicial_tensors/notebooks --select E9,F821,F822,F823
+mypy --ignore-missing-imports --follow-imports=skip src/simplicial_tensors/__init__.py src/simplicial_tensors/tensor_ops.py src/simplicial_tensors/cyclic_tensor_ops.py
+bandit -q -r src/simplicial_tensors -x src/simplicial_tensors/notebooks -lll
+pytest -q
+```
+
+## Experiments and Documentation
+
+The `experiments` directory contains standalone scripts and artifacts used for research exploration.
+
+Current documentation policy in this repository:
+
+- Each tracked `experiments/*.py` and `experiments/*.sage` script has a corresponding `docs/<script_stem>.md` page.
+- `docs/experiments_catalog.md` inventories tracked files in `experiments`.
+
+Some experiment scripts depend on additional packages not declared in core package metadata (for example `networkx`, `matplotlib`, `pandas`, `seaborn`, `torch`, `dask`, `tqdm`, or SageMath). Install these as needed for the specific script you run.
+
+A few scripts also assume local helper modules or a particular working directory; consult each script header and its paired page in `docs` before running.
+
+## TeX Manuscript Assets
+
+The `tex` directory contains the paper sources and supporting files, including:
+
+- Main file: `tex/dstm.tex`
+- Section files such as `introduction.tex`, `horns.tex`, `normalization.tex`, `combinatorics.tex`, and `dichotomy.tex`
+- Bibliography: `tex/dstm.bib`
+- Generated PDFs/artifacts used in drafting and submission
+
 ## Repository Layout
 
-- `src/simplicial_tensors/`: package source modules
-- `tests/`: automated test suite
-- `experiments/`: research and exploratory scripts/artifacts
-- `docs/`: project and experiment documentation
-- `logs/`, `plots/`, `tex/`: generated artifacts and paper materials
+- `src/simplicial_tensors`: reusable library code
+- `tests`: pytest suites
+- `experiments`: runnable research scripts and generated artifacts
+- `docs`: documentation for experiments and project notes
+- `tex`: manuscript source and paper artifacts
+- `plots`, `logs`: generated outputs
+- `Cleanup`: maintenance scripts
 
-## Experiments Documentation
+## Development Notes
 
-- Every git-tracked `experiments/*.py` and `experiments/*.sage` script has a dedicated page at `docs/<script_stem>.md`.
-- A complete inventory of all git-tracked files under `experiments/` is maintained in [docs/experiments_catalog.md](docs/experiments_catalog.md).
-- Notebook and artifact files are documented in the catalog and linked to dedicated docs when applicable.
+Repository conventions are documented in `GUIDELINES.md`.
 
-## Notes
+Key expectations:
 
-- `experiments/` contains exploratory code and artifacts; interfaces there are less stable than the package API under `src/`.
-- For SageMath-focused workflows, see `src/simplicial_tensors/sagemath_compatible_tensor_ops.py` and related docs.
+- Reusable logic lives in `src/simplicial_tensors`.
+- Experiment-specific workflows live in `experiments`.
+- Avoid duplicating library logic across scripts.
 
 ## License
 
-This repository is distributed under the GPLv3 (see [LICENSE](LICENSE)).
-
+GPL-3.0-or-later. See `LICENSE`.
