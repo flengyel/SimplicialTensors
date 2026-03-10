@@ -35,18 +35,12 @@ rng = np.random.default_rng(___SEED___)  # Create a random number generator with
 
 ## Tensor construction functions
 
-def random_tensor(shape: Tuple[int, ...], low: int = 1, high: int = 10, seed: int = ___SEED___) -> np.ndarray:
-    if seed != ___SEED___:
-        rng_to_use = np.random.default_rng(seed)
-    else:
-        rng_to_use = rng  # Use the global rng defined with ___SEED___
+def random_tensor(shape: Tuple[int, ...], low: int = 1, high: int = 10, seed: Optional[int] = None) -> np.ndarray:
+    rng_to_use = rng if seed is None else np.random.default_rng(seed)
     return rng_to_use.integers(low=low, high=high, size=shape, dtype=np.int16)
 
-def random_real_tensor(shape: Tuple[int, ...], mean: float = 0.0, std: float = 1.0, seed: int = ___SEED___) -> np.ndarray:
-    if seed != ___SEED___:
-        rng_to_use = np.random.default_rng(seed)
-    else:
-        rng_to_use = rng  # Use the global rng defined with ___SEED___
+def random_real_tensor(shape: Tuple[int, ...], mean: float = 0.0, std: float = 1.0, seed: Optional[int] = None) -> np.ndarray:
+    rng_to_use = rng if seed is None else np.random.default_rng(seed)
     return rng_to_use.normal(loc=mean, scale=std, size=shape)
 
 
@@ -98,13 +92,13 @@ def order(t: np.ndarray) -> int:
 # Cette précomputation est utilisée pour éviter de recalculer la même liste d'indices
 # dans les calculs de frontière
 
-def _dims(m: np.ndarray) -> Tuple[List[np.ndarray], ...]:
-    return tuple([np.arange(dim_size) for dim_size in m.shape])
+def _dims(m: np.ndarray) -> Tuple[np.ndarray, ...]:
+    return tuple(np.arange(dim_size) for dim_size in m.shape)
 
 # Généralisation de l'opération face aux tenseurs
-def _face(m: np.ndarray, axes: Tuple[List[np.ndarray], ...], i: int) -> np.ndarray:
+def _face(m: np.ndarray, axes: Tuple[np.ndarray, ...], i: int) -> np.ndarray:
     rows, cols = axes[0], axes[1]
-    indices = [np.delete(axis, i) if len(axis) > i else axis for axis in axes]
+    indices: List[np.ndarray] = [np.delete(axis, i) if len(axis) > i else axis for axis in axes]
     grid = np.ix_(*indices)
     return m[grid]
 
@@ -118,7 +112,7 @@ def face(m: np.ndarray, i: int) -> np.ndarray:
 
 # i-ème face horizontale d'une matrice, avec des indices dimensionnels donnés par les lignes et les colonnes
 # def _hface(m: np.ndarray, rows: np.ndarray, cols: np.ndarray, i: int) -> np.ndarray:
-def _hface(m: np.ndarray, axes: Tuple[List[np.ndarray], ...], i: int) -> np.ndarray:
+def _hface(m: np.ndarray, axes: Tuple[np.ndarray, ...], i: int) -> np.ndarray:
     rows, cols = axes[0], axes[1]
     grid = np.ix_(np.delete(rows, i), cols)
     return m[grid]
@@ -128,7 +122,7 @@ def hface(m: np.ndarray, i: int) -> np.ndarray:
     return _hface(m, _dims(m), i)
 
 # i-ème face verticale d'une matrice, avec des indices dimensionnels donnés par les lignes et les colonnes
-def _vface(m: np.ndarray, axes: Tuple[List[np.ndarray], ...], i: int) -> np.ndarray:
+def _vface(m: np.ndarray, axes: Tuple[np.ndarray, ...], i: int) -> np.ndarray:
     rows, cols = axes[0], axes[1]
     grid = np.ix_(rows, np.delete(cols, i))
     return m[grid]
@@ -179,7 +173,7 @@ def _get_degeneracy_system_matrix(a: np.ndarray) -> np.ndarray:
         return np.zeros((size_n, 0))
 
     num_degen_ops = n
-    S_combined = np.zeros((size_n, num_degen_ops * size_n_minus_1), dtype=float)
+    S_combined: np.ndarray = np.zeros((size_n, num_degen_ops * size_n_minus_1), dtype=float)
 
     for i in range(num_degen_ops):
         for j in range(size_n_minus_1):
@@ -209,7 +203,7 @@ def decompose_degen_numpy(a: np.ndarray) -> Optional[List[np.ndarray]]:
     if n <= 0:
         return None
 
-    v_a = a.flatten().astype(float)
+    v_a: np.ndarray = a.flatten().astype(float)
     S_combined = _get_degeneracy_system_matrix(a)
 
     if S_combined.shape[1] == 0:
@@ -313,7 +307,7 @@ def find_degen(a: np.ndarray) -> Union[Tuple[np.ndarray, int], None]:
 
 # Frontière d'un tenseur
 def bdry(m: np.ndarray) -> np.ndarray:
-    d = np.min(m.shape)
+    d: int = int(np.min(m.shape))
     axes = _dims(m)
     #  soustraire 1 de chaque dimension
     a = np.zeros(np.subtract(m.shape, np.array([1])), dtype=m.dtype)
@@ -352,7 +346,7 @@ def vbdry(m: np.ndarray) -> np.ndarray:
 
 # cobord d'une matrice. Cela donnera toujours une cohomologie nulle
 def cobdry(m: np.ndarray) -> np.ndarray:
-    d = np.min(m.shape)
+    d: int = int(np.min(m.shape))
     # Ajoutez 1 à chaque dimension
     a = np.zeros(np.add(m.shape,np.array([1])))
     for i in range(d):
@@ -515,7 +509,7 @@ def check_horn(t: np.ndarray,
     the missing face, and that the filler matches the original tensor.
     """
     h = horn(t, i)
-    occurrence_tensor = np.zeros(shape, dtype=int)
+    occurrence_tensor: np.ndarray = np.zeros(shape, dtype=int)
 
     # Outer loop: iterate over each face in the horn
     for face_idx in range(len(h)):
@@ -780,5 +774,4 @@ def main():
         print(f" Does the filler t' equal the original tensor t? {np.array_equal(t, t_prime)}")
         print(f" Is the difference tensor t - t' degenerate? {is_degen(t - t_prime)}")
         print(f" Difference tensor t - t':\n{t - t_prime}")
-    
-    
+

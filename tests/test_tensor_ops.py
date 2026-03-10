@@ -84,6 +84,12 @@ def test_range_tensor2() -> None:
     expected_range2 = np.arange(7*9*11).reshape(7,9,11) 
     assert np.allclose(z2, expected_range2)
 
+
+def test_random_tensor_seed_reproducible() -> None:
+    a = random_tensor((6, 7), low=-3, high=9, seed=___SEED___)
+    b = random_tensor((6, 7), low=-3, high=9, seed=___SEED___)
+    assert np.array_equal(a, b)
+
 def test_face() -> None:
     expected_face = np.array([[ 0,  1,  2,  3,  4,  6],
                               [ 7,  8,  9, 10, 11, 13],
@@ -632,3 +638,4 @@ if __name__ == "__main__":
     for i in range(3):
         for j in range(3):
             print( bdry(standard_basis_matrix(3,3,i,j)) )
+
