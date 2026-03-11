@@ -1,233 +1,75 @@
 # Future Directions for Diagonal Simplicial Tensor Modules
 
-This document records possible extensions and applications of the diagonal simplicial tensor module (DSTM) construction. None of these are promises; they are ideas for later work and experimentation.
+This note records several questions suggested by the present study of diagonal simplicial tensor modules. Some are direct continuations of the results already proved, especially on horn kernels, generated submodules, and the moduli map. Others are more distant questions whose relevance is clear, even if the appropriate formalism has not yet been developed.
 
----
+## 1. Directions Closest to the Present Work
 
-## 1. Categorical Generalizations
+### 1.1 Relative and scheme-theoretic variants
 
-### 1.1 Scheme-theoretic versions
+A first extension is to formulate the construction relative to a base scheme. One would replace modules over a commutative ring $A$ by quasi-coherent $\mathcal{O}_S$-modules on a scheme $S$, and ask whether the same index-set construction produces a simplicial object $X_\bullet(\vec s; \mathcal{O}_S)$ in $\mathrm{QCoh}(S)$. From this point of view, the main questions concern the behavior of kernel sequences in families, the effect of base change, and the extent to which the moduli problem for generated subobjects can be expressed using relative Grassmannians and relative incidence loci. Any precise representability statement would, of course, require suitable finiteness and flatness hypotheses.
 
-- Replace $A$-modules by quasi-coherent $\mathcal{O}_S$-modules on a base scheme $S$.
-- Define $X_\bullet(\vec s; \mathcal{O}_S)$ using the same cosimplicial index sets, but with fibers in QCoh$(S)$.
-- Study the relative moduli functor of generated subobjects and its representability:
-  - Relative Grassmannians over $S$ instead of absolute ones.
-  - Behavior of kernel sequences under non-flat base change.
+### 1.2 Rank formulas and partition combinatorics
 
-### 1.2 Non-abelian generalizations
+The combinatorial formulas obtained in the constant-shape case already point toward a more systematic theory. The appearance of Stirling numbers of the second kind and of inclusion-exclusion over product index sets suggests that the horn-kernel ranks should admit a reformulation in terms of partition lattices and Mobius inversion. It would be natural to seek generating functions for these ranks, as well as conceptual explanations for the finite-difference formulas appearing in the classification theorem. This appears to be the most immediate continuation of the combinatorial part of the paper.
 
-- Replace $A$-modules by groups, rings, or group objects:
-  - Diagonal of $k$-fold simplicial groups, recovering Quillen’s diagonal at $k=2$.
-  - Horn kernels now live in non-abelian settings; uniqueness of fillers is subtler.
-- Without Dold–Kan, homological tools change substantially:
-  - Compare classification via horn kernels with existing notions of $n$-hypergroupoids and higher groupoids in simplicial sets.
+### 1.3 Geometry of the moduli space
 
-### 1.3 Derived and ∞-categorical enhancements
+The present work places the image of the moduli map inside an incidence locus in a product of Grassmannians cut out by linear compatibility conditions. A next step would be to study this geometry more closely. Basic questions include the dimensions and degrees of natural closures, the structure of singular loci, and the interaction of these incidence conditions with Schubert cycles. One may also ask for useful stratifications, for example by generic kernel dimensions, collision patterns, or the homology type of the generated submodule $\langle T \rangle$. These problems remain squarely within the algebraic-geometric framework already established.
 
-- Interpret the moduli space $\mathcal{M}(\vec s)$ of kernel sequences as the truncation of a derived stack of simplicial subobjects.
-- Use the explicit contracting homotopy $H$ as a computational tool:
-  - Potential access to tangent complexes or deformation complexes of kernel sequences.
-  - Explore whether index collision data can be interpreted as derived intersections.
+### 1.4 Asymptotics
 
-### 1.4 Other abelian categories
+The rank formulas and contractibility results also suggest asymptotic questions. One may study the behavior of horn-kernel ranks as $k \to \infty$ with simplicial dimension fixed, as $n \to \infty$ with tensor order fixed, or along rays such as $k \sim c n$. The same perspective applies to moduli dimensions and to spectra of combinatorial Laplacians attached to generated submodules. Even partial asymptotic information would help distinguish structural phenomena from low-dimensional accidents.
 
-- Internalize the diagonal construction in other abelian categories:
-  - $R$-modules for noncommutative rings $R$.
-  - Functor categories and diagram categories.
-- Check which parts of the rank-counting and classification survive in the absence of freeness.
+## 2. Algebraic and Homotopical Extensions
 
----
+### 2.1 Other abelian categories
 
-## 2. Combinatorics
+The diagonal construction should make sense in abelian categories beyond modules over a commutative ring. One may ask for analogues in categories of modules over more general rings, in functor categories, or in other settings where kernels and simplicial identities remain available. The main issue is not the formal definition of the face and degeneracy maps, but rather which parts of the present analysis survive once freeness is no longer available. In particular, the current rank-counting arguments and moduli constructions rely heavily on linear-algebraic features specific to the module setting.
 
-### 2.1 Species viewpoint
+### 2.2 Non-abelian variants
 
-- View $\vec s \mapsto X_\bullet(\vec s; A)$ as a multisort combinatorial species.
-- Relate the Stirling number expressions to classical species operations:
-  - Surjections and partitions underlying the horn-count formulas.
-  - Possible plethystic identities for families of shapes.
+A more ambitious problem is to understand whether some part of the construction extends to non-abelian settings, for example to diagonals of multi-simplicial groups or other group-valued objects. Quillen's diagonal for double semi-simplicial groups suggests that such a direction is not artificial. What changes immediately, however, is the loss of the linear algebra that underlies the present paper: horn kernels become genuinely non-abelian, uniqueness of fillers becomes subtler, and Dold-Kan methods are no longer available in the same form. For that reason, this should be regarded less as a formal generalization than as a distinct project motivated by the same combinatorics.
 
-### 2.2 Partition lattices and Möbius functions
+### 2.3 Realization and homology at the threshold
 
-- The inclusion–exclusion formulas for ranks already involve Stirling numbers of the second kind.
-- Interpret rank formulas in terms of:
-  - Whitney numbers of the partition lattice.
-  - Möbius inversion on partition posets.
-  - Possible connections to chromatic polynomials or Tutte polynomials in low-dimensional cases.
+At the threshold $k=n$, the DSTM is a strict algebraic $n$-hypergroupoid in the sense used in the paper. In the simplicial abelian setting, geometric realization is controlled by the Dold-Kan correspondence, so the homotopy groups of the realization identify with the homology groups of the associated normalized complex. This raises a concrete moduli problem: which sequences of abelian groups can occur as the homology of a generated submodule $\langle T \rangle$, and how do those groups constrain the position of $\langle T \rangle$ inside the moduli space? It would be especially interesting to understand whether the threshold theorem forces recognizable homological patterns in low-dimensional examples.
 
-### 2.3 Asymptotics
+### 2.4 Filtrations and persistence
 
-- Study asymptotic behavior of:
-  - Ranks, Betti numbers, and Laplacian spectra.
-  - Moduli dimensions $\dim \mathcal{M}(\vec s)$.
-- Regimes of interest:
-  - $k \to \infty$ with $n$ fixed.
-  - $n \to \infty$ with $k$ fixed.
-  - Scaling along rays such as $k = c n$.
+The objects considered here carry several natural filtrations, for example by support, by index depth, by entry size, or by collision complexity. One may therefore ask for persistent invariants of families of generated submodules or of families of shapes. This direction remains close to the present framework, since it keeps the same algebraic input while reorganizing the data by scale.
 
----
+## 3. Spectral and Computational Questions
 
-## 3. Geometry of the Moduli Space
+### 3.1 Laplacians and spectral statistics
 
-### 3.1 Schubert calculus and intersection theory
+Once combinatorial Laplacians are fixed on the relevant chain groups or generated submodules, one can ask for spectral invariants attached to the resulting complexes. For a fixed shape $\vec s$, one may study distributions of eigenvalues for random tensors, dependence across homological degree, and comparison with the familiar graph-theoretic case $k=2$. The point is not to assert a general Hodge theory in every setting, but to use the chain complexes already present in the paper as a source of computable spectral data.
 
-- The incidence locus $\mathbf{Gr}^{\mathrm{simp}}(\vec s) \subset \operatorname{Gr}(\vec s)$ is defined by linear (Segre–Plücker) conditions.
-- Questions:
-  - Compute cohomology classes of these incidence loci.
-  - Study intersections with Schubert cycles and induced multiplicities.
-  - Determine degrees of $\mathcal{M}(\vec s)$ in natural projective embeddings.
+### 3.2 Complexity
 
-### 3.2 Stratifications
+Several basic algorithms arise naturally in this project: computing faces, degeneracies, and boundaries; testing horn conditions and filler uniqueness; computing kernel sequences and moduli coordinates; and extracting spectra of the resulting operators. It would be useful to know which of these procedures are polynomial in the natural size parameters and which quickly become impractical. A systematic complexity analysis would also help explain which experiments are mathematically illuminating and which are merely computationally convenient.
 
-- Stratify $\mathcal{M}(\vec s)$ by:
-  - Homology type of $\langle T \rangle$.
-  - Index-collision types and generic kernel dimensions.
-  - Hodge spectra (eigenvalue patterns of projected Laplacians).
-- Understand incidence relations among strata and whether closures have reasonable combinatorics.
+### 3.3 Software
 
-### 3.3 Singularities and birational geometry
+The existing `SimplicialTensors` codebase can be developed further in several straightforward ways. One would like direct support for kernel-sequence computations, small-shape moduli calculations, Laplacian and homology routines, and clearer mathematical documentation of the experiment scripts. These are ordinary software tasks rather than new theorems, but they would substantially improve the usability of the project.
 
-- Basic questions:
-  - Is the Zariski closure of $\mathcal{M}(\vec s)$ smooth? normal? Cohen–Macaulay?
-  - Describe singular loci in terms of degeneracies of the realization matrices.
-- Compare birational models:
-  - Explicit parametrizations (e.g., via diagonal entries in the $(3,3)$ example).
-  - Possible Mori theoretic or log Fano behavior in small examples.
+## 4. Broader but More Speculative Directions
 
-### 3.4 Tropical and polyhedral aspects
+### 4.1 Derived refinements
 
-- Tropicalize $\mathcal{M}(\vec s)$:
-  - Use valuations on $K$ to study tropical images of Grassmannians and incidence loci.
-- Seek matroidal interpretations of:
-  - Supports of kernel vectors.
-  - Degeneracy and collision patterns.
+The incidence description of $\mathcal{M}(\vec s)$ suggests the question of whether some useful derived enhancement exists, or whether the collision conditions can be interpreted as a form of derived intersection. At present this is only a heuristic indication. The most reasonable version of the problem is modest: can one attach deformation complexes or tangent-obstruction data to kernel sequences in a way that reflects the explicit linear algebra already visible in the present work?
 
----
+### 4.2 Connections with tensor decompositions
 
-## 4. Hodge Theory and Spectral Questions
+It is natural to compare DSTM invariants with classical tensor invariants such as CP rank, Tucker data, tensor-train structure, rank, and border rank. One may ask whether kernel sequences detect structure invisible to those classical invariants, or conversely whether standard decomposition data constrain the DSTM in a recognizable manner. This direction is plausible, but at present it remains heuristic.
 
-### 4.1 Spectral distributions and random tensors
+### 4.3 Higher-categorical and operadic variants
 
-- For a fixed shape $\vec s$, study:
-  - Statistical behavior of Laplacian eigenvalues $\operatorname{Spec}(\Delta_p^C)$ for random $T$.
-  - Dependencies between different degrees $p$.
-- Compare with:
-  - Random graph Laplacians for $k=2$.
-  - Random tensor models and high-dimensional expanders for $k>2$.
+One may also ask whether the threshold phenomena studied here have analogues for other indexing categories, for example in settings related to higher Segal conditions or dendroidal objects. There is no direct route from the present results to such a theory, but the question is conceptually natural: the current construction is already diagonal in a multi-simplicial sense, so replacing the indexing category is an evident abstraction. At this stage the right question is simply whether some analogue of the horn-kernel picture survives, and whether branching data can replace tensor order as the parameter governing filler behavior.
 
-### 4.2 Discrete curvature
+### 4.4 Machine-learning applications
 
-- Define discrete Ricci-type curvatures on:
-  - The $1$-skeleton of the DSTM (Ollivier, Forman, or related notions).
-  - Higher-dimensional analogues using the Laplacian on $p$-simplices.
-- Relate curvature bounds to:
-  - Spectral gaps of $\Delta_p^C$.
-  - Effective resistance metrics and Foster-type identities.
+The repository contains exploratory experiments involving boundary operators and neural-network layers. It is conceivable that simplicial boundary operators could serve as structured linear maps or regularizers in specialized architectures. This should be regarded as an applications question external to the core mathematics, not as a consequence of the classification results.
 
-### 4.3 Heat kernels and zeta functions
+## 5. Concluding Remarks
 
-- Use $e^{-t\Delta_p}$ to define heat kernels on $X_p$ and on generated submodules.
-- Explore:
-  - Short-time asymptotics and trace expansions.
-  - Combinatorial zeta functions built from Laplacian eigenvalues.
-- Investigate whether the explicit homotopy $H$ yields computational shortcuts for heat kernel evaluations.
-
----
-
-## 5. Topology and Homotopy Types
-
-$n$-hypergroupoids model homotopy $n$-types (spaces with $\pi_k = 0$ for $k > n$). In the simplicial abelian setting, homotopy groups are abelian.
-
-### 5.1 Realization at the threshold $k=n$
-
-- At the threshold $k = n$, the DSTM $X_\bullet(\vec s; A)$ is a strict algebraic $n$-hypergroupoid.
-- For a generated submodule $\langle T \rangle$ in the abelian setting:
-  - The geometric realization $|\langle T \rangle|$ has homotopy groups
-    $\pi_k(|\langle T \rangle|) \cong H_k(\langle T \rangle)$.
-  - The moduli problem: characterize which sequences of abelian groups
-    $(H_0, \dots, H_n)$ occur as the homology of $\langle T \rangle$ as $T$ and $\vec s$ vary.
-- Use the homology constraints from the kernel-sequence description and dichotomy results to restrict possible patterns.
-
-### 5.2 Configuration-space analogies
-
-- The index sets $I_p$ parameterize lattice points in products of intervals / simplices.
-- Compare:
-  - Cohomology of configuration spaces and their combinatorial models.
-  - Possible “configuration-like” interpretations of normalized cycles and horn kernels.
-
----
-
-## 6. Computational and Software Directions
-
-### 6.1 Complexity
-
-- Analyze algorithmic complexity of:
-  - Computing face and degeneracy maps on large tensors.
-  - Evaluating the moduli map $\Psi$ (kernel sequences and Grassmannian coordinates).
-  - Computing Hodge spectra and effective resistance for given $(\vec s, T)$.
-- Identify regimes where:
-  - Complexity is polynomial in $|\vec s|$ and $k$.
-  - Complexity becomes prohibitive and needs approximation or randomized methods.
-
-### 6.2 Software extensions
-
-- Extend the `SimplicialTensors` Python package to:
-  - Compute kernel sequences and moduli coordinates for small shapes.
-  - Perform Hodge decompositions and Laplacian spectral analysis.
-  - Visualize $\mathcal{M}(\vec s)$ for low-dimensional examples.
-- Exploit the fact that the boundary operator is defined for matrices of **any** size:
-  - Interfaces to machine learning / neural networks where simplicial boundary operators act as structured linear layers or regularizers.
-
----
-
-## 7. Links to Other Areas
-
-### 7.1 Tensor decompositions
-
-- Compare DSTM structure with:
-  - CP, Tucker, and tensor-train decompositions.
-  - Notions of tensor rank and border rank.
-- Questions:
-  - How do kernel sequences behave under standard tensor decompositions?
-  - Can DSTM invariants detect structure invisible to classical tensor ranks?
-
-### 7.2 Higher Segal spaces and higher categories
-
-- The threshold theorem classifies when $X_\bullet(\vec s; A)$ is an $n$-hypergroupoid.
-- Relate this to:
-  - Higher Segal space conditions.
-  - $(\infty, n)$-categories built from multi-simplicial directions.
-- Explore whether certain shapes $\vec s$ naturally encode compositional data.
-
-### 7.3 Persistence and filtrations
-
-- Introduce filtrations on $X_\bullet(\vec s; A)$:
-  - By depth, support size, or norms of tensor entries.
-- Study persistent homology of:
-  - The family $\{X_\bullet(\vec s; A)\}_{\vec s}$ as shape varies.
-  - Generated submodules $\langle T \rangle$ along parameter paths in $T$-space.
-
----
-
-## 8. Dendroidal / Operadic Variants
-
-Dendroidal sets (Moerdijk–Weiss) replace $\Delta$ by the category $\Omega$ of trees, encoding operadic composition.
-
-### 8.1 Dendroidal DSTM
-
-- Replace the corolla-like shape $\vec s \in \mathbb{Z}_{>0}^k$ by a tree $T$:
-  - Leaves and root correspond to outer horns.
-  - Inner edges correspond to inner horns.
-- Define index sets $I_p(T)$ using the combinatorics of $T$ (rather than products of intervals).
-- Apply a dendroidal analogue of the diagonal construction:
-  - Synchronize simplicial directions along edges of $T$.
-  - Expect asymmetries between inner and outer horns reflected in horn kernels.
-
-### 8.2 Operadic and $\infty$-operadic behavior
-
-- Investigate when $X_\bullet(T; A)$ satisfies higher Segal or $\infty$-operadic conditions.
-- Compare:
-  - Threshold phenomena in horn filling (now depending on tree branching).
-  - Classification of algebraic $n$-hypergroupoids associated to trees, not just corollas.
-
-These dendroidal directions are speculative but potentially align the DSTM viewpoint with higher operad theory and homotopy-coherent algebra.
+The most immediate continuations of the present work are the combinatorics of horn-kernel ranks, the geometry of the moduli space and its incidence strata, relative formulations over a base scheme, and explicit homological or spectral calculations for generated submodules. Beyond these lie broader questions, especially non-abelian, derived, and operadic variants. Those questions are worth recording, but they should be read as possible lines of development rather than as claims strongly implied by the current paper.
