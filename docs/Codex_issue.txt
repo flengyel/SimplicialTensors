@@ -1,0 +1,20 @@
+Implement adjoint boundary feedback.
+
+Create src/simplicial_tensors/adjoint_ops.py with:
+
+- face_adjoint(y, original_shape, i)
+- bdry_adjoint(y, original_shape)
+- boundary_homeostasis_feedback(W, target_boundary=None, alpha=1e-3)
+
+Use the existing face/bdry conventions:
+- d_i deletes index i along every axis.
+- d_i^* inserts the smaller tensor back into the positions avoiding i and fills deleted hyperplanes with zero.
+- ∂^* = Σ_i (-1)^i d_i^*.
+
+Add tests:
+- <d_i W, Y> = <W, d_i^* Y>
+- <∂W, Y> = <W, ∂^*Y>
+- boundary_homeostasis_feedback has the same shape as W
+- for H=0, a sufficiently small update reduces ||∂W||_F^2
+
+Do not modify the old neural-network experiments except to mark them superseded.
