@@ -8,6 +8,7 @@ This document enumerates every git-tracked file under `experiments/` and provide
 - `experiments/atlas_cospectral_scan.py` (Python script): Python experiment script for Atlas cospectral scan. See [docs/atlas_cospectral_scan.md](atlas_cospectral_scan.md).
 - `experiments/bdry_network_experiment1.py` (Python script): Python experiment script for Bdry network experiment1. See [docs/bdry_network_experiment1.md](bdry_network_experiment1.md).
 - `experiments/boundary_augmented_network.py` (Python script): Python experiment script for Boundary augmented network. See [docs/boundary_augmented_network.md](boundary_augmented_network.md).
+- `experiments/clayworth_simplicial_regression.py` (Python script): Finite regression experiment for Clayworth-style simplicial-object claims. See [docs/clayworth_simplicial_regression.md](clayworth_simplicial_regression.md).
 - `experiments/consolidated_experiment.py` (Python script): Python experiment script for Consolidated experiment. See [docs/consolidated_experiment.md](consolidated_experiment.md).
 - `experiments/consolidated_experiment_with_n01.py` (Python script): Python experiment script for Consolidated experiment with n01. See [docs/consolidated_experiment_with_n01.md](consolidated_experiment_with_n01.md).
 - `experiments/cospectral_proof.py` (Python script): Python experiment script for Cospectral proof. See [docs/cospectral_proof.md](cospectral_proof.md).
@@ -47,7 +48,3 @@ This document enumerates every git-tracked file under `experiments/` and provide
 - `experiments/simplicial_permutation_group.py` (Python script): Python experiment script for Simplicial permutation group. See [docs/simplicial_permutation_group.md](simplicial_permutation_group.md).
 - `experiments/verify_degenerate_preference.py` (Python script): Python experiment script for Verify degenerate preference. See [docs/verify_degenerate_preference.md](verify_degenerate_preference.md).
 - `experiments/verify_injective_face_map.py` (Python script): Python experiment script for Verify injective face map. See [docs/verify_injective_face_map.md](verify_injective_face_map.md).
-
-
-
-
