@@ -8,6 +8,22 @@
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
+#
+#    Clayworth source-material notice (attribution for claims under review,
+#    not a license statement for this GPL experiment):
+#
+#      © 2026 Logocentricity Inc.
+#      U.S. Provisional Patent Application 63/961,154.
+#      Released for academic citation, peer review, and scientific verification.
+#      Paul Clayworth
+#      Founder & CEO
+#      Logocentricity Inc.
+#      Capital Factory, Austin, TX
+#
+#    This experiment is an independent regression/stress test of finite
+#    mathematical consequences of the Clayworth simplicial-object claims.  It
+#    does not reproduce the Clayworth source document or assert ownership of
+#    Clayworth Algebra Framework text, terminology, trademarks, or patent claims.
 
 """Finite regression tests for Clayworth-style simplicial-object claims.
 
@@ -235,7 +251,6 @@ def check_all_tuple_model(max_dim: int, state_count: int) -> RegressionResult:
                         f"bad degeneracy length for simplex={simplex}, i={i}",
                     )
 
-            # Tuple-level face-face identity.
             if n >= 2:
                 for i in range(n + 1):
                     for j in range(i + 1, n + 1):
@@ -384,12 +399,8 @@ def check_fano_closed_object_count() -> RegressionResult:
         "lines": sum(obj in FANO_LINES for obj in objects),
         "full": sum(obj == FANO_POINTS for obj in objects),
     }
-    passed = len(objects) == 16 and counts == {
-        "empty": 1,
-        "points": 7,
-        "lines": 7,
-        "full": 1,
-    }
+    expected = {"empty": 1, "points": 7, "lines": 7, "full": 1}
+    passed = len(objects) == 16 and counts == expected
     return RegressionResult(
         "Fano-closed subsets have the advertised 1+7+7+1 count",
         passed,
