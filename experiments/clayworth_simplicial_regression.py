@@ -21,7 +21,7 @@
 #      Capital Factory, Austin, TX
 #
 #    This experiment is an independent regression/stress test of finite
-#    mathematical consequences of the Clayworth simplicial-object claims.  It
+#    mathematical consequences of the Clayworth simplicial-object claims. It
 #    does not reproduce the Clayworth source document or assert ownership of
 #    Clayworth Algebra Framework text, terminology, trademarks, or patent claims.
 
@@ -33,10 +33,10 @@ It then tests finite consequences of the Clayworth document's simplicial
 claims on small finite models.
 
 The tests are intentionally modest: they do not try to prove or disprove a
-topos equivalence.  They check local finite implications that should hold
+topos equivalence. They check local finite implications that should hold
 before such an equivalence can be taken seriously.
 
-A PASS means the expected regression condition was observed.  For refutation
+A PASS means the expected regression condition was observed. For refutation
 tests, this means the expected finite counterexample was found.
 """
 
@@ -44,9 +44,18 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from dataclasses import asdict, dataclass
 from itertools import product
+from pathlib import Path
 from typing import Callable
+
+# Allow direct execution from either the repository root or experiments/.
+# This keeps the script usable even before `pip install -e .` has been run.
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+_SRC_DIR = _REPO_ROOT / "src"
+if _SRC_DIR.exists() and str(_SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(_SRC_DIR))
 
 import numpy as np
 
