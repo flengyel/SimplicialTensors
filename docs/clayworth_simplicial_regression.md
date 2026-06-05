@@ -14,7 +14,7 @@ Python script
 
 Stress-tests finite consequences of Clayworth-style simplicial-object claims using the SimplicialTensors face, degeneracy, horn, and filler operations as the local reference implementation.
 
-The experiment is deliberately local. It does not try to prove or disprove the asserted equivalence between the Clayworth marked simplicial set / quasi-category and a Grothendieck topos. It checks finite prerequisites and counterexample candidates for the simplicial-object part of the claim.
+The experiment is deliberately local. It does not try to prove or disprove the asserted equivalence between the Clayworth marked simplicial set / quasi-category and a Grothendieck topos. It checks finite prerequisites, weak spots, and counterexample candidates for the simplicial-object part of the claim.
 
 ## Clayworth Source-Material Notice
 
@@ -55,7 +55,7 @@ The script focuses on claims of the following form:
 
 ## How To Run
 
-After the latest patch, the script can be run directly from either the repository root or from `experiments/`. It inserts the repository `src` directory into `sys.path` before importing `simplicial_tensors`, so an editable install is not required.
+The script can be run directly from either the repository root or from `experiments/`. It inserts the repository `src` directory into `sys.path` before importing `simplicial_tensors`, so an editable install is not required.
 
 From the repository root:
 
@@ -96,12 +96,22 @@ PYTHONPATH=src python experiments/clayworth_simplicial_regression.py
 
 ## Outputs
 
-A compact PASS/FAIL table or JSON list of named regression checks. In this experiment, a PASS means the expected finite condition was observed. For refutation checks, PASS means the expected finite counterexample was found.
+A compact diagnostic table with an `Outcome` column, or a JSON list of named diagnostic results.
+
+Outcome labels:
+
+- `CHECKED`: a SimplicialTensors local sanity check behaved as expected.
+- `CLASSIFIES`: a construction was classified, usually as true but too weak to support the advertised claim.
+- `FLAGS`: the experiment identified a weak or tautological check.
+- `REFUTES`: the experiment found a finite counterexample or obstruction to a stronger Clayworth-style simplicial claim.
+- `CONFIRMS`: the experiment confirmed a local finite fact, such as the Fano-closed subset count.
+- `ERROR` or `NO_CEX`: the expected diagnostic outcome was not observed.
 
 ## Interpretation Guidance
 
-- Passing the all-tuples checks validates only the dynamics-free/codiscrete construction.
-- Finding closure failures for strict `Phi`-orbit tuples refutes the stronger claim that those tuples form a simplicial set without adding identity edges or extra coherence data.
-- Filling only `Lambda^2_1` horns is not the full quasi-category condition.
+- `CLASSIFIES` for the all-tuples model means the construction is simplicial only in the dynamics-free/codiscrete sense.
+- `REFUTES` for strict `Phi`-orbit tuples means the script found a concrete face-closure or degeneracy-closure counterexample.
+- `FLAGS` for `Lambda^2_1` horn filling means the tested horn filler is tautological and does not establish the full quasi-category condition.
+- `CONFIRMS` for the Fano closed-subset count or inner 2-horns is a local finite result, not evidence for the advertised topos equivalence.
 - The Fano poset nerve is a quasi-category in the ordinary nerve-of-a-category sense, but the explicit outer-horn obstruction shows it is not Kan.
 - None of these finite checks establishes or refutes the advertised topos equivalence by itself.
