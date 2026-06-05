@@ -32,12 +32,13 @@ implementation for standard face, degeneracy, horn, and filler operations.
 It then tests finite consequences of the Clayworth document's simplicial
 claims on small finite models.
 
-The tests are intentionally modest: they do not try to prove or disprove a
-topos equivalence. They check local finite implications that should hold
-before such an equivalence can be taken seriously.
+The tests are intentionally local: they do not try to prove or disprove a
+topos equivalence. They check finite prerequisites, weak spots, and explicit
+counterexample candidates for the simplicial-object part of the claim.
 
-A PASS means the expected regression condition was observed. For refutation
-tests, this means the expected finite counterexample was found.
+Output uses diagnostic outcome labels rather than PASS/FAIL. In particular,
+REFUTES means that the experiment found the expected finite counterexample or
+obstruction to a Clayworth-style strengthening.
 """
 
 from __future__ import annotations
@@ -45,6 +46,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections import Counter
 from dataclasses import asdict, dataclass
 from itertools import product
 from pathlib import Path
@@ -84,11 +86,19 @@ FANO_POINTS = frozenset(range(1, 8))
 
 @dataclass(frozen=True)
 class RegressionResult:
-    """One finite regression result."""
+    """One finite diagnostic result."""
 
     name: str
-    passed: bool
+    observed: bool
     detail: str
+    outcome: str = "OK"
+    unexpected_outcome: str = "ERROR"
+
+    @property
+    def display_outcome(self) -> str:
+        """Human-readable outcome label for the result table."""
+
+        return self.outcome if self.observed else self.unexpected_outcome
 
 
 def tuple_face(simplex: tuple[int, ...], i: int) -> tuple[int, ...]:
@@ -140,7 +150,6 @@ def check_tensor_simplicial_identities() -> RegressionResult:
         tensor = range_tensor(shape)
         n_faces = min(tensor.shape)
 
-        # d_i d_j = d_{j-1} d_i for i < j.
         for i in range(n_faces):
             for j in range(i + 1, n_faces):
                 lhs = face(face(tensor, j), i)
@@ -153,7 +162,6 @@ def check_tensor_simplicial_identities() -> RegressionResult:
                         f"failed for shape={shape}, i={i}, j={j}",
                     )
 
-        # s_i s_j = s_{j+1} s_i for i <= j.
         for i in range(n_faces):
             for j in range(i, n_faces):
                 lhs = degen(degen(tensor, j), i)
@@ -166,10 +174,6 @@ def check_tensor_simplicial_identities() -> RegressionResult:
                         f"failed for shape={shape}, i={i}, j={j}",
                     )
 
-        # Mixed identity:
-        # d_i s_j = s_{j-1} d_i for i < j,
-        # d_i s_j = id for i = j or i = j+1,
-        # d_i s_j = s_j d_{i-1} for i > j+1.
         for j in range(n_faces):
             degenerated = degen(tensor, j)
             for i in range(min(degenerated.shape)):
@@ -192,6 +196,7 @@ def check_tensor_simplicial_identities() -> RegressionResult:
         "SimplicialTensors simplicial identities",
         True,
         f"checked {checked} face/degeneracy identities on {len(shapes)} shapes",
+        "CHECKED",
     )
 
 
@@ -227,6 +232,7 @@ def check_tensor_horn_pipeline() -> RegressionResult:
         "SimplicialTensors horn/filler round-trip",
         True,
         f"checked {checked} horns across {len(shapes)} tensor shapes",
+        "CHECKED",
     )
 
 
@@ -280,6 +286,7 @@ def check_all_tuple_model(max_dim: int, state_count: int) -> RegressionResult:
             f"checked {checked} finite tuple operations through dimension {max_dim}; "
             "this validates only the trivial all-tuples construction"
         ),
+        "CLASSIFIES",
     )
 
 
@@ -314,6 +321,7 @@ def check_stage1_lambda21_is_trivial(state_count: int) -> RegressionResult:
             f"filled {checked} horns by the tuple (s0,s1,s2); "
             "no Phi-compatibility or higher-dimensional condition is tested"
         ),
+        "FLAGS",
     )
 
 
@@ -363,12 +371,16 @@ def check_strict_phi_faces_fail(max_dim: int, state_count: int) -> RegressionRes
                             f"counterexample: simplex={simplex}, d_{i}={f}; "
                             "deleting an intermediate vertex creates a Phi-gap"
                         ),
+                        "REFUTES",
+                        "NO_CEX",
                     )
 
     return RegressionResult(
         "Strict Phi-orbit tuples are not face-closed",
         False,
         f"no counterexample found through dimension {max_dim}",
+        "REFUTES",
+        "NO_CEX",
     )
 
 
@@ -389,12 +401,16 @@ def check_strict_phi_degeneracies_fail(max_dim: int, state_count: int) -> Regres
                             f"counterexample: simplex={simplex}, s_{i}={s}; "
                             "a repeated non-fixed vertex is not a Phi-step"
                         ),
+                        "REFUTES",
+                        "NO_CEX",
                     )
 
     return RegressionResult(
         "Strict Phi-orbit tuples are not degeneracy-closed",
         False,
         f"no counterexample found through dimension {max_dim}",
+        "REFUTES",
+        "NO_CEX",
     )
 
 
@@ -409,11 +425,12 @@ def check_fano_closed_object_count() -> RegressionResult:
         "full": sum(obj == FANO_POINTS for obj in objects),
     }
     expected = {"empty": 1, "points": 7, "lines": 7, "full": 1}
-    passed = len(objects) == 16 and counts == expected
+    observed = len(objects) == 16 and counts == expected
     return RegressionResult(
         "Fano-closed subsets have the advertised 1+7+7+1 count",
-        passed,
+        observed,
         f"count={len(objects)}, partition={counts}",
+        "CONFIRMS",
     )
 
 
@@ -437,6 +454,7 @@ def check_fano_poset_inner_2_horns() -> RegressionResult:
         "Fano poset nerve inner 2-horns fill",
         True,
         f"checked {checked} composable edge pairs; fillers exist by transitivity",
+        "CONFIRMS",
     )
 
 
@@ -458,12 +476,16 @@ def check_fano_poset_not_kan() -> RegressionResult:
                 "outer 2-horn with edges {1}<={1,2,3} and {1}<={1,4,5} "
                 "has no filler because the two lines are incomparable"
             ),
+            "REFUTES",
+            "NO_CEX",
         )
 
     return RegressionResult(
         "Fano poset nerve is not Kan",
         False,
         "expected incomparable-line outer horn was not found",
+        "REFUTES",
+        "NO_CEX",
     )
 
 
@@ -486,24 +508,28 @@ def run_regression(max_dim: int, state_count: int) -> list[RegressionResult]:
 def print_table(results: list[RegressionResult]) -> None:
     """Print a compact text table."""
 
-    print("=" * 100)
+    print("=" * 104)
     print("Clayworth simplicial-object finite regression")
-    print("=" * 100)
-    print(f"{'Status':<8} {'Check':<62} Detail")
-    print("-" * 100)
+    print("=" * 104)
+    print(f"{'Outcome':<10} {'Check':<62} Detail")
+    print("-" * 104)
     for result in results:
-        status = "PASS" if result.passed else "FAIL"
-        print(f"{status:<8} {result.name:<62} {result.detail}")
-    print("-" * 100)
-    n_pass = sum(result.passed for result in results)
-    print(f"Result: {n_pass}/{len(results)} expected finite conditions observed.")
+        print(f"{result.display_outcome:<10} {result.name:<62} {result.detail}")
+    print("-" * 104)
+
+    n_observed = sum(result.observed for result in results)
+    counts = Counter(result.display_outcome for result in results)
+    counts_text = ", ".join(f"{label}={count}" for label, count in sorted(counts.items()))
+    print(f"Result: {n_observed}/{len(results)} diagnostic outcomes observed.")
+    print(f"Outcome counts: {counts_text}")
     print()
     print("Interpretation:")
-    print("  * The all-tuples construction satisfies the simplicial identities,")
-    print("    but that is the dynamics-free/codiscrete case.")
-    print("  * The strict Phi-orbit interpretation is not a simplicial set in")
-    print("    this finite model, because faces and degeneracies are not closed.")
-    print("  * The Fano poset nerve has inner 2-horn fillers, but it is not Kan.")
+    print("  * REFUTES rows are finite counterexamples or obstructions to stronger")
+    print("    Clayworth-style simplicial claims.")
+    print("  * FLAGS rows identify checks that are too weak or tautological to support")
+    print("    the advertised quasi-category claim.")
+    print("  * CONFIRMS and CHECKED rows are local sanity checks; they do not establish")
+    print("    the claimed topos equivalence.")
 
 
 def main() -> int:
@@ -541,7 +567,7 @@ def main() -> int:
     else:
         print_table(results)
 
-    return 0 if all(result.passed for result in results) else 1
+    return 0 if all(result.observed for result in results) else 1
 
 
 if __name__ == "__main__":
