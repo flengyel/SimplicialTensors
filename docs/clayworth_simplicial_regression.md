@@ -55,22 +55,36 @@ The script focuses on claims of the following form:
 
 ## How To Run
 
+After the latest patch, the script can be run directly from either the repository root or from `experiments/`. It inserts the repository `src` directory into `sys.path` before importing `simplicial_tensors`, so an editable install is not required.
+
 From the repository root:
 
 ```bash
-PYTHONPATH=src python experiments/clayworth_simplicial_regression.py
+python experiments/clayworth_simplicial_regression.py
+```
+
+From `experiments/`:
+
+```bash
+python clayworth_simplicial_regression.py
 ```
 
 JSON output:
 
 ```bash
-PYTHONPATH=src python experiments/clayworth_simplicial_regression.py --json
+python experiments/clayworth_simplicial_regression.py --json
 ```
 
 Larger finite search:
 
 ```bash
-PYTHONPATH=src python experiments/clayworth_simplicial_regression.py --max-dim 5 --state-count 5
+python experiments/clayworth_simplicial_regression.py --max-dim 5 --state-count 5
+```
+
+The older invocation still works:
+
+```bash
+PYTHONPATH=src python experiments/clayworth_simplicial_regression.py
 ```
 
 ## Inputs
