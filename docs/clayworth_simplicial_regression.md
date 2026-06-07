@@ -32,6 +32,18 @@ Capital Factory, Austin, TX
 
 The experiment is an independent regression/stress test. It does not reproduce the Clayworth source document, and it does not assert ownership of Clayworth Algebra Framework text, terminology, trademarks, or patent claims.
 
+## Current Status
+
+This experiment should be read as a finite diagnostic, not as a complete mathematical adjudication. Its useful output is narrower:
+
+- It confirms several local finite facts, such as the Fano-closed subset count.
+- It classifies the all-tuples construction as simplicial but dynamics-free.
+- It flags the Stage-1-style `Lambda^2_1` horn-filling check as tautological on all tuples.
+- It refutes strict finite `Phi`-orbit closure under ordinary face and degeneracy operations.
+- It exhibits an outer-horn obstruction showing the Fano closed-subset poset nerve is not Kan.
+
+The experiment does not establish or refute the advertised topos equivalence by itself.
+
 ## Claims Under Test
 
 The script focuses on claims of the following form:
@@ -41,6 +53,27 @@ The script focuses on claims of the following form:
 3. Strict `Phi`-orbit-compatible tuples are closed under faces and degeneracies.
 4. The Fano closed-subset site has the advertised `1 + 7 + 7 + 1 = 16` object count.
 5. The Fano closed-subset poset nerve has inner 2-horn fillers but is not a Kan complex.
+
+## Finite `Phi`-Orbit Model
+
+The script uses a deliberately small update map only for the strict-orbit stress test:
+
+```python
+def strict_phi(x: int) -> int:
+    return max(x - 1, 0)
+```
+
+A strict `Phi`-orbit tuple means that every adjacent pair satisfies:
+
+```text
+next_state == Phi(current_state)
+```
+
+For example, `(2, 1, 0)` is a strict finite orbit segment because `Phi(2) = 1` and `Phi(1) = 0`. But deleting the middle vertex produces `(2, 0)`, and `Phi(2) = 1`, not `0`. Therefore the face `d_1(2,1,0) = (2,0)` is not a strict one-step orbit segment.
+
+This is what earlier informal output called a `Phi-gap`: an edge created by deleting an intermediate vertex skips the required one-step update. The current script avoids that phrase in the diagnostic output and prints the explicit arithmetic instead.
+
+Degeneracy fails for the same reason. From the strict orbit `(1, 0)`, the degeneracy `s_0` gives `(1, 1, 0)`. Since `Phi(1) = 0`, the edge `1 -> 1` is not a one-step update.
 
 ## What It Checks
 
@@ -96,7 +129,7 @@ PYTHONPATH=src python experiments/clayworth_simplicial_regression.py
 
 ## Outputs
 
-A compact diagnostic table with an `Outcome` column, or a JSON list of named diagnostic results.
+A compact diagnostic table with an `Outcome` column, or a JSON list of named diagnostic results. The text table wraps detail lines to avoid terminal truncation or misleading mid-word wrapping.
 
 Outcome labels:
 
