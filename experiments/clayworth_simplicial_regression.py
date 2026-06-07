@@ -50,6 +50,7 @@ from collections import Counter
 from dataclasses import asdict, dataclass
 from itertools import product
 from pathlib import Path
+from textwrap import wrap
 from typing import Callable
 
 # Allow direct execution from either the repository root or experiments/.
@@ -326,7 +327,19 @@ def check_stage1_lambda21_is_trivial(state_count: int) -> RegressionResult:
 
 
 def strict_phi(x: int) -> int:
-    """A finite non-identity update map used to model Phi-orbit segments."""
+    """Finite one-step update map used only for the strict orbit stress test.
+
+    In this experiment, Phi is not a new algebraic operation. It is a tiny
+    finite stand-in for a claimed state-update map. A strict Phi-orbit tuple
+    requires every adjacent pair (current_state, next_state) to satisfy
+    next_state == Phi(current_state). For this toy map, Phi(x) = max(x - 1, 0).
+
+    The earlier phrase "Phi-gap" meant only this: after a face map deletes an
+    intermediate vertex, an adjacent pair may skip the required one-step update.
+    Example: (2, 1, 0) is a strict orbit segment, but deleting the middle vertex
+    gives (2, 0); since Phi(2) = 1, the edge 2 -> 0 is not a one-step update.
+    That phrase is deliberately not used in the output because it is informal.
+    """
 
     return max(x - 1, 0)
 
@@ -369,7 +382,8 @@ def check_strict_phi_faces_fail(max_dim: int, state_count: int) -> RegressionRes
                         True,
                         (
                             f"counterexample: simplex={simplex}, d_{i}={f}; "
-                            "deleting an intermediate vertex creates a Phi-gap"
+                            f"Phi({f[0]})={strict_phi(f[0])}, so edge "
+                            f"{f[0]}->{f[1]} skips the required one-step update"
                         ),
                         "REFUTES",
                         "NO_CEX",
@@ -394,12 +408,17 @@ def check_strict_phi_degeneracies_fail(max_dim: int, state_count: int) -> Regres
             for i in range(n + 1):
                 s = tuple_degen(simplex, i)
                 if not is_strict_phi_simplex(s):
+                    bad_index = next(
+                        j for j in range(len(s) - 1) if s[j + 1] != strict_phi(s[j])
+                    )
                     return RegressionResult(
                         "Strict Phi-orbit tuples are not degeneracy-closed",
                         True,
                         (
                             f"counterexample: simplex={simplex}, s_{i}={s}; "
-                            "a repeated non-fixed vertex is not a Phi-step"
+                            f"Phi({s[bad_index]})={strict_phi(s[bad_index])}, "
+                            f"so edge {s[bad_index]}->{s[bad_index + 1]} "
+                            "is not a one-step update"
                         ),
                         "REFUTES",
                         "NO_CEX",
@@ -505,16 +524,29 @@ def run_regression(max_dim: int, state_count: int) -> list[RegressionResult]:
     ]
 
 
+def _detail_lines(detail: str, width: int = 88) -> list[str]:
+    """Wrap detail text for narrow terminals without breaking words."""
+
+    return wrap(
+        detail,
+        width=width,
+        break_long_words=False,
+        break_on_hyphens=False,
+    ) or [""]
+
+
 def print_table(results: list[RegressionResult]) -> None:
-    """Print a compact text table."""
+    """Print a compact diagnostic table with wrapped details."""
 
     print("=" * 104)
     print("Clayworth simplicial-object finite regression")
     print("=" * 104)
-    print(f"{'Outcome':<10} {'Check':<62} Detail")
+    print(f"{'Outcome':<10} Check")
     print("-" * 104)
     for result in results:
-        print(f"{result.display_outcome:<10} {result.name:<62} {result.detail}")
+        print(f"{result.display_outcome:<10} {result.name}")
+        for line in _detail_lines(result.detail):
+            print(f"{'':<10}   {line}")
     print("-" * 104)
 
     n_observed = sum(result.observed for result in results)
