@@ -117,7 +117,7 @@ print("filler matches input:", np.array_equal(t, t_prime))
 `tensor_ops` exposes `___SEED___ = 123` and uses a module-level RNG stream.
 
 - `random_tensor(..., seed=None)` and `random_real_tensor(..., seed=None)` use the shared stream.
-- Passing an explicit `seed` creates a deterministic per-call generator.
+- Passing an explicit seed creates a deterministic per-call generator.
 
 So repeated calls with the same explicit seed are reproducible, while calls without a seed advance the shared stream.
 
@@ -176,6 +176,20 @@ Current documentation policy in this repository:
 Some experiment scripts depend on additional packages not declared in core package metadata (for example `networkx`, `matplotlib`, `pandas`, `seaborn`, `torch`, `dask`, `tqdm`, or SageMath). Install these as needed for the specific script you run.
 
 A few scripts also assume local helper modules or a particular working directory; consult each script header and its paired page in `docs` before running.
+
+### Interpreting experiment output
+
+Experiment scripts are research diagnostics, not all-or-nothing package tests. Some scripts print labels such as:
+
+- `CHECKED`: a local identity, invariant, or sanity check was verified on the selected finite data.
+- `CLASSIFIES`: the script classified a construction, often showing that it works only in a restricted or trivial sense.
+- `FLAGS`: the script found that a proposed verification is weak, tautological, or insufficient for the stronger claim being examined.
+- `REFUTES`: the script found a finite counterexample or obstruction to the stronger claim being examined.
+- `CONFIRMS`: the script confirmed a local finite fact, without implying a broader theorem.
+
+A script may exit successfully when it finds an expected counterexample. In that case, success means the diagnostic behaved as intended; it does not mean every mathematical claim under examination was confirmed.
+
+If an experiment cannot import `simplicial_tensors`, either run `pip install -e .` from the repository root or set `PYTHONPATH=src` before invoking the script.
 
 ## TeX Manuscript Assets
 
