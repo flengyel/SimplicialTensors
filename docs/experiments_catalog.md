@@ -11,6 +11,7 @@ This document enumerates every git-tracked file under `experiments/` and provide
 - `experiments/clayworth_simplicial_regression.py` (Python script): Finite regression experiment for Clayworth-style simplicial-object claims. See [docs/clayworth_simplicial_regression.md](clayworth_simplicial_regression.md).
 - `experiments/consolidated_experiment.py` (Python script): Python experiment script for Consolidated experiment. See [docs/consolidated_experiment.md](consolidated_experiment.md).
 - `experiments/consolidated_experiment_with_n01.py` (Python script): Python experiment script for Consolidated experiment with n01. See [docs/consolidated_experiment_with_n01.md](consolidated_experiment_with_n01.md).
+- `experiments/convex_boundary_study.py` (Python script): Controlled, validation-tuned matrix-regression study of DSTM, ridge, isospectral-random, and grid penalties. See [docs/convex_boundary_study.md](convex_boundary_study.md).
 - `experiments/cospectral_proof.py` (Python script): Python experiment script for Cospectral proof. See [docs/cospectral_proof.md](cospectral_proof.md).
 - `experiments/count_standard_basis_tensors.py` (Python script): Python experiment script for Count standard basis tensors. See [docs/count_standard_basis_tensors.md](count_standard_basis_tensors.md).
 - `experiments/degenerate_counterexample.py` (Python script): Python experiment script for Degenerate counterexample. See [docs/degenerate_counterexample.md](degenerate_counterexample.md).
@@ -28,6 +29,7 @@ This document enumerates every git-tracked file under `experiments/` and provide
 - `experiments/matrix_boundary_homotopy_identity.py` (Python script): Python experiment script for Matrix boundary homotopy identity. See [docs/matrix_boundary_homotopy_identity.md](matrix_boundary_homotopy_identity.md).
 - `experiments/n_cycle_conjugation.py` (Python script): Python experiment script for N cycle conjugation. See [docs/n_cycle_conjugation.md](n_cycle_conjugation.md).
 - `experiments/n_hypergroupoid_conjecture.py` (Python script): Python experiment script for N hypergroupoid conjecture. See [docs/n_hypergroupoid_conjecture.md](n_hypergroupoid_conjecture.md).
+- `experiments/neural_boundary_study.py` (Python script): Paired-seed digits MLP and neural-symmetry stress study. See [docs/neural_boundary_study.md](neural_boundary_study.md).
 - `experiments/normalized_moore_complex_homology.py` (Python script): Python experiment script for Normalized moore complex homology. See [docs/normalized_moore_complex_homology.md](normalized_moore_complex_homology.md).
 - `experiments/notebooks/petersen_coset_enumeration.ipynb` (Notebook): Jupyter notebook experiment for Petersen coset enumeration. See [docs/petersen_coset_enumeration.md](petersen_coset_enumeration.md).
 - `experiments/notebooks/petersen_coset_enumeration.sage` (Sage script): Sage experiment script for Petersen coset enumeration. See [docs/petersen_coset_enumeration.md](petersen_coset_enumeration.md).
@@ -42,6 +44,13 @@ This document enumerates every git-tracked file under `experiments/` and provide
 - `experiments/plots/properties_vs_similarity.png` (Plot image): Generated plot artifact for Properties vs similarity. Covered by this catalog entry.
 - `experiments/plots/similarity_distribution.png` (Plot image): Generated plot artifact for Similarity distribution. Covered by this catalog entry.
 - `experiments/random_zero_one_mask_cocycle_test.py` (Python script): Python experiment script for Random zero one mask cocycle test. See [docs/random_zero_one_mask_cocycle_test.md](random_zero_one_mask_cocycle_test.md).
+- `experiments/results/convex_boundary_study/signal1.csv` (CSV data artifact): Per-run lower-SNR convex boundary results.
+- `experiments/results/convex_boundary_study/signal1.json` (JSON data artifact): Protocol, diagnostics, summary, and lower-SNR convex results.
+- `experiments/results/convex_boundary_study/signal2.csv` (CSV data artifact): Per-run higher-SNR convex boundary results.
+- `experiments/results/convex_boundary_study/signal2.json` (JSON data artifact): Protocol, diagnostics, summary, and higher-SNR convex results.
+- `experiments/results/neural_boundary_study/confirmation_runs.csv` (CSV data artifact): Paired neural confirmation runs.
+- `experiments/results/neural_boundary_study/summary.json` (JSON data artifact): Selected configurations, neural summaries, specificity comparisons, and invariance diagnostics.
+- `experiments/results/neural_boundary_study/tuning_runs.csv` (CSV data artifact): Validation-search runs for every neural method.
 - `experiments/sagemath_compatible_tensor_ops.py` (Python script): Python experiment script for Sagemath compatible tensor ops. See [docs/sagemath_compatible_tensor_ops.md](sagemath_compatible_tensor_ops.md).
 - `experiments/sagemath_normalized_tensor_homology.py` (Python script): Python experiment script for Sagemath normalized tensor homology. See [docs/sagemath_normalized_tensor_homology.md](sagemath_normalized_tensor_homology.md).
 - `experiments/shape_generator.py` (Python script): Python experiment script for Shape generator. See [docs/shape_generator.md](shape_generator.md).

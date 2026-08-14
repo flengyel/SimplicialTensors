@@ -51,6 +51,25 @@ Primary numeric API (NumPy/SymPy-based), including:
 - Conjecture/comparison helpers: `n_hypergroupoid_conjecture`, `n_hypergroupoid_comparison`
 - Tensor permutation/cycle helpers: `permute_tensor`, `random_axis_permutation`, `cyclic`, `cyclic_signed`
 
+### `simplicial_tensors.adjoint_ops`
+
+Frobenius adjoints and exact finite boundary filters:
+
+- `face_adjoint`, `bdry_adjoint`
+- `boundary_homeostasis_gradient`, `boundary_homeostasis_feedback`
+- `lower_hodge_laplacian`, `exact_cycle_projection`
+- `boundary_pseudoinverse`, `project_to_boundary`
+- `boundary_sobolev_filter`
+
+### `simplicial_tensors.architecture_ops`
+
+Typed neural-architecture operations that avoid identifying unrelated weight
+axes:
+
+- hidden-node incidence/balance residuals, energies, and gradients
+- function-preserving ReLU equi-normalization
+- two-edge path products and a path-diamond diagnostic
+
 ### `simplicial_tensors.symbolic_tensor_ops`
 
 SymPy-backed symbolic tensor class:
@@ -167,6 +186,11 @@ pytest -q
 ## Experiments and Documentation
 
 The `experiments` directory contains standalone scripts and artifacts used for research exploration.
+
+The controlled boundary/AI investigation, literature synthesis, exact
+spectrum result, negative symmetry findings, and paired experiments are
+collected in
+[`docs/neural_boundary_research_report.md`](docs/neural_boundary_research_report.md).
 
 Current documentation policy in this repository:
 

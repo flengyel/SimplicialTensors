@@ -12,7 +12,12 @@ REPO_ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 def test_package_importable() -> None:
     pkg = importlib.import_module("simplicial_tensors")
-    assert set(pkg.__all__) == {"tensor_ops", "symbolic_tensor_ops"}
+    assert set(pkg.__all__) == {
+        "adjoint_ops",
+        "architecture_ops",
+        "tensor_ops",
+        "symbolic_tensor_ops",
+    }
 
 
 def test_sagemath_module_importable() -> None:
