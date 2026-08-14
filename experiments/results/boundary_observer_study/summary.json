@@ -1,0 +1,834 @@
+{
+  "config": {
+    "control_seed": 920260813,
+    "dataset_seed": 20260813,
+    "epochs": 90,
+    "first_trajectory_seed": 4100,
+    "fit_trajectories": 8,
+    "heldout_trajectories": 5,
+    "hidden_width": 10,
+    "learning_rate": 0.16,
+    "loss_horizon": 5,
+    "momentum": 0.8,
+    "random_controls": 16,
+    "recurrence_scale": 0.55,
+    "recurrent_steps": 3,
+    "shadow_relative_norm": 0.001,
+    "shadow_stride": 10,
+    "tune_trajectories": 3,
+    "velocity_horizon": 3,
+    "weight_decay": 0.0001
+  },
+  "dataset_sizes": {
+    "test": 360,
+    "train": 1078,
+    "validation": 359
+  },
+  "experiment": "raw_dstm_boundary_observer",
+  "forecast_summary": {
+    "boundary_gradient": {
+      "baseline_r2": -0.06182985277672537,
+      "dstm_minus_random_best_r2": 0.003960105131752378,
+      "dstm_minus_random_mean_r2": 0.006042326414072957,
+      "dstm_percentile_among_controls": 100.0,
+      "dstm_r2": -0.06014944656381149,
+      "dstm_rank_among_dstm_and_controls": 1,
+      "random_best_r2": -0.06410955169556387,
+      "random_mean_r2": -0.06619177297788445,
+      "random_standard_deviation_r2": 0.0017821230337276596
+    },
+    "future_train_loss": {
+      "baseline_r2": 0.9725712678597926,
+      "dstm_minus_random_best_r2": -0.12817378511735267,
+      "dstm_minus_random_mean_r2": -0.0729473666300473,
+      "dstm_percentile_among_controls": 12.5,
+      "dstm_r2": 0.8407781185453409,
+      "dstm_rank_among_dstm_and_controls": 15,
+      "random_best_r2": 0.9689519036626936,
+      "random_mean_r2": 0.9137254851753882,
+      "random_standard_deviation_r2": 0.041659029702830745
+    },
+    "future_validation_loss": {
+      "baseline_r2": 0.9735716878993594,
+      "dstm_minus_random_best_r2": -0.11795505852399446,
+      "dstm_minus_random_mean_r2": -0.017750185356929515,
+      "dstm_percentile_among_controls": 18.75,
+      "dstm_r2": 0.8491156921418767,
+      "dstm_rank_among_dstm_and_controls": 14,
+      "random_best_r2": 0.9670707506658711,
+      "random_mean_r2": 0.8668658774988062,
+      "random_standard_deviation_r2": 0.17870527268592323
+    },
+    "syndrome_velocity": {
+      "baseline_r2": -0.11019137845739535,
+      "dstm_minus_random_best_r2": 0.011066849117691957,
+      "dstm_minus_random_mean_r2": 0.015587385612962773,
+      "dstm_percentile_among_controls": 100.0,
+      "dstm_r2": -0.09902883999042555,
+      "dstm_rank_among_dstm_and_controls": 1,
+      "random_best_r2": -0.11009568910811751,
+      "random_mean_r2": -0.11461622560338833,
+      "random_standard_deviation_r2": 0.0031988853144514326
+    }
+  },
+  "gradient_validation": {
+    "absolute_error": 3.963718069044386e-11,
+    "analytic_directional_derivative": -0.012721780700328813,
+    "epsilon": 1e-06,
+    "finite_difference_directional_derivative": -0.012721780739965993,
+    "relative_error": 3.115694374917345e-09
+  },
+  "operator_validation": {
+    "ambient_dimension": 100,
+    "boundary_output_dimension": 81,
+    "boundary_rank": 45,
+    "boundary_squared_max_abs_error": 4.440892098500626e-16,
+    "boundary_squared_operator_max_abs_error": 0.0,
+    "matched_control_chain_max_abs_error": 3.469446951953614e-16,
+    "matched_spectrum_max_abs_error": 1.3322676295501878e-15,
+    "matrix_application_max_abs_error": 4.440892098500626e-16,
+    "nonzero_singular_values": [
+      1.7320508075688779,
+      1.7320508075688774,
+      1.7320508075688774,
+      1.7320508075688774,
+      1.7320508075688774,
+      1.7320508075688774,
+      1.7320508075688774,
+      1.7320508075688774,
+      1.7320508075688774,
+      1.7320508075688774,
+      1.7320508075688774,
+      1.7320508075688774,
+      1.7320508075688774,
+      1.7320508075688774,
+      1.7320508075688774,
+      1.7320508075688774,
+      1.7320508075688774,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.7320508075688772,
+      1.732050807568877,
+      1.732050807568877,
+      1.7320508075688767,
+      1.7320508075688767,
+      1.4142135623730951,
+      1.4142135623730951,
+      1.4142135623730951,
+      1.4142135623730951,
+      1.4142135623730951
+    ],
+    "range_coordinate_reconstruction_max_abs_error": 1.3322676295501878e-15
+  },
+  "projection_validation": {
+    "null": 1.1449174941446927e-16,
+    "visible": 1.1579279202145187e-16
+  },
+  "screening_decision": {
+    "criteria": {
+      "loss_forecasts": "DSTM held-out R2 exceeds the scalar baseline and reaches at least the 90th percentile of matched controls on both train- and validation-loss change.",
+      "shadow_interventions": "The paired 95% CI lower bound for DSTM-visible minus random-mean-visible is positive and DSTM reaches at least the 90th matched-control percentile for both training and validation loss."
+    },
+    "endpoint_passes": {
+      "future_train_loss": false,
+      "future_validation_loss": false,
+      "training_shadow": false,
+      "validation_shadow": false
+    },
+    "overall_pass": false
+  },
+  "shadow_summary": {
+    "comparison": {
+      "training": {
+        "dstm_percentile_among_controls": 0.0,
+        "dstm_rank_among_dstm_and_controls": 17,
+        "dstm_visible_minus_random_best": -0.011521083219030497,
+        "dstm_visible_minus_random_mean": -0.00868572228502486,
+        "dstm_visible_minus_random_mean_95_percent_ci": [
+          -0.011577182843526258,
+          -0.005794261726523461
+        ],
+        "random_mean_visible_improvement_per_delta_norm": 0.05550885841511565
+      },
+      "validation": {
+        "dstm_percentile_among_controls": 0.0,
+        "dstm_rank_among_dstm_and_controls": 17,
+        "dstm_visible_minus_random_best": -0.012794793230644239,
+        "dstm_visible_minus_random_mean": -0.007582860185489008,
+        "dstm_visible_minus_random_mean_95_percent_ci": [
+          -0.012613008573030502,
+          -0.0025527117979475145
+        ],
+        "random_mean_visible_improvement_per_delta_norm": 0.04509722273000356
+      }
+    },
+    "dstm": {
+      "training": {
+        "null_95_percent_ci": [
+          0.0602912648304046,
+          0.0740490403281003
+        ],
+        "null_mean_improvement_per_delta_norm": 0.06717015257925245,
+        "visible_95_percent_ci": [
+          0.03891406649377192,
+          0.05473220576640968
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.0468231361300908,
+        "visible_minus_null_95_percent_ci": [
+          -0.026712737083516663,
+          -0.013981295814806647
+        ],
+        "visible_minus_null_mean": -0.020347016449161655
+      },
+      "validation": {
+        "null_95_percent_ci": [
+          0.04663095779383272,
+          0.06431529968190655
+        ],
+        "null_mean_improvement_per_delta_norm": 0.05547312873786964,
+        "visible_95_percent_ci": [
+          0.026382021900050755,
+          0.04864670318897834
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.03751436254451455,
+        "visible_minus_null_95_percent_ci": [
+          -0.024327725525691152,
+          -0.011589806861019021
+        ],
+        "visible_minus_null_mean": -0.017958766193355086
+      }
+    },
+    "random_00": {
+      "training": {
+        "null_95_percent_ci": [
+          0.05525470640775587,
+          0.06654481140402775
+        ],
+        "null_mean_improvement_per_delta_norm": 0.06089975890589181,
+        "visible_95_percent_ci": [
+          0.04769982445942891,
+          0.0636938684019312
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.055696846430680055,
+        "visible_minus_null_95_percent_ci": [
+          -0.009424237754931232,
+          -0.0009815871954922794
+        ],
+        "visible_minus_null_mean": -0.005202912475211756
+      },
+      "validation": {
+        "null_95_percent_ci": [
+          0.04514623087175719,
+          0.060152106754749204
+        ],
+        "null_mean_improvement_per_delta_norm": 0.0526491688132532,
+        "visible_95_percent_ci": [
+          0.027486296821367037,
+          0.05760160135919541
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.042543949090281225,
+        "visible_minus_null_95_percent_ci": [
+          -0.02441679715767543,
+          0.004206357711731477
+        ],
+        "visible_minus_null_mean": -0.010105219722971976
+      }
+    },
+    "random_01": {
+      "training": {
+        "null_95_percent_ci": [
+          0.05669854094523322,
+          0.06754105305227051
+        ],
+        "null_mean_improvement_per_delta_norm": 0.062119796998751864,
+        "visible_95_percent_ci": [
+          0.04584549789672582,
+          0.06261215132587636
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.05422882461130109,
+        "visible_minus_null_95_percent_ci": [
+          -0.012777437162148804,
+          -0.0030045076127527374
+        ],
+        "visible_minus_null_mean": -0.00789097238745077
+      },
+      "validation": {
+        "null_95_percent_ci": [
+          0.0429371307699955,
+          0.06021628837049453
+        ],
+        "null_mean_improvement_per_delta_norm": 0.051576709570245016,
+        "visible_95_percent_ci": [
+          0.032726881312153476,
+          0.05495891613067768
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.04384289872141558,
+        "visible_minus_null_95_percent_ci": [
+          -0.015168030474255582,
+          -0.0002995912234033003
+        ],
+        "visible_minus_null_mean": -0.007733810848829441
+      }
+    },
+    "random_02": {
+      "training": {
+        "null_95_percent_ci": [
+          0.05183904437081669,
+          0.06834976326239078
+        ],
+        "null_mean_improvement_per_delta_norm": 0.060094403816603734,
+        "visible_95_percent_ci": [
+          0.049802626056832555,
+          0.06284923785476779
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.05632593195580017,
+        "visible_minus_null_95_percent_ci": [
+          -0.011033728625266328,
+          0.003496784903659216
+        ],
+        "visible_minus_null_mean": -0.003768471860803556
+      },
+      "validation": {
+        "null_95_percent_ci": [
+          0.03595713128639905,
+          0.059718286059707165
+        ],
+        "null_mean_improvement_per_delta_norm": 0.047837708673053106,
+        "visible_95_percent_ci": [
+          0.03703156063030682,
+          0.05802194482462939
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.047526752727468105,
+        "visible_minus_null_95_percent_ci": [
+          -0.012975763485181582,
+          0.01235385159401158
+        ],
+        "visible_minus_null_mean": -0.00031095594558500084
+      }
+    },
+    "random_03": {
+      "training": {
+        "null_95_percent_ci": [
+          0.054828722008289324,
+          0.07028281758094766
+        ],
+        "null_mean_improvement_per_delta_norm": 0.0625557697946185,
+        "visible_95_percent_ci": [
+          0.04742870825364976,
+          0.06010783509177988
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.05376827167271482,
+        "visible_minus_null_95_percent_ci": [
+          -0.014172019579648667,
+          -0.0034029766641587083
+        ],
+        "visible_minus_null_mean": -0.008787498121903688
+      },
+      "validation": {
+        "null_95_percent_ci": [
+          0.03592920225522933,
+          0.06253274400910348
+        ],
+        "null_mean_improvement_per_delta_norm": 0.04923097313216641,
+        "visible_95_percent_ci": [
+          0.03723003257044949,
+          0.05587036587489408
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.046550199222671784,
+        "visible_minus_null_95_percent_ci": [
+          -0.016983529294167403,
+          0.01162198147517814
+        ],
+        "visible_minus_null_mean": -0.002680773909494631
+      }
+    },
+    "random_04": {
+      "training": {
+        "null_95_percent_ci": [
+          0.052078860951660755,
+          0.0678215323370036
+        ],
+        "null_mean_improvement_per_delta_norm": 0.059950196644332175,
+        "visible_95_percent_ci": [
+          0.051386811235590704,
+          0.06153803854353358
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.05646242488956214,
+        "visible_minus_null_95_percent_ci": [
+          -0.006503717952928739,
+          -0.00047182555661131904
+        ],
+        "visible_minus_null_mean": -0.003487771754770029
+      },
+      "validation": {
+        "null_95_percent_ci": [
+          0.03924119134045216,
+          0.06388094837263274
+        ],
+        "null_mean_improvement_per_delta_norm": 0.05156106985654245,
+        "visible_95_percent_ci": [
+          0.034658194250186444,
+          0.052532405516994216
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.04359529988359033,
+        "visible_minus_null_95_percent_ci": [
+          -0.019681225715885174,
+          0.003749685769980972
+        ],
+        "visible_minus_null_mean": -0.0079657699729521
+      }
+    },
+    "random_05": {
+      "training": {
+        "null_95_percent_ci": [
+          0.052813469028875404,
+          0.06818822600566128
+        ],
+        "null_mean_improvement_per_delta_norm": 0.06050084751726834,
+        "visible_95_percent_ci": [
+          0.04766484362211702,
+          0.064234821327114
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.05594983247461551,
+        "visible_minus_null_95_percent_ci": [
+          -0.013611260053156382,
+          0.004509229967850738
+        ],
+        "visible_minus_null_mean": -0.004551015042652822
+      },
+      "validation": {
+        "null_95_percent_ci": [
+          0.0401904185847826,
+          0.05923588904441668
+        ],
+        "null_mean_improvement_per_delta_norm": 0.04971315381459964,
+        "visible_95_percent_ci": [
+          0.034579582824911664,
+          0.0564258585630171
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.04550272069396438,
+        "visible_minus_null_95_percent_ci": [
+          -0.01238380375605953,
+          0.003962937514789019
+        ],
+        "visible_minus_null_mean": -0.004210433120635256
+      }
+    },
+    "random_06": {
+      "training": {
+        "null_95_percent_ci": [
+          0.052155759950050416,
+          0.06442283022073597
+        ],
+        "null_mean_improvement_per_delta_norm": 0.0582892950853932,
+        "visible_95_percent_ci": [
+          0.05043703966267969,
+          0.0662513990355629
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.0583442193491213,
+        "visible_minus_null_95_percent_ci": [
+          -0.005316798662029031,
+          0.005426647189485225
+        ],
+        "visible_minus_null_mean": 5.492426372809694e-05
+      },
+      "validation": {
+        "null_95_percent_ci": [
+          0.037835660826785696,
+          0.060348817045499374
+        ],
+        "null_mean_improvement_per_delta_norm": 0.049092238936142535,
+        "visible_95_percent_ci": [
+          0.033982987025104765,
+          0.05777521212773553
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.04587909957642015,
+        "visible_minus_null_95_percent_ci": [
+          -0.015831291431843218,
+          0.00940501271239845
+        ],
+        "visible_minus_null_mean": -0.003213139359722385
+      }
+    },
+    "random_07": {
+      "training": {
+        "null_95_percent_ci": [
+          0.055405556089050186,
+          0.07030961248675542
+        ],
+        "null_mean_improvement_per_delta_norm": 0.0628575842879028,
+        "visible_95_percent_ci": [
+          0.04738194487769261,
+          0.059599411335683444
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.053490678106688026,
+        "visible_minus_null_95_percent_ci": [
+          -0.013364630491833174,
+          -0.005369181870596384
+        ],
+        "visible_minus_null_mean": -0.009366906181214779
+      },
+      "validation": {
+        "null_95_percent_ci": [
+          0.04438604384833961,
+          0.065747146557655
+        ],
+        "null_mean_improvement_per_delta_norm": 0.0550665952029973,
+        "visible_95_percent_ci": [
+          0.030749090244641637,
+          0.0482716369571216
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.039510363600881615,
+        "visible_minus_null_95_percent_ci": [
+          -0.021480442243641727,
+          -0.00963202096058964
+        ],
+        "visible_minus_null_mean": -0.015556231602115684
+      }
+    },
+    "random_08": {
+      "training": {
+        "null_95_percent_ci": [
+          0.05552285418258371,
+          0.0661071178406919
+        ],
+        "null_mean_improvement_per_delta_norm": 0.0608149860116378,
+        "visible_95_percent_ci": [
+          0.04667877906338862,
+          0.06477074452779115
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.05572476179558988,
+        "visible_minus_null_95_percent_ci": [
+          -0.012213472775033336,
+          0.0020330243429374922
+        ],
+        "visible_minus_null_mean": -0.005090224216047922
+      },
+      "validation": {
+        "null_95_percent_ci": [
+          0.04085753898696448,
+          0.05976250602322555
+        ],
+        "null_mean_improvement_per_delta_norm": 0.05031002250509502,
+        "visible_95_percent_ci": [
+          0.030313640551103443,
+          0.05975372103714416
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.0450336807941238,
+        "visible_minus_null_95_percent_ci": [
+          -0.021497162458976145,
+          0.010944479037033713
+        ],
+        "visible_minus_null_mean": -0.005276341710971215
+      }
+    },
+    "random_09": {
+      "training": {
+        "null_95_percent_ci": [
+          0.056882452676044484,
+          0.06882475489538632
+        ],
+        "null_mean_improvement_per_delta_norm": 0.0628536037857154,
+        "visible_95_percent_ci": [
+          0.046074043990368706,
+          0.060889318750083445
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.053481681370226075,
+        "visible_minus_null_95_percent_ci": [
+          -0.011775961721337855,
+          -0.006967883109640832
+        ],
+        "visible_minus_null_mean": -0.009371922415489344
+      },
+      "validation": {
+        "null_95_percent_ci": [
+          0.045766604239520295,
+          0.05796437440105476
+        ],
+        "null_mean_improvement_per_delta_norm": 0.051865489320287526,
+        "visible_95_percent_ci": [
+          0.02855837841045361,
+          0.057919473780024586
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.0432389260952391,
+        "visible_minus_null_95_percent_ci": [
+          -0.01965240338645266,
+          0.002399276936355804
+        ],
+        "visible_minus_null_mean": -0.008626563225048428
+      }
+    },
+    "random_10": {
+      "training": {
+        "null_95_percent_ci": [
+          0.05465139974874475,
+          0.06747768545317559
+        ],
+        "null_mean_improvement_per_delta_norm": 0.06106454260096017,
+        "visible_95_percent_ci": [
+          0.048468433422475976,
+          0.062414285422299806
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.05544135942238789,
+        "visible_minus_null_95_percent_ci": [
+          -0.008190749124616495,
+          -0.003055617232528069
+        ],
+        "visible_minus_null_mean": -0.0056231831785722814
+      },
+      "validation": {
+        "null_95_percent_ci": [
+          0.03943303433480319,
+          0.06273032498477328
+        ],
+        "null_mean_improvement_per_delta_norm": 0.051081679659788236,
+        "visible_95_percent_ci": [
+          0.031245731709828785,
+          0.05748126510697147
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.04436349840840013,
+        "visible_minus_null_95_percent_ci": [
+          -0.023139524116807943,
+          0.009703161614031713
+        ],
+        "visible_minus_null_mean": -0.006718181251388115
+      }
+    },
+    "random_11": {
+      "training": {
+        "null_95_percent_ci": [
+          0.0523049264997415,
+          0.06513187994175687
+        ],
+        "null_mean_improvement_per_delta_norm": 0.058718403220749185,
+        "visible_95_percent_ci": [
+          0.05102358450567924,
+          0.06487483615685202
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.057949210331265634,
+        "visible_minus_null_95_percent_ci": [
+          -0.003067138084712878,
+          0.0015287523057457616
+        ],
+        "visible_minus_null_mean": -0.0007691928894835581
+      },
+      "validation": {
+        "null_95_percent_ci": [
+          0.03308308189491364,
+          0.05837136663788165
+        ],
+        "null_mean_improvement_per_delta_norm": 0.045727224266397644,
+        "visible_95_percent_ci": [
+          0.04079850567145082,
+          0.0591270308537812
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.04996276826261601,
+        "visible_minus_null_95_percent_ci": [
+          -0.008010265910236014,
+          0.01648135390267274
+        ],
+        "visible_minus_null_mean": 0.004235543996218362
+      }
+    },
+    "random_12": {
+      "training": {
+        "null_95_percent_ci": [
+          0.05629443819945835,
+          0.06751955277852015
+        ],
+        "null_mean_improvement_per_delta_norm": 0.061906995488989244,
+        "visible_95_percent_ci": [
+          0.046486233345756196,
+          0.06272029327307443
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.05460326330941532,
+        "visible_minus_null_95_percent_ci": [
+          -0.011632448087811074,
+          -0.002975016271336785
+        ],
+        "visible_minus_null_mean": -0.00730373217957393
+      },
+      "validation": {
+        "null_95_percent_ci": [
+          0.0398392909979151,
+          0.06080734165505815
+        ],
+        "null_mean_improvement_per_delta_norm": 0.05032331632648662,
+        "visible_95_percent_ci": [
+          0.03295551475691699,
+          0.05729654002784361
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.0451260273923803,
+        "visible_minus_null_95_percent_ci": [
+          -0.017973292412189087,
+          0.0075787145439764475
+        ],
+        "visible_minus_null_mean": -0.00519728893410632
+      }
+    },
+    "random_13": {
+      "training": {
+        "null_95_percent_ci": [
+          0.05637103117683425,
+          0.06762580341327967
+        ],
+        "null_mean_improvement_per_delta_norm": 0.061998417295056965,
+        "visible_95_percent_ci": [
+          0.04547441541253012,
+          0.06313579068174921
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.05430510304713967,
+        "visible_minus_null_95_percent_ci": [
+          -0.01404408190966843,
+          -0.001342546586166159
+        ],
+        "visible_minus_null_mean": -0.007693314247917295
+      },
+      "validation": {
+        "null_95_percent_ci": [
+          0.04776445088155835,
+          0.056359096494097836
+        ],
+        "null_mean_improvement_per_delta_norm": 0.05206177368782809,
+        "visible_95_percent_ci": [
+          0.026426462861647383,
+          0.05927927959910451
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.04285287123037595,
+        "visible_minus_null_95_percent_ci": [
+          -0.023683158508137785,
+          0.005265353593233506
+        ],
+        "visible_minus_null_mean": -0.00920890245745214
+      }
+    },
+    "random_14": {
+      "training": {
+        "null_95_percent_ci": [
+          0.05424845735447274,
+          0.06726879448890376
+        ],
+        "null_mean_improvement_per_delta_norm": 0.06075862592168825,
+        "visible_95_percent_ci": [
+          0.04907010051428719,
+          0.062453113176651975
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.05576160684546958,
+        "visible_minus_null_95_percent_ci": [
+          -0.006965545667938178,
+          -0.003028492484499149
+        ],
+        "visible_minus_null_mean": -0.0049970190762186634
+      },
+      "validation": {
+        "null_95_percent_ci": [
+          0.03140445492027799,
+          0.06027772394911478
+        ],
+        "null_mean_improvement_per_delta_norm": 0.045841089434696385,
+        "visible_95_percent_ci": [
+          0.04440469262883911,
+          0.05621361892147846
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.050309155775158786,
+        "visible_minus_null_95_percent_ci": [
+          -0.007910239120905153,
+          0.016846371801829962
+        ],
+        "visible_minus_null_mean": 0.004468066340462405
+      }
+    },
+    "random_15": {
+      "training": {
+        "null_95_percent_ci": [
+          0.051389764928802435,
+          0.06840076542273317
+        ],
+        "null_mean_improvement_per_delta_norm": 0.0598952651757678,
+        "visible_95_percent_ci": [
+          0.05158260428006608,
+          0.061632833779680436
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.05660771902987326,
+        "visible_minus_null_95_percent_ci": [
+          -0.008531096077650329,
+          0.0019560037858612584
+        ],
+        "visible_minus_null_mean": -0.003287546145894535
+      },
+      "validation": {
+        "null_95_percent_ci": [
+          0.03591412432478306,
+          0.06340228848520743
+        ],
+        "null_mean_improvement_per_delta_norm": 0.04965820640499524,
+        "visible_95_percent_ci": [
+          0.039341603819767826,
+          0.05209310059037149
+        ],
+        "visible_mean_improvement_per_delta_norm": 0.04571735220506966,
+        "visible_minus_null_95_percent_ci": [
+          -0.014620129099279629,
+          0.006738420699428468
+        ],
+        "visible_minus_null_mean": -0.003940854199925581
+      }
+    }
+  },
+  "shadow_updates_committed": false,
+  "software": {
+    "numpy": "2.3.5",
+    "python": "3.12.13",
+    "scikit_learn": "1.8.0",
+    "scipy": "1.17.0"
+  },
+  "training_summary": {
+    "mean_final_test_accuracy": 0.9147569444444444,
+    "mean_final_test_loss": 0.3083206803716727,
+    "mean_final_train_loss": 0.09475090321543787,
+    "mean_final_validation_accuracy": 0.9242688022284122,
+    "mean_final_validation_loss": 0.2818966155684779
+  },
+  "training_uses_boundary": false,
+  "trajectory_split": {
+    "fit": [
+      4100,
+      4101,
+      4102,
+      4103,
+      4104,
+      4105,
+      4106,
+      4107
+    ],
+    "heldout": [
+      4111,
+      4112,
+      4113,
+      4114,
+      4115
+    ],
+    "tune": [
+      4108,
+      4109,
+      4110
+    ]
+  },
+  "wall_seconds": 3.268327654001041
+}

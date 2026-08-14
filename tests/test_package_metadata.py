@@ -15,6 +15,7 @@ def test_package_importable() -> None:
     assert set(pkg.__all__) == {
         "adjoint_ops",
         "architecture_ops",
+        "introspection_ops",
         "tensor_ops",
         "symbolic_tensor_ops",
     }

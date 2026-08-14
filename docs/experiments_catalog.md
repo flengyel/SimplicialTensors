@@ -8,6 +8,8 @@ This document enumerates every git-tracked file under `experiments/` and provide
 - `experiments/atlas_cospectral_scan.py` (Python script): Python experiment script for Atlas cospectral scan. See [docs/atlas_cospectral_scan.md](atlas_cospectral_scan.md).
 - `experiments/bdry_network_experiment1.py` (Python script): Python experiment script for Bdry network experiment1. See [docs/bdry_network_experiment1.md](bdry_network_experiment1.md).
 - `experiments/boundary_augmented_network.py` (Python script): Python experiment script for Boundary augmented network. See [docs/boundary_augmented_network.md](boundary_augmented_network.md).
+- `experiments/boundary_observer_report.md` (Markdown report): Design, primary results, validity checks, limitations, and go/no-go decision for the raw boundary observer study.
+- `experiments/boundary_observer_study.py` (Python script): Controlled tied-weight observer and shadow-intervention study with chain-compatible isospectral controls. See [docs/boundary_observer_study.md](boundary_observer_study.md).
 - `experiments/clayworth_simplicial_regression.py` (Python script): Finite regression experiment for Clayworth-style simplicial-object claims. See [docs/clayworth_simplicial_regression.md](clayworth_simplicial_regression.md).
 - `experiments/consolidated_experiment.py` (Python script): Python experiment script for Consolidated experiment. See [docs/consolidated_experiment.md](consolidated_experiment.md).
 - `experiments/consolidated_experiment_with_n01.py` (Python script): Python experiment script for Consolidated experiment with n01. See [docs/consolidated_experiment_with_n01.md](consolidated_experiment_with_n01.md).
@@ -48,6 +50,11 @@ This document enumerates every git-tracked file under `experiments/` and provide
 - `experiments/results/convex_boundary_study/signal1.json` (JSON data artifact): Protocol, diagnostics, summary, and lower-SNR convex results.
 - `experiments/results/convex_boundary_study/signal2.csv` (CSV data artifact): Per-run higher-SNR convex boundary results.
 - `experiments/results/convex_boundary_study/signal2.json` (JSON data artifact): Protocol, diagnostics, summary, and higher-SNR convex results.
+- `experiments/results/boundary_observer_study/final_metrics.csv` (CSV data artifact): Per-trajectory final task metrics for the boundary observer study.
+- `experiments/results/boundary_observer_study/forecast_metrics.csv` (CSV data artifact): Tuned held-out observer forecasting metrics.
+- `experiments/results/boundary_observer_study/shadow_interventions.csv` (CSV data artifact): Norm-matched copied-weight intervention results on training and validation losses.
+- `experiments/results/boundary_observer_study/summary.json` (JSON data artifact): Configuration, splits, operator and gradient checks, aggregate results, and software versions.
+- `experiments/results/boundary_observer_study/trajectories.csv` (CSV data artifact): Per-checkpoint training-trajectory measurements.
 - `experiments/results/neural_boundary_study/confirmation_runs.csv` (CSV data artifact): Paired neural confirmation runs.
 - `experiments/results/neural_boundary_study/summary.json` (JSON data artifact): Selected configurations, neural summaries, specificity comparisons, and invariance diagnostics.
 - `experiments/results/neural_boundary_study/tuning_runs.csv` (CSV data artifact): Validation-search runs for every neural method.

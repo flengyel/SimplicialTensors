@@ -61,6 +61,21 @@ Frobenius adjoints and exact finite boundary filters:
 - `boundary_pseudoinverse`, `project_to_boundary`
 - `boundary_sobolev_filter`
 
+### `simplicial_tensors.introspection_ops`
+
+Exact boundary analysis--controller--synthesis without an implicit scalar
+penalty:
+
+- `boundary_analyze`, `boundary_synthesize`
+- `project_boundary_signal`, `boundary_target_update`
+- `boundary_controller_feedback`, `boundary_projector_feedback`
+
+The analysis retains the cycle channel and the boundary signal, so it is
+lossless. Controller targets are projected into the realizable boundary range
+and returned to weight space with the exact Moore--Penrose decoder.
+Individual controllers can still impose hard constraints; for example, a zero
+target projects onto the cycle space.
+
 ### `simplicial_tensors.architecture_ops`
 
 Typed neural-architecture operations that avoid identifying unrelated weight
@@ -187,10 +202,13 @@ pytest -q
 
 The `experiments` directory contains standalone scripts and artifacts used for research exploration.
 
-The controlled boundary/AI investigation, literature synthesis, exact
-spectrum result, negative symmetry findings, and paired experiments are
+The boundary/AI investigation, literature synthesis, exact spectrum result,
+legacy regularization findings, and corrected observer--feedback framing are
 collected in
 [`docs/neural_boundary_research_report.md`](docs/neural_boundary_research_report.md).
+The subsequent passive observer test and its negative go/no-go decision are
+reported in
+[`experiments/boundary_observer_report.md`](experiments/boundary_observer_report.md).
 
 Current documentation policy in this repository:
 

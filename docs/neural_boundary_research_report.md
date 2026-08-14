@@ -6,15 +6,16 @@
 
 ## Executive verdict
 
-The original proposal is **not worth pursuing unchanged as a generic neural
-introspection mechanism**.  Its central inference is false: although
-(partial^2=0), returned feedback uses (partial^*\partial), which is a
-positive-semidefinite Hodge operator rather than a nilpotent map.  More
-decisively, the diagonal DSTM boundary depends on arbitrary neuron ordering
-and fails function-preserving hidden-unit permutation and ReLU-rescaling
-symmetries.
+The adjoint-return experiments did not test the original feedback proposal.
+Choosing (R=\partial^*) made the returned signal
+(\partial^*\partial W), the gradient of a quadratic boundary penalty.  Those
+experiments detected no general DSTM-specific benefit for that regularizer and showed
+that the raw diagonal boundary is coordinate sensitive.  Neither result
+falsifies a typed observer--controller--decoder acting on a deliberately
+labeled parameterized machine.  Section 5.4 reports a separate passive
+observer screen on one tied architecture; that screen was negative.
 
-Three narrower directions are worth pursuing:
+Four conclusions follow:
 
 1. **Exact DSTM spectral mathematics.**  A candidate new theorem derived and
    verified here gives the complete integer spectrum of
@@ -26,7 +27,11 @@ Three narrower directions are worth pursuing:
    for example certain adjacency tensors or explicitly indexed cochains.  It
    should not be applied indiscriminately to dense-layer rows, columns,
    channels, and spatial axes.
-3. **Architecture/path-complex introspection.**  Treat scalar weights as edges
+3. **Exact feedback is implemented but not empirically justified here.**  The
+   cycle projector and pseudoinverse give a lossless, finite
+   analysis--synthesis cell.  The first matched observer screen did not pass
+   its gate, so no learned feedback controller was trained.
+4. **Architecture/path-complex introspection.**  Treat scalar weights as edges
    of the actual network DAG.  Incidence boundaries, path-diamond products,
    and gauge-quotient features respect hidden-neuron relabeling; path products
    also respect positive ReLU scaling.  Much of the underlying balance/gauge
@@ -34,11 +39,14 @@ Three narrower directions are worth pursuing:
    path observable and convincing empirical separation from path-norm and
    symmetry-aware baselines.
 
-The experiments do **not** establish a specifically simplicial learning
-benefit.  On digits, the DSTM weight penalty improved mean test accuracy by
+The penalty and smoothing experiments do **not** establish a specifically
+simplicial learning benefit.  On digits, the DSTM weight penalty improved mean test accuracy by
 0.52 percentage points over baseline, but an exactly isospectral randomly
 conjugated penalty performed essentially identically.  The same DSTM method
 also made two functionally identical, differently labeled networks diverge.
+These results concern regularization and gradient smoothing, not a
+boundary-conditioned controller with exact synthesis.  The later observer
+screen tests whether such a controller has a DSTM-specific signal to exploit.
 
 ## 1. The proposal, repaired
 
@@ -57,8 +65,8 @@ Thus the typed feature pair ((W,\partial W)) has no second boundary feature.
 That is a legitimate, finite, one-level diagnostic.
 
 Returning the signal to the original parameter space requires a map
-(R:C_{p-1}\to C_p).  For the principled Euclidean choice (R=\partial^*),
-the feedback operator is
+(R:C_{p-1}\to C_p).  The previous study chose the Frobenius adjoint
+(R=\partial^*), making the feedback operator
 
 \[
 L=\partial^*\partial.
@@ -72,15 +80,16 @@ nilpotence.  The update
 W\leftarrow W-\eta\lambda L W
 \]
 
-is ordinary quadratic regularization/heat flow.  It can be stable and useful,
-but it does not terminate because (partial^2=0).
+is ordinary quadratic regularization/heat flow.  This optional return map can be
+stable and useful, but it does not terminate because (partial^2=0) and should
+not be identified with the general feedback proposal.
 
 This distinction mirrors Dirac signal processing: a graded nilpotent block
 operator (Q(W,h)=(0,\partial W)) satisfies (Q^2=0), while the self-adjoint
 Dirac operator (Q+Q^*) squares to a block Hodge Laplacian rather than zero
 ([Calmon, Schaub, and Bianconi 2023](https://arxiv.org/abs/2301.10137)).
 
-### 1.2 A finite replacement that is actually exact
+### 1.2 Exact boundary analysis--controller--synthesis
 
 The new spectral result gives
 
@@ -97,25 +106,40 @@ P_{\ker\partial}
 \left(I-\frac{\partial^*\partial}{\lambda}\right)
 \]
 
-is the exact Frobenius-orthogonal projector onto the cycle space.  It gives a
-finite, typed, non-iterative answer to “remove the boundary-changing component
-of this tensor.”
-
-For a target (H), the exact minimum-norm decoder is
+is the exact Frobenius-orthogonal projector onto the cycle space.  Let
+(B=\partial), (P_0=P_{\ker B}), and let (B^\dagger) be the exact
+Moore--Penrose decoder obtained from the same finite spectrum.  Then
 
 \[
-W_{\rm new}
-=W-\partial^\dagger(\partial W-H).
+W=P_0W+B^\dagger BW.
 \]
 
-This is analogous to treating (partial W) as a syndrome: nilpotence checks
-syndrome consistency, while correction requires a decoder.  Homological
-error-correcting codes make the same separation between boundary/syndrome and
-recovery ([Dua et al. 2023](https://quantum-journal.org/papers/q-2023-09-26-1122/)).
+Thus (a=P_0W) and (s=BW) form a lossless cycle/syndrome analysis.  A
+task-aware controller can propose a boundary and exact synthesis can return it
+without a scalar boundary penalty:
 
-### 1.3 A stationary-point-preserving optimizer variant
+\[
+\widetilde h=\Phi_\theta(s,\text{context}),\qquad
+h=BB^\dagger\widetilde h,\qquad
+W^+=a+B^\dagger h.
+\]
 
-Instead of driving weights toward (ker\partial), smooth the proposed update:
+Exactly (P_0W^+=a) and (BW^+=h).  For a fixed target the equivalent update
+
+\[
+W^+=W-B^\dagger(BW-h)
+\]
+
+is the closest-to-(W) tensor having boundary (h) and is idempotent.  This is
+analogous to treating (BW) as a syndrome: nilpotence checks syndrome
+consistency, while correction requires a decoder.  Homological error-correcting
+codes make the same separation between boundary/syndrome and recovery
+([Dua et al. 2023](https://quantum-journal.org/papers/q-2023-09-26-1122/)).
+
+### 1.3 Separate optimizer-smoothing baseline
+
+As a separate baseline, smooth the task update rather than driving weights
+toward (ker\partial):
 
 \[
 \widetilde g=(I+\mu\widehat L)^{-1}g,
@@ -140,7 +164,7 @@ or an eigensolve.  The closest algorithmic precedent is Laplacian-smoothed
 gradient descent ([Osher et al. 2018](https://arxiv.org/abs/1806.06317)); the
 resolvent itself is not novel.
 
-## 2. The symmetry obstruction
+## 2. What the symmetry tests establish
 
 For adjacent dense layers, a hidden permutation (P) acts by
 
@@ -167,8 +191,9 @@ the matrix boundary changes from (2-1=1) to (0).  Positive hidden scaling
 produces a second failure: (W_1'=S W_1, W_2'=W_2S^{-1}) preserves the ReLU
 function while changing the raw boundary penalty.
 
-This is not a minor aesthetic issue.  Modern weight-space methods explicitly
-build in hidden-neuron permutation symmetry
+This rules out treating the raw statistic as intrinsic to the represented
+function on a generic dense layer.  Modern function-level weight-space methods
+explicitly build in hidden-neuron permutation symmetry
 ([Navon et al. 2023](https://proceedings.mlr.press/v202/navon23a.html)) and,
 for homogeneous networks, scaling/monomial symmetry
 ([ScaleGMN 2024](https://arxiv.org/abs/2406.10685),
@@ -184,7 +209,17 @@ nonzero same-shape linear nilpotent operator cannot be intrinsic to a generic
 dense matrix under the full neuron-relabeling group.  Nontrivial nilpotence
 requires genuinely graded architecture spaces.
 
-## 3. Architecture-aware replacement
+These conclusions do not rule out inspection of a concrete labeled machine.
+Parameters, optimizer state, numerical conditioning, and future Euclidean
+training dynamics need not be constant on a function-preserving scaling orbit.
+For such a coordinate-state claim, permutation and scaling tests are robustness
+and portability measurements rather than vetoes.  A tied map (W:H\to H) also
+removes the row/column type mismatch, although its neuron order remains a
+chosen coordinate convention.  The ANOVA no-go result concerns same-shape
+linear equivariant endomorphisms; it does not exclude a typed rectangular
+analysis, nonlinear controller, and exact decoder.
+
+## 3. Function-intrinsic alternatives and baselines
 
 ### 3.1 Incidence boundary and balance
 
@@ -307,7 +342,9 @@ epochs, two initially identical functions differed in predicted probabilities
 by 2.31% relative RMS under the DSTM penalty and 6.15% under DSTM Sobolev;
 baseline and architecture balance remained identical to roundoff.
 
-This falsifies a generic dense-weight interpretation of the DSTM operation.
+This rules out interpreting the tested penalty and Sobolev updates as
+function-equivariant methods on generic dense weights.  It does not test a
+labeled-state observer/controller with exact synthesis.
 
 ### 5.2 Convex matrix regression: 50 paired replications
 
@@ -366,14 +403,47 @@ the method failed neuron relabeling.  The appropriate conclusion is
 **anisotropic regularization helped this small model; no specifically
 simplicial benefit was detected**.
 
+### 5.4 Passive observer screen on a tied map
+
+The follow-up experiment removed the boundary from both the loss and optimizer.
+A digits classifier reused one square hidden-state map (W:H\to H) at every
+residual step.  Sixteen controls had the same rank and nonzero singular values
+as the DSTM boundary and mapped into its boundary range, so the next boundary
+vanished for every control.  Entire initialization trajectories were assigned
+to fitting, tuning, or held-out evaluation.
+
+The operator-independent forecasts were negative:
+
+| Future-loss target | Scalar baseline | DSTM | Random mean | DSTM rank |
+|---|---:|---:|---:|---:|
+| Training loss | 0.9726 | 0.8408 | 0.9137 | 15 of 17 |
+| Validation loss | 0.9736 | 0.8491 | 0.8669 | 14 of 17 |
+
+In norm-matched shadow interventions, the DSTM-visible gradient component was
+also the worst of the seventeen observers.  Its improvement per unit
+perturbation was (0.04682) on training loss versus a random-control mean of
+(0.05551), paired difference (-0.00869) with 95% interval
+([-0.01158,-0.00579]).  On validation loss the corresponding values were
+(0.03751), (0.04510), and (-0.00758) with interval
+([-0.01261,-0.00255]).
+
+The DSTM observation ranked first on two secondary DSTM-defined targets, but
+both held-out (R^2) values were negative.  Those targets cannot establish
+privileged task information because their definitions already contain DSTM.
+The screening gate required superiority on both future loss and matched
+shadow intervention; it failed on every primary endpoint.  Consequently no
+learned feedback controller was added.  The full design, limitations, and
+reproduction command are in
+[`experiments/boundary_observer_report.md`](../experiments/boundary_observer_report.md).
+
 ## 6. Broader literature map and novelty boundaries
 
 The search deliberately extended beyond topological deep learning.
 
 | Area | Primary precedents | Consequence |
 |---|---|---|
-| Simplicial/Hodge signal processing | [Principled Simplicial Neural Networks](https://proceedings.mlr.press/v139/roddenberry21a.html), [Message Passing Simplicial Networks](https://proceedings.mlr.press/v139/bodnar21a.html), [Simplicial Convolutional Filters](https://arxiv.org/abs/2201.11720) | Relabeling/orientation equivariance and typed lower/upper Hodge terms are requirements. |
-| Weight-space learning | [Deep Weight Spaces](https://proceedings.mlr.press/v202/navon23a.html), [Permutation-Equivariant Neural Functionals](https://arxiv.org/abs/2302.14040), [Universal Neural Functionals](https://proceedings.neurips.cc/paper_files/paper/2024/file/bd20595c8e5802ba40ed418f4ec116f0-Paper-Conference.pdf) | Raw weight introspection is active; symmetry-aware processing is standard, not optional. |
+| Simplicial/Hodge signal processing | [Principled Simplicial Neural Networks](https://proceedings.mlr.press/v139/roddenberry21a.html), [Message Passing Simplicial Networks](https://proceedings.mlr.press/v139/bodnar21a.html), [Simplicial Convolutional Filters](https://arxiv.org/abs/2201.11720) | Relabeling/orientation equivariance and typed lower/upper Hodge terms are requirements for function-intrinsic claims. |
+| Weight-space learning | [Deep Weight Spaces](https://proceedings.mlr.press/v202/navon23a.html), [Permutation-Equivariant Neural Functionals](https://arxiv.org/abs/2302.14040), [Universal Neural Functionals](https://proceedings.neurips.cc/paper_files/paper/2024/file/bd20595c8e5802ba40ed418f4ec116f0-Paper-Conference.pdf) | Raw weight introspection is active; symmetry-aware processing is standard for portable function-level observables, while labeled-state mechanisms require robustness ablations. |
 | Self-reference and learned optimization | [Schmidhuber 1993](https://mediatum.ub.tum.de/doc/814784/file.pdf), [Andrychowicz et al. 2016](https://proceedings.neurips.cc/paper/2016/hash/fb87582825f9d28a8d42c5e5e5e8b23d-Abstract.html), [Wichrowska et al. 2017](https://proceedings.mlr.press/v70/wichrowska17a.html), [Irie et al. 2022](https://proceedings.mlr.press/v162/irie22b.html) | “Weights acting on weights” and self-referential updates are established. Typed algebra and demonstrated advantage must carry novelty. |
 | Homeostatic plasticity | [BCM](https://www.jneurosci.org/content/2/1/32), [Oja 1982](https://pubmed.ncbi.nlm.nih.gov/7153672/), [synaptic scaling](https://pubmed.ncbi.nlm.nih.gov/9495341/), [Mean Teacher](https://proceedings.neurips.cc/paper/2017/hash/68053af2923e00204c3ca7c6a3150cf7-Abstract.html) | A slow nonzero/EMA target is more plausible than always forcing (partial W=0), but it needs full-weight and output-consistency controls. |
 | Geometry and metrics | [Discrete Exterior Calculus](https://arxiv.org/abs/math/0508341), [Finite Element Exterior Calculus](https://arxiv.org/abs/0906.4325), [K-FAC](https://proceedings.mlr.press/v37/martens15.html) | The adjoint depends on the metric.  Frobenius is only one choice; Fisher/K-FAC-weighted adjoints are a future ablation. |
@@ -393,10 +463,16 @@ The search deliberately extended beyond topological deep learning.
 2. Retain the exact projector, pseudoinverse decoder, and polynomial resolvent
    as reusable library operations.  They are correct and computationally
    useful regardless of neural results.
-3. Investigate DSTM filtering only on data with a real common ordered label
-   set.  A spatial kernel slice or an actual cochain is a defensible first
+3. Do not train a boundary-conditioned controller on the tied-digits setting:
+   its passive observer failed both operator-independent forecasting and
+   matched shadow-intervention gates.
+4. If the observer hypothesis is tested again, change the domain rather than
+   retuning this negative screen.  Use a parameter tensor with a semantically
+   ordered common index set and fresh trajectories, retaining the same
+   chain-compatible isospectral controls.
+5. A spatially ordered recurrent operator or an actual cochain is a defensible
    target; unordered channels are not.
-4. For generic networks, evaluate architecture path-diamond or Hodge-quotient
+6. For generic networks, evaluate architecture path-diamond or Hodge-quotient
    features as post-hoc diagnostics or fine-tuning anchors.  Compare against
    path norms, random gauge-invariant cycle contrasts, Fisher-Rao/function
    metrics, and ScaleGMN.  Do not strongly penalize all curls toward zero;
@@ -406,7 +482,7 @@ The search deliberately extended beyond topological deep learning.
 
 - Do not claim that (partial^2=0) makes returned feedback or training
   terminate.
-- Do not call a coordinate-dependent boundary norm intrinsic neural
+- Do not call a coordinate-dependent boundary norm function-intrinsic neural
   self-knowledge.
 - Do not promote the digits improvement as simplicial: the isospectral random
   control matched it.
@@ -414,9 +490,13 @@ The search deliberately extended beyond topological deep learning.
   permutation/gauge tests and beats ordinary/matched controls in a second
   setting.
 
-The honest outcome is therefore mixed but useful: the original AI story is
-falsified, a conditional structural prior is characterized, and a potentially
-new exact spectral theorem produces a genuinely finite boundary decoder.
+The result of the original study is therefore narrower than its verdict:
+the adjoint-return realization reduced to regularization and lacked DSTM
+specificity, while a conditional structural prior was characterized and a
+potentially new exact spectral theorem produced a finite boundary decoder.
+The separate tied-digits observer screen was negative.  The exact controller
+remains algebraically available, but learned feedback is not empirically
+justified in that setting.
 
 ## 8. Reproduction
 
@@ -435,6 +515,8 @@ PYTHONPATH=src python experiments/convex_boundary_study.py \
 
 PYTHONPATH=src python experiments/neural_boundary_study.py \
   --output-dir experiments/results/neural_boundary_study
+
+PYTHONPATH=src python experiments/boundary_observer_study.py
 ```
 
 Machine-readable results are in `experiments/results/`.  The neural script
