@@ -18,6 +18,7 @@ This document enumerates every git-tracked file under `experiments/` and provide
 - `experiments/count_standard_basis_tensors.py` (Python script): Python experiment script for Count standard basis tensors. See [docs/count_standard_basis_tensors.md](count_standard_basis_tensors.md).
 - `experiments/degenerate_counterexample.py` (Python script): Python experiment script for Degenerate counterexample. See [docs/degenerate_counterexample.md](degenerate_counterexample.md).
 - `experiments/discrepancy_test.py` (Python script): Python experiment script for Discrepancy test. See [docs/discrepancy_test.md](discrepancy_test.md).
+- `experiments/dstm_examples.py` (Python script): Exact vector faces, a matrix horn, and a generated submodule with nonzero first homology. See [docs/dstm_examples.md](dstm_examples.md).
 - `experiments/examples_range_tensors.py` (Python script): Python experiment script for Examples range tensors. See [docs/examples_range_tensors.md](examples_range_tensors.md).
 - `experiments/experiment_results.csv` (CSV data artifact): CSV results artifact for Experiment results. Covered by this catalog entry.
 - `experiments/filler_combinatorics.py` (Python script): Python experiment script for Filler combinatorics. See [docs/filler_combinatorics.md](filler_combinatorics.md).

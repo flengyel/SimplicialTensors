@@ -97,13 +97,18 @@ def _dims(m: np.ndarray) -> Tuple[np.ndarray, ...]:
 
 # Généralisation de l'opération face aux tenseurs
 def _face(m: np.ndarray, axes: Tuple[np.ndarray, ...], i: int) -> np.ndarray:
-    rows, cols = axes[0], axes[1]
     indices: List[np.ndarray] = [np.delete(axis, i) if len(axis) > i else axis for axis in axes]
     grid = np.ix_(*indices)
     return m[grid]
 
 # i-ème face d'une matrice
 def face(m: np.ndarray, i: int) -> np.ndarray:
+    """Delete index ``i`` along every axis, including for one-axis tensors.
+
+    Valid indices satisfy ``0 <= i < min(m.shape)``. In positive simplicial
+    degree this is the diagonal face map. If an axis has length one, deleting
+    index zero returns an empty array; empty input arrays have no valid faces.
+    """
     num_faces = min(m.shape) if m.ndim > 0 else 0
     if not (0 <= i < num_faces):
         raise IndexError(f"Face index {i} out of bounds for tensor shape {m.shape}.")
@@ -147,6 +152,10 @@ def degen_matrix(z: np.ndarray, j: int) -> np.ndarray:
 
 # k-ème dégénérescence d'un tenseur
 def degen(z: np.ndarray, k: int) -> np.ndarray:
+    """Duplicate index ``k`` along every axis, including for one-axis tensors.
+
+    Simplicial degeneracies use ``0 <= k < min(z.shape)`` on nonempty tensors.
+    """
     # Parcourez chaque dimension et dupliquez la k-ème hypercolonne
     for axis in range(z.ndim):
         # Each element of slices can be either a slice or an int, 
@@ -307,6 +316,13 @@ def find_degen(a: np.ndarray) -> Union[Tuple[np.ndarray, int], None]:
 
 # Frontière d'un tenseur
 def bdry(m: np.ndarray) -> np.ndarray:
+    """Return the alternating sum of diagonal faces, preserving the dtype.
+
+    The input has at least one axis, all of positive length. The output shape
+    is ``tuple(s - 1 for s in m.shape)``. In simplicial degree zero it is an
+    empty array representing the zero boundary. An empty input array is
+    outside the domain and raises ``ValueError``.
+    """
     d: int = int(np.min(m.shape))
     axes = _dims(m)
     #  soustraire 1 de chaque dimension
