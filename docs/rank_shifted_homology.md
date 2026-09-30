@@ -15,8 +15,10 @@ indices. In degree `p`, the permitted indices are `0,...,p`. Faces require
 tensor raises `ValueError` rather than inventing a degree-minus-one tensor.
 
 The mathematical definitions and proofs are in
-[`tex/rank_shifted_homology.tex`](../tex/rank_shifted_homology.tex), included
-in the main manuscript. The implementation uses `Fraction` coefficients;
+[`tex/rank_shifted_homology.tex`](../tex/rank_shifted_homology.tex), a separate
+section prepared for later inclusion in the short manuscript. Neither
+manuscript driver currently includes it; see the
+[manuscript guide](../tex/README.md). The implementation uses `Fraction` coefficients;
 the representation theorems in the manuscript hold over every field.
 The code does not implement finite-field arithmetic or integer torsion.
 
