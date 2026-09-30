@@ -46,6 +46,7 @@ This document enumerates every git-tracked file under `experiments/` and provide
 - `experiments/plots/properties_vs_similarity.png` (Plot image): Generated plot artifact for Properties vs similarity. Covered by this catalog entry.
 - `experiments/plots/similarity_distribution.png` (Plot image): Generated plot artifact for Similarity distribution. Covered by this catalog entry.
 - `experiments/random_zero_one_mask_cocycle_test.py` (Python script): Python experiment script for Random zero one mask cocycle test. See [docs/random_zero_one_mask_cocycle_test.md](random_zero_one_mask_cocycle_test.md).
+- `experiments/rank_shifted_homology.py` (Python script): Exact sparse rank-shifted representations of Petersen graph homology and the reduced smash of two circles. See [docs/rank_shifted_homology.md](rank_shifted_homology.md).
 - `experiments/results/convex_boundary_study/signal1.csv` (CSV data artifact): Per-run lower-SNR convex boundary results.
 - `experiments/results/convex_boundary_study/signal1.json` (JSON data artifact): Protocol, diagnostics, summary, and lower-SNR convex results.
 - `experiments/results/convex_boundary_study/signal2.csv` (CSV data artifact): Per-run higher-SNR convex boundary results.

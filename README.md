@@ -17,7 +17,15 @@ The core package implements simplicial operators on NumPy arrays (and symbolic a
 - Horn construction and filler computation
 - Utilities for testing the n-hypergroupoid uniqueness criterion on shapes/tensors
 
-The TeX sources in `tex` develop the mathematical framework around diagonal simplicial tensor modules and strict algebraic `n`-hypergroupoids.
+The current short manuscript is [Horn kernels and normalization of diagonal
+simplicial tensor modules](tex/dstm_short.pdf), with [LaTeX source](tex/dstm_short.tex).
+See [the manuscript guide](tex/README.md) for its build instructions and the
+separate rank-shifted section awaiting later inclusion.
+
+Sparse rank-shifted tensors also provide explicit representations of graph
+homology and reduced smash products. The [worked examples and API](docs/rank_shifted_homology.md)
+include the Petersen graph and the smash of two circles, with exact rational
+verification and a separate manuscript section awaiting inclusion.
 
 ## Mathematical Scope
 
@@ -104,6 +112,14 @@ SageMath-friendly symbolic variant:
 Axis-specific cyclic/face/degeneracy helpers:
 
 - `face_axis`, `degen_axis`, `cyclic`, `cyclic_signed`
+
+### `simplicial_tensors.rank_shifted`
+
+Sparse tensors over the rationals with explicit simplicial degree and fixed
+axis shifts. The module provides face and degeneracy maps, Moore normalization,
+axis-concatenating tensor products, and graph embeddings. It stores nonzero
+entries and retains exactly `p+1` faces in positive degree `p`, irrespective
+of the shifts. See [rank-shifted homology](docs/rank_shifted_homology.md).
 
 ## Installation
 

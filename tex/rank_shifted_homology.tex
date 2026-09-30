@@ -1,0 +1,387 @@
+\section{Rank shifts and homology of submodules}
+\label{sec:rank-shifted-homology}
+
+Let $K$ be an arbitrary field. A rank shift enlarges the tensor axes while retaining
+the simplicial degree and its face and degeneracy indices. The resulting
+modules contain explicit representations of graph chain complexes. Their
+tensor products also give representations of reduced smash products.
+Homology of a simplicial module always means the homology of its
+normalized chain complex.
+
+\subsection{Fixed tails and normalized chains}
+
+Fix $k\geq 1$ and a tuple $\mathbf c=(c_1,\ldots,c_k)$ of nonnegative
+integers. For $p\geq 0$, put
+\[
+ I_p(\mathbf c)=\prod_{a=1}^k[p+c_a],
+ \qquad X_p(\mathbf c)=K^{I_p(\mathbf c)}.
+\]
+The coordinates $0,\ldots,p$ on each axis form its simplicial part; the
+remaining $c_a$ coordinates form a fixed tail. For an order-preserving map
+$\alpha:[q]\to[p]$, define
+\[
+ \alpha^{+c_a}:[q+c_a]\longrightarrow[p+c_a],\qquad
+ \alpha^{+c_a}(j)=
+ \begin{cases}
+   \alpha(j),&0\leq j\leq q,\\
+   p+t,&j=q+t,\quad 1\leq t\leq c_a.
+ \end{cases}
+\]
+This is the ordinal sum of $\alpha$ with the identity on a $c_a$-element
+ordered set. Define
+\begin{equation}\label{eq:shifted-pullback}
+ (\alpha^*T)(j_1,\ldots,j_k)
+ =T\bigl(\alpha^{+c_1}(j_1),\ldots,
+          \alpha^{+c_k}(j_k)\bigr).
+\end{equation}
+Since $(\alpha\beta)^{+c_a}=\alpha^{+c_a}\beta^{+c_a}$,
+these maps make $X(\mathbf c)$ a simplicial $K$-module. For $p\geq1$ its
+degree-$p$ faces are $d_0,\ldots,d_p$, and for $p\geq0$ its degree-$p$ degeneracies are
+$s_0,\ldots,s_p$. Thus $d_i$ deletes coordinate $i$ on every axis and
+$s_i$ duplicates coordinate $i$ on every axis. The tail lengths do not
+increase the number of face or degeneracy operators.
+
+Replacing $\mathbf c$ by
+$\mathbf c+r\mathbf 1$, where $r\geq0$ and
+$\mathbf1=(1,\ldots,1)$, is a common rank shift. We write
+\[
+ X^{(k,r)}=X(r,\ldots,r),\qquad
+ X^{(k,r)}_p=K^{[p+r]^k}
+\]
+for the equal-tail case. These definitions also include unequal axis
+lengths without a common shift. The DSTM of the preceding sections is
+the case $\min_a c_a=0$. Allowing all tail lengths to be positive
+extends that construction by enlarging its degree-zero module.
+
+For $m=(m_1,\ldots,m_k)\in I_p(\mathbf c)$, let $E_m$ denote the tensor
+unit at $m$, and put $\operatorname{val}(m)=\{m_1,\ldots,m_k\}$.
+We use the Moore normalization
+\[
+N_pX=\bigcap_{i=1}^p\ker d_i,\qquad
+ \partial=d_0:N_pX\longrightarrow N_{p-1}X\quad(p\geq1).
+\]
+Here $N_0X=X_0$ and the complex is unaugmented.
+
+\begin{proposition}[Normalized basis and ambient homology]
+\label{prop:shifted-normalized-basis}
+For $p\geq1$, the following sets are bases of the indicated spaces:
+\begin{align*}
+ N_pX(\mathbf c):&\quad
+   \{E_m:\{1,\ldots,p\}\subseteq\operatorname{val}(m)\},\\
+ Z_p(NX(\mathbf c)):&\quad
+   \{E_m:\{0,\ldots,p\}\subseteq\operatorname{val}(m)\}.
+\end{align*}
+Moreover,
+\begin{equation}\label{eq:shifted-ambient-homology}
+ H_p(NX(\mathbf c))=0\quad(p>0),\qquad
+ H_0(NX(\mathbf c))
+ \cong K^{\prod_{a=1}^k\{1,\ldots,c_a\}}.
+\end{equation}
+In particular, $\dim_K H_0=\prod_{a=1}^k c_a$, with value zero if
+any $c_a=0$.
+\end{proposition}
+
+\begin{proof}
+The image $d_iE_m$ is zero precisely when some coordinate of $m$ equals
+$i$. On the tensor units whose coordinates all avoid $i$, the map $d_i$
+is a bijection onto the tensor-unit basis in degree $p-1$: each coordinate
+strictly greater than $i$ is decreased by one. Distinct such units
+therefore have distinct images. It follows that $\ker d_i$ is spanned by
+the units whose index tuples contain $i$. Intersecting these coordinate
+subspaces proves both basis statements.
+
+For $p\geq1$, let $W_p$ be the span of the normalized tensor units whose
+indices avoid zero. The basis descriptions give
+\[
+ N_pX=Z_p(NX)\oplus W_p.
+\]
+On $W_p$, the differential subtracts one from every coordinate. For
+$p\geq2$, this is a bijection from its basis onto the basis of
+$Z_{p-1}(NX)$. Consequently every positive-degree cycle is a boundary.
+For $p=1$, the image $d_0W_1$ is exactly the span of the degree-zero units
+whose index tuples contain zero. The complementary degree-zero units
+have $1\leq m_a\leq c_a$ for every $a$. Their residue classes give the
+asserted basis of $H_0$.
+\end{proof}
+
+The vanishing of positive ambient homology does not force the same
+vanishing in a simplicial submodule. A cycle in a submodule may have all
+of its ambient fillings outside that submodule. The support description
+nevertheless imposes a bound depending only on the number of axes.
+
+\begin{corollary}[Bounds for submodule homology]
+\label{cor:shifted-submodule-bound}
+If $Y\subseteq X(\mathbf c)$ is a simplicial submodule with $k$ tensor
+axes, then
+\[
+ H_p(NY)=0\qquad(p\geq k).
+\]
+For two axes, $\dim_K H_1(NY)\leq2$, independently of the tail lengths.
+\end{corollary}
+
+\begin{proof}
+For $p\geq1$,
+\[
+ Z_p(NY)=Y_p\cap\bigcap_{i=0}^p\ker d_i
+         \subseteq Z_p(NX).
+\]
+A tuple of $k$ coordinates cannot contain the $p+1$ distinct values
+$0,\ldots,p$ when $p\geq k$. In degree one with two axes, the only
+tuples containing both zero and one are $(0,1)$ and $(1,0)$.
+Thus the ambient cycle space has basis $E_{01},E_{10}$, and taking a
+subspace and then a quotient cannot increase its dimension.
+\end{proof}
+
+\subsection{An embedding of graph chains}
+
+Let $G$ be a finite graph with vertices $1,\ldots,v$, where $v\geq1$,
+and edges $1,\ldots,e$. Choose an orientation of each edge, and write
+$u_j\to w_j$ for edge $j$. Loops and parallel edges are allowed. Regard
+$G$ as the simplicial set with these vertices and nondegenerate edges,
+with no nondegenerate simplices in higher degrees. Its realization is
+the usual one-dimensional CW complex of the graph.
+
+For $r\geq\max\{v,e\}$, define tensors in $X^{(3,r)}$ by
+\begin{align}
+ a_t&=E_{0,t,t}\in X^{(3,r)}_0
+       &&(1\leq t\leq v),\label{eq:graph-vertices}\\
+ T_j&=E_{0,u_j+1,u_j+1}+E_{1,w_j+1,w_j+1}
+          +E_{0,1,j+1}\in X^{(3,r)}_1
+       &&(1\leq j\leq e).\label{eq:graph-edges}
+\end{align}
+Deleting index one or zero, respectively, gives
+\begin{equation}\label{eq:graph-endpoints}
+ d_1T_j=a_{u_j},\qquad d_0T_j=a_{w_j}.
+\end{equation}
+
+\begin{theorem}[Graph representation]
+\label{thm:graph-representation}
+The assignments in \eqref{eq:graph-vertices}--\eqref{eq:graph-edges}
+extend to an injective simplicial linear map
+\[
+ F:K[G]\longrightarrow X^{(3,r)}.
+\]
+Its image $Y_G$ is the simplicial submodule generated by all $a_t$ and
+$T_j$. Its normalized chain complex is isomorphic to
+\begin{equation}\label{eq:graph-chain-complex}
+ 0\longrightarrow K^e
+ \xrightarrow{\ \partial\ }K^v\longrightarrow0,
+ \qquad \partial(\mathbf e_j)=\mathbf e_{w_j}-\mathbf e_{u_j},
+\end{equation}
+where $\mathbf e_j$ and $\mathbf e_t$ denote the edge and vertex basis vectors.
+If $G$ has $b$ connected components, then
+\[
+ H_0(NY_G)\cong K^b,\qquad
+ H_1(NY_G)\cong K^{e-v+b},\qquad
+ H_p(NY_G)=0\quad(p\geq2).
+\]
+\end{theorem}
+
+\begin{proof}
+The endpoint identities \eqref{eq:graph-endpoints} define a simplicial
+map from $G$ to the underlying simplicial set of $X^{(3,r)}$; extend it
+linearly to obtain $F$. Its image is the stated generated submodule.
+
+The normalized degree-zero map sends the vertex basis to the distinct
+tensor units $a_t$, so it is injective. In degree one, a basis of
+$N_1K[G]$ is formed by
+$j-s_0u_j$. Its image is
+\begin{equation}\label{eq:graph-normalized-edges}
+ b_j=T_j-s_0a_{u_j}
+   =E_{1,w_j+1,w_j+1}-E_{1,u_j+1,u_j+1}+E_{0,1,j+1}.
+\end{equation}
+The coefficient at $(0,1,j+1)$ is one in $b_j$ and zero in every
+$b_{j'}$ with $j'\neq j$. These coordinates also have zero coefficient
+in the endpoint terms, since those terms have first coordinate one.
+Hence the $b_j$ are linearly independent, including for loops and
+parallel edges. The normalized map is therefore injective in degrees
+zero and one. It is injective in every higher degree because
+$N_pK[G]=0$ there.
+
+For every simplicial module $Y$, the natural degeneracy decomposition is
+\[
+ Y_p=\bigoplus_{q=0}^p\ \bigoplus_{\theta:[p]\twoheadrightarrow[q]}
+       \theta^*N_qY,
+\]
+where $\theta$ ranges over the order-preserving surjections
+\cite[\S8.4]{Weibel}. Applied to $F$, this decomposition shows that $F$
+is injective in every simplicial degree. Finally,
+\[
+ d_0b_j=a_{w_j}-a_{u_j},
+\]
+which identifies the normalized differential with the incidence map in
+\eqref{eq:graph-chain-complex}. On each connected component, the image
+of this map is the subspace of vertex coefficients having total sum
+zero: the edge differences span this subspace along a spanning tree.
+The incidence map consequently has rank $v-b$, over every field.
+The homology formulas follow.
+\end{proof}
+
+\begin{example}[The Petersen graph]\label{ex:petersen-homology}
+For the Petersen graph, $v=10$, $e=15$, and $b=1$. The construction with
+$r=15$ gives a simplicial submodule of $X^{(3,15)}$ with
+\[
+ H_0\cong K,\qquad H_1\cong K^6,
+ \qquad H_p=0\quad(p\geq2).
+\]
+Corollary~\ref{cor:shifted-submodule-bound} shows that no simplicial
+submodule of a two-axis DSTM can have this first homology, regardless of
+its rank shift.
+\end{example}
+
+\subsection{Tensor products and reduced smash products}
+
+For tuples $\mathbf c=(c_1,\ldots,c_k)$ and
+$\mathbf d=(d_1,\ldots,d_\ell)$, denote their concatenation by
+$(\mathbf c,\mathbf d)$. Tensor products of simplicial modules in this
+subsection are taken degreewise.
+
+\begin{proposition}[Concatenation of axes]
+\label{prop:shifted-tensor-product}
+There is a natural isomorphism of simplicial $K$-modules
+\begin{equation}\label{eq:axis-concatenation}
+ X(\mathbf c)\otimes_K X(\mathbf d)
+       \cong X(\mathbf c,\mathbf d),\qquad
+ E_m\otimes E_n\longmapsto E_{(m,n)}.
+\end{equation}
+If $A\subseteq X(\mathbf c)$ and $B\subseteq X(\mathbf d)$ are
+simplicial submodules, this isomorphism restricts to an embedding
+$A\otimes_KB\hookrightarrow X(\mathbf c,\mathbf d)$.
+\end{proposition}
+
+\begin{proof}
+In every degree, the tensor-unit bases give the displayed linear
+isomorphism. Equation~\eqref{eq:shifted-pullback} shows that it commutes
+with every simplicial map: the same order map acts on every axis.
+Tensoring inclusions of vector spaces over a field gives an inclusion,
+so the restriction is injective in every degree.
+\end{proof}
+
+Different tail lengths need not be equalized for
+\eqref{eq:axis-concatenation}. If an equal-tail ambient module is
+preferred, there are natural zero-padding inclusions
+\[
+ X(\mathbf c)\hookrightarrow X(\mathbf c')
+ \qquad(c_a\leq c'_a\text{ for all }a).
+\]
+In degree $p$, retain the coordinates $0,\ldots,p+c_a$ on axis $a$ and
+set every entry using one of its new tail coordinates to zero. The
+fixed-tail maps preserve old and new tails separately, so this padding
+commutes with faces and degeneracies. In particular,
+\[
+ X^{(k,r)}\otimes_KX^{(\ell,r)}\cong X^{(k+\ell,r)}.
+\]
+
+For a pointed simplicial set $S$, write
+$\widetilde K[S]=K[S]/K[*]$ for its reduced free simplicial module.
+The smash product is the degreewise quotient
+$S\wedge T=(S\times T)/(S\vee T)$.
+An embedding of $K[S]$ also supplies an embedding of
+$\widetilde K[S]$: the latter is naturally isomorphic to the kernel of
+the augmentation $\varepsilon:K[S]\to K$ by
+\[
+ [\sigma]\bmod K[*]\longmapsto[\sigma]-[*].
+\]
+Here $*$ denotes the basepoint simplex in the appropriate degree.
+In particular, choosing a vertex as basepoint in
+Theorem~\ref{thm:graph-representation} yields such a reduced embedding.
+
+\begin{proposition}[Reduced smash representation]
+\label{prop:shifted-smash}
+There is a natural isomorphism
+\begin{equation}\label{eq:reduced-smash-linearization}
+ \widetilde K[S\wedge T]
+   \cong\widetilde K[S]\otimes_K\widetilde K[T].
+\end{equation}
+Consequently, embeddings
+\[
+ \widetilde K[S]\hookrightarrow X(\mathbf c),\qquad
+ \widetilde K[T]\hookrightarrow X(\mathbf d)
+\]
+induce an embedding
+$\widetilde K[S\wedge T]\hookrightarrow X(\mathbf c,\mathbf d)$.
+The Eilenberg--Zilber maps give a natural chain homotopy equivalence
+\begin{equation}\label{eq:shifted-eilenberg-zilber}
+ N\widetilde K[S\wedge T]
+   \simeq
+ N\widetilde K[S]\otimes_K N\widetilde K[T],
+\end{equation}
+where the right side is the tensor product of chain complexes.
+\end{proposition}
+
+\begin{proof}
+In each degree, a basis of either side of
+\eqref{eq:reduced-smash-linearization} is indexed by pairs of
+nonbasepoint simplices. A pair containing a basepoint represents zero
+on both sides. This identification commutes with all simplicial maps,
+including those that send a nonbasepoint simplex to the basepoint.
+The embedding follows from Proposition~\ref{prop:shifted-tensor-product}.
+Applying the shuffle and Alexander--Whitney maps, transported between
+the normalized quotient and Moore normalization, gives
+\eqref{eq:shifted-eilenberg-zilber}; see
+\cite[\S8.5]{Weibel}.
+\end{proof}
+
+\begin{example}[The smash product of two circles]
+\label{ex:shifted-circle-smash}
+In the unshifted two-axis module $X^{(2,0)}$, let
+$a=E_{01}\in X^{(2,0)}_1$. Both faces of $a$ are zero. The simplicial
+submodule $A$ generated by $a$ is isomorphic to
+$\widetilde K[\Delta[1]/\partial\Delta[1]]$. Indeed, sending the
+nondegenerate edge to $a$ defines a map from this reduced free module;
+its normalized map is an isomorphism onto $Ka$ in degree one and has
+zero source in every other degree. The degeneracy decomposition proves
+injectivity, and the generated-submodule definition proves surjectivity.
+Thus
+\[
+ N_1A=Ka,\qquad N_pA=0\quad(p\neq1).
+\]
+Proposition~\ref{prop:shifted-smash} embeds $A\otimes_K A$ in
+$X^{(4,0)}$. A normalized two-cycle representing its homology generator
+is the shuffle
+\begin{equation}\label{eq:circle-smash-shuffle}
+ z=(s_1a)\otimes(s_0a)-(s_0a)\otimes(s_1a).
+\end{equation}
+The simplicial identities give $d_0z=d_1z=d_2z=0$. On this cycle, the
+$(1,1)$-component of the Alexander--Whitney map is computed by
+$d_2\otimes d_0$ and sends $z$ to $a\otimes a$.
+This is the nonzero generator of the tensor product complex
+$NA\otimes_KNA$, which is concentrated in degree two. The
+Eilenberg--Zilber equivalence therefore gives
+\[
+ H_2\bigl(N(A\otimes_K A)\bigr)\cong K,
+ \qquad H_p\bigl(N(A\otimes_K A)\bigr)=0\quad(p\neq2).
+\]
+These are the reduced homology groups of the simplicial smash product
+of two circles. The computation holds in characteristic two as well,
+where the minus sign in \eqref{eq:circle-smash-shuffle} becomes a plus
+sign.
+\end{example}
+
+\subsection{Sparse computations}
+
+The accompanying Python implementation stores rational coefficients at
+nonzero tensor coordinates, together with the simplicial degree and the
+fixed tail lengths. Faces, degeneracies, normalization, and concatenation
+of axes are computed directly on these coordinates. Exact rational
+elimination on the occurring coordinates gives the following dimensions
+and ranks, where $\partial_p=d_0:N_p\to N_{p-1}$:
+\begin{center}
+\begin{tabular}{lrrrrr}
+\hline
+Representation & $\dim N_0$ & $\dim N_1$ & $\dim N_2$
+ & $\rank\partial_1$ & $\rank\partial_2$\\
+\hline
+Petersen graph & 10 & 15 & 0 & 9 & 0\\
+Reduced circle smash & 0 & 1 & 2 & 0 & 1\\
+\hline
+\end{tabular}
+\end{center}
+Both computations therefore agree with the preceding homology
+calculations. At shift $r=15$, each degree-one graph tensor belongs to an
+ambient space with $17^3=4913$ coordinates but has only three nonzero
+entries. This sparsity does not give a general efficiency bound:
+duplicating one coordinate on each of $k$ axes can replace a single entry
+by $2^k$ entries. Source code and reproducible examples are available in
+\url{https://github.com/flengyel/SimplicialTensors}; the experiment is
+\texttt{experiments/rank\_shifted\_homology.py}.
