@@ -16,6 +16,7 @@ def test_package_importable() -> None:
         "adjoint_ops",
         "architecture_ops",
         "introspection_ops",
+        "rank_shifted",
         "tensor_ops",
         "symbolic_tensor_ops",
     }

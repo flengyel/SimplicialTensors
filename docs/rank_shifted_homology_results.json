@@ -1,0 +1,49 @@
+{
+  "circle_smash_circle": {
+    "boundary_ranks_degrees_0_to_3": [
+      0,
+      0,
+      1,
+      0
+    ],
+    "construction": "reduced circle module tensor reduced circle module",
+    "higher_homology": "zero: every degree at least three is degenerate",
+    "normalized_dimensions_degrees_0_to_3": [
+      0,
+      1,
+      2,
+      0
+    ],
+    "reduced_betti_numbers_degrees_0_to_2": [
+      0,
+      0,
+      1
+    ],
+    "shift": 0,
+    "shuffle_cycle_all_faces_zero": true,
+    "shuffle_cycle_nonzero_entries": 6,
+    "tensor_order": 4
+  },
+  "coefficient_field": "Q",
+  "linear_algebra": "exact rational rank on occurring coordinates",
+  "petersen": {
+    "ambient_degree_one_coordinates": 4913,
+    "betti_numbers": [
+      1,
+      6
+    ],
+    "boundary_rank_1": 9,
+    "degree_one_axis_length": 17,
+    "edges": 15,
+    "higher_homology": "zero: all higher graph simplices are degenerate",
+    "normalized_dimensions": [
+      10,
+      15,
+      0
+    ],
+    "shift": 15,
+    "stored_edge_entries_total": 45,
+    "tensor_order": 3,
+    "vertices": 10
+  }
+}

@@ -19,6 +19,11 @@ The core package implements simplicial operators on NumPy arrays (and symbolic a
 
 The TeX sources in `tex` develop the mathematical framework around diagonal simplicial tensor modules and strict algebraic `n`-hypergroupoids.
 
+Sparse rank-shifted tensors also provide explicit representations of graph
+homology and reduced smash products. The [worked examples and API](docs/rank_shifted_homology.md)
+include the Petersen graph and the smash of two circles, with exact rational
+verification and a corresponding manuscript section.
+
 ## Mathematical Scope
 
 The implementation is aligned with standard simplicial identities and supports computational checks of statements used throughout the project, including:
@@ -104,6 +109,14 @@ SageMath-friendly symbolic variant:
 Axis-specific cyclic/face/degeneracy helpers:
 
 - `face_axis`, `degen_axis`, `cyclic`, `cyclic_signed`
+
+### `simplicial_tensors.rank_shifted`
+
+Sparse tensors over the rationals with explicit simplicial degree and fixed
+axis shifts. The module provides face and degeneracy maps, Moore normalization,
+axis-concatenating tensor products, and graph embeddings. It stores nonzero
+entries and retains exactly `p+1` faces in positive degree `p`, irrespective
+of the shifts. See [rank-shifted homology](docs/rank_shifted_homology.md).
 
 ## Installation
 

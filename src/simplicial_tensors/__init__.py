@@ -7,11 +7,13 @@ __all__ = [
     "adjoint_ops",
     "architecture_ops",
     "introspection_ops",
+    "rank_shifted",
     "tensor_ops",
     "symbolic_tensor_ops",
 ]
 
 if TYPE_CHECKING:  # pragma: no cover - only for type checkers
+    from . import rank_shifted as rank_shifted
     from . import tensor_ops as tensor_ops
     from . import symbolic_tensor_ops as symbolic_tensor_ops
 
