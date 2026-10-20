@@ -101,6 +101,26 @@ def test_face() -> None:
                               [56, 57, 58, 59, 60, 62]])
     assert np.allclose(face(Z,5), expected_face)
 
+@pytest.mark.parametrize(
+    "values, index, expected",
+    [
+        ([10, 20, 30], 0, [20, 30]),
+        ([10, 20, 30], 1, [10, 30]),
+        ([10, 20, 30], 2, [10, 20]),
+        ([10], 0, []),
+    ],
+)
+def test_face_one_dimensional(
+    values: list[int], index: int, expected: list[int]
+) -> None:
+    vector = np.array(values, dtype=np.int16)
+
+    result = face(vector, index)
+
+    assert_array_equal(result, np.array(expected, dtype=vector.dtype))
+    assert result.dtype == vector.dtype
+
+
 def test_hface() -> None:
     expected_hface = np.array([[ 0,  1,  2,  3,  4,  5,  6],
                                 [ 7,  8,  9, 10, 11, 12, 13],

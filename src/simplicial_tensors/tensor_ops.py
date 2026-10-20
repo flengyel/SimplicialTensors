@@ -97,13 +97,13 @@ def _dims(m: np.ndarray) -> Tuple[np.ndarray, ...]:
 
 # Généralisation de l'opération face aux tenseurs
 def _face(m: np.ndarray, axes: Tuple[np.ndarray, ...], i: int) -> np.ndarray:
-    rows, cols = axes[0], axes[1]
     indices: List[np.ndarray] = [np.delete(axis, i) if len(axis) > i else axis for axis in axes]
     grid = np.ix_(*indices)
     return m[grid]
 
 # i-ème face d'une matrice
 def face(m: np.ndarray, i: int) -> np.ndarray:
+    """Delete index i along every axis of a vector, matrix, or higher-order tensor."""
     num_faces = min(m.shape) if m.ndim > 0 else 0
     if not (0 <= i < num_faces):
         raise IndexError(f"Face index {i} out of bounds for tensor shape {m.shape}.")
