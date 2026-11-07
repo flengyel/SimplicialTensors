@@ -1,0 +1,117 @@
+\section{Horns on rooted trees}\label{sec:tree-horns}
+Let $\Omega$ be the dendroidal category. Its objects are rooted trees
+and its morphisms are morphisms of the free symmetric coloured operads
+on those trees \cite[\S3]{MoerdijkWeissDendroidal}. For a tree $T$ with
+edge set $E(T)$, put $I(T)=\prod_{a=1}^k(E(T)\sqcup C_a)$, where each
+$C_a$ is a fixed finite set. Pullback along colour maps, extended by
+the identity on the $C_a$, defines $D:\Omega^{\mathrm{op}}\to
+\mathbf{Mod}_A$, with $D(T)=A^{I(T)}$. On linear trees the colour maps
+are the ordinal maps, so this restricts to $X(\mathbf c;A)$ for
+$c_a=|C_a|$.
+
+An elementary inner face contracts an inner edge. For a tree with
+at least two vertices, an elementary outer face prunes an endpoint
+of the tree of vertices, retaining its one incident inner edge.
+The faces of a one-vertex tree are its individual edges. For a face
+$F:S\to T$, the horn omitting $F$ is the union of the representables
+of the other elementary faces of $T$. Its data are tensors on those
+faces agreeing on common subfaces. This description follows by
+factoring dendroidal morphisms into degeneracies, isomorphisms and
+faces \cite[Lemma~2.3]{BasicNikolaus}.
+Write $K_F(T)$ for the tensors that vanish on the included faces and
+$K(T)$ for those that vanish on all elementary faces. Identify face
+index sets with their images in $I(T)$.
+
+\begin{proposition}\label{prop:tree-lifts}
+Let $F:S\to T$ be an elementary face. The pullback
+$F^*:K_F(T)\to K(S)$ has kernel $K(T)$ and image
+\[
+ A^{\,I(S)\setminus\bigcup_{G\ne F} I(S_G)}
+ \ \subseteq\ K(S),\qquad G:S_G\to T.
+\]
+The inclusion is by extension by zero in $I(S)$. The map onto this
+image splits by extension by zero in $I(T)$.
+\end{proposition}
+\begin{proof}
+Each elementary face of $S$, composed with $F$, factors through
+another elementary face of $T$ by the codimension-two face identity
+\cite[Lemma~2.1]{BasicNikolaus}. Thus the restriction of $K_F(T)$
+lies in $K(S)$. Membership in $K_F(T)$ means vanishing on the union
+of the included index sets. Restriction to $I(S)$ and extension by zero
+give the stated image and section. The kernel vanishes on $F$
+as well as on the included faces.
+\end{proof}
+
+Take the two-vertex tree with vertices $u:a\to e$ and
+$v:(e,b)\to r$, and omit the contraction of $e$. Its two included faces have colour
+sets $\{a,e\}$ and $\{e,b,r\}$, meeting in the single-edge tree on $e$.
+Every such inner horn fills by gluing the two arrays on their common
+index set. With two axes and empty tails, $S$ is the corolla
+$(a,b)\to r$ and $K(S)$ is spanned by its six off-diagonal units.
+The omitted-face map reaches the four ordered pairs joining $a$
+to $b$ or $r$. The units at $(b,r)$ and $(r,b)$ are visible on the
+face with colours $\{e,b,r\}$ and have no lifts in $K_F(T)$.
+
+\begin{theorem}\label{thm:tree-cutoff}
+For $k$ axes and arbitrary fixed tails, all horns on trees with at
+least $k+2$ vertices fill uniquely. For each $k\geq2$, there is an
+inner horn on a tree with $k+1$ vertices whose restriction has
+cokernel free of rank $k!$. For $k=1$, every inner horn fills uniquely.
+\end{theorem}
+\begin{proof}
+For an ambient index tuple, join two included faces that contain it
+when a common subface contains it. Compatible data assign one value
+to each connected component of this graph, whereas a filler assigns
+one value to all copies of the tuple. Hence a horn fills for all
+compatible data if every nonempty graph is connected.
+
+Let $T$ have $n\geq3$ vertices and $o$ outer faces. The outer vertices
+are the endpoints of the tree of vertices, so $o\geq2$. The included
+contractions form a clique among the faces containing a tuple, as
+do the included prunings. A contraction and a pruning also give
+adjacent copies when the contracted edge is away from the pruned
+vertex. In each case the two moves commute, and the common face
+retains their common colours. If a tuple has a disconnected graph,
+exactly two included faces retain it. They are the pruning of an
+outer vertex $v$ and the contraction of its incident inner edge $e$.
+Indeed, an outer vertex has only one incident inner edge, and for
+$n\geq3$ an inner edge has at most one outer endpoint.
+
+The remaining included faces delete pairwise disjoint sets of
+edges. The tuple must contain at least one edge from each such set,
+so it contains at least $n+o-4$ distinct edges. If $o=2$, the tree
+of vertices is a path. Pruning $v$ and then its neighbour, or
+contracting $e$ and then pruning the merged vertex, gives the same
+common face. It contains the edges deleted by every other included
+contraction and, if the other pruning is included, all the edges
+deleted by that pruning. A disconnected tuple must contain an
+additional edge outside this common face. In either case it contains
+at least $n-1$ distinct edges. Thus $n\geq k+2$ gives existence.
+For uniqueness, a coordinate of $K_F(T)$ must hit the deletion
+sets of all $n+o-2$ included faces, so $K_F(T)=0$ if $n>k$.
+
+For sharpness, take $k+1$ vertices on a path, all unary except the
+second vertex from the top, which has an extra leaf $b$. Let $e$
+be the inner edge incident to the top vertex, and omit contraction
+of another inner edge $h$. Use a tuple consisting of the root
+edge, $b$, and every inner edge except $e$ and $h$. Only contraction
+of $e$ and pruning of the top vertex retain this tuple. On
+contracting $e$ an operation using the merged vertex has the
+top leaf as an input, and that leaf is absent from the pruned tree.
+On pruning the top vertex an operation using the second vertex
+has $e$ as an input, and $e$ is absent from the contracted tree.
+The colour $b$ is therefore isolated from the root in their common
+subfaces. The two copies of the tuple may take distinct values,
+which prevents a filler. For this tree the obstructing tuples are
+exactly the permutations of the one just described. At the top
+endpoint the forced inner edges and the root require one further
+colour, which must be $b$. At the root endpoint, if its incident
+contraction is included, the common face contains every shared
+colour, since the neighbour of the root vertex is unary. The
+cokernel of the horn restriction is therefore free of rank $k!$.
+
+For one axis the bound covers all trees with at least three
+vertices. On a two-vertex tree the two faces in the inner horn
+meet in their connecting edge, so the horn fills by gluing.
+Their deletion sets give uniqueness.
+\end{proof}
