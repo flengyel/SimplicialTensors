@@ -19,6 +19,20 @@ The core package implements simplicial operators on NumPy arrays (and symbolic a
 
 The TeX sources in `tex` develop the mathematical framework around diagonal simplicial tensor modules and strict algebraic `n`-hypergroupoids.
 
+## Worked DSTM Examples
+
+After installing the package with `python -m pip install -e .`, run:
+
+```bash
+python experiments/dstm_examples.py
+```
+
+The script uses the library operators to compute faces and boundaries of a
+vector, fill a matrix horn with two free entries, and exhibit a matrix-generated
+submodule with one-dimensional first homology. Its rank calculations are exact
+over the rationals. See [the worked examples](docs/dstm_examples.md) for the
+calculations and expected output.
+
 ## Mathematical Scope
 
 The implementation is aligned with standard simplicial identities and supports computational checks of statements used throughout the project, including:
@@ -27,6 +41,13 @@ The implementation is aligned with standard simplicial identities and supports c
 - `s_i s_j = s_{j+1} s_i` for `i <= j`
 - Mixed `d_i s_j` relations
 - `d^2 = 0` (boundary squared is zero)
+
+One-axis tensors are supported: `face(np.array([3, 5]), 0)` is `[5]`, and
+`bdry(np.array([3, 5]))` is `[2]`. Positive-degree faces reduce each axis length
+by one. At degree zero, when the shortest axis has length one, `face(T, 0)`
+and `bdry(T)` return empty arrays of shape `tuple(s - 1 for s in T.shape)`.
+This is the code's representation of the zero target below degree zero;
+empty arrays are not inputs to further boundary operations.
 
 For this codebase, the shape-dependent heuristic/conjecture function is:
 

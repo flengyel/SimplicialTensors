@@ -101,6 +101,68 @@ def test_face() -> None:
                               [56, 57, 58, 59, 60, 62]])
     assert np.allclose(face(Z,5), expected_face)
 
+
+@pytest.mark.parametrize(
+    ("index", "expected"),
+    [(0, [5, 11]), (1, [3, 11]), (2, [3, 5])],
+)
+def test_vector_face(index: int, expected: list[int]) -> None:
+    vector = np.array([3, 5, 11], dtype=np.int16)
+    result = face(vector, index)
+    assert_array_equal(result, expected)
+    assert result.dtype == vector.dtype
+
+
+@pytest.mark.parametrize(
+    ("entries", "index", "expected"),
+    [([3], 0, [3, 3]), ([3, 5], 0, [3, 3, 5]), ([3, 5], 1, [3, 5, 5])],
+)
+def test_vector_degeneracy_and_retraction(
+    entries: list[int], index: int, expected: list[int]
+) -> None:
+    vector = np.array(entries, dtype=np.int16)
+    result = degen(vector, index)
+    assert_array_equal(result, expected)
+    assert result.dtype == vector.dtype
+    assert_array_equal(face(result, index), vector)
+    assert_array_equal(face(result, index + 1), vector)
+
+
+@pytest.mark.parametrize(
+    ("entries", "expected"),
+    [([3, 5], [2]), ([3, 5, 11], [5, 5]), ([3, 5, 11, 17], [2, 0, 6])],
+)
+def test_vector_boundary(entries: list[int], expected: list[int]) -> None:
+    vector = np.array(entries, dtype=np.int16)
+    result = bdry(vector)
+    assert_array_equal(result, expected)
+    assert result.dtype == vector.dtype
+
+
+@pytest.mark.parametrize("length", [2, 3, 4, 5, 6])
+def test_vector_boundary_squared(length: int) -> None:
+    vector = np.array([3, -5, 11, 17, -23, 31][:length], dtype=np.int16)
+    assert_array_equal(bdry(bdry(vector)), np.zeros(length - 2, dtype=vector.dtype))
+
+
+@pytest.mark.parametrize("shape", [(1,), (1, 3), (2, 1, 3)])
+def test_degree_zero_face_and_boundary_are_empty(shape: Tuple[int, ...]) -> None:
+    tensor = np.arange(np.prod(shape), dtype=np.int16).reshape(shape)
+    expected_shape = tuple(size - 1 for size in shape)
+    for result in (face(tensor, 0), bdry(tensor)):
+        assert result.shape == expected_shape
+        assert result.size == 0
+        assert result.dtype == tensor.dtype
+
+
+def test_empty_vector_has_no_further_face_or_boundary() -> None:
+    vector = np.array([], dtype=np.int16)
+    with pytest.raises(IndexError):
+        face(vector, 0)
+    with pytest.raises(ValueError):
+        bdry(vector)
+
+
 def test_hface() -> None:
     expected_hface = np.array([[ 0,  1,  2,  3,  4,  5,  6],
                                 [ 7,  8,  9, 10, 11, 12, 13],
