@@ -188,6 +188,9 @@ feedback, exact homology, and sparse graph APIs, along with experiment
 entry points and documentation coverage. Sage-specific and optional
 experiment tests are skipped when their dependencies are unavailable.
 
+For SageMath verification in SagePod, follow the
+[Codex handoff](docs/CODEX_SAGEPOD_HANDOFF_2026-11-12.md).
+
 GitHub Actions runs Ruff, selected Mypy checks, Bandit, and a pytest
 matrix for Python 3.10, 3.11, and 3.12. The exact commands are in
 [.github/workflows/ci.yml](.github/workflows/ci.yml).
