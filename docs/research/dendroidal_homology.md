@@ -56,6 +56,12 @@ B_2=\begin{pmatrix}1\\1\\-1\end{pmatrix}.
 $$
 The three terms in $B_2$ are the root pruning, top pruning, and inner contraction, with the signs of Definition 3.1 of Bašić–Nikolaus. Thus $B_1B_2=0$. The columns for $u$ and $v$ are independent and the column for $w$ is their sum. The boundary ranks are therefore two and one over every field, giving Betti numbers $(2,0,0)$. The relative boundary quotient is concentrated in degree two with dimension one.
 
+The boundary subpresheaf of the two-vertex tree retains the four colours
+and three one-vertex operations, with differential $B_1$ above. Its Betti
+numbers are $(2,1)$, and $u+v-w$ represents its first homology class.
+The connecting homomorphism sends the relative class of $T$ to this
+boundary class, so that relative class has no absolute cycle lift.
+
 ## Tree data needed for computation
 
 Tree shape determines the degree and the available faces. A binary corolla and $L_2$ both have three edges, but they have one and two vertices. Their arrays can both have shape $3\times3$, although their dendroidal degrees and face maps differ. The simultaneous-deletion boundary in the tensor library computes the simplicial restriction.

@@ -6,6 +6,7 @@ commands run from the repository root unless a page specifies another directory.
 
 ## API references
 
+- [Kernel sequences and exact chain maps](api/kernel_sequences.md)
 - [Exact chain complexes and tensor representatives](api/chain_complex.md)
 - [Embedded hypergraph homology](api/hypergraph_homology.md)
 - [Degeneracy membership and Moore projection](api/is_degen.md)
@@ -20,6 +21,7 @@ commands run from the repository root unless a page specifies another directory.
 and stored results. Each linked guide describes inputs, dependencies, commands,
 outputs, and interpretation. Useful starting points are the
 [homology examples](experiments/homology_basis.md),
+[kernel and lifting calculations](experiments/kernel_sequences.md),
 [embedded hypergraph calculations](experiments/hypergraph_homology.md),
 [finite dendroidal chains](experiments/dendroidal_representable_chains.md),
 [Petersen calculation](experiments/petersen_coset_enumeration.md), and

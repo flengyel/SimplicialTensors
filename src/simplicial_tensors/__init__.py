@@ -9,6 +9,8 @@ __all__ = [
     "graph_ops",
     "homology",
     "chain_complex",
+    "chain_maps",
+    "kernel_sequences",
     "hypergraph_homology",
     "tensor_chain_complex",
     "introspection_ops",

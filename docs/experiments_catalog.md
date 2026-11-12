@@ -18,7 +18,7 @@ its dependencies, output, and known execution or interpretation limits.
 - `experiments/cospectral_proof.py` — Exhaustive mod-two boundary ranks for an atlas pair and a zero-boundary test for Petersen labelings. See [cospectral_proof](experiments/cospectral_proof.md).
 - `experiments/count_standard_basis_tensors.py` — Enumeration of coordinate tensors accepted by the degeneracy test. See [count_standard_basis_tensors](experiments/count_standard_basis_tensors.md).
 - `experiments/degenerate_counterexample.py` — A matrix example separating selected filler recovery from filler uniqueness. See [degenerate_counterexample](experiments/degenerate_counterexample.md).
-- `experiments/dendroidal_representable_chains.py` — Signed chain matrices for two finite dendroidal representables and their relative boundary quotients. See [dendroidal_representable_chains](experiments/dendroidal_representable_chains.md).
+- `experiments/dendroidal_representable_chains.py` — Signed chain matrices for two finite dendroidal representables, their boundaries, and relative boundary quotients. See [dendroidal_representable_chains](experiments/dendroidal_representable_chains.md).
 - `experiments/discrepancy_test.py` — Sampled reconstruction comparisons with tabular and plot outputs. See [discrepancy_test](experiments/discrepancy_test.md).
 - `experiments/examples_range_tensors.py` — Fixed range-tensor horn, degeneracy, and filler comparisons. See [examples_range_tensors](experiments/examples_range_tensors.md).
 - `experiments/filler_combinatorics.py` — Symbolic comparison of uncovered horn coordinates and Moore filler corrections. See [filler_combinatorics](experiments/filler_combinatorics.md).
@@ -29,6 +29,7 @@ its dependencies, output, and known execution or interpretation limits.
 - `experiments/homotopy_constraint_verification_with_independence_test.py` — The horn-support diagnostic with separate face-image independence tests. See [homotopy_constraint_verification_with_independence_test](experiments/homotopy_constraint_verification_with_independence_test.md).
 - `experiments/horn_map_reduce.py` — Dask enumeration of coordinates absent from the included horn faces. See [horn_map_reduce](experiments/horn_map_reduce.md).
 - `experiments/hypergraph_homology.py` — Exact embedded and closure homology of fixed hypergraphs, with optional lifted representatives. See [hypergraph_homology](experiments/hypergraph_homology.md).
+- `experiments/kernel_sequences.py` — Universal kernel matrices, sparse kernel realization, quotient-isomorphism lifts, and capacity obstructions. See [kernel_sequences](experiments/kernel_sequences.md).
 - `experiments/loss_experiment.py` — Reconstruction-loss distributions over 10,000 random-matrix trials. See [loss_experiment](experiments/loss_experiment.md).
 - `experiments/matrix_boundary_homotopy_identity.py` — Signed and mod-two boundary checks under induced vertex permutations. See [matrix_boundary_homotopy_identity](experiments/matrix_boundary_homotopy_identity.md).
 - `experiments/n_cycle_conjugation.py` — Cyclic relabeling and signed or mod-two boundary comparisons. See [n_cycle_conjugation](experiments/n_cycle_conjugation.md).

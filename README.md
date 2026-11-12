@@ -101,6 +101,8 @@ See [the comparison experiment](docs/experiments/n_hypergroupoid_conjecture.md).
 | `introspection_ops` | Boundary analysis, target projection, synthesis, and controller or projector feedback. |
 | `architecture_ops` | Hidden-node balance diagnostics, ReLU equi-normalization, path products, and path-diamond energy. |
 | `chain_complex` | Based exact field complexes, cycles, boundaries, homology representatives, and ambient lifts. |
+| `chain_maps` | Exact chain maps, embeddings, isomorphisms, and automorphism lifts of specified quotient maps. |
+| `kernel_sequences` | Full universal realization matrices, normalized kernel sequences, quotient presentations, and sparse tensor realization from a kernel. |
 | `hypergraph_homology` | Embedded homology of finite hypergraphs through joint missing-face constraints. |
 | `tensor_chain_complex` | Normalized tensor complexes and relative horn quotients, with explicit sparse degree and shifts. |
 | `homology` | Exact normalized chain dimensions, boundary ranks, and homology dimensions of tensor-generated submodules and relative horn quotients over $\mathbb Q$ or a prime field. |
@@ -124,11 +126,17 @@ Supplying `seed` to
 `random_tensor` or `random_real_tensor` creates a generator for that
 call. Calls with `seed=None` advance the shared generator.
 
+The [kernel-sequence API](docs/api/kernel_sequences.md) retains the universal
+presentation and constructs tensors from admissible kernels. The
+[example program](docs/experiments/kernel_sequences.md) computes a parameter
+family with a homology jump, higher-degree sparse classes, and explicit
+quotient-isomorphism lifts.
+
 ## Manuscript and computations
 
 The current manuscript is *Computations with simplicial tensor modules*.
 Its driver is [tex/dstm_short.tex](tex/dstm_short.tex).
-The compiled [ten-page manuscript](tex/dstm_short.pdf) accompanies the source.
+The compiled [manuscript](tex/dstm_short.pdf) accompanies the source.
 The [manuscript instructions](tex/README.md) describe the build and
 arXiv source package.
 

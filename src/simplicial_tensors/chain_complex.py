@@ -6,21 +6,26 @@ degree, including the zero matrix from degree zero to the zero space.
 
 from __future__ import annotations
 
+import operator
 from dataclasses import dataclass
 from fractions import Fraction
+from numbers import Rational
 from typing import cast
 
 import numpy as np
 import sympy as sp
 from sympy.polys.matrices import DomainMatrix
 
-__all__ = ["ExactField", "ChainComplex"]
+__all__ = ["ChainComplex", "ExactField"]
 
 
 def _nonnegative_integer(value, name):
-    if isinstance(value, (bool, np.bool_)) or not isinstance(value, (int, np.integer, sp.Integer)):
+    if isinstance(value, (bool, np.bool_)):
         raise TypeError(f"{name} must be an integer.")
-    value = int(value)
+    try:
+        value = operator.index(value)
+    except TypeError as exc:
+        raise TypeError(f"{name} must be an integer.") from exc
     if value < 0:
         raise ValueError(f"{name} must be nonnegative.")
     return value
@@ -30,7 +35,8 @@ def _nonnegative_integer(value, name):
 class ExactField:
     """Exact arithmetic over Q, or F_p for a supplied prime modulus.
 
-    Matrix entries are Python/NumPy integers, Fraction, or SymPy rationals.
+    Matrix entries are Python/NumPy integers, Fraction, SymPy rationals,
+    or exact Rational objects providing as_integer_ratio (including Sage QQ).
     Finite-field matrices store canonical integer residues. Use the field's
     operations when multiplying or taking ranks of those stored matrices.
     """
@@ -54,9 +60,16 @@ class ExactField:
     def scalar(self, value):
         if isinstance(value, (bool, np.bool_)):
             value = int(value)
-        if not isinstance(value, (int, np.integer, Fraction, sp.Rational)):
+        if isinstance(value, (int, np.integer, Fraction, sp.Rational)):
+            rational = sp.Rational(value)
+        elif isinstance(value, Rational):
+            try:
+                numerator, denominator = value.as_integer_ratio()
+                rational = sp.Rational(operator.index(numerator), operator.index(denominator))
+            except (AttributeError, TypeError) as exc:
+                raise TypeError("Exact coefficients must be integers or rationals.") from exc
+        else:
             raise TypeError("Exact coefficients must be integers or rationals.")
-        rational = sp.Rational(value)
         if self.modulus is None:
             return rational
         try:

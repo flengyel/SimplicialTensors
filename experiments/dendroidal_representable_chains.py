@@ -18,13 +18,15 @@ from simplicial_tensors.chain_complex import ChainComplex, ExactField
 EXPECTED = {
     "binary_corolla": ((3, 1), (0, 1), (2, 0)),
     "unary_binary_tree": ((4, 3, 1), (0, 2, 1), (2, 0, 0)),
+    "boundary_binary_corolla": ((3,), (0,), (3,)),
+    "boundary_unary_binary_tree": ((4, 3), (0, 2), (2, 1)),
     "relative_binary_corolla": ((0, 1), (0, 0), (0, 1)),
     "relative_unary_binary_tree": ((0, 0, 1), (0, 0, 0), (0, 0, 1)),
 }
 
 
 def representable_models(*, modulus: int | None = None) -> dict[str, ChainComplex]:
-    """Return the four based chain complexes over Q or a prime field."""
+    """Return representables, their boundaries, and relative quotients."""
     field = ExactField(modulus)
     corolla_bases = (("r", "a", "b"), ("C2",))
     tree_bases = (("a", "e", "b", "r"), ("u", "v", "w"), ("T",))
@@ -44,6 +46,14 @@ def representable_models(*, modulus: int | None = None) -> dict[str, ChainComple
         modulus=field.modulus,
         ambient_bases=tree_bases,
     )
+    boundary_corolla = ChainComplex(
+        corolla.dimensions[:-1], corolla.differentials[:-1],
+        modulus=field.modulus, ambient_bases=corolla_bases[:-1],
+    )
+    boundary_tree = ChainComplex(
+        tree.dimensions[:-1], tree.differentials[:-1],
+        modulus=field.modulus, ambient_bases=tree_bases[:-1],
+    )
     relative_corolla = ChainComplex(
         (0, 1),
         (sp.zeros(0, 0), sp.zeros(0, 1)),
@@ -61,6 +71,8 @@ def representable_models(*, modulus: int | None = None) -> dict[str, ChainComple
     return {
         "binary_corolla": corolla,
         "unary_binary_tree": tree,
+        "boundary_binary_corolla": boundary_corolla,
+        "boundary_unary_binary_tree": boundary_tree,
         "relative_binary_corolla": relative_corolla,
         "relative_unary_binary_tree": relative_tree,
     }

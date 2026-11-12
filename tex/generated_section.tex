@@ -1,6 +1,7 @@
 \section{Generated submodules}
 \label{sec:generated}
-Let $K$ be a field and $X=X(\vec s;K)$.
+Let $K$ be a field, fix $n\geq0$ and nonnegative tail lengths
+$\mathbf c=(c_1,\ldots,c_k)$, and put $X=X(\mathbf c;K)$.
 Let $P=K[\Delta^n]$ be the free simplicial $K$-module on the standard
 $n$-simplex, so $P_p$ has basis the nondecreasing maps $[p]\to[n]$.
 For $T\in X_n$, its representing property gives
@@ -38,6 +39,242 @@ $0\to L(T)\to C\to C/L(T)\to0$ gives
 \end{equation}
 where $\epsilon$ is induced by the augmentation sending every vertex of
 $\Delta^n$ to $1$.
+
+\subsection{Quotients and automorphisms}
+
+We work in the category $\operatorname{Ch}_{\geq0}(K)$ of nonnegative
+chain complexes of $K$-vector spaces and chain maps. A complex is finite
+if the direct sum of its chain groups is finite-dimensional. For a complex $E$,
+write
+\[
+ Z_p^{\mathrm{ord}}(E)=\ker(\partial_p:E_p\to E_{p-1}),\qquad
+ B_p(E)=\im(\partial_{p+1}:E_{p+1}\to E_p),
+ \qquad E_{-1}=0.
+\]
+Thus $Z_0^{\mathrm{ord}}(E)=E_0$. For a $K$-vector space $V$ and
+$p\geq0$, let $S^p(V)$ be the complex with $V$ in degree $p$ and zero elsewhere. Choosing complements of boundaries
+inside cycles, and of cycles inside each chain group, gives
+\begin{equation}\label{eq:finite-chain-splitting}
+ E\cong\bigoplus_{p\geq0}S^p(H_p(E))
+       \oplus\bigoplus_{p\geq1}D^p(B_{p-1}(E))
+\end{equation}
+for every finite complex $E$. Indeed, the differential maps the chosen
+complement of $Z_p^{\mathrm{ord}}(E)$ isomorphically onto $B_{p-1}(E)$.
+These choices also show that homology dimensions and differential ranks
+determine the chain isomorphism class and admit cancellation under direct sums.
+
+For the normalized simplex complex, the dimensions of its chain groups
+and its homology give
+\begin{equation}\label{eq:simplex-projective}
+ C\cong S^0(K)\oplus\bigoplus_{p=1}^n
+                   D^p\bigl(K^{\binom np}\bigr).
+\end{equation}
+Both $S^0(V)$ and $D^p(V)$, for $p\geq1$, are projective objects:
+a chain map from either is determined by an arbitrary linear map from
+$V$ into the target's degree-zero or degree-$p$ group, respectively.
+Evaluation in either degree and $\operatorname{Hom}_K(V,-)$ are exact.
+Consequently $C$ is projective.
+
+\begin{proposition}\label{prop:quotient-lift}
+Fix a field $K$ and $n\geq0$, and let $C=N(K[\Delta^n])$.
+For subcomplexes $L,M\subseteq C$, every specified chain isomorphism
+$\varphi:C/L\to C/M$ lifts to a chain automorphism $u:C\to C$
+making the following square commute:
+\[
+\begin{tikzcd}
+ C \arrow[r,"u"] \arrow[d,"\pi_L"'] & C \arrow[d,"\pi_M"]\\
+ C/L \arrow[r,"\varphi"'] & C/M .
+\end{tikzcd}
+\]
+Here $\pi_L$ and $\pi_M$ are the quotient maps. In particular,
+$C/L\cong C/M$ if and only if $u(L)=M$ for some
+$u\in\operatorname{Aut}_{\operatorname{Ch}_{\geq0}(K)}(C)$.
+The orbits of this automorphism group on subcomplexes of $C$ classify
+the chain isomorphism classes of quotients of $C$.
+\end{proposition}
+\begin{proof}
+Projectivity supplies chain maps $f,g:C\to C$ with
+$\pi_Mf=\varphi\pi_L$ and $\pi_Lg=\varphi^{-1}\pi_M$.
+Put $h=gf$, so $\pi_Lh=\pi_L$. Choose $m$ large enough that the
+images and kernels of $h^m$ stabilize in every degree. The Fitting
+decomposition is a direct sum of subcomplexes
+\[
+ C=U\oplus V,\qquad U=\im h^m,\quad V=\ker h^m,
+\]
+with $h_U=h|_U$ invertible. Since $\pi_Lh^m=\pi_L$, we have $V\subseteq L$.
+Let $e:C\to U$ be the projection and define
+$r=h_U^{-1}eg:C\to U$. Then $rf|_U=1_U$, so
+\[
+ C=f(U)\oplus V',\qquad V'=\ker r,\qquad f|_U:U\xrightarrow{\sim}f(U).
+\]
+Write $\lambda=\pi_L|_U:U\to C/L$. Since $V\subseteq L$ and
+$\pi_Lh=\pi_L$, we have $\lambda e=\pi_L$ and
+$\lambda h_U^{-1}=\lambda$. Hence $\lambda r=\pi_Lg$ and
+$\pi_M=\varphi\pi_Lg=\varphi\lambda r$, so $V'\subseteq M$.
+
+Cancellation in \eqref{eq:finite-chain-splitting} gives a chain
+isomorphism $a:V\to V'$. Define $u$ by $u|_U=f|_U$ and $u|_V=a$.
+The two direct sums show that $u$ is invertible. Its quotient map
+agrees with $\varphi\pi_L$ on $U$ and vanishes on $V$, proving the
+specified lifting identity. Taking kernels gives $u(L)=M$.
+Conversely, such an automorphism induces an isomorphism of quotients.
+\end{proof}
+
+For $a\in\operatorname{Aut}_{\operatorname{Ch}_{\geq0}(K)}(C)$,
+let $\widetilde a:P\to P$ be its simplicial automorphism under Dold--Kan.
+The tensor
+\[
+ T'=f_{T,n}\bigl(\widetilde a_n(\operatorname{id}_{[n]})\bigr)\in X_n
+\]
+satisfies $f_{T'}=f_T\widetilde a$ by the representing property of $P$.
+Hence $L(T')=a^{-1}L(T)$ and
+$\langle T'\rangle=\langle T\rangle$. Thus the set
+$\{L(T):T\in X_n\}$ is invariant under the automorphism group.
+Equation~\eqref{eq:generated-normalization}, Dold--Kan and
+Proposition~\ref{prop:quotient-lift} identify its orbits with the abstract
+simplicial isomorphism classes of the generated modules.
+There are only finitely many such orbits: the chain dimensions and
+differential ranks of $C/L$ are bounded integers.
+
+\subsection{Realizable kernels}
+
+Put $\mathcal D=N(X(\mathbf c;K))$. A subcomplex $L\subseteq C$ is
+\emph{realizable in $X$} if $L=L(T)$ for some $T\in X_n$.
+
+\begin{proposition}\label{prop:kernel-realizability}
+Let $K$ be a field, $n\geq0$, $C=N(K[\Delta^n])$, and
+$X=X(\mathbf c;K)$ for arbitrary nonnegative tail lengths $\mathbf c$.
+For a subcomplex $L\subseteq C$ and $Q=C/L$, the following are equivalent:
+\begin{enumerate}
+\item $L$ is realizable in $X$.
+\item There is a chain monomorphism $Q\hookrightarrow\mathcal D=N(X)$.
+\item For every $p\geq0$,
+\begin{equation}\label{eq:realizability-inequalities}
+ \dim_K Z_p^{\mathrm{ord}}(Q)\leq
+          \dim_K Z_p^{\mathrm{ord}}(\mathcal D),\qquad
+ \dim_K B_p(Q)\leq\dim_K B_p(\mathcal D).
+\end{equation}
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+A realizing map $g_T:C\to\mathcal D$ induces the required monomorphism
+$C/L(T)\to\mathcal D$. Any chain monomorphism restricts to injections
+on ordinary cycles and on boundaries, proving the inequalities.
+
+Conversely, assume \eqref{eq:realizability-inequalities}. Basis extension
+gives, in each degree, an injection
+\[
+ j_p:Z_p^{\mathrm{ord}}(Q)\longrightarrow
+                 Z_p^{\mathrm{ord}}(\mathcal D),
+ \qquad j_p(B_p(Q))\subseteq B_p(\mathcal D).
+\]
+Choose $Q_p=Z_p^{\mathrm{ord}}(Q)\oplus W_p$. For $p>0$,
+$\partial_Q:W_p\to B_{p-1}(Q)$ is an isomorphism. Lift
+$j_{p-1}\partial_Q|_{W_p}$ through
+$\partial_{\mathcal D}:\mathcal D_p\to B_{p-1}(\mathcal D)$ to a
+linear map $\ell_p:W_p\to\mathcal D_p$. Such a lift exists because
+its image lies in the indicated boundary space. Set
+$i_p(z+w)=j_p(z)+\ell_p(w)$; in degree zero use $i_0=j_0$, since $W_0=0$.
+These maps form a chain map. For $p>0$, if $i_p(z+w)=0$, applying
+the differential gives $j_{p-1}\partial_Qw=0$, hence $w=0$ and then $z=0$.
+The degree-zero map is injective by construction. Thus
+$i:Q\to\mathcal D$ is a monomorphism.
+
+The composite $C\to Q\xrightarrow{i}\mathcal D$ corresponds under
+Dold--Kan to a simplicial map $P=K[\Delta^n]\to X$. The representing
+property of $P$ identifies it with $f_T$ for the image $T$ of the
+identity $n$-simplex. Its normalized kernel is $L$, so $L=L(T)$.
+\end{proof}
+
+Proposition~\ref{prop:disks} identifies $B_p(\mathcal D)$ with the
+coordinate module $Z_p$ of Section~\ref{sec:normalized} for every $p\geq0$.
+For $p>0$, $Z_p^{\mathrm{ord}}(\mathcal D)=Z_p$, whereas
+\[
+ Z_0^{\mathrm{ord}}(\mathcal D)=B\oplus Z_0,\qquad
+ \dim_K Z_0^{\mathrm{ord}}(\mathcal D)=\prod_a(c_a+1),\qquad
+ \dim_K B_0(\mathcal D)=\prod_a(c_a+1)-\prod_a c_a.
+\]
+In particular, positive tails contribute ordinary degree-zero cycles
+through the summand $B$. The remaining dimensions in
+\eqref{eq:realizability-inequalities} are given by Corollary~\ref{cor:ranks}.
+
+For example, when $\mathbf c=(1,1)$, the ordinary cycle dimensions
+of $\mathcal D$ are $(4,2,0)$ and its boundary dimensions are $(3,2,0)$.
+The complex $Q=D^1(K^4)$ is a quotient of $N(K[\Delta^4])$ by
+\eqref{eq:simplex-projective}. It satisfies the cycle inequalities,
+but $\dim B_0(Q)=4>3=\dim B_0(\mathcal D)$, so it does not embed.
+
+\subsection{Matrix and sparse coordinate examples}
+
+\begin{example}\label{ex:parameter-jump}
+For $t\in K$, take empty tails and
+\[
+ T(t)=\begin{pmatrix}0&1&0\\0&1&1\\1&1&t\end{pmatrix}\in X_2,
+ \qquad Y_t=\langle T(t)\rangle.
+\]
+In $N_1(X)$, use coordinates $(E_{01},E_{10},E_{11})$.
+The normalized restrictions to vertex pairs $01,02,12$ are
+\[
+ v_{01}=(1,0,1),\qquad v_{02}=(0,1,t),\qquad
+ v_{12}=(0,0,t-1).
+\]
+Their determinant is $t-1$. The normalized image of the top simplex
+is $E_{12}-E_{21}$, whose differential is $E_{01}-E_{10}$.
+The differential out of $N_1(X)$ reads the $E_{11}$ coordinate.
+Thus the differential ranks of the generated complex are $(0,1,1)$,
+indexed by source degree, and
+\[
+\begin{array}{c|c|c}
+ &(\dim N_0(Y_t),\dim N_1(Y_t),\dim N_2(Y_t))&(\dim H_0(Y_t),\dim H_1(Y_t),\dim H_2(Y_t))\\ \hline
+ t\ne1&(1,3,1)&(0,1,0)\\
+ t=1&(1,2,1)&(0,0,0).
+\end{array}
+\]
+For $t\ne1$, the cycle
+$E_{01}=v_{01}-(t-1)^{-1}v_{12}$ represents the nonzero homology class.
+At $t=1$, the cycle space in degree one is the line spanned by
+$v_{01}-v_{02}=E_{01}-E_{10}$, which is already a boundary.
+
+In the vertex basis of $C_0=K^3$, the degree-zero kernel is
+\[
+ L_0(T(t))=\ker(0,1,t)
+   =\operatorname{span}_K\{(1,0,0),(0,-t,1)\}.
+\]
+These planes vary with $t$. For $t\ne1$, the remaining normalized
+kernels are $L_1=L_2=0$, and all the quotient complexes are isomorphic.
+Proposition~\ref{prop:quotient-lift} therefore places these distinct
+kernels in one automorphism orbit. At $t=1$, $L_1$ is spanned by
+the normalized edge $[12]$ and $L_2=0$. For example, $T(4)$ has
+first Betti number one over $\mathbb Q$ and zero over $\mathbb F_3$.
+\end{example}
+
+\begin{example}\label{ex:sparse-higher-cycle}
+Fix $q\geq1$, use $k=q+1$ axes and any nonnegative tail lengths,
+and take $T_q=E_{(0,1,\ldots,q)}\in X_q(\mathbf c;K)$.
+Every face of $T_q$ is zero, since its index tuple contains every
+active label. Hence $T_q$ is normalized. All lower-degree generators
+of $\langle T_q\rangle$ vanish. In higher degrees, every nondecreasing
+map to $[q]$ is noninjective, so its image is a degeneracy of a
+lower-degree generator. Consequently
+\[
+ N(\langle T_q\rangle)=S^q(K),\qquad
+ H_q(\langle T_q\rangle)\cong K,\qquad
+ H_p(\langle T_q\rangle)=0\quad(p\ne q).
+\]
+For $q=2$ and empty tails this uses one nonzero entry in a
+$3\times3\times3$ tensor. For $q=3$ it uses one entry in shape
+$(4,4,4,4)$ and gives one-dimensional third homology.
+In the full module,
+\[
+ \partial_{q+1}E_{(1,2,\ldots,q+1)}=T_q.
+\]
+Thus the same cycle is an ambient boundary. The number of axes is
+minimal: \eqref{eq:cycles} gives $Z_q(X)=0$ for $k\leq q$, so
+no simplicial submodule of such an $X$ has nonzero $q$th homology.
+\end{example}
+
+The repository script \path{experiments/kernel_sequences.py} computes
+the kernel, quotient and homology data in these examples.
 
 \subsection{Graph chains in shifted matrix slices}
 
@@ -211,9 +448,10 @@ $\mathbb P_K^2$, the kernel map therefore has exactly the stated image.
 The restriction of the augmentation $(1,1,1)$ to $\ker(a,b,c)$
 is surjective with one-dimensional kernel, since $(a,b,c)$ is
 nonconstant. Formula \eqref{eq:generated-homology} proves the homology
-assertions. Over $K$ these quotients all have the same dimensions
-and differential ranks, so their underlying chain complexes are
-isomorphic even as their kernel planes vary.
+assertions. These quotients have the same chain dimensions and
+differential ranks. By \eqref{eq:finite-chain-splitting} they are
+isomorphic, and Proposition~\ref{prop:quotient-lift} places their kernels
+in one automorphism orbit.
 \end{proof}
 
 For comparison, the all-ones $3\times3$ tensor generates the constant

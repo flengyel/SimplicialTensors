@@ -49,12 +49,21 @@ def main() -> None:
 
     import_module("simplicial_tensors.notebooks.cocalc_compatible_tensor_ops")
     from simplicial_tensors.chain_complex import ChainComplex
+    from simplicial_tensors.chain_maps import chain_isomorphism, lift_quotient_isomorphism
+    from simplicial_tensors.kernel_sequences import kernel_sequence, realize_kernel
     from simplicial_tensors.hypergraph_homology import embedded_chain_complex
     from simplicial_tensors.rank_shifted import circle_generator
     from simplicial_tensors.tensor_chain_complex import generated_chain_complex
     tensor_model = generated_chain_complex(circle_generator())
     assert isinstance(tensor_model, ChainComplex)
     assert tensor_model.homology().homology_dimensions == (0, 1)
+    presentation = kernel_sequence(circle_generator())
+    assert presentation.kernel.dimensions == (2, 0)
+    reconstructed = realize_kernel(presentation.inclusion, (0, 0))
+    assert kernel_sequence(reconstructed).quotient.homology().homology_dimensions == (0, 1)
+    phi = chain_isomorphism(presentation.quotient, presentation.quotient)
+    lifted = lift_quotient_isomorphism(presentation.projection, presentation.projection, phi)
+    assert lifted.is_isomorphism()
     hypergraph_model = embedded_chain_complex([(0,), (1,), (0, 1)])
     assert hypergraph_model.homology().homology_dimensions == (1, 0)
     assert hypergraph_model.homology_representatives(0).cols == 1

@@ -18,6 +18,10 @@ def test_representables_have_leaf_homology_and_relative_cell_classes(modulus):
         summary = model.homology()
         if name.startswith("relative_"):
             assert summary.homology_dimensions == (0,) * (len(model.dimensions) - 1) + (1,)
+        elif name == "boundary_binary_corolla":
+            assert summary.homology_dimensions == (3,)
+        elif name == "boundary_unary_binary_tree":
+            assert summary.homology_dimensions == (2, 1)
         else:
             assert summary.homology_dimensions == (2,) + (0,) * (len(model.dimensions) - 1)
         for degree in range(1, len(model.dimensions)):
@@ -82,3 +86,18 @@ def test_cli_validates_the_prime_field(capsys):
         EXPERIMENT["main"](["--modulus", "4"])
     assert error.value.code == 2
     assert "prime" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("modulus", [None, 2, 3])
+def test_tree_boundary_cycle_is_the_connecting_obstruction(modulus):
+    models = EXPERIMENT["representable_models"](modulus=modulus)
+    absolute = models["unary_binary_tree"]
+    boundary = models["boundary_unary_binary_tree"]
+    relative = models["relative_unary_binary_tree"]
+    lifted = relative.lift(2, relative.homology_representatives(2))
+    connecting_cycle = absolute.field.matmul(absolute.differential(2), lifted)
+    assert connecting_cycle == boundary.field.matrix([[1], [1], [-1]])
+    assert not any(boundary.field.matmul(boundary.differential(1), connecting_cycle))
+    assert boundary.boundaries(1).cols == 0
+    assert boundary.field.rank(connecting_cycle) == 1
+    assert absolute.homology().homology_dimensions[1] == 0

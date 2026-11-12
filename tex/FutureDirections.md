@@ -1,6 +1,6 @@
 # Further work on simplicial tensor modules
 
-The current manuscript is [Computations with simplicial tensor modules](dstm_short.tex). It includes normalized contractions, a finite kernel presentation for tensor-generated submodules, generic (3, 3) kernel geometry, graph incidence realizations, and an extension to rooted trees. The following questions concern work beyond those results.
+The current manuscript is [Computations with simplicial tensor modules](dstm_short.tex). It includes normalized contractions, quotient-automorphism and kernel-realizability criteria, generic (3, 3) kernel geometry, homology jumps, sparse higher-degree cycles, graph incidence realizations, and an extension to rooted trees. The following questions concern work beyond those results.
 
 ## Exact computations for generated submodules
 
@@ -8,11 +8,18 @@ Section 6 provides a degree bound for a generator in degree $n$. The [exact homo
 
 The [homology examples](../docs/experiments/homology_basis.md), [relative horn calculation](../docs/experiments/normalized_moore_complex_homology.md), and [symbolic tensor calculation](../docs/experiments/sagemath_normalized_tensor_homology.md) use this implementation. They distinguish a tensor-generated submodule from the full ambient module and report homology dimensions over fields.
 
+The [kernel-sequence interface](../docs/api/kernel_sequences.md) retains the
+universal realization maps and constructs a sparse tensor with a prescribed
+kernel when the cycle and boundary capacities fit. The
+[worked examples](../docs/experiments/kernel_sequences.md) compute homology
+jumps, higher-degree coordinate cycles, quotient-isomorphism lifts, and failed
+capacity conditions.
+
 ## Kernel geometry
 
 Appendix A proves rationality of the closure of the generic kernel image and identifies the (3, 3) image with a projective plane minus one point. Further calculations could determine images, dimensions, and singularities for other shapes.
 
-Equality of kernel sequences classifies quotients with chosen generators. Comparing abstract isomorphism classes also requires accounting for changes of generator. Relative Grassmannians over a base scheme require explicit finiteness and base-change hypotheses.
+For a fixed generator degree, automorphism orbits of normalized kernels classify abstract quotient isomorphism classes. Ordinary cycle and boundary dimensions determine which kernels occur in a fixed tensor module. Further calculations could describe orbit closures and their incidence relations, including the nongeneric rank loci. Relative Grassmannians over a base scheme require explicit finiteness and base-change hypotheses.
 
 ## Graph calculations
 

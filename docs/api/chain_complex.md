@@ -15,9 +15,10 @@ Matrices act on column vectors. Degree zero has the zero differential
 $D_0:C_0\to0$, represented by a matrix of shape $(0,c_0)$.
 
 `ExactField(modulus=None)` selects the rationals; `ExactField(p)` selects
-$\mathbb F_p$. Inputs are Python or NumPy integers, `Fraction`, or SymPy rationals.
-Floating-point coefficients are rejected. Reduction modulo $p$ requires each
-rational denominator to be invertible modulo $p$.
+$\mathbb F_p$. Exact coefficient inputs include Python and NumPy integers,
+`Fraction`, SymPy rationals, and native Sage `ZZ` and `QQ` elements.
+Floating-point coefficients, including Sage real-field elements, are rejected.
+Reduction modulo $p$ requires each rational denominator to be invertible modulo $p$.
 
 `ChainComplex(dimensions, differentials, *, modulus=None, lifts=None,
 ambient_bases=None)` checks matrix shapes and the chain identity in the selected
@@ -82,3 +83,7 @@ generators and their boundaries. It does not allocate the dense ambient tensor.
 Face enumeration and exact basis calculations can still grow with the generator
 degree and support size. The dimension-only dense routines remain available as
 `generated_homology` and `relative_horn_homology`.
+
+The [kernel-sequence and chain-map interfaces](kernel_sequences.md) retain the
+universal source relations, construct embeddings from cycle and boundary
+capacities, and lift specified quotient isomorphisms.
