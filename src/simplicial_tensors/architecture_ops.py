@@ -7,7 +7,9 @@ the familiar incoming-minus-outgoing synaptic balance residual.
 
 This module is deliberately NumPy-only.  It provides diagnostics and exact
 function-preserving positive rescalings without adding a neural-network
-framework dependency to the package.
+framework dependency to the package. Numerical inputs are promoted to a common
+dtype with at least float64 precision before products and squared norms;
+complex inputs retain their imaginary components.
 """
 
 from __future__ import annotations
@@ -15,6 +17,11 @@ from __future__ import annotations
 from collections.abc import Sequence
 
 import numpy as np
+
+
+def _promote_arrays(arrays: Sequence[np.ndarray]) -> list[np.ndarray]:
+    dtype = np.result_type(*(array.dtype for array in arrays), np.float64)
+    return [array.astype(dtype, copy=False) for array in arrays]
 
 
 def _validate_network(
@@ -33,7 +40,7 @@ def _validate_network(
             )
 
     if biases is None:
-        return arrays, None
+        return _promote_arrays(arrays), None
     bias_arrays = [np.asarray(bias) for bias in biases]
     if len(bias_arrays) != len(arrays):
         raise ValueError("there must be one bias vector per weight matrix")
@@ -42,7 +49,8 @@ def _validate_network(
             raise ValueError(
                 f"bias shape {bias.shape} is incompatible with weight shape {weight.shape}"
             )
-    return arrays, bias_arrays
+    promoted = _promote_arrays(arrays + bias_arrays)
+    return promoted[: len(arrays)], promoted[len(arrays) :]
 
 
 def hidden_balance_residuals(
@@ -83,7 +91,11 @@ def hidden_balance_energy(
 def hidden_balance_gradients(
     weights: Sequence[np.ndarray], biases: Sequence[np.ndarray] | None = None
 ) -> tuple[list[np.ndarray], list[np.ndarray] | None]:
-    """Return exact gradients of :func:`hidden_balance_energy`."""
+    """Return analytic gradients of :func:`hidden_balance_energy`.
+
+    Inputs and gradient arrays share a promoted numerical dtype. For complex
+    parameters, gradients use the real inner product ``Re(vdot(g, delta))``.
+    """
 
     matrices, vectors = _validate_network(weights, biases)
     residuals = hidden_balance_residuals(matrices, vectors)
@@ -121,15 +133,8 @@ def equinormalize_relu_network(
     if tolerance < 0 or eps <= 0 or max_scale < 1:
         raise ValueError("invalid tolerance, eps, or max_scale")
     matrices, vectors = _validate_network(weights, biases)
-    dtype = np.result_type(*(matrix.dtype for matrix in matrices), np.float64)
-    balanced_weights: list[np.ndarray] = [
-        matrix.astype(dtype, copy=True) for matrix in matrices
-    ]
-    balanced_biases: list[np.ndarray] | None = (
-        None
-        if vectors is None
-        else [vector.astype(dtype, copy=True) for vector in vectors]
-    )
+    balanced_weights = [matrix.copy() for matrix in matrices]
+    balanced_biases = None if vectors is None else [vector.copy() for vector in vectors]
 
     for _ in range(max_sweeps):
         for layer in range(len(balanced_weights) - 1):
@@ -176,6 +181,7 @@ def path_product_tensor(incoming: np.ndarray, outgoing: np.ndarray) -> np.ndarra
         raise ValueError("incoming and outgoing weights must be matrices")
     if incoming.shape[0] != outgoing.shape[1]:
         raise ValueError("incoming and outgoing hidden widths must agree")
+    incoming, outgoing = _promote_arrays([incoming, outgoing])
     return np.einsum("oh,hi->ohi", outgoing, incoming)
 
 

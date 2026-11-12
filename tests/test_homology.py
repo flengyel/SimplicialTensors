@@ -194,3 +194,27 @@ def test_cocalc_adapter_uses_shared_symbolic_operations():
     assert edge.degen(0).order() == 2
     with pytest.raises(ValueError, match="shape"):
         SymbolicTensor((2, 2), tensor_data=[[1]])
+
+
+@pytest.mark.parametrize("index", [False, True, np.bool_(False), np.bool_(True), 1.0])
+def test_relative_horn_rejects_boolean_and_noninteger_face_indices(index):
+    tensor = np.array([[0, 1], [0, 1]], dtype=object)
+    with pytest.raises(TypeError, match="integer"):
+        relative_horn_homology(tensor, index)
+
+
+def test_relative_horn_accepts_exact_integer_index_protocol():
+    class FaceIndex:
+        def __index__(self):
+            return 1
+
+    tensor = np.array([[0, 1], [0, 1]], dtype=object)
+    expected = relative_horn_homology(tensor, 1)
+    for index in (np.int64(1), sp.Integer(1), FaceIndex()):
+        assert relative_horn_homology(tensor, index) == expected
+
+
+def test_relative_horn_accepts_native_sage_integer_face_index():
+    sage = pytest.importorskip("sage.all")
+    tensor = np.array([[0, 1], [0, 1]], dtype=object)
+    assert relative_horn_homology(tensor, sage.Integer(1)) == relative_horn_homology(tensor, 1)

@@ -2,6 +2,13 @@
 
 The diagonal boundary deletes a common index on every tensor axis and takes the alternating sum. It lowers the degree by one and satisfies $\partial^2=0$. The adjoint, projector, and pseudoinverse operations use the entrywise Euclidean or Frobenius inner product.
 
+The numerical `adjoint_ops` and `introspection_ops` APIs accept NumPy Boolean,
+integer, floating-point, and complex dtypes. Inputs are promoted before signed
+boundary arithmetic to `np.result_type(input.dtype, np.float64)`, preserving
+complex components and wider floating-point dtypes. Boolean values are treated
+as real zeroes and ones. Object and string arrays are rejected. Exact field
+calculations use the [homology APIs](homology.md).
+
 ## Adjoint regularization
 
 The adjoint face inserts a smaller tensor in the positions avoiding the deleted index and fills the other hyperplanes with zero. Thus
@@ -73,10 +80,25 @@ assert np.allclose(
 )
 ```
 
-The routines evaluate finite identities with floating-point arithmetic and test residuals up to numerical tolerance. `tests/test_adjoint_ops.py` and `tests/test_introspection_ops.py` compare the filters with dense small-matrix references.
+The routines evaluate the displayed identities with floating-point arithmetic.
+In synthesis, write $C$ for the supplied cycle and $R=B^\dagger H$ for the decoded
+syndrome. The cycle check compares $\|BC\|_F$ with a tolerance proportional to
+$\max(\|C\|_F,\|R\|_F)$. This allows roundoff relative to the full signal when
+the cycle channel nearly vanishes. There is no absolute tolerance floor: a small
+cycle norm alone does not excuse a proportionally large boundary residual.
+The cycle, its boundary, and the decoded signal must have finite norms.
+`tests/test_adjoint_ops.py` and `tests/test_introspection_ops.py` compare the
+filters with dense small-matrix references and test analysis–synthesis on
+boundary-visible inputs.
 
 ## Coordinate and experimental scope
 
-The DSTM boundary identifies index $i$ on every axis. Dense-layer row and column indices usually label different neuron sets, and their independent relabeling changes this operation. A tied square map supplies the same source and target space, while the chosen ordering still affects its boundary.
+The diagonal tensor boundary identifies index $i$ on every axis. Dense-layer row and column indices usually label different neuron sets, and their independent relabeling changes this operation. A tied square map supplies the same source and target space, while the chosen ordering still affects its boundary.
+
+The architecture diagnostics promote weights and biases together before
+squared norms, products, and gradient accumulation. Numerical array dtypes use
+at least `float64` or `complex128`; complex biases retain their imaginary
+components. ReLU equi-normalization returns copies in the promoted dtype and
+preserves the real network's represented function up to roundoff.
 
 The [neural study](../experiments/neural_boundary_study.md) tests quadratic penalties and gradient smoothing. The [observer study](../experiments/boundary_observer_study.md) tests passive boundary information on a tied map. Its stored full run did not pass the criterion for adding a learned controller. The separate `architecture_ops` module supplies layer-incidence and path-product diagnostics with explicitly typed neural layers.

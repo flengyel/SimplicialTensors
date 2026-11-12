@@ -6,7 +6,9 @@ The module [rank_shifted.py](../../src/simplicial_tensors/rank_shifted.py) repre
 
 ## Graph representation
 
-`graph_embedding(vertex_count, edges, shift=None)` embeds the chain complex of a finite oriented graph into a three-axis shifted simplicial tensor module. Vertex labels are $1,\ldots,v$. Loops, repeated edges, isolated vertices, and the empty graph are allowed.
+`graph_embedding(vertex_count, edges, shift=None)` returns vertex and edge
+tensors whose generated simplicial submodule has normalized complex isomorphic
+to the graph's oriented incidence complex. Vertex labels are $1,\ldots,v$. Loops, repeated edges, isolated vertices, and the empty graph are allowed.
 
 Number the edges separately from $1$ to $e$, writing $u_j\to w_j$ for edge $j$. Choose $r\ge\max(v,e)$, which is the default shift. The vertex and edge tensors are
 
@@ -54,9 +56,22 @@ use a sparse generator's declared degree and shifts. Their
 [chain-model interface](chain_complex.md) exposes bases, differentials, and
 ambient lifts without allocating a dense ambient tensor.
 
-For graph homology, the implementation validates the coordinate-unit vertex
-basis and checks each normalized edge boundary against its target vertex minus
-its source vertex. When these checks pass, connected components give the
-incidence rank and Betti numbers. Otherwise the routine computes the exact field
-rank of the tensor-incidence matrix. `graph_incidence_matrix` returns that
-explicit matrix independently.
+`graph_incidence_matrix(embedding, *, modulus=None)` returns the normalized
+edge-boundary matrix in the supplied vertex basis. If $V$ has the vertex tensors
+as columns and $B$ has the normalized edge boundaries as columns, it solves
+$VX=B$ over the selected field and returns $X$ as a SymPy matrix. The vertex
+tensors must be independent in that field, and each boundary must lie in their
+span. Vertex tensors have degree zero, edge tensors have degree one, and all
+share the same axis shifts.
+
+Rational coefficients are reduced modulo the supplied prime before solving.
+Every denominator must be invertible, including those in coordinates that do
+not contribute to a boundary. Finite-field matrix entries are canonical integer
+residues. A vertex basis independent over the rationals can become dependent
+modulo a prime and is then rejected.
+
+`graph_chain_homology` uses connected components when the coordinate-unit vertex
+basis and normalized edge boundaries match the graph's endpoint data. Otherwise
+it computes the exact rank of $X$ in the selected field. Factory-generated
+embeddings use the connected-component calculation; a supplied alternative
+vertex basis uses its own coordinates.

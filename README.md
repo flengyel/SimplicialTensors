@@ -193,8 +193,13 @@ Useful starting points include the
 The neural studies distinguish adjoint energy regularization from
 boundary analysis followed by controller-driven synthesis. The latter
 retains the cycle component and projects the controller's target into
-the realizable boundary range. The spectral formulas in these modules
-are evaluated with floating-point arithmetic.
+the realizable boundary range. Numerical adjoint, introspection, and architecture
+operations promote numerical array dtypes to at least `float64` or `complex128`
+before signed arithmetic and products. The spectral formulas are evaluated
+with floating-point arithmetic; synthesis checks cycle residuals relative to
+the cycle and decoded boundary signal. See the
+[numerical API](docs/api/boundary_homeostasis.md) for coefficient and tolerance
+conventions.
 Read the [research report](docs/research/neural_boundary_research_report.md) and
 [observer results](experiments/boundary_observer_report.md) for their
 protocols, measured results, and scope.

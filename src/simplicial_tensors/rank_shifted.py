@@ -278,7 +278,7 @@ def graph_embedding(
     edges: Iterable[tuple[int, int]],
     shift: int | None = None,
 ) -> GraphEmbedding:
-    """Encode any finite oriented graph in a three-axis shifted DSTM.
+    """Encode a finite oriented graph in a shifted simplicial tensor module.
 
     For edge ``j: u -> v`` and ``r >= max(vertex_count, edge_count)``, use
 
@@ -286,7 +286,7 @@ def graph_embedding(
     ``T_j = E_(0,u+1,u+1) + E_(1,v+1,v+1) + E_(0,1,j+1)``.
 
     Thus ``d_1(T_j) = a_u`` and ``d_0(T_j) = a_v``.  The independent
-    marker coordinate ``(0,1,j+1)`` ensures that normalized edge classes
+    marker coordinate ``(0,1,j+1)`` ensures that normalized edge tensors
     have no extra linear relations.  The simplicial submodule generated
     by these vertices and edges has the graph's normalized chain complex.
     """

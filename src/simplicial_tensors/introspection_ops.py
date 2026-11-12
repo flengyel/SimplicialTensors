@@ -23,6 +23,7 @@ from typing import NamedTuple
 import numpy as np
 
 from .adjoint_ops import (
+    _as_inexact_array,
     boundary_pseudoinverse,
     boundary_spectral_values,
     exact_cycle_projection,
@@ -32,6 +33,17 @@ from .tensor_ops import bdry
 
 Shape = tuple[int, ...]
 BoundaryController = Callable[[np.ndarray], np.ndarray]
+
+
+def _frobenius_norm(value: np.ndarray) -> float:
+    """Compute a norm without squaring the unscaled tensor entries."""
+
+    if value.size == 0:
+        return 0.0
+    maximum = float(np.max(np.abs(value)))
+    if maximum == 0.0 or not np.isfinite(maximum):
+        return maximum
+    return float(np.linalg.norm(value / maximum)) * maximum
 
 
 class BoundaryAnalysis(NamedTuple):
@@ -48,8 +60,12 @@ def boundary_analyze(w: np.ndarray) -> BoundaryAnalysis:
     reconstructs ``w`` up to floating-point roundoff.
     """
 
-    source = np.asarray(w)
+    source = _as_inexact_array(w)
     cycle = exact_cycle_projection(source)
+    # A nearly boundary-visible source can leave a tiny cancellation residue.
+    # Refine that residue in its own scale so zero-target synthesis also gets
+    # a numerically closed cycle, even when the true cycle is zero.
+    cycle = exact_cycle_projection(cycle)
     return BoundaryAnalysis(cycle=cycle, syndrome=bdry(source))
 
 
@@ -79,21 +95,28 @@ def boundary_synthesize(
     syndrome components are discarded by the Moore--Penrose decoder.  When
     ``original_shape`` is supplied, it must equal ``cycle.shape``; the
     argument makes the return type explicit at call sites where the shape is
-    carried separately.
+    carried separately. The residual tolerance is relative to the larger
+    of the cycle norm and decoded signal norm, allowing roundoff from an
+    analyzed tensor whose true cycle is zero without an absolute error floor.
     """
 
-    cycle_array = np.asarray(cycle)
+    cycle_array = _as_inexact_array(cycle)
     shape: Shape = cycle_array.shape
     if original_shape is not None and tuple(original_shape) != shape:
         raise ValueError(
             f"cycle has shape {shape}; received original_shape "
             f"{tuple(original_shape)}"
         )
+    signal_array = _as_inexact_array(syndrome)
+    if not np.all(np.isfinite(cycle_array)) or not np.all(np.isfinite(signal_array)):
+        raise ValueError("cycle and boundary signal must be finite")
+    decoded = boundary_pseudoinverse(signal_array, shape)
     cycle_boundary = bdry(cycle_array)
-    cycle_norm = float(np.linalg.norm(cycle_array))
-    residual_norm = float(np.linalg.norm(cycle_boundary))
-    if not np.isfinite(cycle_norm) or not np.isfinite(residual_norm):
-        raise ValueError("cycle and its boundary must contain only finite values")
+    cycle_norm = _frobenius_norm(cycle_array)
+    decoded_norm = _frobenius_norm(decoded)
+    residual_norm = _frobenius_norm(cycle_boundary)
+    if not all(np.isfinite(norm) for norm in (cycle_norm, decoded_norm, residual_norm)):
+        raise ValueError("cycle, its boundary, and the decoded signal must be finite")
 
     if np.issubdtype(cycle_array.dtype, np.complexfloating):
         real_dtype = np.empty((), dtype=cycle_array.dtype).real.dtype
@@ -102,14 +125,13 @@ def boundary_synthesize(
     else:
         real_dtype = np.dtype(np.float64)
     precision = np.finfo(real_dtype)
-    scale = max(cycle_norm, precision.tiny)
+    scale = max(cycle_norm, decoded_norm)
     tolerance = 128.0 * precision.eps * np.sqrt(max(1, cycle_array.size)) * scale
     if residual_norm > tolerance:
         raise ValueError(
             "cycle must lie in ker(bdry): boundary residual norm "
             f"{residual_norm:.6g} exceeds tolerance {tolerance:.6g}"
         )
-    decoded = boundary_pseudoinverse(np.asarray(syndrome), shape)
     return cycle_array + decoded
 
 

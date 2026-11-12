@@ -67,6 +67,20 @@ def main() -> None:
     hypergraph_model = embedded_chain_complex([(0,), (1,), (0, 1)])
     assert hypergraph_model.homology().homology_dimensions == (1, 0)
     assert hypergraph_model.homology_representatives(0).cols == 1
+    from dataclasses import replace
+    from fractions import Fraction
+    import numpy as np
+    from simplicial_tensors.adjoint_ops import bdry_adjoint, boundary_pseudoinverse
+    from simplicial_tensors.graph_ops import graph_chain_homology
+    from simplicial_tensors.introspection_ops import boundary_analyze, boundary_synthesize
+    from simplicial_tensors.rank_shifted import graph_embedding
+    assert np.allclose(boundary_pseudoinverse(np.array([1], dtype=np.uint8), (2,)), [-0.5, 0.5])
+    signal = np.random.default_rng(20261112).normal(size=(3, 4))
+    visible = bdry_adjoint(signal, (4, 5))
+    assert np.allclose(boundary_synthesize(*boundary_analyze(visible)), visible)
+    graph = graph_embedding(2, [(1, 2)])
+    graph = replace(graph, edge_tensors=(Fraction(1, 2) * graph.edge_tensors[0],))
+    assert graph_chain_homology(graph, modulus=3).homology_dimensions == (1, 0)
     environment = dict(os.environ)
     environment.pop("PYTHONPATH", None)
     with tempfile.TemporaryDirectory(prefix="simplicial-wheel-run-") as directory:

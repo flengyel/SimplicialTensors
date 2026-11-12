@@ -8,22 +8,61 @@ from math import gcd
 
 import numpy as np
 import sympy as sp
-from sympy.polys.matrices import DomainMatrix
 
+from .chain_complex import ExactField
 from .homology import GeneratedHomology
 from .rank_shifted import GraphEmbedding, SparseTensor
 from .tensor_ops import bdry
 
 
-def graph_incidence_matrix(embedding: GraphEmbedding) -> sp.Matrix:
-    """Read the integral incidence matrix from the normalized tensor faces."""
-    coordinates = [next(iter(vertex.entries)) for vertex in embedding.vertices]
-    boundaries = [edge.face(0) for edge in embedding.normalized_edges]
-    return sp.Matrix(
-        len(coordinates), len(boundaries),
-        lambda i, j: boundaries[j].coefficient(coordinates[i]),
-    )
+def _graph_tensors(embedding: GraphEmbedding, field: ExactField):
+    """Validate tensor types and coefficients without allocating ambient arrays."""
+    if not isinstance(embedding, GraphEmbedding):
+        raise TypeError("Supply a GraphEmbedding tensor model.")
+    vertices, edges = tuple(embedding.vertices), tuple(embedding.edge_tensors)
+    shifts = None
+    for degree, tensors in ((0, vertices), (1, edges)):
+        for tensor in tensors:
+            if not isinstance(tensor, SparseTensor) or tensor.degree != degree:
+                raise ValueError(f"Graph tensors in degree {degree} must be SparseTensor objects of that degree.")
+            if shifts is None:
+                shifts = tensor.shifts
+            elif tensor.shifts != shifts:
+                raise ValueError("Graph tensors must have the same axis shifts.")
+            for coefficient in tensor.entries.values():
+                field.scalar(coefficient)
+    return vertices, edges
 
+
+def graph_incidence_matrix(
+    embedding: GraphEmbedding, *, modulus: int | None = None,
+) -> sp.Matrix:
+    """Return normalized edge boundaries in the supplied vertex basis.
+
+    Solve V * X = B over Q, or over F_p for a prime modulus. Vertex
+    tensors must be independent in that field, and every normalized edge
+    boundary must lie in their span. Rational denominators must be invertible
+    in the selected field. Finite-field entries are canonical integer residues.
+    """
+    field = ExactField(modulus)
+    vertices, edges = _graph_tensors(embedding, field)
+    boundaries = tuple(edge.normalize().face(0) for edge in edges)
+    coordinates = sorted({index for tensor in vertices + boundaries for index in tensor.entries})
+    vertex_basis = field.matrix(sp.Matrix(
+        len(coordinates), len(vertices),
+        lambda row, column: vertices[column].entries.get(coordinates[row], 0),
+    ))
+    boundary_columns = field.matrix(sp.Matrix(
+        len(coordinates), len(boundaries),
+        lambda row, column: boundaries[column].entries.get(coordinates[row], 0),
+    ))
+    if field.rank(vertex_basis) != len(vertices):
+        raise ValueError("Vertex tensors must be independent in the coefficient field.")
+    try:
+        incidence = field.coordinates(vertex_basis, boundary_columns)
+    except ValueError as exc:
+        raise ValueError("Normalized edge boundaries must lie in the vertex span.") from exc
+    return sp.Matrix(incidence)
 
 
 def _graph_components_if_incidence_matches(embedding: GraphEmbedding) -> int | None:
@@ -73,24 +112,26 @@ def _graph_components_if_incidence_matches(embedding: GraphEmbedding) -> int | N
         parents[find(source)] = find(target)
     return len({find(vertex) for vertex in range(count)})
 
+
 def graph_chain_homology(
     embedding: GraphEmbedding, *, modulus: int | None = None,
 ) -> GeneratedHomology:
-    """Compute ordinary graph homology over Q or a prime field from the tensor model."""
-    if modulus is not None and (
-        not isinstance(modulus, (int, np.integer))
-        or isinstance(modulus, (bool, np.bool_)) or not sp.isprime(modulus)
-    ):
-        raise ValueError("The modulus must be prime.")
+    """Return dimensions and ranks of the normalized tensor-incidence complex.
+
+    Coefficients lie in Q or a prime field. Canonical graph_embedding
+    models give ordinary graph homology; modified tensor models retain
+    one degree-one basis element per supplied edge tensor.
+    """
+    field = ExactField(modulus)
+    _graph_tensors(embedding, field)
     components = _graph_components_if_incidence_matches(embedding)
     if components is not None:
         vertices, edges = len(embedding.vertices), len(embedding.edge_tensors)
         rank = vertices - components
     else:
-        field = sp.QQ if modulus is None else sp.GF(int(modulus))
-        incidence = graph_incidence_matrix(embedding)
+        incidence = graph_incidence_matrix(embedding, modulus=field.modulus)
         vertices, edges = incidence.shape
-        rank = DomainMatrix.from_Matrix(incidence).convert_to(field).rank()
+        rank = field.rank(incidence)
     return GeneratedHomology(
         (vertices, edges), (0, rank), (vertices - rank, edges - rank),
     )

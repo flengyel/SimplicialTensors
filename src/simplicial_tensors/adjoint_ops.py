@@ -24,6 +24,20 @@ from .tensor_ops import bdry
 Shape = tuple[int, ...]
 
 
+def _as_inexact_array(value: np.ndarray) -> np.ndarray:
+    """Promote numerical inputs before signed or subtractive arithmetic.
+
+    The exact coefficient arithmetic in tensor_ops is a separate API.
+    These Euclidean operators use at least float64 or complex128, retaining
+    wider floating-point types and all complex components.
+    """
+
+    array = np.asarray(value)
+    if array.dtype.kind not in "buifc":
+        raise TypeError("numerical boundary operators require a Boolean or numeric dtype")
+    return array.astype(np.result_type(array.dtype, np.float64), copy=False)
+
+
 def _validate_original_shape(original_shape: Sequence[int]) -> Shape:
     """Return a validated integer shape."""
 
@@ -57,7 +71,7 @@ def face_adjoint(y: np.ndarray, original_shape: tuple[int, ...], i: int) -> np.n
     hyperplanes to zero.
     """
 
-    y = np.asarray(y)
+    y = _as_inexact_array(y)
     shape = _validate_boundary_shape(y, original_shape)
     if i < 0 or i >= min(shape):
         raise IndexError(f"face index {i} out of bounds for tensor shape {shape}")
@@ -69,9 +83,13 @@ def face_adjoint(y: np.ndarray, original_shape: tuple[int, ...], i: int) -> np.n
 
 
 def bdry_adjoint(y: np.ndarray, original_shape: tuple[int, ...]) -> np.ndarray:
-    """Return the Frobenius adjoint of the diagonal boundary map."""
+    """Return the Frobenius adjoint of the diagonal boundary map.
 
-    y = np.asarray(y)
+    Inputs are promoted to at least float64 or complex128 before applying
+    signs, so unsigned and fixed-width integer arithmetic cannot wrap.
+    """
+
+    y = _as_inexact_array(y)
     shape = _validate_boundary_shape(y, original_shape)
     result = np.zeros(shape, dtype=y.dtype)
     for i in range(min(shape)):
@@ -83,7 +101,7 @@ def bdry_adjoint(y: np.ndarray, original_shape: tuple[int, ...]) -> np.ndarray:
 def lower_hodge_laplacian(w: np.ndarray) -> np.ndarray:
     """Return ``bdry_adjoint(bdry(w))`` with the same shape as ``w``."""
 
-    w = np.asarray(w)
+    w = _as_inexact_array(w)
     shape = _validate_original_shape(w.shape)
     return bdry_adjoint(bdry(w), shape)
 
@@ -94,11 +112,11 @@ def boundary_homeostasis_gradient(
 ) -> np.ndarray:
     """Return the gradient of ``0.5 * ||bdry(w) - target_boundary||_F**2``."""
 
-    w = np.asarray(w)
+    w = _as_inexact_array(w)
     shape = _validate_original_shape(w.shape)
     residual = bdry(w)
     if target_boundary is not None:
-        target = np.asarray(target_boundary)
+        target = _as_inexact_array(target_boundary)
         _validate_boundary_shape(target, shape)
         residual = residual - target
     return bdry_adjoint(residual, shape)
@@ -120,7 +138,7 @@ def boundary_homeostasis_feedback(
         raise ValueError("alpha must be non-negative")
     if eps <= 0:
         raise ValueError("eps must be positive")
-    w = np.asarray(w)
+    w = _as_inexact_array(w)
     gradient = boundary_homeostasis_gradient(w, target_boundary)
     gradient_norm = float(np.linalg.norm(gradient))
     if gradient_norm <= eps:
@@ -171,7 +189,7 @@ def _apply_spectral_function(
 ) -> np.ndarray:
     """Apply an interpolating polynomial in the lower Hodge operator."""
 
-    w = np.asarray(w)
+    w = _as_inexact_array(w)
     nodes = _spectral_nodes(w.shape)
     if len(values) != len(nodes):
         raise ValueError(f"expected {len(nodes)} spectral values, received {len(values)}")
@@ -195,7 +213,7 @@ def exact_cycle_projection(w: np.ndarray) -> np.ndarray:
     ``L = bdry_adjoint @ bdry``.  It requires no dense matrix or SVD.
     """
 
-    w = np.asarray(w)
+    w = _as_inexact_array(w)
     _validate_original_shape(w.shape)
     dtype = np.result_type(w.dtype, np.float64)
     result: np.ndarray = w.astype(dtype, copy=True)
@@ -207,7 +225,7 @@ def exact_cycle_projection(w: np.ndarray) -> np.ndarray:
 def boundary_range_projection(w: np.ndarray) -> np.ndarray:
     """Orthogonally project ``w`` onto ``range(bdry_adjoint)``."""
 
-    w = np.asarray(w)
+    w = _as_inexact_array(w)
     return w - exact_cycle_projection(w)
 
 
@@ -219,7 +237,7 @@ def boundary_pseudoinverse(y: np.ndarray, original_shape: tuple[int, ...]) -> np
     boundary it is the exact minimum-Frobenius-norm decoder.
     """
 
-    y = np.asarray(y)
+    y = _as_inexact_array(y)
     shape = _validate_boundary_shape(y, original_shape)
     adjoint_signal = bdry_adjoint(y, shape)
     nodes = _spectral_nodes(shape)
@@ -235,13 +253,13 @@ def project_to_boundary(w: np.ndarray, target_boundary: np.ndarray | None = None
     :func:`exact_cycle_projection` up to roundoff.
     """
 
-    w = np.asarray(w)
+    w = _as_inexact_array(w)
     shape = _validate_original_shape(w.shape)
     current = bdry(w)
     if target_boundary is None:
         target = np.zeros_like(current)
     else:
-        target = np.asarray(target_boundary)
+        target = _as_inexact_array(target_boundary)
         _validate_boundary_shape(target, shape)
     correction = boundary_pseudoinverse(current - target, shape)
     return w - correction
@@ -258,7 +276,7 @@ def boundary_sobolev_filter(w: np.ndarray, mu: float = 1.0, normalized: bool = T
 
     if mu < 0:
         raise ValueError("mu must be non-negative")
-    w = np.asarray(w)
+    w = _as_inexact_array(w)
     nodes = _spectral_nodes(w.shape)
     if len(nodes) == 1 or mu == 0:
         return np.result_type(w.dtype, np.float64).type(1) * w

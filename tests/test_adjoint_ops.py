@@ -231,3 +231,54 @@ def test_return_feedback_is_not_nilpotent() -> None:
 def test_validation(call, error: type[Exception]) -> None:
     with pytest.raises(error):
         call()
+
+
+@pytest.mark.parametrize("dtype", (np.bool_, np.uint8, np.int8, np.float32, np.float64))
+def test_numerical_boundary_promotes_before_signed_arithmetic(dtype) -> None:
+    y = np.array([1], dtype=dtype)
+    assert bdry_adjoint(y, (2,)).dtype == np.dtype(np.float64)
+    np.testing.assert_array_equal(bdry_adjoint(y, (2,)), [-1.0, 1.0])
+    np.testing.assert_array_equal(boundary_pseudoinverse(y, (2,)), [-0.5, 0.5])
+
+    w = np.array([1, 0], dtype=dtype)
+    np.testing.assert_array_equal(lower_hodge_laplacian(w), [1.0, -1.0])
+    np.testing.assert_array_equal(boundary_homeostasis_gradient(w, y), [2.0, -2.0])
+    np.testing.assert_array_equal(project_to_boundary(w, y), [0.0, 1.0])
+    np.testing.assert_array_equal(exact_cycle_projection(w), [0.5, 0.5])
+    np.testing.assert_array_equal(boundary_range_projection(w), [0.5, -0.5])
+
+
+@pytest.mark.parametrize("dtype", (np.uint8, np.int8, np.float32, np.complex64))
+def test_numerical_operators_match_dense_reference_for_input_dtypes(dtype) -> None:
+    shape = (3, 4)
+    boundary = _boundary_matrix(shape)
+    rng = np.random.default_rng(20261112)
+    w = rng.integers(0, 100, size=shape).astype(dtype)
+    y = rng.integers(0, 100, size=(2, 3)).astype(dtype)
+    if np.issubdtype(dtype, np.complexfloating):
+        w += 1j * rng.normal(size=shape).astype(np.float32)
+        y += 1j * rng.normal(size=y.shape).astype(np.float32)
+    w_numeric = w.astype(np.result_type(dtype, np.float64))
+    y_numeric = y.astype(np.result_type(dtype, np.float64))
+    expected_adjoint = (boundary.T @ y_numeric.ravel()).reshape(shape)
+    expected_laplacian = (boundary.T @ boundary @ w_numeric.ravel()).reshape(shape)
+    expected_decoder = (np.linalg.pinv(boundary) @ y_numeric.ravel()).reshape(shape)
+    np.testing.assert_allclose(bdry_adjoint(y, shape), expected_adjoint, atol=1e-11)
+    np.testing.assert_allclose(lower_hodge_laplacian(w), expected_laplacian, atol=1e-11)
+    np.testing.assert_allclose(boundary_pseudoinverse(y, shape), expected_decoder, atol=1e-11)
+    assert face_adjoint(y, shape, 0).dtype == w_numeric.dtype
+    if np.issubdtype(dtype, np.complexfloating):
+        assert np.iscomplexobj(boundary_pseudoinverse(y, shape))
+        assert np.linalg.norm(boundary_pseudoinverse(y, shape).imag) > 0
+
+
+@pytest.mark.parametrize("dtype", (object, "U1"))
+def test_numerical_boundary_rejects_non_numeric_array_dtypes(dtype) -> None:
+    with pytest.raises(TypeError, match="Boolean or numeric dtype"):
+        bdry_adjoint(np.array([1], dtype=dtype), (2,))
+
+
+def test_signed_integer_minimum_is_promoted_before_negation() -> None:
+    y = np.array([-128], dtype=np.int8)
+    np.testing.assert_array_equal(bdry_adjoint(y, (2,)), [128.0, -128.0])
+    np.testing.assert_array_equal(boundary_pseudoinverse(y, (2,)), [64.0, -64.0])
