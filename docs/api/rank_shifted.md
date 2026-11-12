@@ -45,3 +45,18 @@ The remaining `graph_ops` functions use a different graph representation. They a
 - `adjacency_h1_relations` computes the nonnegative generator of the integral relation ideal on the normalized degree-one class. For a graph with an edge, the tensor-generated first homology is $\mathbb Z/(g)$, where $g$ is the returned integer. An edgeless graph generates the zero module.
 
 These adjacency calculations differ from ordinary graph homology. A path on three vertices has ordinary Betti numbers $(1,0)$, whereas its adjacency-generated tensor module has zero rational homology and a nonzero first homology group over $\mathbb F_2$.
+
+## Sparse chain models
+
+`generated_chain_complex` and `sparse_generated_homology` in
+[tensor_chain_complex.py](../../src/simplicial_tensors/tensor_chain_complex.py)
+use a sparse generator's declared degree and shifts. Their
+[chain-model interface](chain_complex.md) exposes bases, differentials, and
+ambient lifts without allocating a dense ambient tensor.
+
+For graph homology, the implementation validates the coordinate-unit vertex
+basis and checks each normalized edge boundary against its target vertex minus
+its source vertex. When these checks pass, connected components give the
+incidence rank and Betti numbers. Otherwise the routine computes the exact field
+rank of the tensor-incidence matrix. `graph_incidence_matrix` returns that
+explicit matrix independently.

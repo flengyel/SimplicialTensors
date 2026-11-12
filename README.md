@@ -2,9 +2,11 @@
 
 SimplicialTensors implements simplicial operations on matrices and
 hypermatrices using NumPy and SymPy. It computes horn fillers,
-normalized homology of generated submodules, and graph homology through
-sparse tensor representations. Research scripts also study ordered
-graph boundaries and boundary-based neural diagnostics.
+normalized homology of generated submodules, and embedded homology of finite
+hypergraphs. Its graph homology routines use sparse tensor representations,
+and its exact chain models expose differential matrices and representatives.
+Research scripts also study ordered graph boundaries and boundary-based neural
+diagnostics.
 
 For a hypermatrix of shape $(n_1,\ldots,n_k)$, the numeric module defines
 its order as $k$ and its simplicial degree as $\min_a n_a-1$.
@@ -98,6 +100,9 @@ See [the comparison experiment](docs/experiments/n_hypergroupoid_conjecture.md).
 | `adjoint_ops` | Frobenius adjoints, boundary energy gradients, cycle and range projections, a boundary pseudoinverse, and spectral filters. |
 | `introspection_ops` | Boundary analysis, target projection, synthesis, and controller or projector feedback. |
 | `architecture_ops` | Hidden-node balance diagnostics, ReLU equi-normalization, path products, and path-diamond energy. |
+| `chain_complex` | Based exact field complexes, cycles, boundaries, homology representatives, and ambient lifts. |
+| `hypergraph_homology` | Embedded homology of finite hypergraphs through joint missing-face constraints. |
+| `tensor_chain_complex` | Normalized tensor complexes and relative horn quotients, with explicit sparse degree and shifts. |
 | `homology` | Exact normalized chain dimensions, boundary ranks, and homology dimensions of tensor-generated submodules and relative horn quotients over $\mathbb Q$ or a prime field. |
 | `rank_shifted` | Sparse rational tensors in a declared simplicial degree, graph representations, and a circle generator. |
 | `graph_ops` | Graph incidence homology from tensor faces, deletion-chain homology over $\mathbb F_2$, and ordered boundary-rank distributions. |
@@ -151,10 +156,12 @@ target minus source. This realizes the incidence complex of the graph.
 Deleting matching rows and columns of its adjacency matrix gives a
 different complex.
 
-The exact homology functions return dimensions over $\mathbb Q$ by
-default. A prime `modulus=p` selects $\mathbb F_p$. They retain linear
-relations among tensor entries and subtract both incoming and outgoing
-boundary ranks. They do not compute integral torsion or homology bases.
+`generated_homology` and `relative_horn_homology` return dimension and rank
+summaries over $\mathbb Q$ by default. A prime `modulus=p` selects
+$\mathbb F_p$. They retain linear relations among tensor entries and subtract
+both incoming and outgoing boundary ranks. The [chain-complex interface](docs/api/chain_complex.md)
+also supplies differential matrices, cycle bases, and homology representatives.
+These computations use fields and do not compute integral torsion.
 See [the homology examples](docs/experiments/homology_basis.md) and
 [sparse tensor representations](docs/api/rank_shifted.md).
 

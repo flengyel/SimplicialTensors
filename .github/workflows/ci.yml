@@ -22,7 +22,7 @@ jobs:
       - name: Lint (ruff)
         run: ruff check src tests --select E9,F821,F822,F823
       - name: Type check (mypy)
-        run: mypy --ignore-missing-imports --follow-imports=skip src/simplicial_tensors/__init__.py src/simplicial_tensors/tensor_ops.py src/simplicial_tensors/cyclic_tensor_ops.py
+        run: mypy --ignore-missing-imports --follow-imports=skip src/simplicial_tensors/__init__.py src/simplicial_tensors/tensor_ops.py src/simplicial_tensors/cyclic_tensor_ops.py src/simplicial_tensors/chain_complex.py src/simplicial_tensors/hypergraph_homology.py src/simplicial_tensors/tensor_chain_complex.py
       - name: Security (bandit)
         run: bandit -q -r src/simplicial_tensors -lll
 

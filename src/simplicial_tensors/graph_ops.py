@@ -11,7 +11,7 @@ import sympy as sp
 from sympy.polys.matrices import DomainMatrix
 
 from .homology import GeneratedHomology
-from .rank_shifted import GraphEmbedding
+from .rank_shifted import GraphEmbedding, SparseTensor
 from .tensor_ops import bdry
 
 
@@ -25,6 +25,54 @@ def graph_incidence_matrix(embedding: GraphEmbedding) -> sp.Matrix:
     )
 
 
+
+def _graph_components_if_incidence_matches(embedding: GraphEmbedding) -> int | None:
+    """Count components when sparse tensor boundaries match the graph data."""
+    if any(not isinstance(values, (tuple, list)) for values in
+           (embedding.vertices, embedding.edges, embedding.edge_tensors)):
+        return None
+    count = embedding.vertex_count
+    if (not isinstance(count, (int, np.integer))
+            or isinstance(count, (bool, np.bool_)) or count < 0):
+        return None
+    count = int(count)
+    if len(embedding.vertices) != count or len(embedding.edge_tensors) != len(embedding.edges):
+        return None
+    coordinates = set()
+    for vertex in embedding.vertices:
+        if not isinstance(vertex, SparseTensor) or vertex.degree != 0 or len(vertex.entries) != 1:
+            return None
+        coordinate, coefficient = next(iter(vertex.entries.items()))
+        if coefficient != 1 or coordinate in coordinates:
+            return None
+        coordinates.add(coordinate)
+    parents = list(range(count))
+
+    def find(vertex):
+        while parents[vertex] != vertex:
+            parents[vertex] = parents[parents[vertex]]
+            vertex = parents[vertex]
+        return vertex
+
+    for edge, tensor in zip(embedding.edges, embedding.edge_tensors):
+        if (not isinstance(edge, (tuple, list)) or len(edge) != 2
+                or not isinstance(tensor, SparseTensor) or tensor.degree != 1):
+            return None
+        source, target = edge
+        if any(not isinstance(vertex, (int, np.integer))
+               or isinstance(vertex, (bool, np.bool_)) or not 1 <= vertex <= count
+               for vertex in edge):
+            return None
+        source, target = int(source) - 1, int(target) - 1
+        try:
+            expected = embedding.vertices[target] - embedding.vertices[source]
+            if tensor.normalize().face(0) != expected:
+                return None
+        except (TypeError, ValueError):
+            return None
+        parents[find(source)] = find(target)
+    return len({find(vertex) for vertex in range(count)})
+
 def graph_chain_homology(
     embedding: GraphEmbedding, *, modulus: int | None = None,
 ) -> GeneratedHomology:
@@ -34,12 +82,17 @@ def graph_chain_homology(
         or isinstance(modulus, (bool, np.bool_)) or not sp.isprime(modulus)
     ):
         raise ValueError("The modulus must be prime.")
-    field = sp.QQ if modulus is None else sp.GF(int(modulus))
-    incidence = graph_incidence_matrix(embedding)
-    rank = DomainMatrix.from_Matrix(incidence).convert_to(field).rank()
+    components = _graph_components_if_incidence_matches(embedding)
+    if components is not None:
+        vertices, edges = len(embedding.vertices), len(embedding.edge_tensors)
+        rank = vertices - components
+    else:
+        field = sp.QQ if modulus is None else sp.GF(int(modulus))
+        incidence = graph_incidence_matrix(embedding)
+        vertices, edges = incidence.shape
+        rank = DomainMatrix.from_Matrix(incidence).convert_to(field).rank()
     return GeneratedHomology(
-        (incidence.rows, incidence.cols), (0, rank),
-        (incidence.rows - rank, incidence.cols - rank),
+        (vertices, edges), (0, rank), (vertices - rank, edges - rank),
     )
 
 

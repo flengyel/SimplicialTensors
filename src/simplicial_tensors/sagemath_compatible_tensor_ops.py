@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from typing import Any, List, Tuple
 from . import tensor_ops as ops
+from ._symbolic_validation import symbolic_tensor_arguments
 
 import numpy as np
 
@@ -62,10 +63,10 @@ def _is_zero(expr: Any) -> bool:
 
 class SymbolicTensor:
     def __init__(self, shape: Tuple[int, ...], tensor=None, init_type: str = "range"):
-        self.shape = tuple(shape)
+        self.shape, array = symbolic_tensor_arguments(shape, tensor)
 
-        if tensor is not None:
-            self.tensor = np.array(tensor, dtype=object, copy=True)
+        if array is not None:
+            self.tensor = array
         else:
             self.tensor = np.empty(self.shape, dtype=object)
             for idx in np.ndindex(self.shape):

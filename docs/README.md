@@ -6,6 +6,8 @@ commands run from the repository root unless a page specifies another directory.
 
 ## API references
 
+- [Exact chain complexes and tensor representatives](api/chain_complex.md)
+- [Embedded hypergraph homology](api/hypergraph_homology.md)
 - [Degeneracy membership and Moore projection](api/is_degen.md)
 - [Exact generated and relative homology](api/homology.md)
 - [Sparse shifted tensors and graph chains](api/rank_shifted.md)
@@ -18,11 +20,14 @@ commands run from the repository root unless a page specifies another directory.
 and stored results. Each linked guide describes inputs, dependencies, commands,
 outputs, and interpretation. Useful starting points are the
 [homology examples](experiments/homology_basis.md),
+[embedded hypergraph calculations](experiments/hypergraph_homology.md),
+[finite dendroidal chains](experiments/dendroidal_representable_chains.md),
 [Petersen calculation](experiments/petersen_coset_enumeration.md), and
 [tensor-boundary notebooks](experiments/tensor_boundary_notebooks.md).
 
 ## Research notes
 
+- [Dendroidal homology and the array presheaf](research/dendroidal_homology.md)
 - [Spectrum of the diagonal tensor boundary](research/exact_boundary_spectrum.md)
 - [Boundary operators in neural experiments](research/neural_boundary_research_report.md)
 

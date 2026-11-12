@@ -280,6 +280,17 @@ def test_native_sage_exact_operations_agree_with_sympy(shape):
             compare(actual_face, expected_face)
 
 
+
+def test_native_sage_integer_shape_and_empty_axes():
+    tensor = SymbolicTensor(
+        (sage_all.ZZ(1), sage_all.ZZ(2)), tensor=[[sage_all.QQ(1)/7, 3]],
+    )
+    assert tensor.shape == (1, 2)
+    assert tensor.face(0).shape == (0, 1)
+    with pytest.raises(ValueError, match="match the stated shape"):
+        SymbolicTensor((sage_all.ZZ(2), sage_all.ZZ(2)), tensor=[[1]])
+
+
 if __name__ == "__main__":
     # To run these tests, execute from a SageMath command line:
     # sage -python -m pytest test_sagemath_compatible_tensor_ops.py

@@ -82,13 +82,18 @@ def _exact_cases():
         np.array([[large, large + 1], [large + 1, large + 2]], dtype=object),
         np.array([[0, fifth], [0, 0]], dtype=object),
         np.zeros((3, 3), dtype=object),
+        np.array([
+            [large, fifth, negative, 2],
+            [Fraction(large, 5), 1, 0, Fraction(1, 7)],
+            [3, negative, 4, fifth],
+        ], dtype=object),
     ]
 
 
 @pytest.mark.parametrize("modulus", [None, 2, 3])
 @pytest.mark.parametrize("tensor", _exact_cases(), ids=[
     "rectangular", "three-axes", "vector", "degree-zero", "large-exact",
-    "rational-circle", "zero",
+    "rational-circle", "zero", "large-rational-rectangular",
 ])
 def test_generated_and_relative_homology_against_sage_quotient_ranks(tensor, modulus):
     field = sage.QQ if modulus is None else sage.GF(modulus)

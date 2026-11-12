@@ -42,17 +42,43 @@ def _exact_tensor(tensor: np.ndarray, modulus: int | None) -> np.ndarray:
 
 
 def _column_rank(columns: list[np.ndarray], field) -> int:
-    matrix = sp.Matrix(np.column_stack([column.ravel() for column in columns]).tolist())
-    return DomainMatrix.from_Matrix(matrix).convert_to(field).rank()
+    distinct = {}
+    seen = set()
+    for column in columns:
+        entries = tuple(column.flat)
+        if entries in seen:
+            continue
+        seen.add(entries)
+        values = tuple(field.convert(value) for value in entries)
+        if any(values):
+            distinct.setdefault(values, values)
+    if not distinct:
+        return 0
+    rows = {}
+    for column_index, values in enumerate(distinct):
+        for row_index, value in enumerate(values):
+            if value:
+                rows.setdefault(row_index, {})[column_index] = value
+    height = len(next(iter(distinct)))
+    matrix = DomainMatrix(rows, (height, len(distinct)), field)
+    return int(matrix.rank())
 
 
-def _normalized_columns(tensor: np.ndarray, degree: int) -> list[np.ndarray]:
+def _normalized_columns(
+    tensor: np.ndarray, degree: int, cache: dict | None = None,
+) -> list[np.ndarray]:
     active = min(tensor.shape)
     tails = [list(range(active, length)) for length in tensor.shape]
-    return [
-        split_normalized(tensor[np.ix_(*(list(indices) + tail for tail in tails))])[0]
-        for indices in combinations(range(active), degree + 1)
-    ]
+    if cache is None:
+        cache = {}
+    columns = []
+    for indices in combinations(range(active), degree + 1):
+        selected = tensor[np.ix_(*(list(indices) + tail for tail in tails))]
+        key = selected.shape, tuple(selected.flat)
+        if key not in cache:
+            cache[key] = split_normalized(selected)[0]
+        columns.append(cache[key])
+    return columns
 
 
 def _homology(tensor: np.ndarray, modulus: int | None, missing_face: int | None) -> GeneratedHomology:
@@ -68,21 +94,28 @@ def _homology(tensor: np.ndarray, modulus: int | None, missing_face: int | None)
     exact = _exact_tensor(tensor, modulus)
     field = sp.QQ if modulus is None else sp.GF(modulus)
     active = min(tensor.shape)
-    subgenerators = []
+    included_faces: set[int] = set()
     if missing_face is not None:
         if active < 2 or not 0 <= missing_face < active:
             raise ValueError("The omitted face must belong to a positive-degree horn.")
-        subgenerators = [face(exact, i) for i in range(active) if i != missing_face]
+        included_faces = set(range(active)) - {missing_face}
 
     dimensions = []
     ranks = [0]
     subcolumns_below: list[np.ndarray] = []
     subrank_below = 0
     for degree in range(min(active - 1, tensor.ndim) + 1):
-        columns = _normalized_columns(exact, degree)
-        subcolumns = [col for face_tensor in subgenerators for col in _normalized_columns(face_tensor, degree)]
-        subrank = _column_rank(subcolumns, field) if subcolumns else 0
-        dimensions.append(_column_rank(columns, field) - subrank)
+        normalized_cache: dict = {}
+        columns = _normalized_columns(exact, degree, normalized_cache)
+        # Restricting face i selects the original index subsets that omit i.
+        subcolumns = [
+            column for indices, column in zip(combinations(range(active), degree + 1), columns)
+            if not included_faces.issubset(indices)
+        ] if included_faces else []
+        chain_rank = _column_rank(columns, field)
+        subrank = (chain_rank if len(subcolumns) == len(columns)
+                   else _column_rank(subcolumns, field)) if subcolumns else 0
+        dimensions.append(chain_rank - subrank)
         if degree:
             images = [face(column, 0) for column in columns]
             ranks.append(_column_rank(images + subcolumns_below, field) - subrank_below)

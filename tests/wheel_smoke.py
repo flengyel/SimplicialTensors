@@ -48,6 +48,16 @@ def main() -> None:
             raise RuntimeError(f"Module was loaded outside the wheel environment: {origin}")
 
     import_module("simplicial_tensors.notebooks.cocalc_compatible_tensor_ops")
+    from simplicial_tensors.chain_complex import ChainComplex
+    from simplicial_tensors.hypergraph_homology import embedded_chain_complex
+    from simplicial_tensors.rank_shifted import circle_generator
+    from simplicial_tensors.tensor_chain_complex import generated_chain_complex
+    tensor_model = generated_chain_complex(circle_generator())
+    assert isinstance(tensor_model, ChainComplex)
+    assert tensor_model.homology().homology_dimensions == (0, 1)
+    hypergraph_model = embedded_chain_complex([(0,), (1,), (0, 1)])
+    assert hypergraph_model.homology().homology_dimensions == (1, 0)
+    assert hypergraph_model.homology_representatives(0).cols == 1
     environment = dict(os.environ)
     environment.pop("PYTHONPATH", None)
     with tempfile.TemporaryDirectory(prefix="simplicial-wheel-run-") as directory:

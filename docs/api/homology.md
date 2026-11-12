@@ -50,3 +50,14 @@ These functions return dimensions over fields. They do not compute integral tors
 The notebook adapter [homology_basis_with_degeneracy_check_dask.py](../../src/simplicial_tensors/notebooks/homology_basis_with_degeneracy_check_dask.py) also uses the exact relative-homology routine. Its coordinate-unit counts are reported separately from homology dimensions. The module requires no Dask. Run it with `python -m simplicial_tensors.notebooks.homology_basis_with_degeneracy_check_dask`.
 
 The adapter [homology_basis_dask.py](../../src/simplicial_tensors/notebooks/homology_basis_dask.py) delegates its retained `full_homology_verification` entry point to the same exact routine. Running it as a module checks zero, circle, and horn-quotient examples against their known dimensions.
+
+## Chain-level and sparse output
+
+The [based chain interface](chain_complex.md) supplies differential matrices,
+cycle and homology representatives, and ambient coordinate lifts. Its
+`generated_chain_complex` function accepts dense arrays and `SparseTensor`
+objects. A sparse object's declared degree and shifts determine its faces;
+the dimensions of its ambient array do not replace that grading.
+
+The dimension-only routines cache normalized restrictions within a degree and
+discard zero and duplicate rank columns over the selected field.

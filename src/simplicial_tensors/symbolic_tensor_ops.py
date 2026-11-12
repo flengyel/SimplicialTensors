@@ -24,6 +24,7 @@ import sympy as sp
 import numpy as np
 from typing import Tuple, List, Union, Any
 from . import tensor_ops as ops
+from ._symbolic_validation import symbolic_tensor_arguments
 from .tensor_ops import (n_hypergroupoid_conjecture, 
                        SimplicialException)  # Import the exception
 
@@ -33,13 +34,13 @@ class SymbolicTensor:
 
     def __init__(self, shape: Tuple[int, ...], tensor=None, init_type: str = 'range'):
         """Initialize a symbolic tensor."""
-        self.shape = shape
+        self.shape, array = symbolic_tensor_arguments(shape, tensor)
 
-        if tensor is not None:
-            self.tensor = np.array(tensor, dtype=object, copy=True)
+        if array is not None:
+            self.tensor = array
         else:
-            self.tensor = np.empty(shape, dtype=object)
-            for idx in np.ndindex(shape):
+            self.tensor = np.empty(self.shape, dtype=object)
+            for idx in np.ndindex(self.shape):
                 idx_str = ','.join(map(str, idx))
                 if init_type == 'range':
                     self.tensor[idx] = sp.Symbol(f'x_{{{idx_str}}}')

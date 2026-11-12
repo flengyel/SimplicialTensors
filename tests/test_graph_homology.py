@@ -60,3 +60,61 @@ def test_adjacency_tensor_and_graph_chain_complex_have_different_homology():
     assert boundary_rank_distribution(path4) == {0: 4, 2: 20}
     order = (1, 3, 0, 2)
     assert boundary_rank_distribution(path4[np.ix_(order, order)]) == {0: 4, 2: 20}
+
+
+
+@pytest.mark.parametrize("modulus", [None, 2, 3])
+@pytest.mark.parametrize("vertices,edges,betti", [
+    (0, [], (0, 0)),
+    (4, [], (4, 0)),
+    (4, [(1, 2), (1, 2), (3, 3)], (3, 2)),
+])
+def test_valid_graph_homology_avoids_dense_incidence(monkeypatch, vertices, edges, betti, modulus):
+    import simplicial_tensors.graph_ops as graph_ops
+
+    def unexpected_dense_matrix(_embedding):
+        pytest.fail("Validated graph homology should not allocate dense incidence.")
+
+    monkeypatch.setattr(graph_ops, "graph_incidence_matrix", unexpected_dense_matrix)
+    result = graph_ops.graph_chain_homology(graph_embedding(vertices, edges), modulus=modulus)
+    assert result.homology_dimensions == betti
+
+
+@pytest.mark.parametrize("modulus,expected_rank", [(None, 1), (2, 0), (3, 1)])
+def test_modified_graph_tensors_keep_incidence_semantics(monkeypatch, modulus, expected_rank):
+    from dataclasses import replace
+    import simplicial_tensors.graph_ops as graph_ops
+
+    graph = graph_embedding(2, [(1, 2)])
+    modified = replace(graph, edge_tensors=(2 * graph.edge_tensors[0],))
+    calls = []
+    original = graph_ops.graph_incidence_matrix
+
+    def record_matrix(embedding):
+        calls.append(embedding)
+        return original(embedding)
+
+    monkeypatch.setattr(graph_ops, "graph_incidence_matrix", record_matrix)
+    result = graph_ops.graph_chain_homology(modified, modulus=modulus)
+    assert result.boundary_ranks == (0, expected_rank)
+    assert result.homology_dimensions == (2 - expected_rank, 1 - expected_rank)
+    assert calls == [modified]
+
+
+def test_manual_graph_count_mismatch_keeps_tensor_matrix_dimensions():
+    from dataclasses import replace
+
+    graph = replace(graph_embedding(2, [(1, 2)]), vertex_count=7)
+    result = graph_chain_homology(graph)
+    assert result.chain_dimensions == (2, 1)
+    assert result.homology_dimensions == (1, 0)
+
+
+
+def test_unusable_manual_edge_metadata_falls_back_to_tensor_incidence():
+    from dataclasses import replace
+
+    graph = replace(graph_embedding(2, [(1, 2)]), edges=(None,))
+    result = graph_chain_homology(graph)
+    assert result.chain_dimensions == (2, 1)
+    assert result.homology_dimensions == (1, 0)

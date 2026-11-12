@@ -43,3 +43,11 @@ These tests require `HAVE_SAGE=True` and native Sage symbolic entries. They chec
 The [CoCalc adapter](../../src/simplicial_tensors/notebooks/cocalc_compatible_tensor_ops.py) imports the shared implementation. Its `SymbolicTensor` adapter accepts the `tensor_data` keyword, retains `order()` and two-dimensional `to_latex()`, and preserves the adapter type under simplicial operations. `decompose_degen()` returns a normalized tensor $u$ and pairs $(a_i,i)$ satisfying $T=u+\sum_i s_i a_i$. This is an additive decomposition in the degeneracy span.
 
 The [CoCalc notebook](../../experiments/notebooks/cocalc_compatible_tensor_ops.ipynb) imports this adapter and checks a generic horn, the correction rank, a zero tensor, and a sum of degeneracies. Its shape-comparison helper accepts additional shapes explicitly. All default examples are small and use the SymPy fallback when SageMath is absent. Run the module with `python -m simplicial_tensors.notebooks.cocalc_compatible_tensor_ops`.
+
+## Shape validation
+
+Both symbolic tensor backends check that supplied storage matches the declared
+shape and copy it into an object array. Shapes have at least one axis and
+nonnegative integer lengths; exact integer-index scalars are accepted. Boolean
+or nonintegral lengths and mismatched data are rejected. Zero-length axes are
+accepted so that the output of a degree-zero face or boundary can be stored.

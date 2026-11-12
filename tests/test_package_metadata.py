@@ -17,6 +17,9 @@ def test_package_importable() -> None:
         "architecture_ops",
         "graph_ops",
         "homology",
+        "chain_complex",
+        "hypergraph_homology",
+        "tensor_chain_complex",
         "introspection_ops",
         "rank_shifted",
         "tensor_ops",
@@ -37,13 +40,16 @@ def test_readme_reflects_no_examples_directory() -> None:
 
 
 def _git_ls_files(prefix: str) -> list[str]:
-    result = subprocess.run(
-        ["git", "ls-files", prefix],
-        cwd=REPO_ROOT,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
+    try:
+        result = subprocess.run(
+            ["git", "ls-files", prefix],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    except FileNotFoundError:
+        pytest.skip("git is required to validate documentation coverage")
     if result.returncode != 0:
         pytest.skip("git is required to validate documentation coverage")
     return [line.strip() for line in result.stdout.splitlines() if line.strip()]

@@ -26,6 +26,8 @@ Section 7 defines a symmetric dendroidal tensor presheaf and proves the horn-ker
 
 A dendroidal homology construction needs a specified complex and face signs. The planar Dold–Kan correspondence alone does not define homology for the symmetric presheaf used here.
 
+[Dendroidal homology for edge-indexed arrays](../docs/research/dendroidal_homology.md) compares the relevant constructions and gives finite reference matrices.
+
 ## General coefficient objects
 
 Section 5 contracts tensor products of split Čech nerves of arbitrary modules. Extensions to sheaves or other abelian categories should state which products, tensor products, kernels, and exactness properties they use. Coordinate rank formulas require additional hypotheses when the terms are no longer finite free modules.
