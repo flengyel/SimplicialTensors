@@ -48,3 +48,4 @@ ancillary computations, and submission packages.
 - [Repository layout validation, 2026-11-12](development/LAYOUT_VALIDATION_2026-11-12.md)
 - [Exact homology improvements and validation, 2026-11-12](development/HOMOLOGY_VALIDATION_2026-11-12.md)
 - [Kernel sequences and lifting validation, 2026-11-12](development/KERNEL_LIFTING_VALIDATION_2026-11-12.md)
+- [Code repairs and validation, 2026-11-12](development/REVIEW_FIXES_2026-11-12.md)

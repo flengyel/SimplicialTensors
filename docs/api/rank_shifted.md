@@ -74,4 +74,8 @@ modulo a prime and is then rejected.
 basis and normalized edge boundaries match the graph's endpoint data. Otherwise
 it computes the exact rank of $X$ in the selected field. Factory-generated
 embeddings use the connected-component calculation; a supplied alternative
-vertex basis uses its own coordinates.
+vertex basis uses its own coordinates. For a manually modified model, each
+supplied edge tensor represents a formal degree-one generator, and the result
+is the homology of that tensor-incidence complex. Its rank can depend on the
+coefficient field; it need not have the ordinary Betti numbers of the graph
+named by the metadata.
