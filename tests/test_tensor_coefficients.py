@@ -158,6 +158,7 @@ def test_import_does_not_reset_global_random_generators():
 import pickle
 import random
 import numpy as np
+import sympy  # Initialize Sage/SymPy before measuring package-owned RNG effects.
 random.seed(17)
 np.random.seed(23)
 before = pickle.dumps((random.getstate(), np.random.get_state()))
@@ -167,3 +168,14 @@ assert before == after
 """
     env = dict(os.environ, PYTHONPATH=str(Path(__file__).resolve().parents[1] / "src"))
     subprocess.run([sys.executable, "-c", script], check=True, env=env)
+
+
+@pytest.mark.parametrize("backend,rank", [
+    (SymbolicTensor, tensor_filler_difference_rank), (CompatibleTensor, correction_rank),
+])
+@pytest.mark.parametrize("constant", [sp.sqrt(2), sp.pi])
+def test_correction_rank_rejects_irrational_constants(backend, rank, constant):
+    original = backend((1,), tensor=[constant])
+    zero = backend((1,), init_type="zeros")
+    with pytest.raises(ValueError, match="requires polynomials"):
+        rank(original, zero)

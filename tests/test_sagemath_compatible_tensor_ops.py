@@ -34,7 +34,10 @@ Expression = sage_symbolic.Expression
 
 # Import the class and helpers from the Sage-compatible file
 # Ensure sagemath_compatible_tensor_ops.py is in the same directory or Python path.
-from simplicial_tensors.sagemath_compatible_tensor_ops import SymbolicTensor, SimplicialException, n_hypergroupoid_conjecture
+from simplicial_tensors.sagemath_compatible_tensor_ops import (
+    HAVE_SAGE, SymbolicTensor, SimplicialException, correction_rank,
+    n_hypergroupoid_conjecture,
+)
 
 # Seed for reproducibility
 ___SEED___ = 42
@@ -129,11 +132,11 @@ def test_simplicial_identities():
             for i in range(n + 2): # d_i
                 lhs = sjT.face(i)
                 if i < j:
-                    rhs = T.face(j - 1).degen(i)
+                    rhs = T.face(i).degen(j - 1)
                 elif i == j or i == j + 1:
                     rhs = T # Identity
                 else: # i > j + 1
-                    rhs = T.face(j).degen(i - 1)
+                    rhs = T.face(i - 1).degen(j)
                 
                 assert np.all([(simplify(l-r)==0) for l,r in zip(lhs.tensor.flatten(), rhs.tensor.flatten())])
 
@@ -166,6 +169,115 @@ def test_n_hypergroupoid_conjecture_uniqueness():
     observed_unique_2 = not np.any(diff.simplify().tensor != 0)
     assert conjecture_pred_2 == True
     assert observed_unique_2 == True
+
+
+def test_native_sage_backend_is_active():
+    assert HAVE_SAGE
+    assert isinstance(SymbolicTensor((2, 2)).tensor[0, 0], Expression)
+
+
+@pytest.mark.parametrize("i,j", [(0, 2), (2, 0)])
+def test_mixed_identity_exact_matrix(i, j):
+    tensor = SymbolicTensor((3, 3), tensor=np.arange(9, dtype=object).reshape(3, 3))
+    lhs = tensor.degen(j).face(i)
+    rhs = tensor.face(i).degen(j - 1) if i < j else tensor.face(i - 1).degen(j)
+    np.testing.assert_array_equal(lhs.tensor, rhs.tensor)
+
+
+def test_native_sage_correction_rank():
+    x, y = var("sage_rank_x sage_rank_y")
+    QQ = sage_all.QQ
+    zero = SymbolicTensor((2, 2), init_type="zeros")
+    original = SymbolicTensor((2, 2), tensor=[[x, 2*x], [y, 3*y]])
+    rational = SymbolicTensor((2, 2), tensor=[
+        [QQ(1)/3*x, QQ(2)/3*x], [QQ(5)/7*y, QQ(15)/7*y],
+    ])
+    assert correction_rank(original, zero) == 2
+    assert correction_rank(rational, zero) == 2
+    assert correction_rank(zero, zero) == 0
+    assert correction_rank(SymbolicTensor((2, 2), tensor=[
+        [QQ(2**60 + 1)/3, QQ(1)/7], [0, 0],
+    ]), zero) == 1
+
+
+@pytest.mark.parametrize("expression", [
+    sage_all.sin(var("sage_nonpoly_x")),
+    sage_all.sqrt(2)*var("sage_nonpoly_x"),
+    sage_all.sqrt(2),
+])
+def test_native_sage_correction_rank_rejects_nonrational_polynomials(expression):
+    tensor = SymbolicTensor((1,), tensor=[expression])
+    with pytest.raises(ValueError, match="requires polynomials"):
+        correction_rank(tensor, SymbolicTensor((1,), init_type="zeros"))
+
+
+def test_native_sage_sum_of_degeneracies():
+    x, y = var("sage_degen_x sage_degen_y")
+    first = SymbolicTensor((2, 2), tensor=[[x, 0], [0, 0]]).degen(0)
+    second = SymbolicTensor((2, 2), tensor=[[0, 0], [0, y]]).degen(1)
+    tensor = first + second
+    assert tensor.is_degen()
+    for index in range(2):
+        difference = tensor - tensor.face(index).degen(index)
+        assert any(bool(simplify(value) != 0) for value in difference.tensor.flat)
+
+
+@pytest.mark.parametrize("shape", [(1,), (1, 3)])
+def test_native_sage_degree_zero_degeneracy(shape):
+    assert SymbolicTensor(shape, init_type="zeros").is_degen()
+    tensor = SymbolicTensor(shape, tensor=np.full(shape, var("sage_degree_zero"), dtype=object))
+    assert not tensor.is_degen()
+
+
+@pytest.mark.parametrize("shape,unique", [((3, 3), False), ((4, 4), True)])
+@pytest.mark.parametrize("outer_horns", [False, True])
+def test_native_sage_zero_filler_uniqueness(shape, unique, outer_horns):
+    zero = SymbolicTensor(shape, init_type="zeros")
+    assert zero.n_hypergroupoid_comparison(
+        allow_degen=True, outer_horns=outer_horns,
+    ) is unique
+
+
+def _exact_sympy_array(array):
+    import sympy as sp
+
+    result = np.empty(array.shape, dtype=object)
+    for index in np.ndindex(array.shape):
+        rational = sage_all.QQ(array[index])
+        result[index] = sp.Rational(int(rational.numerator()), int(rational.denominator()))
+    return result
+
+
+@pytest.mark.parametrize("shape", [(4,), (3, 4), (3, 3, 4)])
+def test_native_sage_exact_operations_agree_with_sympy(shape):
+    from simplicial_tensors.symbolic_tensor_ops import SymbolicTensor as SympyTensor
+
+    QQ = sage_all.QQ
+    values = np.array([
+        QQ(2**60 + 1)/3 + QQ(index)/7 for index in range(int(np.prod(shape)))
+    ], dtype=object).reshape(shape)
+    tensor = SymbolicTensor(shape, tensor=values)
+    reference = SympyTensor(shape, tensor=_exact_sympy_array(values))
+
+    def compare(actual, expected):
+        assert actual.shape == expected.shape
+        np.testing.assert_array_equal(_exact_sympy_array(actual.tensor), expected.tensor)
+
+    compare(tensor + tensor, reference + reference)
+    compare(tensor - tensor, reference - reference)
+    compare(tensor.bdry(), reference.bdry())
+    compare(tensor.bdry().bdry(), reference.bdry().bdry())
+    for index in range(tensor.dimen() + 1):
+        compare(tensor.face(index), reference.face(index))
+        compare(tensor.degen(index), reference.degen(index))
+        horn = tensor.horn(index)
+        reference_horn = reference.horn(index)
+        for actual_face, expected_face in zip(horn, reference_horn):
+            compare(actual_face, expected_face)
+        actual_filler = tensor.filler(horn, index)
+        compare(actual_filler, reference.filler(reference_horn, index))
+        for actual_face, expected_face in zip(actual_filler.horn(index), horn):
+            compare(actual_face, expected_face)
 
 
 if __name__ == "__main__":

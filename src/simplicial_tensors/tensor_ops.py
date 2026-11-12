@@ -148,14 +148,10 @@ def degen_matrix(z: np.ndarray, j: int) -> np.ndarray:
 def degen(z: np.ndarray, k: int) -> np.ndarray:
     if z.ndim == 0 or not 0 <= k < min(z.shape):
         raise IndexError(f"Degeneracy index {k} out of bounds for tensor shape {z.shape}.")
-    # Parcourez chaque dimension et dupliquez la k-ème hypercolonne
+    # Duplicate indices so object scalars retain their exact coefficient type.
     for axis in range(z.ndim):
-        # Each element of slices can be either a slice or an int, 
-        # which NumPy indexing with tuple(slices) accepts
-        # slice(None) means "take all elements along this axis"
-        slices: list[Union[int, slice]] = [slice(None)] * z.ndim
-        slices[axis] = k  # duplicate the k-th index 
-        z = np.insert(z, k, z[tuple(slices)], axis=axis)
+        indices: np.ndarray = np.insert(np.arange(z.shape[axis]), k, k)
+        z = np.take(z, indices, axis=axis)
     return z
 
 def _get_degeneracy_system_matrix(a: np.ndarray) -> np.ndarray:

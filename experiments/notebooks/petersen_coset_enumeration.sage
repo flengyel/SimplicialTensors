@@ -1,90 +1,76 @@
-# petersen_coset_enumeration.sage
-#
-# Goal: Enumerate labelings of the Petersen graph modulo automorphisms,
-# i.e. compute a right transversal for Aut(P) in S_10, and use it to compute
-# the full rank distribution of the mod-2 adjacency boundary:
-#
-#   ∂T := sum_{k=0}^{9} d_k(T)  in M_9(F_2),
-#   where (d_k T)[u,v] = T[δ_k(u), δ_k(v)] and δ_k skips k.
-#
-# This reduces 10! = 3,628,800 labelings to 10!/|Aut(P)| = 30,240 coset reps
-# since Aut(P) has order 120.
+"""Enumerate Petersen adjacency deletion-boundary ranks over GF(2)."""
 
-from sage.all import *
+from collections import Counter
 
-def delta(k, idx):
-    # coface δ_k: [N-2] -> [N-1] skipping k (Sage indices 0..)
-    return idx if idx < k else idx + 1
+import numpy as np
+from sage.all import GF, factorial, graphs, libgap, matrix
 
-def face_map_adj(T, k):
-    # T is an NxN matrix over GF(2), returns (N-1)x(N-1)
-    N = T.nrows()
-    dim = N - 1
-    out = matrix(GF(2), dim, dim)
-    for u in range(dim):
-        ru = delta(k, u)
-        for v in range(dim):
-            rv = delta(k, v)
-            out[u, v] = T[ru, rv]
-    return out
+from simplicial_tensors.tensor_ops import bdry
+
 
 def boundary_mod2(T):
-    N = T.nrows()
-    dim = N - 1
-    B = zero_matrix(GF(2), dim, dim)
-    for k in range(N):
-        B += face_map_adj(T, k)
-    return B
+    """Apply the shared boundary over the Boolean model of GF(2)."""
+    entries = np.fromiter((bool(x) for x in T.list()), dtype=bool).reshape(T.nrows(), T.ncols())
+    boundary = bdry(entries)
+    return matrix(GF(2), boundary.astype(int).tolist())
+
 
 def permute_adjacency(T, perm):
-    # perm is a list of length N giving new order of vertices (0-based).
-    # Return P T P^T via simultaneous row/col permutation.
-    N = T.nrows()
-    return matrix(GF(2), [[T[perm[i], perm[j]] for j in range(N)] for i in range(N)])
+    """Reorder old vertices by ``T[perm[i], perm[j]]``."""
+    return T.matrix_from_rows_and_columns(perm, perm)
 
-# --- Build Petersen graph and its adjacency matrix over GF(2) ---
-P = graphs.PetersenGraph()
-# Ensure vertices are 0..9 in a fixed order:
-P = P.relabel({v:i for i,v in enumerate(sorted(P.vertices()))}, inplace=False)
-N = P.order()
 
-T0 = matrix(GF(2), P.adjacency_matrix())
+def gap_perm_to_list(g, size):
+    """Convert a GAP right-coset representative to old vertices in new order."""
+    return [int(i) - 1 for i in libgap.ListPerm(g**-1, size)]
 
-# --- Automorphism group and coset reps of S_N / Aut(P) ---
-Aut = P.automorphism_group()   # subgroup of SymmetricGroup(N) (acts on 0..N-1)
-print("N =", N)
-print("|Aut(P)| =", Aut.order())
 
-# Use GAP via libgap to get a right transversal efficiently.
-# (This pattern is standard in Sage for large coset enumerations.)
-Sgap = libgap.SymmetricGroup(N)
-Agap = libgap(Aut)   # convert Sage PermutationGroup -> GAP group
+def right_coset_rank_distribution(graph):
+    """Return group order, coset count, distinct matrices, and two histograms."""
+    P = graph.relabel({v: i for i, v in enumerate(sorted(graph.vertices()))},
+                      inplace=False)
+    N = P.order()
+    T0 = matrix(GF(2), P.adjacency_matrix())
+    Aut = P.automorphism_group()
+    Sgap = libgap.SymmetricGroup(N)
+    Agap = libgap(Aut)
+    reps_gap = [c.Representative() for c in Sgap.RightCosets(Agap)]
 
-cosets = Sgap.RightCosets(Agap)
-reps_gap = [c.Representative() for c in cosets]
-print("Number of right cosets =", len(reps_gap))
-print("Expected =", factorial(N)//Aut.order())
+    # GAP right cosets are Aut*g. With old vertices in new order, use g^-1:
+    # an automorphism of T0 then acts before the new vertex labels are assigned.
+    counts = Counter()
+    seen = set()
+    for g in reps_gap:
+        Tp = permute_adjacency(T0, gap_perm_to_list(g, N))
+        key = bytes(bool(x) for x in Tp.list())
+        if key in seen:
+            raise AssertionError("Right transversal produced duplicate adjacency matrices")
+        seen.add(key)
+        counts[int(boundary_mod2(Tp).rank())] += 1
 
-# Convert a GAP permutation into a 0-based python list perm[0..N-1]
-def gap_perm_to_list(g):
-    # GAP permutations act on {1..N}; convert to list of images of 1..N, then shift to 0..N-1
-    imgs = [Integer(g.Image(i)) for i in range(1, N+1)]
-    return [i-1 for i in imgs]
+    expected = factorial(N) // Aut.order()
+    if len(reps_gap) != expected or len(seen) != expected:
+        raise AssertionError("Right transversal does not cover every labeled adjacency matrix")
+    weighted = {r: c * int(Aut.order()) for r, c in sorted(counts.items())}
+    return int(Aut.order()), len(reps_gap), len(seen), dict(sorted(counts.items())), weighted
 
-# --- Compute rank distribution over all labelings using coset reps ---
-counts = {}
-for g in reps_gap:
-    perm = gap_perm_to_list(g)
-    Tp = permute_adjacency(T0, perm)
-    Bp = boundary_mod2(Tp)
-    r = Bp.rank()
-    counts[r] = counts.get(r, 0) + 1
 
-# Each coset corresponds to Aut.order() permutations with the same labeled adjacency matrix.
-weighted = {r: c * Aut.order() for r, c in counts.items()}
+def main():
+    P = graphs.PetersenGraph()
+    order, num_cosets, num_distinct, counts, weighted = right_coset_rank_distribution(P)
+    assert order == 120
+    assert num_cosets == num_distinct == 30240
+    assert counts == {4: 376, 6: 8496, 8: 21368}
+    assert weighted == {4: 45120, 6: 1019520, 8: 2564160}
+    assert sum(weighted.values()) == factorial(P.order())
+    print("N =", P.order())
+    print("|Aut(P)| =", order)
+    print("Number of right cosets =", num_cosets)
+    print("Distinct relabeled adjacency matrices =", num_distinct)
+    print("Unweighted counts:", counts)
+    print("Weighted counts:", weighted)
+    print("Check totals:", sum(weighted.values()), "vs", factorial(P.order()))
 
-print("\nUnweighted counts over coset reps (sum = #cosets):")
-print(sorted(counts.items()))
-print("\nWeighted counts over all permutations in S_N (sum = N!):")
-print(sorted(weighted.items()))
-print("\nCheck totals:", sum(weighted.values()), "vs", factorial(N))
+
+if __name__ == "__main__":
+    main()

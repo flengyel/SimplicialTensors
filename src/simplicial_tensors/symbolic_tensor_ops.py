@@ -264,9 +264,10 @@ def _polynomial_coefficient_rank(expressions) -> int:
     """
     expressions = [sp.expand(sp.sympify(expr)) for expr in expressions]
     variables = sorted(set().union(*(expr.free_symbols for expr in expressions)), key=str)
-    if not variables:
-        return int(any(expr != 0 for expr in expressions))
     try:
+        if not variables:
+            coefficients = [sp.QQ.convert(expr) for expr in expressions]
+            return int(any(coefficient != 0 for coefficient in coefficients))
         polynomials = [sp.Poly(expr, *variables, domain=sp.QQ) for expr in expressions]
     except (sp.PolynomialError, sp.polys.polyerrors.CoercionFailed) as exc:
         raise ValueError("Correction rank requires polynomials with rational coefficients.") from exc
