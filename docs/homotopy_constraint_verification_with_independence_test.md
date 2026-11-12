@@ -1,51 +1,12 @@
-# Homotopy Constraint Verification With Independence Test
+# Horn constraints and face independence
 
-## Source
+[Source](../experiments/homotopy_constraint_verification_with_independence_test.py) computes the NumPy rank of nonzero coordinate images under each face. It then compares uncovered horn coordinates with the coordinate tensors killed by all included faces.
 
-```text
-experiments/homotopy_constraint_verification_with_independence_test.py
-```
-
-## Type
-
-Python script
-
-## Research Goal
-
-Verifies chain-homotopy identities and compatibility constraints used to prove contractibility and filtration compatibility.
-
-## Relevant Results in TeX Sources
-
-- tex/equivariant_homotopy.tex (explicit homotopy operator H and identities).
-- tex/normalization.tex (Moore filler decomposition and exact horn sequence).
-- tex/dichotomy.tex (induced homological consequences of contractibility).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
+python -m pip install dask
 python experiments/homotopy_constraint_verification_with_independence_test.py
 ```
 
-## Inputs
+This script requires Dask through its import of `horn_map_reduce.py`. The cases are `(3, 3)`, `(4, 4, 4)`, `(3, 4, 5)`, `(4, 4, 4, 4)`, and `(2, 2)`. All available face and horn indices are checked.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
-
-## Outputs
-
-- Identity checks, mismatch reports, and supporting numeric/symbolic evidence for homotopy constraints.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+Separate summaries cover independence and support constraints. The first uses floating-point rank and the second compares finite sets. Despite its filename, the program does not construct a homotopy.

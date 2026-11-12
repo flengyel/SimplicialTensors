@@ -1,54 +1,29 @@
-# `test_symbolic_tensor_ops.py` documentation
+# Symbolic tensor tests
 
-## Location
-- Test module: `tests/test_symbolic_tensor_ops.py`
+[tests/test_symbolic_tensor_ops.py](../tests/test_symbolic_tensor_ops.py) tests [simplicial_tensors.symbolic_tensor_ops](../src/simplicial_tensors/symbolic_tensor_ops.py) with NumPy object arrays and SymPy expressions. Pytest skips the module if either dependency cannot be imported.
 
-## Purpose
-This pytest module validates symbolic simplicial tensor behavior implemented in `simplicial_tensors.symbolic_tensor_ops`.
+## Coverage
 
-It checks:
-- symbol naming and shape behavior,
-- `face`, `degen`, `bdry`, `horn`, and `filler` consistency,
-- `tensor_filler_difference_rank(...)`,
-- `n_hypergroupoid_comparison(...)` behavior,
-- simplicial identities and `bdry(bdry(T)) = 0` on randomized shapes.
+The fourteen tests cover entry names, face and degeneracy shapes, boundary construction, agreement between included horn faces and a filler, and the type and nonnegativity of tensor_filler_difference_rank.
 
-## Test coverage summary
-The module defines 14 tests:
-1. variable naming
-2. face/degen shape preservation
-3. boundary construction
-4. horn/filler face agreement
-5. filler-difference rank type/value
-6. conjecture/comparison compatibility check
-7. no-inner-horns comparison case (`(2,2)`)
-8. per-inner-horn comparison enforcement via monkeypatch
-9. boundary-squared-zero randomized check
-10. first simplicial identity
-11. second simplicial identity
-12. third simplicial identity
-13. fourth simplicial identity
-14. fifth simplicial identity
+Two tests check comparison control flow. A (2, 2) tensor has no inner horns, so the default comparison returns True. A monkeypatch changes one earlier inner-horn filler while preserving a later one and checks that the method reports the discrepancy.
 
-## Outputs
-- Standard pytest progress and summary output.
-- For normal passing runs, no custom file output is generated.
+The remaining tests check the five families of simplicial identities and boundary squared equal to zero. They use bounded random shapes and seed Python's random module from tensor_ops.___SEED___.
 
-## Logging
-- No file logging is configured by this test module.
-- Output is standard pytest console output.
+The function tensor_filler_difference_rank counts distinct simplified difference expressions. Its test does not establish their linear independence.
 
-## Run
-From repository root:
+## Running the tests
 
-```powershell
-.\.venv\Scripts\python.exe -m pytest -q tests\test_symbolic_tensor_ops.py
-```
+From the repository root after installing the package and pytest:
 
-Run full repository tests:
+~~~sh
+python -m pytest -q tests/test_symbolic_tensor_ops.py
+~~~
 
-```powershell
-.\.venv\Scripts\python.exe -m pytest -q
-```
+The current module passes all fourteen tests with the SymPy backend. Output goes to the pytest console, with no experiment data files.
 
+~~~sh
+python -m pytest -q
+~~~
 
+The second command runs the repository suite.

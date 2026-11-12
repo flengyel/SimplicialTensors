@@ -1,51 +1,13 @@
-# Fixed Index Face Independence
+# Coordinate images under one face
 
-## Source
+[Source](../experiments/fixed_index_face_independence.py) applies a fixed face to each coordinate tensor, discards zero images, and computes the NumPy rank of the surviving flattened arrays.
 
-```text
-experiments/fixed_index_face_independence.py
-```
-
-## Type
-
-Python script
-
-## Research Goal
-
-Performs targeted computational checks of combinatorial identities and structural invariants on explicit tensor families.
-
-## Relevant Results in TeX Sources
-
-- tex/horns.tex (missing-index characterization and face-kernel basis).
-- tex/combinatorics.tex (rank and finite-difference formulas).
-- tex/normalization.tex (decomposition through Moore filler map).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
 python experiments/fixed_index_face_independence.py
 ```
 
-## Inputs
+The cases are `(3, 3)` with indices 0 and 1, `(4, 4, 4)` with indices 0 and 2, and `(3, 4, 5)` with index 1. Each prints the survivor count, matrix rank, and equality comparison.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
+A coordinate tensor survives precisely when its tuple avoids the deleted label. Deleting that label maps the survivors bijectively to the face's coordinate basis. The expected count is `prod(s - 1 for s in shape)`. The checks give 4 survivors for `(3, 3)` and 24 for `(3, 4, 5)`.
 
-## Outputs
-
-- Consistency checks, discrepancy reports, and compact experiment summaries.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+The implementation uses floating-point rank. The assertion concerns the surviving coordinate tensors. The face map on the full module has a nonzero kernel.

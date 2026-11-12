@@ -1,267 +1,172 @@
 # SimplicialTensors
 
-Simplicial operations on matrices and higher-order tensors, with research scripts for diagonal simplicial tensor modules (DSTM), horn/filler behavior, and related combinatorics.
+SimplicialTensors implements simplicial operations on matrices and
+hypermatrices using NumPy and SymPy. Its research scripts study horn
+fillers, ordered graph boundaries, and boundary-based neural diagnostics.
 
-## What This Repository Contains
-
-This repository has two main layers:
-
-1. Reusable library code in `src/simplicial_tensors`.
-2. Research scripts and computational studies in `experiments`.
-
-The core package implements simplicial operators on NumPy arrays (and symbolic analogues), including:
-
-- Face maps `d_i`
-- Degeneracy maps `s_i`
-- Boundary/coboundary operators
-- Horn construction and filler computation
-- Utilities for testing the n-hypergroupoid uniqueness criterion on shapes/tensors
-
-The TeX sources in `tex` develop the mathematical framework around diagonal simplicial tensor modules and strict algebraic `n`-hypergroupoids.
-
-## Mathematical Scope
-
-The implementation is aligned with standard simplicial identities and supports computational checks of statements used throughout the project, including:
-
-- `d_i d_j = d_{j-1} d_i` for `i < j`
-- `s_i s_j = s_{j+1} s_i` for `i <= j`
-- Mixed `d_i s_j` relations
-- `d^2 = 0` (boundary squared is zero)
-
-For this codebase, the shape-dependent heuristic/conjecture function is:
-
-- `n_hypergroupoid_conjecture(shape)` returns whether `order(shape) < dimen(shape)`
-
-and the computational check:
-
-- `n_hypergroupoid_comparison(tensor, ...)` compares reconstructed horns/fillers and can raise `SimplicialException` when assumptions fail (for example degenerate boundaries unless explicitly allowed).
-
-## Package Modules
-
-### `simplicial_tensors.tensor_ops`
-
-Primary numeric API (NumPy/SymPy-based), including:
-
-- Tensor constructors: `random_tensor`, `random_real_tensor`, `range_tensor`
-- Shape/index helpers: `get_index`, `dimen`, `order`
-- Simplicial maps: `face`, `hface`, `vface`, `degen`, `hdegen`, `vdegen`
-- Chain-level maps: `bdry`, `hbdry`, `vbdry`, `cobdry`, `bdry_n`, `bdry_mod1`
-- Horn/filler pipeline: `horn`, `kan_condition`, `filler`
-- Degeneracy analysis: `is_degen`, `decompose_degen`, `decompose_degen_numpy`
-- Conjecture/comparison helpers: `n_hypergroupoid_conjecture`, `n_hypergroupoid_comparison`
-- Tensor permutation/cycle helpers: `permute_tensor`, `random_axis_permutation`, `cyclic`, `cyclic_signed`
-
-### `simplicial_tensors.adjoint_ops`
-
-Frobenius adjoints and exact finite boundary filters:
-
-- `face_adjoint`, `bdry_adjoint`
-- `boundary_homeostasis_gradient`, `boundary_homeostasis_feedback`
-- `lower_hodge_laplacian`, `exact_cycle_projection`
-- `boundary_pseudoinverse`, `project_to_boundary`
-- `boundary_sobolev_filter`
-
-### `simplicial_tensors.introspection_ops`
-
-Exact boundary analysis--controller--synthesis without an implicit scalar
-penalty:
-
-- `boundary_analyze`, `boundary_synthesize`
-- `project_boundary_signal`, `boundary_target_update`
-- `boundary_controller_feedback`, `boundary_projector_feedback`
-
-The analysis retains the cycle channel and the boundary signal, so it is
-lossless. Controller targets are projected into the realizable boundary range
-and returned to weight space with the exact Moore--Penrose decoder.
-Individual controllers can still impose hard constraints; for example, a zero
-target projects onto the cycle space.
-
-### `simplicial_tensors.architecture_ops`
-
-Typed neural-architecture operations that avoid identifying unrelated weight
-axes:
-
-- hidden-node incidence/balance residuals, energies, and gradients
-- function-preserving ReLU equi-normalization
-- two-edge path products and a path-diamond diagnostic
-
-### `simplicial_tensors.symbolic_tensor_ops`
-
-SymPy-backed symbolic tensor class:
-
-- `SymbolicTensor` with symbolic `face`, `degen`, `bdry`, `horn`, `filler`
-- Symbolic uniqueness checks and diagnostics
-
-### `simplicial_tensors.sagemath_compatible_tensor_ops`
-
-SageMath-friendly symbolic variant:
-
-- Uses Sage when available
-- Falls back to SymPy so imports still work outside Sage
-
-### `simplicial_tensors.cyclic_tensor_ops`
-
-Axis-specific cyclic/face/degeneracy helpers:
-
-- `face_axis`, `degen_axis`, `cyclic`, `cyclic_signed`
+For a hypermatrix of shape $(n_1,\ldots,n_k)$, the numeric module defines
+its order as $k$ and its simplicial degree as $\min_a n_a-1$.
+The face `face(t, i)` deletes index `i` on every axis. The degeneracy
+`degen(t, i)` duplicates that index on every axis. For a matrix these
+operations delete or duplicate the same row and column.
 
 ## Installation
 
-### Requirements
+Python 3.10 or later is required. The package dependencies are NumPy,
+SymPy, and SciPy.
 
-- Python 3.10+
-- Core dependencies (declared in `pyproject.toml`):
-  - `numpy`
-  - `sympy`
-  - `scipy`
-
-### Editable install
-
-```bash
+```sh
+git clone https://github.com/flengyel/SimplicialTensors.git
+cd SimplicialTensors
 python -m venv .venv
-. .venv/Scripts/activate  # PowerShell: .\.venv\Scripts\Activate.ps1
-pip install --upgrade pip
-pip install -e .
+. .venv/bin/activate
+python -m pip install -e .
 ```
 
-## Quick Start
+On Windows PowerShell, activate the environment with
+`.\.venv\Scripts\Activate.ps1`.
+
+Additional dependencies belong to individual experiments. Graph scripts
+use NetworkX. Plotting and statistical scripts may require Matplotlib,
+pandas, seaborn, or scikit-learn. Distributed and neural scripts may use
+Dask, tqdm, or PyTorch. The Sage notebook and scripts require SageMath.
+Each experiment page lists its dependencies and entry point.
+
+## Numeric operations
+
+Run the following after installation.
 
 ```python
 import numpy as np
-from simplicial_tensors.tensor_ops import range_tensor, face, degen, bdry, horn, filler
+from simplicial_tensors.tensor_ops import bdry, degen, face, filler, horn, kan_condition
 
-t = range_tensor((4, 4, 4))
-f1 = face(t, 1)
-g1 = degen(f1, 1)
-b = bdry(t)
+t = np.arange(9).reshape(3, 3)
+print(face(t, 1))
+print(degen(t, 1).shape)
+print(bdry(t).shape)
 
-h = horn(t, 1)
-t_prime = filler(h, 1)
-
-print("t:", t.shape)
-print("face:", f1.shape)
-print("degen(face):", g1.shape)
-print("bdry:", b.shape)
-print("horn length:", len(h))
-print("filler matches input:", np.array_equal(t, t_prime))
+h = horn(t, 0)
+assert kan_condition(h, 0)
+u = filler(h, 0)
+print(all(np.array_equal(face(u, i), h[i]) for i in (1, 2)))
 ```
 
-## Reproducibility and Random Seeds
+The face is `[[0, 2], [6, 8]]`, the degeneracy has shape `(4, 4)`,
+the boundary has shape `(2, 2)`, and the final comparison is `True`.
+The horn array contains a zero placeholder at the omitted face. That
+placeholder can promote integer inputs to floating point.
+`filler` constructs one filler and checks the omitted-face index.
+Call `kan_condition(h, k)` to check compatibility before filling.
 
-`tensor_ops` exposes `___SEED___ = 123` and uses a module-level RNG stream.
+The boundary is the alternating sum of diagonal faces. `bdry` preserves
+the input dtype, so fixed-width integer arithmetic can overflow.
+`random_tensor` returns `int16` values. Use an appropriate coefficient
+representation for the calculation.
 
-- `random_tensor(..., seed=None)` and `random_real_tensor(..., seed=None)` use the shared stream.
-- Passing an explicit seed creates a deterministic per-call generator.
+The current numeric implementation has two relevant limitations.
 
-So repeated calls with the same explicit seed are reproducible, while calls without a seed advance the shared stream.
+- `face` and `bdry` raise `IndexError` on one-axis arrays because the
+  internal face routine accesses a second axis.
+- At degree zero, `bdry` returns an array with each axis shortened by
+  one. The manuscript uses an unaugmented chain complex with zero
+  outgoing differential in degree zero. Code that constructs that
+  complex must apply the degree-zero convention explicitly.
 
-## Tests
+`is_degen` tests membership in the sum of degeneracy images.
+`decompose_degen` uses SymPy to solve a system whose columns are first
+built as floating-point arrays. `decompose_degen_numpy` uses least
+squares and a numerical reconstruction check.
 
-Run all tests:
+The legacy name `n_hypergroupoid_conjecture(shape)` evaluates
+`len(shape) < min(shape) - 1`. `n_hypergroupoid_comparison` compares an
+input with selected horn fillers and may reject degenerate boundaries.
+Its return value alone does not establish uniqueness of every filler.
+See [the comparison experiment](docs/n_hypergroupoid_conjecture.md).
 
-```bash
-pytest -q
+## Library modules
+
+| Module | Implemented operations |
+|---|---|
+| `tensor_ops` | Tensor constructors, diagonal faces and degeneracies, boundaries, horns and fillers, degeneracy decomposition, and axis permutations. |
+| `symbolic_tensor_ops` | SymPy-backed `SymbolicTensor` with face, degeneracy, boundary, horn, and filler methods. |
+| `sagemath_compatible_tensor_ops` | A symbolic variant using SageMath when available and SymPy otherwise. |
+| `cyclic_tensor_ops` | Face, degeneracy, and cyclic operations on a specified axis. |
+| `adjoint_ops` | Frobenius adjoints, boundary energy gradients, cycle and range projections, a boundary pseudoinverse, and spectral filters. |
+| `introspection_ops` | Boundary analysis, target projection, synthesis, and controller or projector feedback. |
+| `architecture_ops` | Hidden-node balance diagnostics, ReLU equi-normalization, path products, and path-diamond energy. |
+
+Import these modules through `simplicial_tensors`, for example
+`from simplicial_tensors.adjoint_ops import face_adjoint`.
+The package root lazily exports `adjoint_ops`, `architecture_ops`,
+`introspection_ops`, `tensor_ops`, and `symbolic_tensor_ops`.
+The other modules are available through their full submodule paths.
+
+Importing `tensor_ops` resets Python's and NumPy's global random seeds
+to 123 and creates a shared generator. Supplying `seed` to
+`random_tensor` or `random_real_tensor` creates a generator for that
+call. Calls with `seed=None` advance the shared generator.
+
+## Manuscript and computations
+
+The current manuscript is *Computations with simplicial tensor modules*.
+Its driver is [tex/dstm_short.tex](tex/dstm_short.tex).
+The [manuscript instructions](tex/README.md) describe the build and
+arXiv source package.
+
+The full simplicial module specified by a shape is contractible.
+A submodule generated by a single hypermatrix can have nonzero homology.
+For example, the off-diagonal matrix unit $E_{01}$ generates a submodule
+with one-dimensional first homology, although it is a boundary in the
+full square-matrix complex.
+
+The scripts in [tex/anc](tex/anc) reproduce that example, a matrix horn,
+and the Petersen graph incidence calculation. Their
+[instructions](tex/anc/README.txt) pin the software revisions they
+require. The pinned revisions include fixes and modules absent from the current
+default-branch package. Follow the ancillary instructions to reproduce
+these calculations.
+
+## Experiments
+
+[The experiment catalog](docs/experiments_catalog.md) links every
+tracked script and result artifact. Experiment pages give the source,
+dependencies, command, output, and applicable qualifications. Several
+scripts run substantial computations at import time.
+
+Useful starting points include the
+[range-tensor examples](docs/examples_range_tensors.md),
+[matrix-horn computation](docs/filler_combinatorics.md),
+[Petersen rank distribution](docs/petersen_brd_right_cosets.md), and
+[boundary adjoints](docs/boundary_homeostasis.md).
+
+The neural studies distinguish adjoint energy regularization from
+boundary analysis followed by controller-driven synthesis. The latter
+retains the cycle component and projects the controller's target into
+the realizable boundary range. The spectral formulas in these modules
+are evaluated with floating-point arithmetic.
+Read the [research report](docs/neural_boundary_research_report.md) and
+[observer results](experiments/boundary_observer_report.md) for their
+protocols, measured results, and scope.
+
+## Tests and development
+
+```sh
+python -m pip install pytest
+python -m pytest -q
 ```
 
-Test coverage includes:
+The tests cover the maintained numeric, symbolic, adjoint, architecture,
+and feedback APIs, along with package metadata and experiment
+documentation coverage. Sage-specific tests are skipped when SageMath
+is unavailable.
 
-- Simplicial identities for numeric and symbolic tensors
-- Equivariance under tensor-axis permutations
-- Cyclic operator behavior
-- Graph-related equivariance checks
-- Package metadata and documentation coverage checks
-
-Sage-specific tests are present and skipped automatically unless Sage is available.
-
-To run Sage-specific tests explicitly:
-
-```bash
-sage -python -m pytest tests/test_sagemath_compatible_tensor_ops.py -q
-```
-
-## CI Quality Gates
-
-GitHub Actions (`.github/workflows/ci.yml`) runs:
-
-1. `quality` job (Python 3.12):
-   - Ruff fatal checks
-   - Mypy on selected core modules
-   - Bandit high-severity scan
-2. `tests` matrix job (Python 3.10, 3.11, 3.12), dependent on `quality`
-
-Local equivalents:
-
-```bash
-ruff check src tests --exclude src/simplicial_tensors/notebooks --select E9,F821,F822,F823
-mypy --ignore-missing-imports --follow-imports=skip src/simplicial_tensors/__init__.py src/simplicial_tensors/tensor_ops.py src/simplicial_tensors/cyclic_tensor_ops.py
-bandit -q -r src/simplicial_tensors -x src/simplicial_tensors/notebooks -lll
-pytest -q
-```
-
-## Experiments and Documentation
-
-The `experiments` directory contains standalone scripts and artifacts used for research exploration.
-
-The boundary/AI investigation, literature synthesis, exact spectrum result,
-legacy regularization findings, and corrected observer--feedback framing are
-collected in
-[`docs/neural_boundary_research_report.md`](docs/neural_boundary_research_report.md).
-The subsequent passive observer test and its negative go/no-go decision are
-reported in
-[`experiments/boundary_observer_report.md`](experiments/boundary_observer_report.md).
-
-Current documentation policy in this repository:
-
-- Each tracked `experiments/*.py` and `experiments/*.sage` script has a corresponding `docs/<script_stem>.md` page.
-- `docs/experiments_catalog.md` inventories tracked files in `experiments`.
-
-Some experiment scripts depend on additional packages not declared in core package metadata (for example `networkx`, `matplotlib`, `pandas`, `seaborn`, `torch`, `dask`, `tqdm`, or SageMath). Install these as needed for the specific script you run.
-
-A few scripts also assume local helper modules or a particular working directory; consult each script header and its paired page in `docs` before running.
-
-### Interpreting experiment output
-
-Experiment scripts are research diagnostics, not all-or-nothing package tests. Some scripts print labels such as:
-
-- `CHECKED`: a local identity, invariant, or sanity check was verified on the selected finite data.
-- `CLASSIFIES`: the script classified a construction, often showing that it works only in a restricted or trivial sense.
-- `FLAGS`: the script found that a proposed verification is weak, tautological, or insufficient for the stronger claim being examined.
-- `REFUTES`: the script found a finite counterexample or obstruction to the stronger claim being examined.
-- `CONFIRMS`: the script confirmed a local finite fact, without implying a broader theorem.
-
-A script may exit successfully when it finds an expected counterexample. In that case, success means the diagnostic behaved as intended; it does not mean every mathematical claim under examination was confirmed.
-
-If an experiment cannot import `simplicial_tensors`, either run `pip install -e .` from the repository root or set `PYTHONPATH=src` before invoking the script.
-
-## TeX Manuscript Assets
-
-The `tex` directory contains the paper sources and supporting files, including:
-
-- Main file: `tex/dstm.tex`
-- Section files such as `introduction.tex`, `horns.tex`, `normalization.tex`, `combinatorics.tex`, and `dichotomy.tex`
-- Bibliography: `tex/dstm.bib`
-- Generated PDFs/artifacts used in drafting and submission
-
-## Repository Layout
-
-- `src/simplicial_tensors`: reusable library code
-- `tests`: pytest suites
-- `experiments`: runnable research scripts and generated artifacts
-- `docs`: documentation for experiments and project notes
-- `tex`: manuscript source and paper artifacts
-- `plots`, `logs`: generated outputs
-- `Cleanup`: maintenance scripts
-
-## Development Notes
-
-Repository conventions are documented in `GUIDELINES.md`.
-
-Key expectations:
-
-- Reusable logic lives in `src/simplicial_tensors`.
-- Experiment-specific workflows live in `experiments`.
-- Avoid duplicating library logic across scripts.
+GitHub Actions runs Ruff, selected Mypy checks, Bandit, and a pytest
+matrix for Python 3.10, 3.11, and 3.12. The exact commands are in
+[.github/workflows/ci.yml](.github/workflows/ci.yml).
+Repository conventions are in [GUIDELINES.md](GUIDELINES.md).
+Reusable implementations belong in `src/simplicial_tensors`, experiments
+in `experiments`, documentation in `docs`, and manuscript sources in `tex`.
 
 ## License
 
-GPL-3.0-or-later. See `LICENSE`.
+GPL-3.0-or-later. See [LICENSE](LICENSE).

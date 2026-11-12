@@ -1,51 +1,26 @@
-# N Hypergroupoid Conjecture
+# Shape predicate and selected-filler comparison
 
-## Source
+[`tensor_ops.py`](../src/simplicial_tensors/tensor_ops.py) defines `n_hypergroupoid_conjecture(shape)` as `len(shape) < min(shape) - 1`. These are respectively the number of axes and the simplicial degree. In the manuscript's full module the horn kernel vanishes above the number of axes.
 
-```text
-experiments/n_hypergroupoid_conjecture.py
-```
+`n_hypergroupoid_comparison(a, outer_horns=False, verbose=False, allow_degen=False)` constructs horns of `a`, fills them with Moore's algorithm, and compares the selected fillers with `a`. It normally checks only inner horns. `outer_horns=True` includes endpoint horns. Unless `allow_degen=True`, a degenerate boundary raises `SimplicialException`.
 
-## Type
+A false return exhibits another filler for a checked horn. A true return means every selected filler equals `a`. That can hold for a degenerate input even when other fillers exist, so the Boolean alone does not certify uniqueness.
 
-Python script
+[The experiment](../experiments/n_hypergroupoid_conjecture.py) compares the checks on random arrays.
 
-## Research Goal
-
-Tests the strict algebraic n-hypergroupoid criterion by sampling shapes/orders and comparing observed filler uniqueness to the k-versus-n threshold.
-
-## Relevant Results in TeX Sources
-
-- tex/combinatorics.tex (Hypergroupoid Classification theorem).
-- tex/horns.tex (criterion R_{p,j} != 0 iff k >= p).
-- tex/dichotomy.tex (filler dichotomy by order regime).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
 python experiments/n_hypergroupoid_conjecture.py
 ```
 
-## Inputs
+The default run requests 750 arrays of shape `(8, 10, 12)`, rejects degenerate boundaries, and performs three decreasing-degree checks. The rejection loops have no iteration limit. Dense degeneracy systems can be expensive.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
+A smaller call is
 
-## Outputs
+```python
+from simplicial_tensors.tensor_ops import n_hypergroupoid_comparison, random_tensor
 
-- Pass/fail traces of predicted versus observed uniqueness across sampled shapes.
+a = random_tensor((3, 3), low=1, high=10, seed=123)
+print(n_hypergroupoid_comparison(a, allow_degen=True))
+```
 
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+The experiment's `force_degeneracy` option changes the generated shape while its prediction uses the earlier `shape` variable. This mismatch affects forced-degeneracy comparisons.

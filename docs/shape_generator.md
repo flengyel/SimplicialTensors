@@ -1,50 +1,15 @@
-# Shape Generator
+# Shape enumeration
 
-## Source
+[Source](../experiments/shape_generator.py) provides `generate_shapes_by_dimension(max_total_shapes=None)`. It starts at simplicial degree 2, chooses at least that many axes, and adds nonnegative offsets with minimum zero.
 
-```text
-experiments/shape_generator.py
-```
-
-## Type
-
-Python script
-
-## Research Goal
-
-Generates shape families (n_1,...,n_k) for systematic testing across simplicial dimension/order regimes.
-
-## Relevant Results in TeX Sources
-
-- tex/preliminaries.tex (shape vector and simplicial dimension n = min(n_a)-1).
-- tex/combinatorics.tex (classification behavior as k and n vary).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
 python experiments/shape_generator.py
 ```
 
-## Inputs
+The demonstration prints 35 shapes. The initial sequence is `(3, 3)`, `(3, 4)`, `(4, 3)`, `(3, 5)`, `(5, 3)`, and `(3, 6)`.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
+Within one degree and axis count, offsets are grouped by their sum, then compositions of that sum are lexicographically ordered. This differs from lexicographic order on all shape tuples. The offset sum is capped at 15.
 
-## Outputs
+With a positive `max_total_shapes`, the loop over axis counts is unbounded and therefore never advances beyond simplicial degree 2 before reaching the limit. With `None`, explicit cutoffs allow degrees 2, 3, and 4 and finitely many axis counts.
 
-- Enumerated shape tuples used as inputs to downstream computational experiments.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+The generated shapes satisfy `len(shape) >= min(shape) - 1`. They cover a portion of the range where the full-module horn kernel may be nonzero. No fillers are computed.

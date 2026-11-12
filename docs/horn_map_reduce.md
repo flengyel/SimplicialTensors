@@ -1,51 +1,14 @@
-# Horn Map Reduce
+# Enumerate coordinates omitted by a horn
 
-## Source
+[Source](../experiments/horn_map_reduce.py) provides `compute_missing_indices_dask(shape, horn_j)`. It returns tuples containing every face label other than `horn_j`. They index the coordinate tensors killed by all included faces.
 
-```text
-experiments/horn_map_reduce.py
-```
-
-## Type
-
-Python script
-
-## Research Goal
-
-Analyzes horn kernels, missing-index structure, and filler reconstruction behavior in concrete computational settings.
-
-## Relevant Results in TeX Sources
-
-- tex/horns.tex (support characterization and missing-index criterion).
-- tex/normalization.tex (Moore filler map and split exact sequence).
-- tex/nondegeneracy_lemma.tex (R_{p,j} ∩ D_p = {0} and horn decomposition).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
+python -m pip install dask
 python experiments/horn_map_reduce.py
 ```
 
-## Inputs
+Dask is required by this script and is not a core package dependency. The function filters a Dask bag of all index tuples once for each included face.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
+For `k` axes and degree `n = min(shape) - 1`, the result is empty when `k < n`. For `(2, 2)` omitting face 1 it is `{(0, 0), (0, 1), (1, 0)}`. For `(4, 4, 4)` omitting face 0 it consists of the six permutations of `(1, 2, 3)`. The script asserts both cases and prints further counts.
 
-## Outputs
-
-- Horn compatibility diagnostics, filler comparisons, and kernel-support measurements.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+An empty shape returns an empty set. The early `k < n` return precedes horn-index validation, so an invalid `horn_j` is not always rejected. In degree zero, the function returns every tuple because the included-face set is empty.

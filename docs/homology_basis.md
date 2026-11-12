@@ -1,51 +1,26 @@
-# Homology Basis
+# Coordinate-counting prototype
 
-## Source
+[experiments/homology_basis.py](../experiments/homology_basis.py) counts coordinate tensors that fail the package's degeneracy test. Its printed `homology_dim` label does not describe a homology calculation.
 
-```text
-experiments/homology_basis.py
-```
+For a supplied shape, it sets `n = min(shape) - 1` and enumerates the coordinate units of the cube with n + 1 labels on every axis. This discards rectangular offsets. It applies `tensor_ops.is_degen` to each unit, which solves a degeneracy-span linear system.
 
-## Type
+The parameter `j` is unused by `get_normalized_basis`. For n ≥ 1, every enumerated tuple satisfies the condition in `get_missing_indices`, so `compute_homology_dimension` returns the count of units accepted by the earlier filter. Selecting units outside the degeneracy submodule does not construct a normalized basis. The script constructs no differential or quotient by boundaries.
 
-Python script
+Run it from an installed checkout:
 
-## Research Goal
-
-Computes or validates normalized Moore-complex homology data and compares observed dimensions with theoretical predictions.
-
-## Relevant Results in TeX Sources
-
-- tex/normalization.tex (normalized complex N_*(X) and Moore filler machinery).
-- tex/combinatorics.tex (rank formulas for Z_p and N_p).
-- tex/dichotomy.tex (subcomplex and quotient-homology interpretation).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+~~~sh
 python experiments/homology_basis.py
-```
+~~~
 
-## Inputs
+The current fixed examples produce these counts on each reported axis.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
+| Shape | Count |
+|---|---:|
+| (3, 3) | 7 |
+| (4, 4) | 0 |
+| (5, 5) | 0 |
+| (3, 4, 5) | 25 |
 
-## Outputs
+The degeneracy solver is called separately for each unit, so the examples can take time.
 
-- Cycle/boundary ranks, basis representatives, and homology summaries by degree.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+For a verified generated-submodule example, follow [the pinned ancillary instructions](../tex/anc/README.txt). The finite normalized-chain construction is given in §6 of [the current manuscript source](../tex/generated_section.tex).

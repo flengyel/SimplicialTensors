@@ -1,51 +1,45 @@
-# Atlas Cospectral Scan
+# Boundary-rank scan of the Graph Atlas
 
-## Source
+[The script](../experiments/atlas_cospectral_scan.py) groups NetworkX Graph
+Atlas graphs by adjacency eigenvalues rounded to six decimal places.
+It then compares pairs that NetworkX identifies as nonisomorphic.
+The spectral grouping produces candidates for cospectrality.
 
-```text
-experiments/atlas_cospectral_scan.py
+For an ordered $N\times N$ adjacency matrix $A$, it forms
+$$
+B(A)=\sum_{i=0}^{N-1}d_i(A)\quad\text{over }\mathbb F_2,
+$$
+where $d_i$ deletes row and column $i$. Binary Gaussian elimination
+computes the matrix rank of $B(A)$, which is counted across vertex
+relabelings. This is a statistic of boundary matrices. Computing homology
+requires a specified chain complex and its differentials.
+
+## Run
+
+Install NetworkX in addition to the package dependencies.
+
+```sh
+python -m pip install -e . networkx
+python experiments/atlas_cospectral_scan.py --n 6 --max_pairs 1
 ```
 
-## Type
+The first pair in the six-vertex scan is G63 and G64. Exact enumeration
+gives counts `{0: 64, 2: 336, 4: 320}` and `{2: 432, 4: 288}`.
+Each total is $6!=720$.
 
-Python script
+| Option | Meaning | Default |
+|---|---|---:|
+| `--n` | Required vertex count | — |
+| `--max_pairs` | Maximum number of pairs to report | 10 |
+| `--exact_max_n` | Enumerate all permutations through this order | 8 |
+| `--samples` | Permutations sampled above the exact threshold | 20,000 |
+| `--seed` | NumPy sampling seed | 1 |
 
-## Research Goal
+The Graph Atlas contains graphs on at most seven vertices, so `--n 10`
+yields an empty scan. Sampling can be exercised on an available order by
+lowering `--exact_max_n`. Members of a sampled pair use seeds `seed`
+and `seed + 1`.
 
-Computes graph-derived simplicial statistics (including boundary-rank style invariants) for cospectral/non-isomorphic comparisons and structural scans.
-
-## Relevant Results in TeX Sources
-
-- tex/horns.tex (kernel-support interpretation of omitted faces).
-- tex/combinatorics.tex (rank counting framework and inclusion-exclusion viewpoint).
-- tex/generated_subobjects.tex (realization matrices and rank-loss/collision perspective).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
-python experiments/atlas_cospectral_scan.py
-```
-
-## Inputs
-
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
-
-## Outputs
-
-- Enumerations, rank distributions, cospectral pair comparisons, and optional saved summaries.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+Exact counts include all $N!$ permutations, including repeated
+adjacency matrices arising from automorphisms. Sampled counts estimate
+that distribution. Results are printed to standard output.

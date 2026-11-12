@@ -1,51 +1,64 @@
-# Permutation Statistics
+# Statistics of principal faces of permutation matrices
 
-## Source
+[The experiment](../experiments/permutation_statistics.py) samples one
+permutation matrix per selected size and examines its principal faces.
+It compares each face with
+$$
+\partial(P^2)-(\partial P)^2
+$$
+using cosine similarity. Each face is checked for the permutation
+property, nilpotence, idempotence, and repetition among matrix powers.
 
-```text
-experiments/permutation_statistics.py
+The calculations call the signed boundary and face functions from
+`tensor_ops`. Entries are floating-point numbers. Nilpotence and
+power-repetition tests use tolerances and finite power bounds.
+
+## Current entry point
+
+Direct execution raises `RecursionError`. The final
+`def main(): main()` replaces the argument-parsing function.
+This also prevents `--help` from reaching the parser.
+
+The analysis functions can be called by loading the guarded module.
+
+```sh
+python -m pip install -e . matplotlib
+python - <<'PYTHON'
+import runpy
+
+experiment = runpy.run_path("experiments/permutation_statistics.py")
+results = experiment["test_permutation_matrices"](
+    [3, 5], seed=42, max_powers=20, tolerance=1e-7
+)
+experiment["generate_visualizations"](results, "plots/permutation-check")
+PYTHON
 ```
 
-## Type
+The analysis prints property counts and returns one dictionary per
+face with the face index, deleted diagonal entry, property flags,
+power-repetition data, similarity, and input size. The visualization
+function writes `diagonal_vs_properties.png`,
+`properties_by_size.png`, `similarity_distribution.png`, and
+`properties_vs_similarity.png`.
 
-Python script
+## Declared command-line parameters
 
-## Research Goal
+The earlier parser declares the following interface, currently blocked
+by the recursive entry point.
 
-Studies permutation-action invariants and symmetry effects on simplicial tensor constructions.
+| Option | Declared default |
+|---|---|
+| `--sizes` | `3 5 7 11 13 17 19 20 21` |
+| `--seed` | `42` |
+| `--max-powers` | `220` |
+| `--tolerance` | `1e-7` |
+| `--verbose` | disabled |
+| `--output-dir` | `plots` |
 
-## Relevant Results in TeX Sources
+That parser also fails to forward `--max-powers` and `--tolerance`
+to `test_permutation_matrices`, whose defaults are 40 and `1e-7`.
+An explicit call supplies both parameters.
 
-- tex/preliminaries.tex (Stab(s) action and equivariance under axis permutations).
-- tex/equivariant_homotopy.tex (equivariance of homotopy operator).
-- tex/combinatorics.tex (rank effects under symmetry-restricted settings).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
-python experiments/permutation_statistics.py
-```
-
-## Inputs
-
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
-
-## Outputs
-
-- Permutation statistics, orbit-level summaries, and invariance checks.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+Counts describe the sampled matrices. A failed repetition test means
+no repetition was found within its bound. Several property tests can
+hold for the same face, so their counts overlap.

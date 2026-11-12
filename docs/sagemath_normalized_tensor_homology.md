@@ -1,51 +1,32 @@
-# Sagemath Normalized Tensor Homology
+# Symbolic mapping-cone prototype
 
-## Source
+[experiments/sagemath_normalized_tensor_homology.py](../experiments/sagemath_normalized_tensor_homology.py) defines a standalone `SymbolicTensor` class and mapping-cone routines using NumPy and SymPy. It imports no SageMath modules. It has no main function or executable example, so direct execution prints nothing.
 
-```text
-experiments/sagemath_normalized_tensor_homology.py
-```
+## Available functions
 
-## Type
+The local `SymbolicTensor` initializes independent entry symbols by default and zero entries with `init_type="zeros"`. It supports addition, subtraction, faces, and degeneracies.
 
-Python script
+The `build_tensor_basis` function collects iterated faces and degeneracies through degree `max_dim + 1`. Its keys preserve entry order. The `build_differential_matrices` function forms alternating face matrices on these symbols. The `compute_homology_rank` function subtracts the outgoing and incoming matrix ranks. The `compute_relative_homology_rank` function constructs the formal horn generators, inclusion, and mapping cone.
 
-## Research Goal
+## Interpretation
 
-Computes or validates normalized Moore-complex homology data and compares observed dimensions with theoretical predictions.
+Each distinct encountered tensor becomes an independent basis symbol. Linear dependencies in the ambient tensor module are not imposed. A zero tensor can therefore appear as a nonzero formal basis element. The resulting ranks cannot be identified with homology of the tensor-generated submodule without a comparison that accounts for these relations.
 
-## Relevant Results in TeX Sources
+The differential matrices are unnormalized alternating-face matrices on those symbols. The degree-zero helper also infers the chain-group dimension from the outgoing differential, which is absent in degree zero. It needs an explicit degree-zero dimension to compute that homology.
 
-- tex/normalization.tex (normalized complex N_*(X) and Moore filler machinery).
-- tex/combinatorics.tex (rank formulas for Z_p and N_p).
-- tex/dichotomy.tex (subcomplex and quotient-homology interpretation).
+The functions are a retained prototype. The source comments calling it “definitive” do not establish the missing comparison.
 
-## Typical Workflow
+## Inspecting the prototype
 
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
+From the repository root with its dependencies installed:
 
-## How To Run
+~~~python
+import runpy
 
-```bash
-python experiments/sagemath_normalized_tensor_homology.py
-```
+module = runpy.run_path("experiments/sagemath_normalized_tensor_homology.py")
+T = module["SymbolicTensor"]((2, 2))
+basis = module["build_tensor_basis"]([T], 1)
+print({degree: len(tensors) for degree, tensors in basis.items()})
+~~~
 
-## Inputs
-
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
-
-## Outputs
-
-- Cycle/boundary ranks, basis representatives, and homology summaries by degree.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+The current manuscript's exact quotient construction is in [generated_section.tex](../tex/generated_section.tex). A runnable matrix example and its required software revision are documented in [tex/anc/README.txt](../tex/anc/README.txt).

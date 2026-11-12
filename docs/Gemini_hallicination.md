@@ -1,51 +1,23 @@
-# Gemini Hallicination
+# Tensor-product horn examples
 
-## Source
+[experiments/Gemini_hallicination.py](../experiments/Gemini_hallicination.py) constructs two integer tensor products and compares them with fillers of selected horns. The executable calculation uses the package's numeric operations.
 
-```text
-experiments/Gemini_hallicination.py
-```
+## Inputs and output
 
-## Type
+The first input has shape (3, 2, 2) and simplicial degree 1. It has two outer horns and no inner horns. The script prints the tensor, shape predicate, degeneracy checks, and a comparison with outer horns enabled. It fills the horn with missing face 0 and compares the included faces and full tensors.
 
-Python script
+The second input has shape (6, 7, 6, 7), four axes, and simplicial degree 5. It checks the inner horns and explicitly fills the horn with missing face 2. Output includes Kan compatibility, equality of the reconstructed included faces, and equality of the full tensor with that filler.
 
-## Research Goal
+The source comments misstate the second degree and confuse the absence of inner horns in degree 1 with the absence of outer horns. The degrees above follow from `min(shape) - 1`.
 
-Critically checks conjectural statements against the proven DSTM framework and identifies mismatches between heuristic claims and results proved in the TeX sources.
+## Running the examples
 
-## Relevant Results in TeX Sources
+From an installed checkout:
 
-- tex/introduction.tex (overall DSTM program and classification objective).
-- tex/combinatorics.tex (strict algebraic n-hypergroupoid criterion k = n).
-- tex/dichotomy.tex (filler uniqueness vs non-uniqueness regimes).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+~~~sh
 python experiments/Gemini_hallicination.py
-```
+~~~
 
-## Inputs
+The script uses fixed integer arrays and writes no files. The second case invokes a dense degeneracy system with 1,764 rows and 4,500 columns, so it can require substantial time and memory. The comparison can raise `SimplicialException` if the package detects a degenerate boundary.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
-
-## Outputs
-
-- Diagnostic comparisons in console output documenting where claims fail or require further justification.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+Comparison with the algorithm's selected filler tests that pair of fillers. The general uniqueness result is the coordinate horn-kernel calculation in §3 of [the current manuscript](../tex/dstm_short.tex). For k axes, fillers in degree p are unique precisely when p > k. Tensor rank is a separate quantity.

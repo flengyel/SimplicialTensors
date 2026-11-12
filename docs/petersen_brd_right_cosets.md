@@ -1,51 +1,50 @@
-# Petersen Brd Right Cosets
+# Petersen boundary ranks from automorphism cosets
 
-## Source
+[The Python experiment](../experiments/petersen_brd_right_cosets.py)
+computes the full principal-deletion boundary-rank distribution for the
+Petersen graph over $\mathbb F_2$. It uses $KG(5,2)$, whose vertices
+are the two-subsets of a five-element set and whose edges join disjoint
+subsets.
 
-```text
-experiments/petersen_brd_right_cosets.py
-```
+Each boundary is the XOR sum of ten principal deletions, represented as
+nine Python integer row masks. Binary elimination computes its rank.
+The program uses SymPy for permutation groups and no NumPy or NetworkX
+operations.
 
-## Type
+## Run
 
-Python script
-
-## Research Goal
-
-Computes graph-derived simplicial statistics (including boundary-rank style invariants) for cospectral/non-isomorphic comparisons and structural scans.
-
-## Relevant Results in TeX Sources
-
-- tex/horns.tex (kernel-support interpretation of omitted faces).
-- tex/combinatorics.tex (rank counting framework and inclusion-exclusion viewpoint).
-- tex/generated_subobjects.tex (realization matrices and rank-loss/collision perspective).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
+python -m pip install -e .
 python experiments/petersen_brd_right_cosets.py
 ```
 
-## Inputs
+There are no command-line options. The script checks the automorphism
+group order and transversal size and prints both unweighted counts
+and counts weighted by the group order.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
+| Boundary rank | Distinct labeled adjacency matrices | All permutations |
+|---:|---:|---:|
+| 4 | 376 | 45,120 |
+| 6 | 8,496 | 1,019,520 |
+| 8 | 21,368 | 2,564,160 |
+| Total | 30,240 | 3,628,800 |
 
-## Outputs
+## Permutation convention
 
-- Enumerations, rank distributions, cospectral pair comparisons, and optional saved summaries.
+`perm[i]` is the new label of old vertex `i`. The relabeling moves
+every edge `(i, j)` to `(perm[i], perm[j])`. SymPy's transversal
+representatives are used directly with this convention. They produce
+30,240 distinct labeled adjacency matrices, so weighting by the
+automorphism-group order 120 recovers every element of $S_{10}$.
+Inverting those representatives would change the action convention and
+produce duplicate matrices in this implementation.
 
-## Interpretation Guidance
+The ranks belong to the $9\times9$ deletion boundaries of the
+relabeled adjacency tensors. They differ from the rank of the graph's
+incidence differential. No relabeled adjacency tensor is a cycle,
+since the displayed ranks are positive. This computation does not
+assert nonzero homology.
 
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+[The Sage version](petersen_coset_enumeration.md) uses a separate
+reordering convention. Compare its output with this table when
+validating that implementation.

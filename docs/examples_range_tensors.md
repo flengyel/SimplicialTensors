@@ -1,51 +1,13 @@
-# Examples Range Tensors
+# Range tensor examples
 
-## Source
+[Source](../experiments/examples_range_tensors.py) uses arrays filled with consecutive integers to inspect horn reconstruction. It prints range tensors, the predicate `len(shape) < min(shape) - 1`, reconstruction diagnostics, and a fixed `(3, 3)` matrix calculation.
 
-```text
-experiments/examples_range_tensors.py
-```
-
-## Type
-
-Python script
-
-## Research Goal
-
-Performs targeted computational checks of combinatorial identities and structural invariants on explicit tensor families.
-
-## Relevant Results in TeX Sources
-
-- tex/horns.tex (missing-index characterization and face-kernel basis).
-- tex/combinatorics.tex (rank and finite-difference formulas).
-- tex/normalization.tex (decomposition through Moore filler map).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
 python experiments/examples_range_tensors.py
 ```
 
-## Inputs
+The configured shapes are `(2, 2)`, `(3, 3)`, `(4, 4)`, `(5, 5, 5)`, `(6, 6, 6)`, and `(7, 7, 7)`. The larger cases can be expensive. Most calculations occur at module scope, so importing the script also runs them.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
+The reconstruction helper compares the input with selected fillers for omitted faces 1 through the simplicial degree. It omits face 0. The program passes `proceed_anyway=True` to continue after its usual shape and boundary checks.
 
-## Outputs
-
-- Consistency checks, discrepancy reports, and compact experiment summaries.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+The printed label `degree = len(shape)` denotes the number of axes. The simplicial degree is `min(shape) - 1`. For `(4, 4)` the final Boolean reuses the earlier `(3, 3)` result because the new helper return is not assigned to `reconstructed`. Use that call's diagnostics when inspecting this case.

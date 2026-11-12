@@ -1,51 +1,13 @@
-# N Cycle Conjugation
+# Symbolic boundaries under cyclic relabeling
 
-## Source
+[Source](../experiments/n_cycle_conjugation.py) constructs an `n × n` matrix with independent symbolic entries, conjugates it by a cyclic permutation matrix, and compares the signed deletion boundaries.
 
-```text
-experiments/n_cycle_conjugation.py
-```
-
-## Type
-
-Python script
-
-## Research Goal
-
-Studies permutation-action invariants and symmetry effects on simplicial tensor constructions.
-
-## Relevant Results in TeX Sources
-
-- tex/preliminaries.tex (Stab(s) action and equivariance under axis permutations).
-- tex/equivariant_homotopy.tex (equivariance of homotopy operator).
-- tex/combinatorics.tex (rank effects under symmetry-restricted settings).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
 python experiments/n_cycle_conjugation.py
 ```
 
-## Inputs
+The default run uses sizes 3 through 15 and prints each full difference. Its count is the number of nonzero symbolic entries. A `PASS` label means that the two boundary matrices agree entrywise.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
+A smaller call is `test_conjugation_by_n_cycle(3)`, imported from `experiments.n_cycle_conjugation`. Size 3 gives a false equality comparison, 4 nonzero entries, and reference value 4. Size 4 gives 8 nonzero entries and reference value 9. The variable `theoretical` is assigned `(n - 1)**2`, with no derivation or assertion relating it to the count.
 
-## Outputs
-
-- Permutation statistics, orbit-level summaries, and invariance checks.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+The printed word “cocycles” labels entries in a boundary difference. This script does not compute cohomology classes or test whether these expressions are coboundaries.

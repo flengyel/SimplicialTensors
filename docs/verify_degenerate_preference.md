@@ -1,51 +1,13 @@
-# Verify Degenerate Preference
+# Recovery of a degenerate filler
 
-## Source
+[Source](../experiments/verify_degenerate_preference.py) applies one degeneracy to a coordinate tensor, forms every horn of the result, and checks whether the Moore filler recovers that result.
 
-```text
-experiments/verify_degenerate_preference.py
-```
-
-## Type
-
-Python script
-
-## Research Goal
-
-Investigates degenerate-versus-nondegenerate behavior of tensors and fillers, including edge cases and counterexample candidates.
-
-## Relevant Results in TeX Sources
-
-- tex/nondegeneracy_lemma.tex (Horn Non-Degeneracy Lemma).
-- tex/normalization.tex (normalized/degenerate decomposition X_p = N_p ⊕ D_p).
-- tex/dichotomy.tex (impact on filler uniqueness and cycle structure).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
 python experiments/verify_degenerate_preference.py
 ```
 
-## Inputs
+The inputs are `E_(0,1)` in shape `(2, 2)` and `E_(0,1,2)` in shape `(3, 3, 3)`. For each, the program tries all degeneracy indices and all resulting horn indices. The six matrix comparisons return `True`.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
+Each case prints the shapes and an equality result. The final summary combines those results. Its exception handlers count an invalid degeneracy or horn index as a skipped success.
 
-## Outputs
-
-- Counterexample candidates, decomposition checks, and degeneracy classification logs.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+The cases test elements in individual degeneracy images. The degenerate submodule is the sum of all these images, the broader membership question handled by [is_degen](is_degen.md).

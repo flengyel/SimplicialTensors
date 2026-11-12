@@ -1,147 +1,57 @@
-# SimplicialTensors Repository Guidelines
+# Repository guidelines
 
-These guidelines describe how this repository is structured and how to extend it without creating duplicated, tangled, or “forked” code paths.
+## Layout
 
----
+- `src/simplicial_tensors/` contains the reusable library.
+- `experiments/` contains experiment entry points, notebooks, and results.
+- `docs/` contains documentation and research notes.
+- `tex/` contains manuscript sources and ancillary scripts.
+- Other source and output directories retain their existing roles.
+  Their contents do not define the package API.
 
-## 1. Directory layout (authoritative)
+## Library code
 
-- `src/simplicial_tensors/`
-  - The only place for reusable library code.
-  - Contains core tensor and simplicial operations (for example `tensor_ops.py`, `symbolic_tensor_ops.py`, `cyclic_tensor_ops.py`).
-  - Code here should be:
-    - Shape-agnostic (no hard-coded 2×2, 3×3, etc.).
-    - Written with clean function and class interfaces.
-    - Importable without side effects (no heavy computations at import time).
+Implement reusable algorithms once in `src/simplicial_tensors/` and import
+them from experiments. Keep the implementation generic in shape and
+number of axes. Use explicit function and class interfaces.
 
-- `experiments/`
-  - Scripts that run actual experiments (graph examples, neural networks, cyclic operators, random tests, etc.).
-  - Each script:
-    - Imports functions from `simplicial_tensors`.
-    - Documents in a short header comment what the experiment does.
-    - May have a `main()` and an `if __name__ == "__main__":` block.
+Imports should avoid experiment execution, heavy computation, plotting,
+or file output. Command-line parsing and experiment workflows belong
+under `experiments/`. A small optional self-test in a library module may
+use a main guard and tiny inputs.
 
-- `examples/`
-  - Not for core code.
-  - Prefer `experiments/` for any new runnable scripts.
-  - Do not copy or mirror modules from `src/simplicial_tensors/` here.
+New code must use the existing face, degeneracy, boundary, horn, and
+filler implementations where applicable. Specialized reusable operators
+belong in a clearly named library module. Experiment-specific use belongs
+in the experiment that calls them.
 
-- Other directories (`paper/`, `docs/`, `notebooks/`, etc.)
-  - Hold TeX files, notes, slides, or notebooks.
-  - Do not define the library API.
+## Experiments
 
----
+Each experiment should state its purpose, required dependencies, input
+parameters, output, and interpretation. Import reusable operations from
+the package. Put execution in a `main()` function and a main guard when
+practical.
 
-## 2. Core rules (no exceptions)
+Maintain a corresponding page in `docs/` for every tracked Python or
+Sage experiment and keep [the catalog](docs/experiments_catalog.md)
+consistent with the tracked files. Use fixed seeds and record parameters
+for reproducible runs.
 
-1. **Single source of truth**
+## Contributions
 
-   - Any algorithm, data structure, or operation used in more than one place must live in a module under:
-     - `src/simplicial_tensors/`
-   - Experiment scripts in `experiments/` must only call these via imports.
+Read [AGENTS.md](AGENTS.md) for the neural boundary conventions and
+required checks. Put new runnable experiments under `experiments/`.
+Do not add new code under `examples/` or create another
+`simplicial_tensors` package.
 
-2. **No duplication**
+Do not copy library implementations into experiments or other
+directories. If several scripts need the same operation, implement it
+once in the library and import it.
 
-   - Do not copy code from `src/simplicial_tensors/` into:
-     - `experiments/`
-     - `examples/`
-     - any new directory.
-   - If you are about to paste code that clearly already exists somewhere:
-     - Stop, factor it into a function/class in `src/simplicial_tensors/`, and import it.
+Do not rename, move, or delete existing library modules without an
+explicit human instruction. Before adding a new helper, check whether
+an existing operation already supplies it.
 
-3. **No parallel library clones**
-
-   - Do not create any second `simplicial_tensors` package in this or another subdirectory.
-   - The only package named `simplicial_tensors` lives under `src/`.
-
-4. **Boundary operator and DSTM**
-
-   - Boundary, coboundary, horn, and DSTM-related operations are defined once, generically, in the library (for example in `tensor_ops.py`). fileciteturn0file1L1-L250
-   - These operations must:
-     - Work for arbitrary orders/tensor shapes given by a shape tuple.
-     - Never be hard-coded to a particular matrix or tensor size.
-   - Experiments that specialize to a particular graph, neural network, or tensor shape should live in `experiments/` and call the generic functions.
-
-5. **Specialized operators**
-
-   - More specialized but still reusable operations (for example, cyclic operators on tensors as in `cyclic_tensor_ops.py`) should either:
-     - Live in a clearly named module under `src/simplicial_tensors/` if they are part of the library, or
-     - Be wrapped and exercised in `experiments/` if they are exploratory. fileciteturn0file0L1-L80
-
----
-
-## 3. Library code in `src/simplicial_tensors/`
-
-Allowed:
-
-- Pure functions and classes that:
-  - Construct tensors (random, range, structured).
-  - Implement face/degeneracy operations.
-  - Implement boundary and coboundary maps.
-  - Implement horn construction and filling.
-  - Implement DSTM-style constructions and related utilities.
-- Small helper functions for logging, random seeds, or shape utilities.
-
-Strongly discouraged:
-
-- Long-running experiments and demos.
-- CLI parsing, plotting, or heavy I/O.
-- Experiment-specific “main” workflows.
-
-Optional:
-
-- A small `if __name__ == "__main__":` block for quick internal tests is acceptable only if:
-  - It uses tiny toy data.
-  - It does not duplicate any `experiments/` script.
-  - It can be removed without breaking anything.
-
----
-
-## 4. Experiments (`experiments/`)
-
-- Each file in `experiments/` is a standalone experiment.
-- Typical structure:
-
-  - A short header comment describing:
-    - What tensor/graph/network is constructed.
-    - Which library functions are being exercised.
-    - What is printed or plotted.
-  - Imports from `simplicial_tensors`.
-  - A `main()` function that:
-    - Builds the data.
-    - Calls the library functions.
-    - Prints or plots results.
-  - A standard `if __name__ == "__main__":` guard that calls `main()`.
-
-- It is perfectly fine to have **multiple** experiment scripts that all import from the same module (for example, several different experiments using `tensor_ops.py`); that is the desired pattern.
-- Experiments must not reimplement or fork the same logic that already exists in the library.
-
----
-
-## 5. AI / Codex usage rules
-
-When using AI tools (Codex, GPT, etc.) in this repository:
-
-1. Do not create new code under `examples/`.
-2. Do not copy or paste code from `src/simplicial_tensors/` into any other directory.
-3. To extend functionality:
-   - Add reusable code to an appropriate module under `src/simplicial_tensors/`.
-   - Create or update scripts under `experiments/` that import and call these functions.
-4. Do not rename, move, or delete modules under `src/simplicial_tensors/` unless explicitly asked to do so in a human-written instruction.
-5. If you need similar functionality in two places:
-   - Refactor once into `src/simplicial_tensors/`.
-   - Import it from both call sites.
-
----
-
-## 6. Refactoring rule of thumb
-
-Before adding or modifying code, ask:
-
-- “Am I about to duplicate logic that already exists?”
-  - If yes: factor it into a function/class in `src/simplicial_tensors/` and call that.
-- “Is this a one-off experiment or a reusable building block?”
-  - One-off → goes in `experiments/`.
-  - Reusable → goes in `src/simplicial_tensors/`.
-
-Following these rules keeps the repository usable for research and experimentation, without turning it into multiple inconsistent copies of the same code.
+Run `python -m pytest -q` after library changes. Verify documentation
+commands and examples against the code they describe, and check the
+diff before committing.

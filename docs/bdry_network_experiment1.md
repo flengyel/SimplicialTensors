@@ -1,51 +1,17 @@
-# Bdry Network Experiment1
+# Additive boundary network prototype
 
-## Source
+[The script](../experiments/bdry_network_experiment1.py) compares two PyTorch multilayer perceptrons with widths 64, 256, 128, 64, 32, and 10. Both train with Adam and mean squared error on fresh Gaussian inputs and targets at each epoch. Each run has ten epochs and batches of 32 samples. There is no validation set or recorded accuracy endpoint.
 
-```text
-experiments/bdry_network_experiment1.py
-```
+After each optimizer step, the augmented network attempts to add `degen(bdry(weight), 0)` to every weight matrix. This is an additive perturbation of labeled weights.
 
-## Type
-
-Python script
-
-## Research Goal
-
-Explores ML-style training behavior under simplicial boundary/degeneracy-inspired transformations and compares optimization behavior across configurations.
-
-## Relevant Results in TeX Sources
-
-- tex/normalization.tex (decomposition into normalized and degenerate components).
-- tex/combinatorics.tex (rank behavior and boundary-related structure in degrees).
-- tex/equivariant_homotopy.tex (contractibility perspective motivating robustness checks).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
+python -m pip install -e .
+python -m pip install torch
 python experiments/bdry_network_experiment1.py
 ```
 
-## Inputs
+The script has no command-line options. It prints the training loss each epoch and writes no result file. The training data and network initialization have no explicit seed in this script.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
+The call `bdry(param.data)` passes a PyTorch tensor directly to a NumPy-oriented function. Execution depends on that unsupported interoperability and may fail before the augmented comparison completes. The later [controlled neural study](neural_boundary_study.md) uses explicit NumPy arrays and matched controls.
 
-## Outputs
-
-- Training/validation statistics, loss curves, and optional plot artifacts for comparative runs.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+The graded identity `bdry(bdry(W)) == 0` alone gives no identity for repeated same-shape updates `W + degen(bdry(W), 0)`.

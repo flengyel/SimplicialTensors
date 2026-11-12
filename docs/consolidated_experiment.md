@@ -1,51 +1,17 @@
-# Consolidated Experiment
+# Initialization and reconstruction losses
 
-## Source
+[The script](../experiments/consolidated_experiment.py) compares two normalized Frobenius reconstruction errors for a random tensor $T$.
 
-```text
-experiments/consolidated_experiment.py
-```
+- The boundary reconstruction duplicates index zero of $\partial T$.
+- The comparison duplicates index zero of an independently initialized array $S$ with the boundary shape and multiplies its error by $1+\|\partial S\|_F$.
 
-## Type
+It runs 200 trials for each combination of shapes `(128, 64)` and `(32, 3, 3, 3)` with Glorot, He, and orthogonal initialization. Random sampling uses NumPy's global generator without an explicit script-level seed.
 
-Python script
-
-## Research Goal
-
-Performs targeted computational checks of combinatorial identities and structural invariants on explicit tensor families.
-
-## Relevant Results in TeX Sources
-
-- tex/horns.tex (missing-index characterization and face-kernel basis).
-- tex/combinatorics.tex (rank and finite-difference formulas).
-- tex/normalization.tex (decomposition through Moore filler map).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
+python -m pip install numpy scipy
 python experiments/consolidated_experiment.py
 ```
 
-## Inputs
+The script prints one result dictionary per shape and initialization. It reports the difference of mean errors, a two-sample Kolmogorov–Smirnov statistic and p-value, and an effect-size calculation.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
-
-## Outputs
-
-- Consistency checks, discrepancy reports, and compact experiment summaries.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+The reported permutation-test p-value is hard-coded to `0.0`. The function computes only the observed mean difference and performs no permutation test. Interpret that field as an unimplemented output. The file also defines its own face, boundary, and degeneracy routines, so these results exercise its local implementation rather than the installed package API.

@@ -1,51 +1,15 @@
-# Boundary Augmented Network
+# Boundary and random weight augmentation prototype
 
-## Source
+[The script](../experiments/boundary_augmented_network.py) trains three PyTorch networks with widths 64, 256, 128, 64, 32, and 10 using Leaky ReLU, Adam, a step scheduler, and Gaussian inputs and targets. It compares a baseline with boundary and random perturbations of the final three weight matrices. Each run has 40 epochs and batches of 32 samples.
 
-```text
-experiments/boundary_augmented_network.py
-```
+The boundary arm computes `bdry_mod1(weight)` on a NumPy copy, duplicates the middle index with `degen`, converts the result back to PyTorch, and adds it with scale `1e-5`. The random arm duplicates a normal array and adds it with scale `7e-3`. Its local random generator is reset to seed 42 for each layer update.
 
-## Type
-
-Python script
-
-## Research Goal
-
-Explores ML-style training behavior under simplicial boundary/degeneracy-inspired transformations and compares optimization behavior across configurations.
-
-## Relevant Results in TeX Sources
-
-- tex/normalization.tex (decomposition into normalized and degenerate components).
-- tex/combinatorics.tex (rank behavior and boundary-related structure in degrees).
-- tex/equivariant_homotopy.tex (contractibility perspective motivating robustness checks).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
+python -m pip install -e .
+python -m pip install torch
 python experiments/boundary_augmented_network.py
 ```
 
-## Inputs
+There are no command-line options or saved result files. The output is a sequence of training losses and any boundary-integration errors.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
-
-## Outputs
-
-- Training/validation statistics, loss curves, and optional plot artifacts for comparative runs.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+The training loop mutates weights after the forward pass and before `loss.backward()`. PyTorch may reject this update ordering or compute gradients for inconsistent parameter values. The perturbation scales also differ, so the two augmentation arms are not matched by perturbation norm. Treat the file as a legacy prototype. The [controlled neural study](neural_boundary_study.md) specifies paired runs and matched spectral controls.

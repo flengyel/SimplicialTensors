@@ -1,51 +1,23 @@
-# Normalized Moore Complex Homology
+# Numerical relative-homology prototype
 
-## Source
+[experiments/normalized_moore_complex_homology.py](../experiments/normalized_moore_complex_homology.py) attempts to construct a mapping cone from iterated faces and degeneracies of a random tensor. The current script fails on its first default example and provides no validated homology dimensions.
 
-```text
-experiments/normalized_moore_complex_homology.py
-```
+## Method and defects
 
-## Type
+The builders enumerate tensors through one degree above the starting degree and use each encountered tensor as an independent basis symbol. They do not compute linear relations among those tensors in the ambient module.
 
-Python script
+The `key_tensor` function sorts string representations of all entries. Tensors with the same shape and multiset of entries receive the same key even when the entries occupy different positions. Faces depend on those positions.
 
-## Research Goal
+Normalization uses SciPy's floating-point `null_space`. Its columns are basis vectors, but later code applies `np.hstack` to the rows. On the first default input, a subsequent shape lookup raises `IndexError`. The final `len(null_space(D_cone))` would count rows instead of nullity. A homology dimension also requires the incoming boundary rank.
 
-Computes or validates normalized Moore-complex homology data and compares observed dimensions with theoretical predictions.
+## Running the diagnostic
 
-## Relevant Results in TeX Sources
+The script requires NumPy, SciPy, SymPy, and an installed checkout.
 
-- tex/normalization.tex (normalized complex N_*(X) and Moore filler machinery).
-- tex/combinatorics.tex (rank formulas for Z_p and N_p).
-- tex/dichotomy.tex (subcomplex and quotient-homology interpretation).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+~~~sh
 python experiments/normalized_moore_complex_homology.py
-```
+~~~
 
-## Inputs
+It generates random tensors for four fixed shapes and prints object sizes and face-map keys. The first example currently stops with “`IndexError`: tuple index out of range.” No result files are written.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
-
-## Outputs
-
-- Cycle/boundary ranks, basis representatives, and homology summaries by degree.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+For a reproducible homology example, follow [the ancillary instructions](../tex/anc/README.txt). Section 6 of [generated_section.tex](../tex/generated_section.tex) obtains a finite quotient complex using linear spans and exact normalization.

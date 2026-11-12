@@ -1,51 +1,19 @@
-# Discrepancy Test
+# Matrix multiplication and the deletion boundary
 
-## Source
+[The script](../experiments/discrepancy_test.py) computes
+$$
+D(A)=\partial(A^2)-(\partial A)^2
+$$
+for square matrices. It compares this matrix with each principal-deletion face of $A$ using cosine similarity, a Frobenius norm ratio, and a least-squares scalar fit.
 
-```text
-experiments/discrepancy_test.py
+The default run examines random square matrices of sizes 3, 9, 11, and 23. It also examines seeded permutation matrices, tests powers of their faces for nilpotence, idempotence and finite cycles, and summarizes 100 random matrices of size 5.
+
+```sh
+python -m pip install -e .
+python -m pip install matplotlib
+MPLBACKEND=Agg python experiments/discrepancy_test.py
 ```
 
-## Type
+There are no command-line options. Results are printed to the terminal, and the statistical summary writes `discrepancy_analysis.png` in the current working directory.
 
-Python script
-
-## Research Goal
-
-Performs targeted computational checks of combinatorial identities and structural invariants on explicit tensor families.
-
-## Relevant Results in TeX Sources
-
-- tex/horns.tex (missing-index characterization and face-kernel basis).
-- tex/combinatorics.tex (rank and finite-difference formulas).
-- tex/normalization.tex (decomposition through Moore filler map).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
-python experiments/discrepancy_test.py
-```
-
-## Inputs
-
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
-
-## Outputs
-
-- Consistency checks, discrepancy reports, and compact experiment summaries.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+The tests use floating-point tolerances and bounded searches over powers. They report observations for the sampled matrices. Cosine similarity concerns flattened matrix entries, and a scalar-fit residual concerns multiples of an individual face. Neither test decides whether $D(A)$ lies in the span of all faces or whether matrices are similar by conjugation.

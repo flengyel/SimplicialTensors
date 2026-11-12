@@ -1,51 +1,11 @@
-# Degenerate Counterexample
+# A tensor with degenerate boundary
 
-## Source
+[Source](../experiments/degenerate_counterexample.py) constructs a fixed integer matrix of shape `(3, 8)`. It prints the matrix, its alternating face boundary, and the degeneracy test on that boundary.
 
-```text
-experiments/degenerate_counterexample.py
-```
-
-## Type
-
-Python script
-
-## Research Goal
-
-Investigates degenerate-versus-nondegenerate behavior of tensors and fillers, including edge cases and counterexample candidates.
-
-## Relevant Results in TeX Sources
-
-- tex/nondegeneracy_lemma.tex (Horn Non-Degeneracy Lemma).
-- tex/normalization.tex (normalized/degenerate decomposition X_p = N_p ⊕ D_p).
-- tex/dichotomy.tex (impact on filler uniqueness and cycle structure).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
 python experiments/degenerate_counterexample.py
 ```
 
-## Inputs
+When the boundary is degenerate, the program skips `n_hypergroupoid_comparison`, whose default precondition rejects that case. It still prints the shape predicate, forms the horn omitting face 1, computes its selected Moore filler, and compares that filler with the input.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
-
-## Outputs
-
-- Counterexample candidates, decomposition checks, and degeneracy classification logs.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+A difference exhibits two fillers of the same horn. Equality says that the selected filler reproduces this input. It does not by itself establish uniqueness. See [the comparison helper](n_hypergroupoid_conjecture.md).

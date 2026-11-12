@@ -1,110 +1,69 @@
-# Publishing Workspace Changes to GitHub (using this project)
+# Publishing repository changes
 
-This walkthrough uses the **exact repository names in this workspace** so you can copy the commands without guessing. The code lives in `/workspace/Operations-Tensorielles-Simpliciales`, and you want it to appear on GitHub under a repository named **`SimplicialTensors`**.
+The repository is [flengyel/SimplicialTensors](https://github.com/flengyel/SimplicialTensors).
+Run these commands from its local checkout with GitHub write access.
 
-> **Goal:** Push the existing `work` branch from the Codex workspace to `github.com/<your-username>/SimplicialTensors`, then fetch those commits on your own computer.
+## Inspect the checkout
 
-## 0. Create the GitHub repository (one-time)
-
-In a browser, sign in to GitHub and create a new empty repository named `SimplicialTensors` under your account. Do **not** initialize it with a README or any files.
-
-## 1. Open the Codex shell at the repo root
-
-Even though you interact with the notebook-style Codex UI, there **is** a full terminal available in the lower pane. To open it:
-
-1. Click the **Terminal** tab in the bottom panel. If it is missing, follow the dedicated checklist in [`no_terminal_troubleshooting.md`](no_terminal_troubleshooting.md) to reveal it.
-2. A shell prompt such as `root@...:/workspace#` will appear. This prompt is the same Linux shell shown in the screenshot above.
-
-Once you can see the prompt, change into the project folder:
-
-```bash
-cd /workspace/Operations-Tensorielles-Simpliciales
-```
-
-You should now see the prompt update to `/workspace/Operations-Tensorielles-Simpliciales#`. Staying in this directory ensures every command below acts on the correct Git repository.
-
-## 2. Configure your Git identity (once per workspace)
-
-```bash
-git config --global user.name "<your full name>"
-git config --global user.email "<your-email-used-on-github>"
-```
-
-Use the same email that GitHub expects so commits show up correctly.
-
-## 3. Point this workspace at the new GitHub repo
-
-Add a remote that uses the real destination name:
-
-```bash
-git remote add origin git@github.com:<your-username>/SimplicialTensors.git
-```
-
-If a remote named `origin` already exists (from earlier experiments), update it instead:
-
-```bash
-git remote set-url origin git@github.com:<your-username>/SimplicialTensors.git
-```
-
-Verify the result:
-
-```bash
+```sh
+git status --short --branch
 git remote -v
+git log -3 --oneline
+git fetch origin
 ```
 
-You should see `origin  git@github.com:<your-username>/SimplicialTensors.git` for both fetch and push.
+Verify that `origin` refers to `flengyel/SimplicialTensors`. The clone
+directory and local branch name depend on the checkout.
 
-## 4. Test your GitHub authentication
+Configure the commit identity for this repository when necessary.
 
-The workspace already runs an SSH agent, but GitHub must know your SSH public key. Run:
-
-```bash
-ssh -T git@github.com
+```sh
+git config user.name "Full Name"
+git config user.email "email-associated-with-GitHub"
 ```
 
-If GitHub greets you by username (or reports that you are already authenticated), you are ready to push. If it asks you to add the key, copy the contents of `~/.ssh/id_rsa.pub` and add it to your GitHub SSH keys page.
+Use the actual author identity. Authentication is handled separately
+through the configured HTTPS credential helper or an authorized SSH key.
 
-## 5. Push the branch named `work`
+## Commit a focused change
 
-Find your current branch (it should already be `work`):
+Inspect the diff and stage the intended paths.
 
-```bash
-git status -sb
+```sh
+git diff
+git diff --check
+git add path/to/changed-file
+git diff --cached
+git commit -m "Describe the verified change"
 ```
 
-Then push it to the `SimplicialTensors` repository:
+Run the checks appropriate to the change before publishing.
+Library changes require `python -m pytest -q`.
+Documentation changes require checking their commands, paths, and links.
 
-```bash
-git push -u origin work
+## Publish and verify
+
+For a review branch, push that branch and open a pull request.
+
+```sh
+git push -u origin HEAD
 ```
 
-The `-u` flag sets `origin/work` as the default upstream so future pushes can use plain `git push`.
+When a change is approved for `main`, fetch its current head, integrate
+any new commits, and push a normal fast-forward update.
 
-If Git warns about non-fast-forward updates, add `--force-with-lease` only when you are certain no one else has pushed to that branch.
-
-## 6. Create the pull request on GitHub
-
-Visit `https://github.com/<your-username>/SimplicialTensors/pulls`. GitHub will prompt you to open a pull request from the `work` branch you just pushed.
-
-## 7. Bring the code onto your own computer
-
-On your personal machine, open a terminal and run:
-
-```bash
-git clone git@github.com:<your-username>/SimplicialTensors.git
-cd SimplicialTensors
+```sh
+git fetch origin
+git log --oneline --left-right HEAD...origin/main
+git push origin HEAD:main
+git fetch origin
+git rev-parse HEAD
+git rev-parse origin/main
 ```
 
-The clone command automatically names the local directory `SimplicialTensors`, so there is no manual renaming step.
+The final two hashes identify the local commit and fetched remote
+commit. Resolve a rejected push against the new remote head before
+retrying.
 
-Whenever you want the latest commits from the Codex workspace, run:
-
-```bash
-git pull --ff-only
-```
-
-Now both the Codex workspace and your local machine share the exact same repository name (`SimplicialTensors`) and commit history.
-
-
-
-
+On another machine, update a clean checkout with `git pull --ff-only`.
+The manuscript build is documented in [tex/README.md](../tex/README.md).

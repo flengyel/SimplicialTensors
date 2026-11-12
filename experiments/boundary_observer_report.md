@@ -1,10 +1,10 @@
 # Raw boundary observer study
 
-**Verdict:** This controlled run is a negative screen for DSTM-specific neural introspection; the raw boundary was below the mean matched-random observer on every primary forecast and intervention endpoint.
+The stored run placed the DSTM boundary below the mean matched random observer on every primary forecast and intervention endpoint. The configuration and numerical results are recorded in [summary.json](results/boundary_observer_study/summary.json).
 
-## Question and design
+## Design
 
-This experiment tests whether the unmodified DSTM boundary of a tied square residual/recurrent weight is a useful observer of its training dynamics. The boundary is not added to the objective or optimizer. Shadow interventions are evaluated on copied weights and are never committed to a trajectory.
+This experiment tests whether the unmodified DSTM boundary of a tied square residual/recurrent weight is an observer of its training dynamics. The boundary is not added to the objective or optimizer. Shadow interventions are evaluated on copied weights and are never committed to a trajectory.
 
 The digits classifier reuses one square hidden-state map at every residual step. Whole initialization trajectories, rather than individual epochs, are assigned to ridge fitting, hyperparameter tuning, or final evaluation. Each random control has the same rank and exactly the same nonzero singular values as the DSTM boundary. It also maps into the DSTM boundary range, so applying the next boundary gives zero. The controls therefore preserve the finite-chain property while randomizing which weight-space directions are observed.
 
@@ -12,7 +12,7 @@ Boundary outputs are expressed in orthonormal coordinates of their range; this d
 
 ## Primary results
 
-Held-out standardized-coordinate future-loss forecast \(R^2\):
+Held-out standardized-coordinate future-loss forecast $R^2$:
 
 | Target | Baseline | DSTM | Random mean | Random best | DSTM − random mean | Rank | Percentile |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -30,7 +30,7 @@ Across trajectories, final validation accuracy averaged 0.9243; final test accur
 
 ## Secondary DSTM-defined forecasts
 
-Held-out standardized-coordinate forecast \(R^2\):
+Held-out standardized-coordinate forecast $R^2$:
 
 | Target | Baseline | DSTM | Random mean | DSTM − random mean |
 |---|---:|---:|---:|---:|
@@ -55,10 +55,14 @@ Both secondary DSTM-defined forecasts had negative held-out R² despite ranking 
 
 ## Reproduction
 
-From the repository root, with project dependencies installed:
+From the repository root, install the package and scikit-learn, then run the experiment.
 
 ```bash
-PYTHONPATH=src python experiments/boundary_observer_study.py
+python -m pip install -e .
+python -m pip install scikit-learn
+python experiments/boundary_observer_study.py
 ```
 
 Machine-readable outputs are in `experiments/results/boundary_observer_study/`. `summary.json` records the full configuration, trajectory split, operator and gradient checks, aggregates, runtime, and software versions.
+
+A smoke run uses `--quick`. Specify `--output-directory` and `--report-path` outside the checked-in results to preserve this full-run record. See [the script guide](../docs/boundary_observer_study.md).

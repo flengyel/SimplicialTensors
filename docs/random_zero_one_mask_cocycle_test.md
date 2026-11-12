@@ -1,51 +1,13 @@
-# Random Zero One Mask Cocycle Test
+# Symbolic boundaries of masked matrices
 
-## Source
+[Source](../experiments/random_zero_one_mask_cocycle_test.py) is an incomplete experiment comparing deletion boundaries after masking or relabeling symbolic entries. It imports `CochainComplex` from `cochain_complex_memoized_mod2`, which is absent from this repository and its package dependencies.
 
-```text
-experiments/random_zero_one_mask_cocycle_test.py
-```
-
-## Type
-
-Python script
-
-## Research Goal
-
-Supports exploratory validation of diagonal simplicial tensor module behavior in concrete computational regimes.
-
-## Relevant Results in TeX Sources
-
-- tex/preliminaries.tex (DSTM construction and indexing).
-- tex/horns.tex (horn kernels and missing indices).
-- tex/combinatorics.tex (classification and rank formulas).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
 python experiments/random_zero_one_mask_cocycle_test.py
 ```
 
-## Inputs
+In the checked repository the command stops with `ModuleNotFoundError` at that import.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
+The intended default run samples 50 relabelings of a symbolic Petersen adjacency pattern and 20 pairs of random masks. It counts nonzero entries of each boundary difference and asks the missing helper whether the expressions are coboundaries. The samples have no configured seed.
 
-## Outputs
-
-- Script-defined diagnostics and optional saved artifacts.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+The Petersen routine constructs masked `a_tensor` but computes `boundary_a` from the unmasked symbolic tensor `A`. Its comparison therefore combines masking with relabeling. The final “all tests passed” summary is unconditional. The helper and the comparison must be supplied and reconciled before this experiment supports a cohomology claim.

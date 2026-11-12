@@ -1,51 +1,15 @@
-# Filler Combinatorics
+# Symbolic filler coordinates
 
-## Source
+[Source](../experiments/filler_combinatorics.py) constructs a `SymbolicTensor` with independent entries. For each omitted face, `validate_filler_conjecture(shape)` computes coordinates absent from the included faces, constructs the Moore filler, and compares it with the input.
 
-```text
-experiments/filler_combinatorics.py
-```
-
-## Type
-
-Python script
-
-## Research Goal
-
-Analyzes horn kernels, missing-index structure, and filler reconstruction behavior in concrete computational settings.
-
-## Relevant Results in TeX Sources
-
-- tex/horns.tex (support characterization and missing-index criterion).
-- tex/normalization.tex (Moore filler map and split exact sequence).
-- tex/nondegeneracy_lemma.tex (R_{p,j} ∩ D_p = {0} and horn decomposition).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
 python experiments/filler_combinatorics.py
 ```
 
-## Inputs
+The active shape list in `main` is `(3, 4)`, `(3, 3, 4)`, and the corresponding shapes through six axes of length 3 followed by an axis of length 4. It overwrites the earlier list.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
+Each report gives the uncovered coordinate count, nonzero coordinates of the difference, and comparison with the shape predicate. In the square case with `k` axes and simplicial degree `k`, the uncovered tuples are the `k!` orders of the included face labels.
 
-## Outputs
+A smaller check is `validate_filler_conjecture((3, 4))`, imported from `experiments.filler_combinatorics`. It returns `True` and finds two uncovered coordinates for each horn. Independent symbolic entries test the formula. Equality of a selected filler with one numerical input would not establish uniqueness.
 
-- Horn compatibility diagnostics, filler comparisons, and kernel-support measurements.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+`show_filler_formula` inspects a difference coordinate and compares its expanded monomial count with `2**N`. The default run exits before these demonstrations. The monomial comparison is an experimental check.

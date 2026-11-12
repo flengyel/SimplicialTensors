@@ -1,51 +1,13 @@
-# Matrix Boundary Homotopy Identity
+# Permutation formula for matrix boundaries
 
-## Source
+[Source](../experiments/matrix_boundary_homotopy_identity.py) compares the signed deletion boundary of a relabeled matrix with a sum of individually relabeled principal faces.
 
-```text
-experiments/matrix_boundary_homotopy_identity.py
-```
-
-## Type
-
-Python script
-
-## Research Goal
-
-Verifies chain-homotopy identities and compatibility constraints used to prove contractibility and filtration compatibility.
-
-## Relevant Results in TeX Sources
-
-- tex/equivariant_homotopy.tex (explicit homotopy operator H and identities).
-- tex/normalization.tex (Moore filler decomposition and exact horn sequence).
-- tex/dichotomy.tex (induced homological consequences of contractibility).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
 python experiments/matrix_boundary_homotopy_identity.py
 ```
 
-## Inputs
+It defines `P[sigma[j], j] = 1` and compares `bdry(P @ A @ P.T)` with the sum of `(-1)**i * Q_i.T @ face(A, sigma_inverse[i]) @ Q_i`, using `induced_subperm_matrix`. The default loops request 100 directed zero-diagonal matrices of size 7 over the integers and after reduction modulo 2. The seeds are `123 + t`. A loop prints its first mismatch and stops.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
+The current implementation fails this comparison. A run with seeds 0 through 9 returned `False` in every signed and mod-two trial. The convention for `Q_i` and its use on the right side require reconciliation.
 
-## Outputs
-
-- Identity checks, mismatch reports, and supporting numeric/symbolic evidence for homotopy constraints.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+This is a diagnostic for ordered face maps under vertex relabeling. It constructs no chain homotopy. Each `Q_i` depends on the deleted vertex, so the formula involves more than a single conjugation of the boundary.

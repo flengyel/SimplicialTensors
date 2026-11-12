@@ -1,51 +1,29 @@
-# Sagemath Compatible Tensor Ops
+# SageMath-compatible symbolic operations
 
-## Source
+[experiments/sagemath_compatible_tensor_ops.py](../experiments/sagemath_compatible_tensor_ops.py) calls the demonstration in [simplicial_tensors.sagemath_compatible_tensor_ops](../src/simplicial_tensors/sagemath_compatible_tensor_ops.py). The package uses SageMath when importing `sage.all` succeeds and falls back to SymPy otherwise. `HAVE_SAGE` records the selected backend.
 
-```text
-experiments/sagemath_compatible_tensor_ops.py
-```
+## Interface
 
-## Type
+`SymbolicTensor(shape, tensor=None, init_type="range")` stores a NumPy object array. Initialization modes are "range", "zeros", and "ones". Range entries have names such as x_0_1. Methods include addition, subtraction, face, degen, bdry, horn, filler, `is_degen`, simplify, and subs.
 
-Python script
+A face deletes the same active index on every axis. A degeneracy duplicates it on every axis. The boundary is the alternating sum of faces. The horn method returns all faces with a zero tensor in the omitted position. The filler algorithm corrects the included faces in sequence.
 
-## Research Goal
+The `is_degen` method tests equality with a single expression of the form `s_i d_i T`. This differs from membership in the span of all degeneracy images. The `correction_rank` function counts distinct string representations of simplified nonzero entry differences. It does not compute a matrix rank or prove independence of corrections.
 
-Provides symbolic/Sage-based computation paths mirroring core DSTM operations to validate exact identities over symbolic coefficient domains.
+The `n_hypergroupoid_comparison` method compares the input with its selected filler for each tested horn. It raises `SimplicialException` for a degenerate boundary unless `allow_degen=True`. It tests only inner horns by default. With no inner horns, its loop returns `True` without testing a horn. The helper `test_symbolic_n_hypergroupoid` explicitly includes outer horns.
 
-## Relevant Results in TeX Sources
+## Running the example
 
-- tex/preliminaries.tex (definition of X_p(s;A) via index sets).
-- tex/normalization.tex (normalization theorem and Moore filler algorithm).
-- tex/combinatorics.tex (rank/cycle formulas used for symbolic checks).
+From an installed checkout:
 
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+~~~sh
 python experiments/sagemath_compatible_tensor_ops.py
-```
+~~~
 
-## Inputs
+For SageMath, make the package and NumPy available to its Python environment, then run:
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
+~~~sh
+sage -python experiments/sagemath_compatible_tensor_ops.py
+~~~
 
-## Outputs
-
-- Symbolic identities, exact kernel computations, and reproducible Sage session outputs.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+The fixed (3, 3) example prints the horn comparisons, original tensor, filler, and missing-symbol checks. With the SymPy fallback, the filler reproduces the included faces and `correction_rank` is 2. The script writes no files. SageMath backend behavior requires a separate run under SageMath.

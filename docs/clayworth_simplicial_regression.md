@@ -1,24 +1,24 @@
-# Clayworth Simplicial Regression
+# Finite simplicial regression checks
 
-## Source
+[The script](../experiments/clayworth_simplicial_regression.py) checks finite consequences of the Clayworth simplicial constructions against the package's face, degeneracy, horn, and filler operations.
 
-```text
-experiments/clayworth_simplicial_regression.py
+Its tuple model enumerates states in `range(state_count)` through `max_dim`. For the strict orbit model, $\Phi(x)=\max(x-1,0)$ and adjacent tuple entries must be one update apart. Deleting an intermediate vertex or duplicating a non-fixed vertex can violate this condition. For example, $(2,1,0)$ is an orbit segment, whereas its middle face $(2,0)$ fails the one-step rule.
+
+The Fano checks enumerate 16 closed objects, verify inner 2-horn filling in their inclusion poset, and exhibit an outer-horn obstruction. The all-tuples construction supplies a positive simplicial control, and the corresponding inner 2-horn test has a direct tuple filler.
+
+```sh
+python experiments/clayworth_simplicial_regression.py
+python experiments/clayworth_simplicial_regression.py --json
+python experiments/clayworth_simplicial_regression.py --max-dim 5 --state-count 5
 ```
 
-## Type
+The script inserts the repository `src` directory into `sys.path` and requires NumPy. Defaults are `--max-dim 4` and `--state-count 4`. Minimum permitted values are 2 and 3 respectively. It prints either a wrapped text table or a JSON list of diagnostic records. Exit status is zero when every expected outcome is observed.
 
-Python script
+The text labels `CHECKED`, `CLASSIFIES`, `FLAGS`, `REFUTES`, and `CONFIRMS` describe those expected outcomes. `ERROR` and `NO_CEX` identify a missing expected outcome. A `REFUTES` entry supplies a finite counterexample to the named closure or Kan assertion. The experiment's scope is these finite constructions. The proposed equivalence with a Grothendieck topos requires additional mathematical data and arguments.
 
-## Research Goal
+## Source notice
 
-Stress-tests finite consequences of Clayworth-style simplicial-object claims using the SimplicialTensors face, degeneracy, horn, and filler operations as the local reference implementation.
-
-The experiment is deliberately local. It does not try to prove or disprove the asserted equivalence between the Clayworth marked simplicial set / quasi-category and a Grothendieck topos. It checks finite prerequisites, weak spots, and counterexample candidates for the simplicial-object part of the claim.
-
-## Clayworth Source-Material Notice
-
-The Clayworth source material reviewed by this experiment was supplied with the following notice:
+The reviewed Clayworth material carried the following notice.
 
 ```text
 © 2026 Logocentricity Inc.
@@ -29,122 +29,3 @@ Founder & CEO
 Logocentricity Inc.
 Capital Factory, Austin, TX
 ```
-
-The experiment is an independent regression/stress test. It does not reproduce the Clayworth source document, and it does not assert ownership of Clayworth Algebra Framework text, terminology, trademarks, or patent claims.
-
-## Current Status
-
-This experiment should be read as a finite diagnostic, not as a complete mathematical adjudication. Its useful output is narrower:
-
-- It confirms several local finite facts, such as the Fano-closed subset count.
-- It classifies the all-tuples construction as simplicial but dynamics-free.
-- It flags the Stage-1-style `Lambda^2_1` horn-filling check as tautological on all tuples.
-- It refutes strict finite `Phi`-orbit closure under ordinary face and degeneracy operations.
-- It exhibits an outer-horn obstruction showing the Fano closed-subset poset nerve is not Kan.
-
-The experiment does not establish or refute the advertised topos equivalence by itself.
-
-## Claims Under Test
-
-The script focuses on claims of the following form:
-
-1. The all-tuples construction with vertex deletion and repetition is a simplicial object.
-2. A Stage-1-style `Lambda^2_1` horn-filling check is meaningful evidence for quasi-category structure.
-3. Strict `Phi`-orbit-compatible tuples are closed under faces and degeneracies.
-4. The Fano closed-subset site has the advertised `1 + 7 + 7 + 1 = 16` object count.
-5. The Fano closed-subset poset nerve has inner 2-horn fillers but is not a Kan complex.
-
-## Finite `Phi`-Orbit Model
-
-The script uses a deliberately small update map only for the strict-orbit stress test:
-
-```python
-def strict_phi(x: int) -> int:
-    return max(x - 1, 0)
-```
-
-A strict `Phi`-orbit tuple means that every adjacent pair satisfies:
-
-```text
-next_state == Phi(current_state)
-```
-
-For example, `(2, 1, 0)` is a strict finite orbit segment because `Phi(2) = 1` and `Phi(1) = 0`. But deleting the middle vertex produces `(2, 0)`, and `Phi(2) = 1`, not `0`. Therefore the face `d_1(2,1,0) = (2,0)` is not a strict one-step orbit segment.
-
-This is what earlier informal output called a `Phi-gap`: an edge created by deleting an intermediate vertex skips the required one-step update. The current script avoids that phrase in the diagnostic output and prints the explicit arithmetic instead.
-
-Degeneracy fails for the same reason. From the strict orbit `(1, 0)`, the degeneracy `s_0` gives `(1, 1, 0)`. Since `Phi(1) = 0`, the edge `1 -> 1` is not a one-step update.
-
-## What It Checks
-
-- SimplicialTensors face-face, degeneracy-degeneracy, and mixed face-degeneracy identities on finite tensors.
-- SimplicialTensors horn compatibility and Moore-style filler round trips.
-- The all-tuples model as a positive control: it is simplicial but dynamics-free.
-- The Stage-1-style `Lambda^2_1` filler as a tautological tuple filler.
-- Face-closure and degeneracy-closure failures for strict finite `Phi`-orbit tuples.
-- The Fano-closed subset count and partition.
-- Inner 2-horn filling in the Fano poset nerve by transitivity.
-- An explicit outer 2-horn obstruction showing the Fano poset nerve is not Kan.
-
-## How To Run
-
-The script can be run directly from either the repository root or from `experiments/`. It inserts the repository `src` directory into `sys.path` before importing `simplicial_tensors`, so an editable install is not required.
-
-From the repository root:
-
-```bash
-python experiments/clayworth_simplicial_regression.py
-```
-
-From `experiments/`:
-
-```bash
-python clayworth_simplicial_regression.py
-```
-
-JSON output:
-
-```bash
-python experiments/clayworth_simplicial_regression.py --json
-```
-
-Larger finite search:
-
-```bash
-python experiments/clayworth_simplicial_regression.py --max-dim 5 --state-count 5
-```
-
-The older invocation still works:
-
-```bash
-PYTHONPATH=src python experiments/clayworth_simplicial_regression.py
-```
-
-## Inputs
-
-- Small tensor shapes generated by `simplicial_tensors.tensor_ops.range_tensor`.
-- Finite tuple models over `range(state_count)`.
-- A finite non-identity update map used as a strict `Phi`-orbit model.
-- The seven Fano lines used in the Clayworth source material.
-
-## Outputs
-
-A compact diagnostic table with an `Outcome` column, or a JSON list of named diagnostic results. The text table wraps detail lines to avoid terminal truncation or misleading mid-word wrapping.
-
-Outcome labels:
-
-- `CHECKED`: a SimplicialTensors local sanity check behaved as expected.
-- `CLASSIFIES`: a construction was classified, usually as true but too weak to support the advertised claim.
-- `FLAGS`: the experiment identified a weak or tautological check.
-- `REFUTES`: the experiment found a finite counterexample or obstruction to a stronger Clayworth-style simplicial claim.
-- `CONFIRMS`: the experiment confirmed a local finite fact, such as the Fano-closed subset count.
-- `ERROR` or `NO_CEX`: the expected diagnostic outcome was not observed.
-
-## Interpretation Guidance
-
-- `CLASSIFIES` for the all-tuples model means the construction is simplicial only in the dynamics-free/codiscrete sense.
-- `REFUTES` for strict `Phi`-orbit tuples means the script found a concrete face-closure or degeneracy-closure counterexample.
-- `FLAGS` for `Lambda^2_1` horn filling means the tested horn filler is tautological and does not establish the full quasi-category condition.
-- `CONFIRMS` for the Fano closed-subset count or inner 2-horns is a local finite result, not evidence for the advertised topos equivalence.
-- The Fano poset nerve is a quasi-category in the ordinary nerve-of-a-category sense, but the explicit outer-horn obstruction shows it is not Kan.
-- None of these finite checks establishes or refutes the advertised topos equivalence by itself.

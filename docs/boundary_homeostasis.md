@@ -1,115 +1,48 @@
-# Adjoint boundary regularization and exact boundary synthesis
+# Boundary regularization and exact synthesis
 
-Let (W) be a tensor and let the diagonal face (d_iW) delete index (i)
-along every tensor axis.  The diagonal boundary signal is
+The diagonal boundary deletes a common index on every tensor axis and takes the alternating sum. It lowers the degree by one and satisfies $\partial^2=0$. The adjoint, projector, and pseudoinverse operations use the entrywise Euclidean or Frobenius inner product.
 
-\[
-\partial W=\sum_{i=0}^{p}(-1)^i d_iW,
-\qquad p=\min(\operatorname{shape}W)-1.
-\]
+## Adjoint regularization
 
-Consecutive degree-lowering boundaries satisfy
+The adjoint face inserts a smaller tensor in the positions avoiding the deleted index and fills the other hyperplanes with zero. Thus
+$$
+\partial^*Y=\sum_i(-1)^i d_i^*Y,\qquad
+\langle\partial W,Y\rangle_F=\langle W,\partial^*Y\rangle_F.
+$$
+For a boundary-shaped target $H$, the energy
+$$
+E_H(W)=\tfrac12\|\partial W-H\|_F^2
+$$
+has gradient $\partial^*(\partial W-H)$. The routine `boundary_homeostasis_gradient` returns that gradient. `boundary_homeostasis_feedback` returns a perturbation in its negative direction, normalized to Frobenius norm `alpha * norm(W)` when the gradient is nonzero. A zero gradient gives a zero perturbation.
 
-\[
-\partial_{p-1}\partial_p=0.
-\]
+This update is a quadratic regularization method. Repeated same-shape application involves $\partial^*\partial$, which is positive semidefinite and generally has nonzero powers.
 
-This terminates the **graded feature chain**
-(W\mapsto\partial W\mapsto0).  It does not make a returned same-shape
-feedback update nilpotent.  With the Frobenius adjoint, the returned operator
-is (L=\partial^*\partial), which is positive semidefinite and generally
-satisfies (L^2W\ne0).
+## Analysis and synthesis
 
-The adjoint is one optional return map.  Choosing it inside a negative-gradient
-update produces a regularizer; that choice is not implied by the original
-introspection proposal.  Exact pseudoinverse synthesis supplies a separate
-return mechanism without an implicit scalar penalty.
-
-## Adjoint-return regularizer (baseline)
-
-The adjoint face (d_i^*) inserts a smaller tensor into all positions that
-avoid (i) and fills the deleted hyperplanes with zero.  Therefore
-
-\[
-\partial^*Y=\sum_{i=0}^{p}(-1)^i d_i^*Y,
-\qquad
-\langle\partial W,Y\rangle_F
-=\langle W,\partial^*Y\rangle_F.
-\]
-
-For a target boundary (H), define
-
-\[
-E_H(W)=\frac12\|\partial W-H\|_F^2.
-\]
-
-Its Euclidean gradient is
-
-\[
-\nabla E_H(W)=\partial^*(\partial W-H).
-\]
-
-The ordinary homeostatic update
-
-\[
-W\leftarrow W-\eta\lambda\partial^*(\partial W-H)
-\]
-
-is thus gradient descent on a generalized Tikhonov penalty.  It is an
-iterative diffusion, not a consequence of (partial^2=0).
-
-## Exact analysis--controller--synthesis
-
-For tensor order (k) and degree (p), the nonzero spectrum of
-(L=\partial^*\partial) is
-
-\[
-\{2,3,\ldots,\min(k,p)+1\}.
-\]
-
-Consequently the polynomial
-
-\[
-P_{\ker\partial}
-=\prod_{\lambda=2}^{\min(k,p)+1}
-\left(I-\frac{L}{\lambda}\right)
-\]
-
-is the exact Frobenius-orthogonal projector onto (ker\partial).  With
-(B=\partial), (P_0=P_{\ker B}), and the exact Moore--Penrose decoder
-(B^\dagger), every tensor has the lossless decomposition
-
-\[
+Write $B=\partial$ and let $P_0$ be the orthogonal projector onto $\ker B$. The [spectral formula](exact_boundary_spectrum.md) gives $P_0$ as a polynomial in $L=B^*B$ and the Moore–Penrose inverse as $B^\dagger=g(L)B^*$ for a polynomial $g$. Then
+$$
 W=P_0W+B^\dagger BW.
-\]
+$$
 
-A controller can replace the syndrome (s=BW) by a proposed target without
-minimizing a boundary norm:
+The module [introspection_ops.py](../src/simplicial_tensors/introspection_ops.py) implements the following operations.
 
-\[
-\widetilde h=\Phi(s,\text{context}),\qquad
-h=BB^\dagger\widetilde h,\qquad
-W^+=P_0W+B^\dagger h.
-\]
+| Function | Operation |
+|---|---|
+| `boundary_analyze(W)` | Returns `BoundaryAnalysis(cycle=P0W, syndrome=bdry(W))`. |
+| `project_boundary_signal(H, original_shape)` | Projects $H$ onto $\operatorname{im}B$. |
+| `boundary_synthesize(cycle, syndrome, original_shape=None)` | Adds the cycle to the decoded syndrome. It checks that the cycle is finite and numerically lies in $\ker B$. |
+| `boundary_target_update(W, H)` | Replaces the observed boundary by the projection of $H$ while preserving $P_0W$. |
+| `boundary_controller_feedback(W, controller)` | Passes a copy of `bdry(W)` to a callable, projects its output to the boundary range, and synthesizes the new tensor. |
+| `boundary_projector_feedback(W, gates)` | Retains the cycle and selects nonzero spectral bands using binary gates. |
 
-Exactly (P_0W^+=P_0W) and (BW^+=h).  For a fixed target the equivalent closest
-tensor
-
-\[
-W^+=W-B^\dagger(BW-h)
-\]
-
-is reached in one exact pass and repeating the same update changes nothing.
-An arbitrary controller recomputed after each update need not be idempotent or
-nilpotent.  The implementation evaluates (B^\dagger) as a low-degree
-polynomial in (L), requiring at most (min(k,p)) boundary/adjoint passes and no
-dense matrix or SVD.
-
-## NumPy example
+A fixed-target update is
+$$
+W^+=P_0W+B^\dagger BB^\dagger H.
+$$
+It preserves $P_0W$ and attains the realizable component of $H$. Repeating the same fixed-target update is idempotent. Binary spectral gates also give an idempotent projector. An adaptive controller can produce different targets on later calls.
 
 ```python
 import numpy as np
-
 from simplicial_tensors.adjoint_ops import (
     boundary_homeostasis_gradient,
     exact_cycle_projection,
@@ -124,39 +57,26 @@ from simplicial_tensors.tensor_ops import bdry
 
 rng = np.random.default_rng(7)
 W = rng.normal(size=(4, 5))
-
-# Iterative negative gradient feedback.
-gradient = boundary_homeostasis_gradient(W)
-W_step = W - 0.1 * gradient
+W_step = W - 0.1 * boundary_homeostasis_gradient(W)
 assert np.linalg.norm(bdry(W_step)) < np.linalg.norm(bdry(W))
 
-# Exact finite orthogonal projection onto the cycle space.
-W_cycle = exact_cycle_projection(W)
-assert np.linalg.norm(bdry(W_cycle)) < 1e-12
+cycle = exact_cycle_projection(W)
+assert np.linalg.norm(bdry(cycle)) < 1e-12
 
-# Exact closest solution for a realizable nonzero target.
 H = bdry(rng.normal(size=W.shape))
-W_target = project_to_boundary(W, H)
-assert np.allclose(bdry(W_target), H)
+assert np.allclose(bdry(project_to_boundary(W, H)), H)
 
-# Lossless observation and identity-controller synthesis.
 analysis = boundary_analyze(W)
+assert np.allclose(boundary_synthesize(*analysis), W)
 assert np.allclose(
-    boundary_synthesize(analysis.cycle, analysis.syndrome), W
+    boundary_controller_feedback(W, lambda syndrome: syndrome), W
 )
-W_identity = boundary_controller_feedback(W, lambda syndrome: syndrome)
-assert np.allclose(W_identity, W)
 ```
 
-## Neural-network scope warning
+The routines evaluate finite identities with floating-point arithmetic and test residuals up to numerical tolerance. `tests/test_adjoint_ops.py` and `tests/test_introspection_ops.py` compare the filters with dense small-matrix references.
 
-The diagonal boundary identifies label (i) on every tensor axis.  Generic
-dense-layer row and column indices are different neuron populations and may
-be independently relabeled.  Therefore this boundary is not intrinsic to the
-function represented by a generic dense weight matrix.  That prevents a
-function-level claim, but it does not forbid inspection of a deliberately
-labeled parameter/optimizer state.  A tied recurrent or residual map
-(W:H\to H) fixes the row/column type mismatch, though neuron ordering remains
-a robustness ablation.  For function-intrinsic work, use the typed
-architecture/path operations in `simplicial_tensors.architecture_ops` or
-another permutation- and gauge-aware construction.
+## Coordinate and experimental scope
+
+The DSTM boundary identifies index $i$ on every axis. Dense-layer row and column indices usually label different neuron sets, and their independent relabeling changes this operation. A tied square map supplies the same source and target space, while the chosen ordering still affects its boundary.
+
+The [neural study](neural_boundary_study.md) tests quadratic penalties and gradient smoothing. The [observer study](boundary_observer_study.md) tests passive boundary information on a tied map. Its stored full run did not pass the criterion for adding a learned controller. The separate `architecture_ops` module supplies layer-incidence and path-product diagnostics with explicitly typed neural layers.

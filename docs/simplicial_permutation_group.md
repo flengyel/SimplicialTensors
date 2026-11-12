@@ -1,51 +1,35 @@
-# Simplicial Permutation Group
+# Deleting elements from permutation matrices
 
-## Source
+[The experiment](../experiments/simplicial_permutation_group.py) checks
+that a rank-one correction followed by principal deletion maps
+permutation matrices to permutation matrices. For a permutation matrix $P$ and standard basis
+column $e_i$, it forms
+$$
+P+(Pe_i)(e_i^{\mathsf T}P)
+$$
+and deletes row and column $i$. The correction reconnects the
+predecessor and successor of the deleted element in its permutation
+cycle.
 
-```text
-experiments/simplicial_permutation_group.py
-```
+## Run
 
-## Type
+The script requires NumPy and has no command-line options.
 
-Python script
-
-## Research Goal
-
-Studies permutation-action invariants and symmetry effects on simplicial tensor constructions.
-
-## Relevant Results in TeX Sources
-
-- tex/preliminaries.tex (Stab(s) action and equivariance under axis permutations).
-- tex/equivariant_homotopy.tex (equivariance of homotopy operator).
-- tex/combinatorics.tex (rank effects under symmetry-restricted settings).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
 python experiments/simplicial_permutation_group.py
 ```
 
-## Inputs
+The current constant is `n = 6` and the loop uses `range(n + 1)`.
+It checks all $7!=5{,}040$ permutation matrices of size seven and
+all seven deletion indices, giving 35,280 assertions. The source
+comment mentioning $S_5$ and $S_4$ does not match these bounds.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
+Every input, corrected face, and successful check is printed.
+The final line is `All tests passed.` if the loop completes.
+Redirect standard output when preserving a complete run.
 
-## Outputs
-
-- Permutation statistics, orbit-level summaries, and invariance checks.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+The corrected operation differs from the package's face, which only
+deletes the common index. The script verifies that each output is a
+permutation matrix. It does not test simplicial identities or
+compatibility with group multiplication. Importing the file also
+runs its test loop.

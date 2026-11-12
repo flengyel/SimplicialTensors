@@ -1,51 +1,14 @@
-# Count Standard Basis Tensors
+# Count degenerate coordinate tensors
 
-## Source
+[Source](../experiments/count_standard_basis_tensors.py) enumerates arrays with one coordinate equal to one and calls `tensor_ops.is_degen` on each one. For every configured shape it reports degenerate and nondegenerate counts and the nondegenerate indices.
 
-```text
-experiments/count_standard_basis_tensors.py
-```
-
-## Type
-
-Python script
-
-## Research Goal
-
-Performs targeted computational checks of combinatorial identities and structural invariants on explicit tensor families.
-
-## Relevant Results in TeX Sources
-
-- tex/horns.tex (missing-index characterization and face-kernel basis).
-- tex/combinatorics.tex (rank and finite-difference formulas).
-- tex/normalization.tex (decomposition through Moore filler map).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
+mkdir -p logs
 python experiments/count_standard_basis_tensors.py
 ```
 
-## Inputs
+Run from the repository root. The program logs to the console and a timestamped file under `logs/`. Its configured cases include matrices through size 8 and three-axis arrays. Each coordinate test solves a dense degeneracy system, so larger cases can be expensive.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
+For a smaller calculation, import `count_basis_tensors_for_shape` from `experiments.count_standard_basis_tensors` and call it on `(3, 3)` and `(4, 4)`. These report respectively 2 degenerate and 7 nondegenerate coordinate tensors, then 16 degenerate and no nondegenerate tensors.
 
-## Outputs
-
-- Consistency checks, discrepancy reports, and compact experiment summaries.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+These counts concern membership in the sum of degeneracy images. They do not count all nondegenerate linear combinations or give homology dimensions. See [the degeneracy API](is_degen.md).

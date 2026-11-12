@@ -1,30 +1,42 @@
-# Opening a shell in the Codex workspace
+# Running repository commands
 
-Some Codex sessions are launched without the terminal tab visible by default. If you do not see a **Terminal** entry anywhere in the UI, use the steps below to create one.
+The commands in this repository run in a shell in a local clone.
+In VS Code, use **Terminal → New Terminal** to open an integrated shell.
+Other environments may expose a terminal differently.
 
-1. Move the mouse to the upper-left corner of the window and click the **hamburger menu** (three horizontal lines).
-2. Choose **Terminal** → **New Terminal**. The first click may take a few seconds to open a new panel.
-3. If the menu is collapsed, press **Ctrl+Shift+P** (or **Cmd+Shift+P** on macOS) to open the command palette, then type `Terminal: Create New Terminal` and press Enter.
-4. The terminal panel should appear at the bottom with a prompt similar to:
-   ```
-   root@<container-id>:/workspace/Operations-Tensorielles-Simpliciales#
-   ```
-5. If nothing appears after several seconds, click the **+** button in the terminal panel or repeat step 3. Slow network connections can delay the first shell startup.
+Check the current directory and repository root.
 
-## Verifying you are in the repository
-
-Once a shell opens, the prompt should end with `/workspace/Operations-Tensorielles-Simpliciales`. If it does not, run:
-
-```bash
+```sh
 pwd
-cd /workspace/Operations-Tensorielles-Simpliciales
+git rev-parse --show-toplevel
+git status --short
 ```
 
-From there you can run `git status`, `pytest -q`, or any other commands described in the documentation.
+Change to the directory reported by Git before running the installation
+or test commands. The checkout path depends on the machine and session.
 
-## Still stuck?
+If Git reports that the current directory is outside a repository,
+locate an existing clone or create one.
 
-If the workspace refuses to open a terminal, refresh the browser tab. As a last resort, close the session from the Codex dashboard and start a new one; each session automatically checks out the repository into `/workspace/Operations-Tensorielles-Simpliciales`.
+```sh
+git clone https://github.com/flengyel/SimplicialTensors.git
+cd SimplicialTensors
+```
 
+Create and activate a Python environment, then install the package.
 
+```sh
+python -m venv .venv
+. .venv/bin/activate
+python -m pip install -e .
+python -m pip install pytest
+python -m pytest -q
+```
 
+Use `.\.venv\Scripts\Activate.ps1` for activation in Windows PowerShell.
+For import errors, check that the Python interpreter belongs to the
+environment where the package was installed.
+
+```sh
+python -c "import sys, simplicial_tensors; print(sys.executable); print(simplicial_tensors.__file__)"
+```

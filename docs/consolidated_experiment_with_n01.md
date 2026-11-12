@@ -1,51 +1,16 @@
-# Consolidated Experiment With N01
+# Reconstruction losses with normal initialization
 
-## Source
+[The script](../experiments/consolidated_experiment_with_n01.py) extends the [initialization comparison](consolidated_experiment.md) with standard-normal initialization and an additional matrix shape. It imports `bdry` and `degen` from `simplicial_tensors.tensor_ops`.
 
-```text
-experiments/consolidated_experiment_with_n01.py
-```
+For each random tensor $T$, it compares a normalized reconstruction from `degen(bdry(T), 0)` with a reconstruction from an independently initialized boundary-shaped array $S$. The latter error is multiplied by $1+\|\partial S\|_F$.
 
-## Type
+The default run uses 200 trials for each of `(512, 256)`, `(128, 64)`, and `(32, 3, 3, 3)`, with Glorot, He, orthogonal, and standard-normal initializations.
 
-Python script
-
-## Research Goal
-
-Performs targeted computational checks of combinatorial identities and structural invariants on explicit tensor families.
-
-## Relevant Results in TeX Sources
-
-- tex/horns.tex (missing-index characterization and face-kernel basis).
-- tex/combinatorics.tex (rank and finite-difference formulas).
-- tex/normalization.tex (decomposition through Moore filler map).
-
-## Typical Workflow
-
-1. Configure shape/order/parameter choices directly in the script.
-2. Run the script and record the checks it performs.
-3. Compare printed or saved outputs against the expected behavior from the cited TeX sections.
-
-## How To Run
-
-```bash
+```sh
+python -m pip install -e .
 python experiments/consolidated_experiment_with_n01.py
 ```
 
-## Inputs
+The script has no command-line options. It prints a dictionary for each shape and initialization and saves no result file. Sampling uses NumPy's global generator. The imported package seeds that generator during import, which makes the run depend on the import and call sequence.
 
-- Inputs defined in the script (for example shapes, graphs, or permutations).
-- Functions imported from src/simplicial_tensors.
-- Optional dependencies required by the script.
-
-## Outputs
-
-- Consistency checks, discrepancy reports, and compact experiment summaries.
-
-## Interpretation Guidance
-
-Use this script to test the corresponding definitions and results. If output disagrees, check the cited TeX sections and the implementation.
-
-
-
-
+As in the earlier comparison, `permutation_test` returns the observed mean difference and the constant p-value `0.0`. It does not resample permutations. The Kolmogorov–Smirnov test and effect-size fields are computed from the simulated losses.
