@@ -18,9 +18,19 @@ To package the current source for arXiv, build the manuscript first and
 run the following from `tex/`:
 
 ```sh
-tar -czf dstm_arxiv_source.tar.gz dstm_short.tex generated_section.tex \
+mkdir -p submissions
+tar -czf submissions/dstm_arxiv_source.tar.gz dstm_short.tex generated_section.tex \
   dendroidal_section.tex dstm_short.bib dstm_short.bbl anc
 ```
 
-The earlier driver `dstm.tex` and its section files correspond to
+The driver `dstm.tex` and its section files correspond to
 [arXiv:2512.10281v2](https://arxiv.org/abs/2512.10281v2).
+
+Submission files are grouped in [submissions/](submissions/):
+
+- [submission_7069953-20251210-2314.tar.gz](submissions/submission_7069953-20251210-2314.tar.gz)
+- [submission_7069953-20251210-2342.tar.gz](submissions/submission_7069953-20251210-2342.tar.gz)
+- [Submission 7069953 PDF, dated 11 December 2025](submissions/arXiv_submission.pdf)
+
+The submission PDF is titled *Diagonal Simplicial Tensor Modules and
+Algebraic n-Hypergroupoids*.

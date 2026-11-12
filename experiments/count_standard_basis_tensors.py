@@ -11,23 +11,25 @@ import itertools
 from simplicial_tensors.tensor_ops import is_degen
 import logging
 import datetime
+import argparse
+from pathlib import Path
 
-# --- Setup Logging ---
-# This will create a log file in the same directory as the script.
-# The file will be overwritten each time the script is run (filemode='w').
-timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    filename=f'logs/standard_basis_tensors_{timestamp}.log',
-    filemode='w'
-)
-# Also log to the console
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.INFO)
-formatter = logging.Formatter('%(message)s') # Keep console output clean
-console_handler.setFormatter(formatter)
-logging.getLogger('').addHandler(console_handler)
+DEFAULT_LOG_DIR = Path(__file__).resolve().parent / "results" / "count_standard_basis_tensors" / "runs" / "logs"
+
+
+def setup_logging(log_dir=DEFAULT_LOG_DIR):
+    """Create the run log when the experiment is executed."""
+    log_dir = Path(log_dir)
+    log_dir.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    logfile = log_dir / f"standard_basis_tensors_{timestamp}.log"
+    file_handler = logging.FileHandler(logfile, mode="w", encoding="utf-8")
+    file_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(logging.Formatter("%(message)s"))
+    logging.basicConfig(level=logging.INFO, handlers=[file_handler, console_handler])
+    return logfile
+
 
 def standard_basis_tensor(shape: tuple, index: tuple) -> np.ndarray:
     """
@@ -80,7 +82,11 @@ def count_basis_tensors_for_shape(s: tuple):
         logging.info(f"  - Non-degenerate indices: {sorted(non_degen_indices)}")   
 
 
-def main():
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--log-dir", type=Path, default=DEFAULT_LOG_DIR)
+    args = parser.parse_args(argv)
+    setup_logging(args.log_dir)
     shapes = [
         (3, 3),       # Example shape 1
         (3, 3, 3),    # Example shape 2

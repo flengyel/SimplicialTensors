@@ -3,6 +3,7 @@ import numpy as np
 import math
 import logging
 from datetime import datetime
+from pathlib import Path
 from typing import List, Tuple, Set
 
 # --- Import the efficient Dask function ---
@@ -13,10 +14,14 @@ from .horn_map_reduce import compute_missing_indices_dask
 _wrapper_cache = {}
 _stirling_cache = {}
 
-def setup_logger():
+def setup_logger(log_dir=None):
     """Sets up a logger to write to both console and a uniquely named file."""
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    logfile_name = f"analysis_log_{timestamp}.txt"
+    if log_dir is None:
+        log_dir = Path.cwd() / "experiments" / "results" / "finite_difference_analysis" / "runs" / "logs"
+    log_dir = Path(log_dir)
+    log_dir.mkdir(parents=True, exist_ok=True)
+    logfile_name = str(log_dir / f"analysis_log_{timestamp}.txt")
     
     logger = logging.getLogger('calculus_analyzer')
     logger.setLevel(logging.INFO)

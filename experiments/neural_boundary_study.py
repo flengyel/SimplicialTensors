@@ -661,7 +661,7 @@ def main() -> None:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path("experiments/results/neural_boundary_study"),
+        default=Path(__file__).resolve().parent / "results" / "neural_boundary_study" / "runs",
     )
     parser.add_argument("--quick", action="store_true", help="Run a small smoke study")
     args = parser.parse_args()

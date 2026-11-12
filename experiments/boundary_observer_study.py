@@ -17,7 +17,7 @@ The study asks two screening questions.
 Initialization seeds are split by whole trajectory into fitting, tuning, and
 held-out sets.  The script writes the split, every result, and all
 hyperparameters to machine-readable files and generates a factual Markdown
-report next to this script.
+report at the selected report path.
 """
 
 from __future__ import annotations
@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 import math
 import platform
 import time
@@ -841,6 +842,8 @@ def _write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
 
 
 def _write_report(path: Path, summary: dict[str, Any]) -> None:
+    guide = Path(__file__).resolve().parents[1] / "docs/experiments/boundary_observer_study.md"
+    guide_link = Path(os.path.relpath(guide, path.resolve().parent)).as_posix()
     forecasts = summary["forecast_summary"]
     shadows = summary["shadow_summary"]
     final = summary["training_summary"]
@@ -1045,13 +1048,14 @@ def _write_report(path: Path, summary: dict[str, Any]) -> None:
             "```",
             "",
             (
-                "Machine-readable outputs are in "
-                "`experiments/results/boundary_observer_study/`. `summary.json` records the "
+                "Machine-readable outputs are written to the selected output directory. "
+                "`summary.json` records the "
                 "full configuration, trajectory split, operator and gradient checks, "
                 "aggregates, runtime, and software versions."
             ),
         ]
     )
+    lines.extend(["", f"See [the script guide]({guide_link})."])
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
@@ -1174,12 +1178,12 @@ def main() -> None:
     parser.add_argument(
         "--output-directory",
         type=Path,
-        default=Path("experiments/results/boundary_observer_study"),
+        default=Path(__file__).resolve().parent / "results" / "boundary_observer_study" / "runs",
     )
     parser.add_argument(
         "--report-path",
         type=Path,
-        default=Path("experiments/boundary_observer_report.md"),
+        default=Path(__file__).resolve().parent / "results" / "boundary_observer_study" / "runs" / "report.md",
     )
     parser.add_argument(
         "--quick",

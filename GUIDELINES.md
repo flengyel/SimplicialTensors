@@ -3,11 +3,19 @@
 ## Layout
 
 - `src/simplicial_tensors/` contains the reusable library.
-- `experiments/` contains experiment entry points, notebooks, and results.
-- `docs/` contains documentation and research notes.
-- `tex/` contains manuscript sources and ancillary scripts.
-- Other source and output directories retain their existing roles.
-  Their contents do not define the package API.
+- `tests/` contains unit, integration, documentation, and wheel-install checks.
+- `experiments/` contains runnable studies and notebook documents.
+- `experiments/results/<study>/` contains each study's data, figures, and logs.
+  New runs write under its `runs/` subdirectory.
+- `docs/api/`, `docs/experiments/`, `docs/research/`, and `docs/development/`
+  separate API references, study guides, research notes, and repository workflows.
+  [The documentation index](docs/README.md) provides navigation.
+- `tex/` contains manuscript sources, PDFs, and ancillary computations;
+  `tex/submissions/` contains submission packages and submission PDFs.
+- `scripts/maintenance/` contains repository maintenance utilities.
+- Importable notebook adapters and analysis helpers belong to
+  `src/simplicial_tensors/notebooks/`; notebook documents belong to
+  `experiments/notebooks/`.
 
 ## Library code
 
@@ -32,10 +40,11 @@ parameters, output, and interpretation. Import reusable operations from
 the package. Put execution in a `main()` function and a main guard when
 practical.
 
-Maintain a corresponding page in `docs/` for every tracked Python or
-Sage experiment and keep [the catalog](docs/experiments_catalog.md)
-consistent with the tracked files. Use fixed seeds and record parameters
-for reproducible runs.
+Maintain a corresponding page in `docs/experiments/` or a linked API
+reference for every tracked Python or Sage experiment, and keep
+[the catalog](docs/experiments_catalog.md) consistent with the tracked files. Use fixed seeds and record parameters
+for reproducible runs. Create output directories before writing files, and
+keep default runs separate from checked-in result artifacts.
 
 ## Contributions
 

@@ -14,7 +14,8 @@ dependencies = [
 
 [tool.setuptools]
 package-dir = {"" = "src"}
-packages = ["simplicial_tensors"]
+packages = ["simplicial_tensors", "simplicial_tensors.notebooks"]
+include-package-data = false
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

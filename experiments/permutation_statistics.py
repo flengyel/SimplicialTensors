@@ -10,7 +10,10 @@ import numpy as np
 from typing import Tuple, List, Dict, Any
 import argparse
 import os
+from pathlib import Path
 from simplicial_tensors.tensor_ops import bdry, face, dimen
+
+DEFAULT_FIGURES_DIR = Path(__file__).resolve().parent / "results" / "permutation_statistics" / "runs" / "figures"
 
 def compute_discrepancy(a: np.ndarray) -> np.ndarray:
     """
@@ -384,7 +387,7 @@ def print_overall_statistics(all_results: List[Dict[str, Any]]) -> None:
     if diag_1_count:
         print(f"P(Permutation | Diagonal=1): {sum(1 for r in all_results if r['diagonal_entry'] == 1 and r['is_perm'])/diag_1_count*100:.1f}%")
 
-def generate_visualizations(all_results: List[Dict[str, Any]], output_dir: str = "plots") -> None:
+def generate_visualizations(all_results: List[Dict[str, Any]], output_dir: str = str(DEFAULT_FIGURES_DIR)) -> None:
     """
     Generate visualizations from the analysis results.
     
@@ -671,7 +674,7 @@ def main(argv=None):
                         help='Enable verbose output with full matrix details')
     parser.add_argument('--tolerance', type=float, default=1e-7,
                         help='Numerical tolerance for matrix comparisons')
-    parser.add_argument('--output-dir', type=str, default='plots',
+    parser.add_argument('--output-dir', type=str, default=str(DEFAULT_FIGURES_DIR),
                         help='Directory to save visualization plots')
     
     args = parser.parse_args(argv)

@@ -5,12 +5,15 @@ import ast
 import csv
 import logging
 import os
+from pathlib import Path
 from typing import Tuple
 
 import numpy as np
 from scipy import stats
 from simplicial_tensors.tensor_ops import bdry, degen
 
+
+DEFAULT_RESULTS_DIR = Path(__file__).resolve().parent / "results" / "loss_experiment" / "runs"
 
 def reconstruct_T_from_S(S: np.ndarray, T_shape: Tuple[int, ...]) -> np.ndarray:
     """
@@ -155,7 +158,7 @@ def run_experiment(
 # Plotting Functionality
 # ----------------------------
 
-def plot_results(csv_file: str, *, show: bool = False):
+def plot_results(csv_file: str, *, show: bool = False, output_dir=None):
     """
     Generate and save plots based on the experiment results stored in a CSV file.
 
@@ -187,11 +190,8 @@ def plot_results(csv_file: str, *, show: bool = False):
     # Set plot style
     sns.set(style="whitegrid")
 
-    # Create 'plots' directory if it doesn't exist
-    plots_dir = os.path.join(os.getcwd(), "plots")
-    if not os.path.exists(plots_dir):
-        os.makedirs(plots_dir)
-        logging.info(f"Created 'plots' directory at {plots_dir}")
+    plots_dir = Path(output_dir) if output_dir is not None else Path(csv_file).resolve().parent / "figures"
+    plots_dir.mkdir(parents=True, exist_ok=True)
 
     # ----------------------------
     # Plot 1: Average Loss Comparison
@@ -331,7 +331,7 @@ def plot_results(csv_file: str, *, show: bool = False):
     plt.close()
     logging.info(f"Plot 'effect_size_heatmap.png' has been saved to {plots_dir}.")
 
-    logging.info("All plots have been generated, saved to the 'plots' directory.")
+    logging.info("All plots have been saved to %s.", plots_dir)
 
 # ----------------------------
 # Main Execution Function
@@ -344,12 +344,15 @@ def main(argv=None):
     parser.add_argument('--mean', type=float, default=0.0)
     parser.add_argument('--std', type=float, default=1.0)
     parser.add_argument('--shape', action='append', help='Comma-separated axis lengths')
-    parser.add_argument('--output', default='experiment_results.csv')
-    parser.add_argument('--log', default='experiment.log')
+    parser.add_argument('--output', default=str(DEFAULT_RESULTS_DIR / 'experiment_results.csv'))
+    parser.add_argument('--log', default=str(DEFAULT_RESULTS_DIR / 'logs' / 'experiment.log'))
+    parser.add_argument('--plot-dir', type=Path, help='Figure directory (default: figures beside the output CSV)')
     parser.add_argument('--plot', action='store_true')
     parser.add_argument('--show', action='store_true', help='Display plot windows as well as saving them')
     parser.add_argument('--progress', action='store_true')
     args = parser.parse_args(argv)
+    Path(args.output).parent.mkdir(parents=True, exist_ok=True)
+    Path(args.log).parent.mkdir(parents=True, exist_ok=True)
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s',
                         handlers=[logging.FileHandler(args.log, mode='w', encoding='utf-8'),
                                   logging.StreamHandler()])
@@ -365,7 +368,7 @@ def main(argv=None):
         writer.writeheader()
         writer.writerows(results)
     if args.plot or args.show:
-        plot_results(args.output, show=args.show)
+        plot_results(args.output, show=args.show, output_dir=args.plot_dir)
     return results
 
 

@@ -4,9 +4,9 @@ The current manuscript is [Computations with simplicial tensor modules](dstm_sho
 
 ## Exact computations for generated submodules
 
-Section 6 provides a degree bound for a generator in degree n. An implementation should form the spans of normalized face images, compute the differentials on those spans, and take exact ranks over a declared field. It should distinguish the full module, a tensor-generated submodule, and a free module on encountered tensors.
+Section 6 provides a degree bound for a generator in degree $n$. The [exact homology implementation](../docs/api/homology.md) forms the spans of normalized face images, computes the differentials on those spans, and takes ranks over $\mathbb Q$ or a declared prime field. These spans retain the linear relations inherited from the ambient tensor module.
 
-The existing scripts described in [homology_basis.md](../docs/homology_basis.md), [normalized_moore_complex_homology.md](../docs/normalized_moore_complex_homology.md), and [sagemath_normalized_tensor_homology.md](../docs/sagemath_normalized_tensor_homology.md) do not provide that calculation. Their limitations are recorded in those pages.
+The [homology examples](../docs/experiments/homology_basis.md), [relative horn calculation](../docs/experiments/normalized_moore_complex_homology.md), and [symbolic tensor calculation](../docs/experiments/sagemath_normalized_tensor_homology.md) use this implementation. They distinguish a tensor-generated submodule from the full ambient module and report homology dimensions over fields.
 
 ## Kernel geometry
 

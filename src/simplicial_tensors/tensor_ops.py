@@ -364,7 +364,7 @@ def vbdry(m: np.ndarray, *, exact: bool = False) -> np.ndarray:
     return a
 
 def cobdry(m: np.ndarray, *, exact: bool = False) -> np.ndarray:
-    """Return the historical alternating sum of degeneracies."""
+    """Return the alternating sum of diagonal degeneracies."""
     if m.ndim == 0 or min(m.shape) == 0:
         raise ValueError("The alternating degeneracy operator needs nonempty axes.")
     if exact and m.dtype.kind in "iu":

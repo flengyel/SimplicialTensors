@@ -20,7 +20,10 @@ The neural-network project uses the boundary operator as an introspection signal
 
 - Put reusable library code in `src/simplicial_tensors/`.
 - Put runnable experiments in `experiments/`.
-- Put explanatory notes in `docs/`.
+- Put API references in `docs/api/`, study guides in `docs/experiments/`,
+  research notes in `docs/research/`, and repository workflows in `docs/development/`.
+- Put notebook documents in `experiments/notebooks/` and each study's outputs
+  under `experiments/results/<study>/`; new runs use its `runs/` subdirectory.
 - Put tests in `tests/`.
 - Do not duplicate existing implementations of `face`, `degen`, `bdry`, `horn`, or `filler` inside experiments.
 

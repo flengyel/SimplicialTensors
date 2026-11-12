@@ -65,4 +65,4 @@ python experiments/boundary_observer_study.py
 
 Machine-readable outputs are in `experiments/results/boundary_observer_study/`. `summary.json` records the full configuration, trajectory split, operator and gradient checks, aggregates, runtime, and software versions.
 
-A smoke run uses `--quick`. Specify `--output-directory` and `--report-path` outside the checked-in results to preserve this full-run record. See [the script guide](../docs/boundary_observer_study.md).
+A smoke run uses `--quick`. Specify `--output-directory` and `--report-path` outside the checked-in results to preserve this full-run record. See [the script guide](../docs/experiments/boundary_observer_study.md).

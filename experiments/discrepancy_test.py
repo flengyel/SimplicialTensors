@@ -1,3 +1,5 @@
+import argparse
+from pathlib import Path
 import numpy as np
 from typing import Tuple, List, Dict, Any
 import matplotlib.pyplot as plt
@@ -5,6 +7,8 @@ import matplotlib.pyplot as plt
 # Import the boundary operator and face functions
 from simplicial_tensors.tensor_ops import (bdry, face, dimen, random_real_matrix)
 
+
+DEFAULT_FIGURE_PATH = Path(__file__).resolve().parent / "results" / "discrepancy_test" / "runs" / "figures" / "discrepancy_analysis.png"
 
 def compute_discrepancy(a: np.ndarray) -> np.ndarray:
     """
@@ -440,7 +444,7 @@ def test_discrepancy_conjecture():
                     print(f"Face {i} approximates discrepancy with scaling {scaling:.6f}")
 
 
-def analyze_discrepancy_patterns(num_samples: int = 50, size: int = 5):
+def analyze_discrepancy_patterns(num_samples: int = 50, size: int = 5, *, output=DEFAULT_FIGURE_PATH):
     """
     Analyze patterns in the discrepancy across many random matrices.
     """
@@ -509,11 +513,16 @@ def analyze_discrepancy_patterns(num_samples: int = 50, size: int = 5):
     plt.axhline(y=1, color='r', linestyle='-', alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('discrepancy_analysis.png')
+    output_path = Path(output)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(output_path)
     plt.close()
 
 
-def main():
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="Analyze boundary discrepancies of matrix products.")
+    parser.add_argument("--output", type=Path, default=DEFAULT_FIGURE_PATH, help="Output figure path")
+    args = parser.parse_args(argv)
     print("Testing discrepancy conjecture for random matrices...")
     test_discrepancy_conjecture()
     
@@ -521,7 +530,7 @@ def main():
     results = test_permutation_matrices()
     
     print("\nPerforming statistical analysis of discrepancy patterns...")
-    analyze_discrepancy_patterns(num_samples=100, size=5)
+    analyze_discrepancy_patterns(num_samples=100, size=5, output=args.output)
 
 if __name__ == "__main__":
     main()

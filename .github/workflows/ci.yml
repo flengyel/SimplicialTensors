@@ -20,11 +20,11 @@ jobs:
           pip install -e .
           pip install ruff mypy bandit
       - name: Lint (ruff)
-        run: ruff check src tests --exclude src/simplicial_tensors/notebooks --select E9,F821,F822,F823
+        run: ruff check src tests --select E9,F821,F822,F823
       - name: Type check (mypy)
         run: mypy --ignore-missing-imports --follow-imports=skip src/simplicial_tensors/__init__.py src/simplicial_tensors/tensor_ops.py src/simplicial_tensors/cyclic_tensor_ops.py
       - name: Security (bandit)
-        run: bandit -q -r src/simplicial_tensors -x src/simplicial_tensors/notebooks -lll
+        run: bandit -q -r src/simplicial_tensors -lll
 
   tests:
     needs: quality
@@ -46,3 +46,19 @@ jobs:
       - name: Run tests
         run: pytest -q
 
+  wheel:
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build wheel
+        run: python -m pip wheel --no-deps --wheel-dir /tmp/simplicial-wheel .
+      - name: Test isolated wheel installation
+        run: |
+          python -m venv /tmp/simplicial-wheel-env
+          /tmp/simplicial-wheel-env/bin/python -m pip install /tmp/simplicial-wheel/*.whl
+          /tmp/simplicial-wheel-env/bin/python -I tests/wheel_smoke.py

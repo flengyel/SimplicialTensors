@@ -1,4 +1,4 @@
-"""Exact relative-homology checks retained under the historical notebook filename."""
+"""Exact relative-homology checks for notebook calls."""
 
 import numpy as np
 

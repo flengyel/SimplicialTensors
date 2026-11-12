@@ -160,7 +160,7 @@ def test_cocalc_notebook_has_valid_json_and_python_cells():
     import ast
     import json
 
-    path = ROOT / "src/simplicial_tensors/notebooks/cocalc_compatible_tensor_ops.ipynb"
+    path = ROOT / "experiments/notebooks/cocalc_compatible_tensor_ops.ipynb"
     notebook = json.loads(path.read_text())
     assert notebook["nbformat"] == 4
     for cell in notebook["cells"]:

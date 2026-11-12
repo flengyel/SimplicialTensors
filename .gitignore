@@ -219,3 +219,9 @@ Thumbs.db
 
 # git patches
 *.patch
+
+# Windows folder metadata
+desktop.ini
+
+# Disposable experiment runs; retained results live beside this directory.
+experiments/results/**/runs/

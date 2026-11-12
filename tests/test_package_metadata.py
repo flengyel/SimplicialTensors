@@ -64,7 +64,7 @@ def _catalog_documented_experiment_files() -> set[str]:
 
 
 def _doc_basenames() -> set[str]:
-    return {p.stem.lower() for p in (REPO_ROOT / "docs").glob("*.md")}
+    return {p.stem.lower() for p in (REPO_ROOT / "docs").rglob("*.md")}
 
 
 def test_experiments_catalog_covers_tracked_files() -> None:
@@ -84,4 +84,9 @@ def test_each_experiment_script_has_dedicated_doc_page() -> None:
     docs = _doc_basenames()
 
     missing_docs = sorted(stem for stem in expected_doc_stems if stem not in docs)
-    assert not missing_docs, f"Missing docs/*.md for experiment scripts: {missing_docs}"
+    assert not missing_docs, f"Missing documentation pages for experiment scripts: {missing_docs}"
+
+
+def test_notebook_artifacts_are_outside_installed_sources() -> None:
+    assert not list((REPO_ROOT / "src").rglob("*.ipynb"))
+    assert list((REPO_ROOT / "experiments" / "notebooks").glob("*.ipynb"))

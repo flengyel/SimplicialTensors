@@ -13,5 +13,5 @@ rational ranks. It reports normalized chain ranks 10 and 15, incidence
 rank 9, and Betti numbers 1 and 6 for the Petersen graph. It also computes
 the reduced circle-smash complex.
 
-For a source-only manuscript archive, first clone the repository and
+For a source-only manuscript package, first clone the repository and
 install its package. The scripts in this directory require that package.

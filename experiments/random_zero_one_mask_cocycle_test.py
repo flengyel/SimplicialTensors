@@ -1,7 +1,7 @@
 """Check boundary linearity and boundary cycles for symbolic masked matrices.
 
-The historical filename uses "cocycle". These are chain-boundary checks over
-F_2 by default, with an optional signed calculation over Z.
+The checks use chain boundaries over F_2 by default, with an optional
+signed calculation over Z.
 """
 
 import argparse

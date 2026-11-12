@@ -1,7 +1,6 @@
 """Coordinate-unit diagnostics and exact relative homology examples.
 
-The historical filename is retained. This module requires no Dask and
-executes examples only when run as a module.
+This module requires no Dask and executes examples only when run as a module.
 """
 
 import numpy as np

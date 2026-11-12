@@ -12,6 +12,9 @@ The face `face(t, i)` deletes index `i` on every axis. The degeneracy
 `degen(t, i)` duplicates that index on every axis. For a matrix these
 operations delete or duplicate the same row and column.
 
+See the [documentation index](docs/README.md) for API references, experiment
+guides, research notes, and development instructions.
+
 ## Installation
 
 Python 3.10 or later is required. The package dependencies are NumPy,
@@ -76,13 +79,13 @@ uses $\mathbb F_2$ for Boolean inputs. The zero tensor in degree zero is
 the empty sum of degeneracies. `decompose_degen_numpy` supplies a
 separate least-squares calculation with a numerical reconstruction check.
 
-The legacy name `n_hypergroupoid_conjecture(shape)` evaluates
+The function `n_hypergroupoid_conjecture(shape)` evaluates
 `len(shape) < min(shape) - 1`, the horn-uniqueness threshold in the
 current degree. `n_hypergroupoid_comparison` compares an
 input with selected horn fillers and checks the full-module horn kernel.
 Its default precondition rejects degenerate boundaries. The empty
 family of inner horns in degree at most one is a vacuous comparison.
-See [the comparison experiment](docs/n_hypergroupoid_conjecture.md).
+See [the comparison experiment](docs/experiments/n_hypergroupoid_conjecture.md).
 
 ## Library modules
 
@@ -104,9 +107,14 @@ Import these modules through `simplicial_tensors`, for example
 The package root lazily exports the numeric, symbolic, adjoint,
 architecture, introspection, homology, graph, and rank-shifted modules.
 The other modules are available through their full submodule paths.
+The `simplicial_tensors.notebooks` namespace ships the CoCalc and homology
+adapters and the finite-difference analysis helpers. Notebook documents
+live in `experiments/notebooks/`. The Dask analysis helpers require Dask;
+the CoCalc and homology adapters use the package dependencies.
 
 `tensor_ops` has a private generator initialized with seed 123.
-Importing it leaves Python's and NumPy's global random states unchanged.
+After NumPy and SymPy initialization, importing it leaves Python's and
+NumPy's global random states unchanged.
 Supplying `seed` to
 `random_tensor` or `random_real_tensor` creates a generator for that
 call. Calls with `seed=None` advance the shared generator.
@@ -147,8 +155,8 @@ The exact homology functions return dimensions over $\mathbb Q$ by
 default. A prime `modulus=p` selects $\mathbb F_p$. They retain linear
 relations among tensor entries and subtract both incoming and outgoing
 boundary ranks. They do not compute integral torsion or homology bases.
-See [the homology examples](docs/homology_basis.md) and
-[sparse tensor representations](docs/rank_shifted.md).
+See [the homology examples](docs/experiments/homology_basis.md) and
+[sparse tensor representations](docs/api/rank_shifted.md).
 
 The scripts in [tex/anc](tex/anc) reproduce that example, a matrix horn,
 and the Petersen graph incidence calculation. Their
@@ -162,17 +170,17 @@ tracked script and result artifact. Experiment pages give the source,
 dependencies, command, output, and interpretation.
 
 Useful starting points include the
-[range-tensor examples](docs/examples_range_tensors.md),
-[matrix-horn computation](docs/filler_combinatorics.md),
-[Petersen rank distribution](docs/petersen_brd_right_cosets.md), and
-[boundary adjoints](docs/boundary_homeostasis.md).
+[range-tensor examples](docs/experiments/examples_range_tensors.md),
+[matrix-horn computation](docs/experiments/filler_combinatorics.md),
+[Petersen rank distribution](docs/experiments/petersen_brd_right_cosets.md), and
+[boundary adjoints](docs/api/boundary_homeostasis.md).
 
 The neural studies distinguish adjoint energy regularization from
 boundary analysis followed by controller-driven synthesis. The latter
 retains the cycle component and projects the controller's target into
 the realizable boundary range. The spectral formulas in these modules
 are evaluated with floating-point arithmetic.
-Read the [research report](docs/neural_boundary_research_report.md) and
+Read the [research report](docs/research/neural_boundary_research_report.md) and
 [observer results](experiments/boundary_observer_report.md) for their
 protocols, measured results, and scope.
 
@@ -189,14 +197,35 @@ entry points and documentation coverage. Sage-specific and optional
 experiment tests are skipped when their dependencies are unavailable.
 
 For SageMath verification in SagePod, follow the
-[Codex handoff](docs/CODEX_SAGEPOD_HANDOFF_2026-11-12.md).
+[Codex handoff](docs/development/CODEX_SAGEPOD_HANDOFF_2026-11-12.md).
 
 GitHub Actions runs Ruff, selected Mypy checks, Bandit, and a pytest
-matrix for Python 3.10, 3.11, and 3.12. The exact commands are in
+matrix for Python 3.10, 3.11, and 3.12. A separate job installs a built wheel
+in a fresh environment and runs `tests/wheel_smoke.py` with isolated Python.
+The exact commands are in
 [.github/workflows/ci.yml](.github/workflows/ci.yml).
 Repository conventions are in [GUIDELINES.md](GUIDELINES.md).
-Reusable implementations belong in `src/simplicial_tensors`, experiments
-in `experiments`, documentation in `docs`, and manuscript sources in `tex`.
+
+## Repository layout
+
+| Directory | Purpose |
+|---|---|
+| `src/simplicial_tensors/` | Importable library and notebook adapters. |
+| `tests/` | Unit, integration, documentation, and wheel-install checks. |
+| `experiments/` | Runnable studies and `notebooks/` documents. |
+| `experiments/results/<study>/` | Study data, figures, and logs; new runs use `runs/`. |
+| `docs/api/` | Public interfaces and coefficient conventions. |
+| `docs/experiments/` | Commands, inputs, outputs, and interpretation for individual studies. |
+| `docs/research/` | Mathematical and empirical research notes. |
+| `docs/development/` | Test reports, handoffs, and repository workflows. |
+| `tex/` | Manuscript drivers, inputs, bibliographies, PDFs, and `anc/` computations. |
+| `tex/submissions/` | Submission source packages and submission PDFs. |
+| `scripts/maintenance/` | Repository maintenance utilities. |
+
+Run shell commands from the repository root unless a guide specifies
+another working directory. The [experiment catalog](docs/experiments_catalog.md)
+links scripts and stored results; the [manuscript guide](tex/README.md)
+gives build and submission-package commands.
 
 ## License
 

@@ -455,7 +455,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-prefix",
         type=Path,
-        default=Path("convex_boundary_study_results"),
+        default=Path(__file__).resolve().parent / "results" / "convex_boundary_study" / "runs" / "convex_boundary_study_results",
         help="write PREFIX.json and PREFIX.csv",
     )
     args = parser.parse_args()
