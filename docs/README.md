@@ -44,3 +44,4 @@ ancillary computations, and submission packages.
 - [SagePod verification handoff, 2026-11-12](development/CODEX_SAGEPOD_HANDOFF_2026-11-12.md)
 - [SagePod validation, 2026-11-12](development/SAGEPOD_VALIDATION_2026-11-12.md)
 - [Repository layout validation, 2026-11-12](development/LAYOUT_VALIDATION_2026-11-12.md)
+- [Exact homology improvements and validation, 2026-11-12](development/HOMOLOGY_VALIDATION_2026-11-12.md)
