@@ -38,3 +38,4 @@ ancillary computations, and submission packages.
 - [Adjoint implementation task specification](development/Codex_issue.txt)
 - [SagePod verification handoff, 2026-11-12](development/CODEX_SAGEPOD_HANDOFF_2026-11-12.md)
 - [SagePod validation, 2026-11-12](development/SAGEPOD_VALIDATION_2026-11-12.md)
+- [Repository layout validation, 2026-11-12](development/LAYOUT_VALIDATION_2026-11-12.md)
