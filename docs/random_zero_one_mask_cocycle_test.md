@@ -1,13 +1,39 @@
 # Symbolic boundaries of masked matrices
 
-[Source](../experiments/random_zero_one_mask_cocycle_test.py) is an incomplete experiment comparing deletion boundaries after masking or relabeling symbolic entries. It imports `CochainComplex` from `cochain_complex_memoized_mod2`, which is absent from this repository and its package dependencies.
+[The experiment](../experiments/random_zero_one_mask_cocycle_test.py)
+computes boundary differences for symbolic matrices with random masks
+and for relabelings of a symbolic Petersen adjacency pattern. It uses
+NumPy, SymPy, and the package boundary operation.
+
+Given two source matrices $X$ and $Y$, it forms
+$D=\partial X-\partial Y$ and checks the exact identities
+
+$$
+D=\partial(X-Y),\qquad \partial D=0.
+$$
+
+Thus each difference is a boundary with the displayed preimage. The
+Petersen comparison applies the adjacency mask before computing either
+boundary. Symbolic entries retain their matrix positions.
 
 ```sh
-python experiments/random_zero_one_mask_cocycle_test.py
+python experiments/random_zero_one_mask_cocycle_test.py --permutations 3 --masks 2 --seed 123
 ```
 
-In the checked repository the command stops with `ModuleNotFoundError` at that import.
+The defaults are 50 Petersen relabelings, 20 random mask pairs, seed 123,
+and mask density 0.5. Calculations use $\mathbb F_2$ unless `--signed`
+selects integer coefficients. The random-mask trials use the selected seed
+plus one. All randomness is local to NumPy generators.
 
-The intended default run samples 50 relabelings of a symbolic Petersen adjacency pattern and 20 pairs of random masks. It counts nonzero entries of each boundary difference and asks the missing helper whether the expressions are coboundaries. The samples have no configured seed.
+Each trial reports its pass status and the number of nonzero entries in
+$D$. Petersen trials also report the permutation's cycle partition.
+The summary counts successful checks, and a failed check gives exit
+status 1. The script writes no files.
 
-The Petersen routine constructs masked `a_tensor` but computes `boundary_a` from the unmasked symbolic tensor `A`. Its comparison therefore combines masking with relabeling. The final “all tests passed” summary is unconditional. The helper and the comparison must be supplied and reconciled before this experiment supports a cohomology claim.
+`boundary_difference_check` returns both source boundaries, their
+difference, the nonzero-entry count, and Boolean boundary and cycle
+checks. `test_random_zero_one_boundaries` and
+`test_petersen_permutation_boundaries` return the trial records. Their
+historical `*_cocycles` names remain as compatibility entry points.
+The calculation concerns chain boundaries. It computes no cohomology
+group or nonzero homology class.

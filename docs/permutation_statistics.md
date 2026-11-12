@@ -3,50 +3,22 @@
 [The experiment](../experiments/permutation_statistics.py) samples one
 permutation matrix per selected size and examines its principal faces.
 It compares each face with
+
 $$
 \partial(P^2)-(\partial P)^2
 $$
-using cosine similarity. Each face is checked for the permutation
-property, nilpotence, idempotence, and repetition among matrix powers.
 
-The calculations call the signed boundary and face functions from
-`tensor_ops`. Entries are floating-point numbers. Nilpotence and
-power-repetition tests use tolerances and finite power bounds.
-
-## Current entry point
-
-Direct execution raises `RecursionError`. The final
-`def main(): main()` replaces the argument-parsing function.
-This also prevents `--help` from reaching the parser.
-
-The analysis functions can be called by loading the guarded module.
+using cosine similarity. The powers are matrix products. Each face is
+checked for the permutation property, nilpotence, idempotence, and
+repetition among matrix powers. The calculations use the package signed
+boundary and face operations with floating-point entries.
 
 ```sh
 python -m pip install -e . matplotlib
-python - <<'PYTHON'
-import runpy
-
-experiment = runpy.run_path("experiments/permutation_statistics.py")
-results = experiment["test_permutation_matrices"](
-    [3, 5], seed=42, max_powers=20, tolerance=1e-7
-)
-experiment["generate_visualizations"](results, "plots/permutation-check")
-PYTHON
+MPLBACKEND=Agg python experiments/permutation_statistics.py --sizes 3 5 --seed 42 --max-powers 20 --output-dir plots/permutation-check
 ```
 
-The analysis prints property counts and returns one dictionary per
-face with the face index, deleted diagonal entry, property flags,
-power-repetition data, similarity, and input size. The visualization
-function writes `diagonal_vs_properties.png`,
-`properties_by_size.png`, `similarity_distribution.png`, and
-`properties_vs_similarity.png`.
-
-## Declared command-line parameters
-
-The earlier parser declares the following interface, currently blocked
-by the recursive entry point.
-
-| Option | Declared default |
+| Option | Default |
 |---|---|
 | `--sizes` | `3 5 7 11 13 17 19 20 21` |
 | `--seed` | `42` |
@@ -55,10 +27,21 @@ by the recursive entry point.
 | `--verbose` | disabled |
 | `--output-dir` | `plots` |
 
-That parser also fails to forward `--max-powers` and `--tolerance`
-to `test_permutation_matrices`, whose defaults are 40 and `1e-7`.
-An explicit call supplies both parameters.
+The seed selects one matrix at each size. Power-repetition checks use
+`--max-powers` as their bound. Nilpotence checks use the input size as
+their bound. Both, and the idempotence check, use the selected absolute
+tolerance with zero relative tolerance.
 
-Counts describe the sampled matrices. A failed repetition test means
-no repetition was found within its bound. Several property tests can
-hold for the same face, so their counts overlap.
+The analysis prints property counts and returns one dictionary per face
+with its index, deleted diagonal entry, property flags, repetition data,
+similarity, and input size. `test_permutation_matrices` provides the
+callable interface. `generate_visualizations` writes four files in the
+output directory.
+
+- `diagonal_vs_properties.png`
+- `properties_by_size.png`
+- `similarity_distribution.png`
+- `properties_vs_similarity.png`
+
+Counts describe the sampled matrices. A failed repetition check means no
+repetition was found within its bound. Property counts can overlap.

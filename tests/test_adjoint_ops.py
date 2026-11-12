@@ -23,7 +23,7 @@ from simplicial_tensors.adjoint_ops import (
 from simplicial_tensors.tensor_ops import bdry, face
 
 
-SHAPES = ((3, 3), (4, 5), (3, 3, 3), (4, 3, 3, 3))
+SHAPES = ((3,), (4,), (3, 3), (4, 5), (3, 3, 3), (4, 3, 3, 3))
 
 
 def _boundary_matrix(shape: tuple[int, ...]) -> np.ndarray:
@@ -91,7 +91,7 @@ def test_homeostasis_feedback_is_norm_matched() -> None:
 
 @pytest.mark.parametrize(
     "shape",
-    ((2, 3), (3, 5), (4, 4), (3, 3, 3), (2, 3, 4, 5)),
+    ((2,), (3,), (2, 3), (3, 5), (4, 4), (3, 3, 3), (2, 3, 4, 5)),
 )
 def test_exact_nonzero_lower_hodge_spectrum(shape: tuple[int, ...]) -> None:
     boundary = _boundary_matrix(shape)

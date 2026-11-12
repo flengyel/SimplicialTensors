@@ -7,7 +7,7 @@ from typing import List, Tuple, Set
 
 # --- Import the efficient Dask function ---
 # This assumes that horn_map_reduce.py is in the same directory.
-from ..horn_map_reduce import compute_missing_indices_dask
+from .horn_map_reduce import compute_missing_indices_dask
 
 # --- Caches for memoization ---
 _wrapper_cache = {}

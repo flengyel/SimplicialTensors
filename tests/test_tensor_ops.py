@@ -524,7 +524,8 @@ def test_counterexample_with_degenerate_boundary() -> None:
 
     # ASSERT
     # The assertion is updated to reflect that `is_degenerate` is now correctly found to be True.
-    assert is_degenerate and bdry_is_degen and comparison and not conjecture
+    # Equality with Moore's selected filler is not a uniqueness certificate.
+    assert is_degenerate and bdry_is_degen and not comparison and not conjecture
 
 def test_normed_bdry() -> None:
     A = random_tensor((5, 7, 9, 11), low=-11, high=73)    

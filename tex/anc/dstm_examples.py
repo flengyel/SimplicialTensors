@@ -1,7 +1,7 @@
 """Three computations from the diagonal simplicial tensor module note.
 
 Run from the repository after ``python -m pip install -e .``:
-    python experiments/dstm_examples.py
+    python tex/anc/dstm_examples.py
 
 The script imports all simplicial operations from the library. Matrix ranks
 are computed exactly over Q using SymPy; no floating-point rank test is used.
@@ -73,11 +73,6 @@ def horn_example():
     """The missing-face-zero 2-horn has free entries in positions 12 and 21."""
     tensor = np.arange(1, 10, dtype=int).reshape(3, 3)
     prescribed = horn(tensor, 0)
-    # horn() uses a floating-point zero placeholder. These particular data
-    # are integers; restore their integer dtype before exact calculations.
-    integer_horn = prescribed.astype(int)
-    assert np.array_equal(prescribed, integer_horn)
-    prescribed = integer_horn
     assert np.array_equal(prescribed[1], np.array([[1, 3], [7, 9]]))
     assert np.array_equal(prescribed[2], np.array([[1, 2], [4, 5]]))
     assert np.array_equal(face(prescribed[2], 1), face(prescribed[1], 1))

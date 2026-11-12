@@ -1,15 +1,23 @@
 # Gaussian reconstruction-loss experiment
 
-[The script](../experiments/loss_experiment.py) compares the error of reconstructing a random tensor $T$ from its boundary with the error of reconstructing it from a random array $S$ of the same boundary shape. Reconstruction uses `degen(S, 0)`. Both the original and reconstructed arrays are normalized by their Frobenius norms before their difference is measured.
+[The script](../experiments/loss_experiment.py) compares two approximations to a Gaussian tensor $T$. The boundary approximation is $s_0\partial T$. The comparison is $s_0S$, where $S$ is an independent Gaussian array with the shape of $\partial T$. The map $s_0$ duplicates index zero along every axis. Each error is the Frobenius distance after normalizing the original and approximating arrays, with zero arrays left unchanged.
 
 ```sh
 python -m pip install -e .
-python -m pip install matplotlib pandas seaborn tqdm
-python experiments/loss_experiment.py
+python experiments/loss_experiment.py --shape 3,3 --trials 6 --seed 12345
 ```
 
-The default run performs 10,000 trials for each of 13 configured shape entries, including a repeated `(5, 5, 5)` entry. It reports mean and standard deviation of each loss, the fraction of trials in which the random-array error exceeds the boundary error, a paired t-test, and an effect-size calculation.
+The default run uses 10,000 trials for each of 12 distinct configured shapes. Repeat `--shape` to supply shapes. `--mean` and `--std` set the Gaussian parameters. A local generator seeded by `--seed` draws new, independent arrays $T$ and $S$ on every trial.
 
-Outputs are `experiment.log`, `experiment_results.csv`, and seven images under `plots/`. The script selects Matplotlib's `TkAgg` backend and calls blocking plot windows, so the default command requires Tk and a graphical session.
+Outputs are `experiment.log` and `experiment_results.csv`. `--log` and `--output` change their paths. Each result records the seed and trial count, means and standard deviations of both errors, the fraction of trials in which the comparison error is at least the boundary error, a paired t-test, and a mean difference standardized by the pooled marginal standard deviations.
 
-The tensor $T$ uses seed `trial + 12345`. The comparison array $S$ is created with the fixed seed `___SEED___` on every trial. Consequently $S$ repeats within each shape. The statistics therefore condition on one fixed comparison array per shape.
+The tracked `experiments/experiment_results.csv` records the earlier experiment with one fixed comparison array per shape.
+
+Plotting is optional and does not require a graphical session when Matplotlib uses a noninteractive backend.
+
+```sh
+python -m pip install matplotlib pandas seaborn tqdm
+MPLBACKEND=Agg python experiments/loss_experiment.py --shape 3,3 --trials 6 --plot
+```
+
+`--plot` saves seven images under `plots/`. `--show` also opens plot windows. `--progress` enables a progress bar and requires tqdm. Importing the script does not configure logging, select a plotting backend, or create files.

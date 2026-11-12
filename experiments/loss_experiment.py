@@ -1,45 +1,16 @@
-# main_experiment.py
+"""Compare Gaussian boundary and independent-array reconstruction losses."""
 
-import matplotlib
-matplotlib.use('TkAgg')  # Set the backend before importing pyplot
+import argparse
+import ast
+import csv
+import logging
+import os
+from typing import Tuple
 
 import numpy as np
 from scipy import stats
-import csv
-from typing import Tuple, List
-from simplicial_tensors.tensor_ops import random_real_tensor, bdry, degen, ___SEED___  # Ensure tensor_ops.py is in the same directory
-from tqdm import tqdm  # For progress bars
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import os
-import logging
-import ast  # For safe evaluation of strings to lists
+from simplicial_tensors.tensor_ops import bdry, degen
 
-# ----------------------------
-# Logging Configuration
-# ----------------------------
-
-# Define the log file path
-log_file_path = os.path.join(os.getcwd(), "experiment.log")
-
-# Reset any existing logging handlers to avoid duplication
-for handler in logging.root.handlers[:]:
-    logging.root.removeHandler(handler)
-
-# Configure logging to output to both console and a log file
-logging.basicConfig(
-    level=logging.INFO,  # Capture INFO and above messages
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(log_file_path, mode='w', encoding='utf-8'),
-        logging.StreamHandler()
-    ]
-)
-
-# ----------------------------
-# Tensor Reconstruction and Loss Computation
-# ----------------------------
 
 def reconstruct_T_from_S(S: np.ndarray, T_shape: Tuple[int, ...]) -> np.ndarray:
     """
@@ -86,7 +57,8 @@ def run_experiment(
     tensor_shape: Tuple[int, ...],
     num_trials: int = 10000,
     mean: float = 0.0,
-    std: float = 1.0
+    std: float = 1.0,
+    *, seed: int = 12345, progress: bool = False
 ) -> dict:
     """
     Run the experiment for a specific tensor shape.
@@ -100,20 +72,22 @@ def run_experiment(
     Returns:
         dict: A dictionary containing experiment results.
     """
-    logging.info(f"Starting experiments for tensor shape: {tensor_shape}")
+    if num_trials < 2 or not tensor_shape or min(tensor_shape) < 2:
+        raise ValueError("Use at least two trials and positive boundary dimensions")
+    if std < 0:
+        raise ValueError("std must be nonnegative")
+    rng = np.random.default_rng(seed)
+    trials = range(num_trials)
+    if progress:
+        from tqdm import tqdm
+        trials = tqdm(trials, desc=f"Tensor Shape {tensor_shape}", unit="trial")
+    logging.info(f"Starting experiments for tensor shape: {tensor_shape}, seed={seed}")
     losses_S = []
     losses_boundary = []
-    for trial in tqdm(range(num_trials), desc=f"Tensor Shape {tensor_shape}", unit="trial"):
-        # Unique seed for T to ensure reproducibility
-        seed_T = trial + 12345
-        T = random_real_tensor(shape=tensor_shape, mean=mean, std=std, seed=seed_T)
-        
-        # Compute the boundary tensor ∂T
+    for _ in trials:
+        T = rng.normal(mean, std, size=tensor_shape)
         partial_T = bdry(T)
-        S_shape = partial_T.shape
-        
-        # Generate S using the global RNG without specifying a seed to ensure independence
-        S = random_real_tensor(shape=S_shape, mean=mean, std=std, seed=___SEED___)
+        S = rng.normal(mean, std, size=partial_T.shape)
         
         # Compute losses
         loss_S = compute_loss(T, S)
@@ -136,7 +110,7 @@ def run_experiment(
     t_statistic, p_value = stats.ttest_rel(losses_S, losses_boundary)
     mean_diff = avg_loss_S - avg_loss_boundary
     pooled_std = np.sqrt((std_loss_S ** 2 + std_loss_boundary ** 2) / 2)
-    cohen_d = mean_diff / pooled_std if pooled_std != 0 else np.inf
+    cohen_d = mean_diff / pooled_std if pooled_std != 0 else (0.0 if mean_diff == 0 else np.copysign(np.inf, mean_diff))
 
     # Determine per-axis parity
     axis_parities = ['Even' if dim % 2 == 0 else 'Odd' for dim in tensor_shape]
@@ -146,6 +120,8 @@ def run_experiment(
     # Compile results into a dictionary
     results_dict = {
         'Tensor Shape': tensor_shape,
+        'Seed': seed,
+        'Trials': num_trials,
         'Number of Axes': len(tensor_shape),
         'Axis Parities': axis_parities,
         'Number of Even Axes': num_even_axes,
@@ -179,13 +155,17 @@ def run_experiment(
 # Plotting Functionality
 # ----------------------------
 
-def plot_results(csv_file: str):
+def plot_results(csv_file: str, *, show: bool = False):
     """
     Generate and save plots based on the experiment results stored in a CSV file.
 
     Parameters:
         csv_file (str): Path to the CSV file containing experiment results.
     """
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
     # Check if the CSV file exists
     if not os.path.exists(csv_file):
         logging.error(f"CSV file '{csv_file}' not found. Skipping plotting.")
@@ -228,9 +208,10 @@ def plot_results(csv_file: str):
     plt.tight_layout()
     plot_path = os.path.join(plots_dir, "average_loss_comparison.png")
     plt.savefig(plot_path)
-    plt.show(block=True)  # Display the plot window
+    if show:
+        plt.show(block=True)
     plt.close()
-    logging.info(f"Plot 'average_loss_comparison.png' has been saved to {plots_dir} and displayed on screen.")
+    logging.info(f"Plot 'average_loss_comparison.png' has been saved to {plots_dir}.")
 
     # ----------------------------
     # Plot 2: Inequality Holding Percentage vs. Number of Even Axes
@@ -245,9 +226,10 @@ def plot_results(csv_file: str):
     plt.tight_layout()
     plot_path = os.path.join(plots_dir, "inequality_holds_vs_even_axes.png")
     plt.savefig(plot_path)
-    plt.show(block=True)
+    if show:
+        plt.show(block=True)
     plt.close()
-    logging.info(f"Plot 'inequality_holds_vs_even_axes.png' has been saved to {plots_dir} and displayed on screen.")
+    logging.info(f"Plot 'inequality_holds_vs_even_axes.png' has been saved to {plots_dir}.")
 
     # ----------------------------
     # Plot 3: Paired t-test Statistic and Cohen's d vs. Number of Even Axes
@@ -266,9 +248,10 @@ def plot_results(csv_file: str):
     plt.tight_layout()
     plot_path = os.path.join(plots_dir, "statistical_metrics_vs_even_axes.png")
     plt.savefig(plot_path)
-    plt.show(block=True)
+    if show:
+        plt.show(block=True)
     plt.close()
-    logging.info(f"Plot 'statistical_metrics_vs_even_axes.png' has been saved to {plots_dir} and displayed on screen.")
+    logging.info(f"Plot 'statistical_metrics_vs_even_axes.png' has been saved to {plots_dir}.")
 
     # ----------------------------
     # Plot 4: Cohen's d (Effect Size) vs. Number of Even Axes
@@ -283,9 +266,10 @@ def plot_results(csv_file: str):
     plt.tight_layout()
     plot_path = os.path.join(plots_dir, "cohens_d_vs_even_axes.png")
     plt.savefig(plot_path)
-    plt.show(block=True)
+    if show:
+        plt.show(block=True)
     plt.close()
-    logging.info(f"Plot 'cohens_d_vs_even_axes.png' has been saved to {plots_dir} and displayed on screen.")
+    logging.info(f"Plot 'cohens_d_vs_even_axes.png' has been saved to {plots_dir}.")
 
     # ----------------------------
     # Plot 5: Distribution of Axis Parity
@@ -300,9 +284,10 @@ def plot_results(csv_file: str):
     plt.tight_layout()
     plot_path = os.path.join(plots_dir, "axis_parity_distribution.png")
     plt.savefig(plot_path)
-    plt.show(block=True)
+    if show:
+        plt.show(block=True)
     plt.close()
-    logging.info(f"Plot 'axis_parity_distribution.png' has been saved to {plots_dir} and displayed on screen.")
+    logging.info(f"Plot 'axis_parity_distribution.png' has been saved to {plots_dir}.")
 
     # ----------------------------
     # Plot 6: Average Loss vs. Number of Even Axes
@@ -317,9 +302,10 @@ def plot_results(csv_file: str):
     plt.tight_layout()
     plot_path = os.path.join(plots_dir, "average_loss_vs_even_axes.png")
     plt.savefig(plot_path)
-    plt.show(block=True)
+    if show:
+        plt.show(block=True)
     plt.close()
-    logging.info(f"Plot 'average_loss_vs_even_axes.png' has been saved to {plots_dir} and displayed on screen.")
+    logging.info(f"Plot 'average_loss_vs_even_axes.png' has been saved to {plots_dir}.")
 
     # ----------------------------
     # Plot 7: Heat Map of Effect Sizes (Cohen's d)
@@ -340,75 +326,48 @@ def plot_results(csv_file: str):
     plt.tight_layout()
     plot_path = os.path.join(plots_dir, "effect_size_heatmap.png")
     plt.savefig(plot_path)
-    plt.show(block=True)
+    if show:
+        plt.show(block=True)
     plt.close()
-    logging.info(f"Plot 'effect_size_heatmap.png' has been saved to {plots_dir} and displayed on screen.")
+    logging.info(f"Plot 'effect_size_heatmap.png' has been saved to {plots_dir}.")
 
-    logging.info("All plots have been generated, saved to the 'plots' directory, and displayed on screen.")
+    logging.info("All plots have been generated, saved to the 'plots' directory.")
 
 # ----------------------------
 # Main Execution Function
 # ----------------------------
 
-def main():
-    """
-    Main function to execute the experiments, save results, and generate plots.
-    """
-    try:
-        # Define the tensor shapes to test (both isotropic and anisotropic)
-        tensor_shapes = [
-            (5, 5, 5),       # 0 even axes
-            (4, 5, 5),       # 1 even axis
-            (5, 6, 7),       # 1 even axis
-            (4, 6, 8),       # 3 even axes
-            (5, 5, 5),       # 0 even axes
-            (6, 7, 8, 9),    # 2 even axes
-            (8, 9, 10),      # 2 even axes
-            (5, 7, 9, 10),   # 1 even axis
-            (5,7,9,11),
-            (6, 6, 6, 6),      # 4 even axes
-            (7,7,7,7),
-            (9,9,9),
-            (9,9,11,11)
-        ]
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--trials', type=int, default=10000)
+    parser.add_argument('--seed', type=int, default=12345)
+    parser.add_argument('--mean', type=float, default=0.0)
+    parser.add_argument('--std', type=float, default=1.0)
+    parser.add_argument('--shape', action='append', help='Comma-separated axis lengths')
+    parser.add_argument('--output', default='experiment_results.csv')
+    parser.add_argument('--log', default='experiment.log')
+    parser.add_argument('--plot', action='store_true')
+    parser.add_argument('--show', action='store_true', help='Display plot windows as well as saving them')
+    parser.add_argument('--progress', action='store_true')
+    args = parser.parse_args(argv)
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s',
+                        handlers=[logging.FileHandler(args.log, mode='w', encoding='utf-8'),
+                                  logging.StreamHandler()])
+    shapes = [(5, 5, 5), (4, 5, 5), (5, 6, 7), (4, 6, 8),
+              (6, 7, 8, 9), (8, 9, 10), (5, 7, 9, 10), (5, 7, 9, 11),
+              (6, 6, 6, 6), (7, 7, 7, 7), (9, 9, 9), (9, 9, 11, 11)]
+    if args.shape:
+        shapes = [tuple(int(n) for n in shape.split(',')) for shape in args.shape]
+    results = [run_experiment(shape, args.trials, args.mean, args.std,
+                              seed=args.seed, progress=args.progress) for shape in shapes]
+    with open(args.output, 'w', newline='', encoding='utf-8') as output:
+        writer = csv.DictWriter(output, fieldnames=list(results[0]))
+        writer.writeheader()
+        writer.writerows(results)
+    if args.plot or args.show:
+        plot_results(args.output, show=args.show)
+    return results
 
-        num_trials = 10000  # Number of trials per tensor shape
-        mean = 0.0           # Mean of the normal distribution
-        std = 1.0            # Standard deviation of the normal distribution
 
-        all_results = []     # List to store results for all tensor shapes
-
-        for shape in tensor_shapes:
-            result = run_experiment(tensor_shape=shape, num_trials=num_trials, mean=mean, std=std)
-            all_results.append(result)
-        
-        # Save all_results to a CSV file for further analysis
-        csv_file = 'experiment_results.csv'
-        csv_columns = ['Tensor Shape', 'Number of Axes', 'Axis Parities', 'Number of Even Axes', 'Number of Odd Axes',
-                      'Average Loss T & S', 'Average Loss T & ∂T',
-                      'Inequality Holds (%)', 'Standard Deviation Loss S',
-                      'Standard Deviation Loss ∂T', 'Paired t-test Statistic',
-                      'p-value', 'Cohen\'s d']
-
-        try:
-            with open(csv_file, 'w', newline='', encoding='utf-8') as csvfile:
-                writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
-                writer.writeheader()
-                for data in all_results:
-                    # Convert tuple to string for CSV compatibility
-                    data_copy = data.copy()
-                    data_copy['Tensor Shape'] = str(data_copy['Tensor Shape'])
-                    writer.writerow(data_copy)
-            logging.info(f"All results have been saved to {csv_file}")
-        except IOError:
-            logging.error("I/O error while trying to write the CSV file.")
-
-        # Generate plots based on the saved CSV
-        plot_results(csv_file)
-
-    except Exception as e:
-        logging.exception("An unexpected error occurred during the experiments.")
-        print("An error occurred. Check experiment.log for details.")
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

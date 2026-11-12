@@ -73,6 +73,10 @@ B_p^\dagger=g(L)B_p^*.
 $$
 Interpolation at $0,2,\ldots,R+1$ also evaluates the resolvent $(I+\mu L)^{-1}$.
 
-The NumPy routines promote these evaluations to floating-point arithmetic. “Exact” describes the finite polynomial identity. Computed projector and pseudoinverse residuals are subject to roundoff. The current one-axis boundary implementation has a separate indexing defect, so vector filter calls require that defect to be repaired. The matrix and higher-axis tests exercise the supported examples.
+The NumPy routines promote these evaluations to floating-point arithmetic.
+“Exact” describes the finite polynomial identity. Computed projector and
+pseudoinverse residuals are subject to roundoff. The boundary and its
+spectral filters support one-axis arrays as well as matrices and
+hypermatrices.
 
 This spectrum concerns the boundary operator and its adjoint. The full DSTM for the stated offsets is contractible. The spectral projectors are used for analysis, synthesis, and regularization as described in [boundary_homeostasis.md](boundary_homeostasis.md).

@@ -1,28 +1,16 @@
 #!/usr/bin/env python3
-"""
-Permutation Matrix Analysis Tool
+"""Sample permutation matrices and classify the powers of their principal faces.
 
-This script analyzes permutation matrices, their faces, and the algebraic properties
-of these faces in relation to the discrepancy operator ∂(A²) - ∂(A)².
-
-The key theoretical question explored:
-- What is the relationship between the faces of a permutation matrix P and
-  the discrepancy ∂(P²) - ∂(P)²?
-
-Key findings:
-- Faces where the corresponding diagonal element is 1 tend to be permutation matrices
-- Faces where the corresponding diagonal element is 0 show various algebraic behaviors:
-  - Some are nilpotent
-  - Some are idempotent (either immediately or eventually)
-  - Some exhibit cyclic behavior
+The experiment records cosine similarity with boundary(P**2) - boundary(P)**2,
+where the powers are matrix products. Power repetition is tested up to a
+specified bound with an absolute numerical tolerance.
 """
 
 import numpy as np
 from typing import Tuple, List, Dict, Any
-import matplotlib.pyplot as plt
 import argparse
 import os
-from simplicial_tensors.tensor_ops import bdry, face, dimen, random_real_matrix
+from simplicial_tensors.tensor_ops import bdry, face, dimen
 
 def compute_discrepancy(a: np.ndarray) -> np.ndarray:
     """
@@ -143,7 +131,8 @@ def is_nilpotent(matrix: np.ndarray, max_power: Optional[int] = None, tolerance:
         max_power = matrix.shape[0]
     
     current = np.copy(matrix)
-    max_power = max_power or matrix.shape[0]  # Default to matrix size if None
+    if max_power < 1 or tolerance <= 0:
+        raise ValueError("max_power and tolerance must be positive")
     for i in range(1, max_power + 1):
         if np.all(np.abs(current) < tolerance):
             return True, i  # Return True and the nilpotent index
@@ -163,7 +152,7 @@ def is_idempotent(matrix: np.ndarray, tolerance: float = 1e-10) -> bool:
         True if the matrix is idempotent, False otherwise
     """
     squared = np.matmul(matrix, matrix)
-    return np.allclose(squared, matrix, atol=tolerance)
+    return np.allclose(squared, matrix, atol=tolerance, rtol=0)
 
 def check_cycles(matrix: np.ndarray, max_powers: int = 40, tolerance: float = 1e-7) -> Tuple[bool, int, int]:
     """
@@ -178,6 +167,8 @@ def check_cycles(matrix: np.ndarray, max_powers: int = 40, tolerance: float = 1e
         Tuple of (has_cycle, cycle_start, cycle_length)
         If eventually idempotent, returns (True, power_at_idempotence, 0)
     """
+    if max_powers < 2 or tolerance <= 0:
+        raise ValueError("max_powers must be at least 2 and tolerance positive")
     powers = [np.identity(matrix.shape[0]), matrix]  # Start with I and A
     
     for power in range(2, max_powers + 1):
@@ -185,7 +176,7 @@ def check_cycles(matrix: np.ndarray, max_powers: int = 40, tolerance: float = 1e
         
         # Check if this power equals any previous power
         for prev_idx, prev_power in enumerate(powers):
-            if np.allclose(next_power, prev_power, atol=tolerance):
+            if np.allclose(next_power, prev_power, atol=tolerance, rtol=0):
                 cycle_start = prev_idx
                 cycle_length = power - prev_idx
                 
@@ -401,6 +392,8 @@ def generate_visualizations(all_results: List[Dict[str, Any]], output_dir: str =
         all_results: List of all analysis results
         output_dir: Directory to save plots
     """
+    import matplotlib.pyplot as plt
+
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     
@@ -415,7 +408,6 @@ def generate_visualizations(all_results: List[Dict[str, Any]], output_dir: str =
     matrix_sizes = np.array([r['matrix_size'] for r in all_results])
     
     # Plot 1: Diagonal entry vs properties
-    plt.figure(figsize=(10, 6))
     labels = ['Permutation', 'Nilpotent', 'Immediately\nIdempotent', 'Eventually\nIdempotent', 'Cyclic']
     diag0_props = [
         sum(is_perm[diag_entries == 0]) / max(sum(diag_entries == 0), 1) * 100,
@@ -460,6 +452,7 @@ def generate_visualizations(all_results: List[Dict[str, Any]], output_dir: str =
     
     fig.tight_layout()
     plt.savefig(os.path.join(output_dir, 'diagonal_vs_properties.png'))
+    plt.close()
     
     # Plot 2: Matrix size vs percentage of property types
     unique_sizes = np.unique(matrix_sizes)
@@ -489,6 +482,7 @@ def generate_visualizations(all_results: List[Dict[str, Any]], output_dir: str =
     plt.legend()
     plt.grid(True, alpha=0.3)
     plt.savefig(os.path.join(output_dir, 'properties_by_size.png'))
+    plt.close()
     
     # Plot 3: Similarity distribution
     plt.figure(figsize=(10, 6))
@@ -501,6 +495,7 @@ def generate_visualizations(all_results: List[Dict[str, Any]], output_dir: str =
     plt.legend()
     plt.grid(True, alpha=0.3)
     plt.savefig(os.path.join(output_dir, 'similarity_distribution.png'))
+    plt.close()
     
     # Plot 4: Face properties vs similarity (boxplot)
     plt.figure(figsize=(12, 8))
@@ -513,12 +508,13 @@ def generate_visualizations(all_results: List[Dict[str, Any]], output_dir: str =
     cycle_sims = similarities[has_cycle == 1]
     
     data = [perm_sims, nilp_sims, imm_idemp_sims, ev_idemp_sims, cycle_sims]
-    box = plt.boxplot(data)
+    plt.boxplot(data)
     plt.xticks(ticks=range(1, len(labels) + 1), labels=labels)
     plt.ylabel('Cosine Similarity with Discrepancy')
     plt.title('Face Properties vs Similarity')
     plt.grid(True, alpha=0.3)
     plt.savefig(os.path.join(output_dir, 'properties_vs_similarity.png'))
+    plt.close()
     
     print(f"\nVisualizations saved to {output_dir} directory")
 
@@ -609,7 +605,7 @@ def analyze_single_face(face_i: np.ndarray, i: int, similarity: float, diagonal_
         Dictionary with analysis results
     """
     is_perm = is_permutation_matrix(face_i)
-    is_nilp, nilp_index = is_nilpotent(face_i, max_power=n)
+    is_nilp, nilp_index = is_nilpotent(face_i, max_power=n, tolerance=tolerance)
     is_immediately_idempotent = is_idempotent(face_i, tolerance=tolerance)
     
     has_cycle, cycle_start, cycle_length, is_eventually_idempotent = check_face_cycles(
@@ -660,7 +656,7 @@ def print_face_analysis(i: int, diagonal_entry: float, is_perm: bool, is_nilp: b
     print(f"Face {i} is {'cyclic' if (has_cycle and cycle_length > 0) else 'not cyclic'}")
     print(f"Similarity with discrepancy: {similarity:.6f}")
 
-def main():
+def main(argv=None):
     """
     Main function to execute permutation matrix analysis.
     """
@@ -678,22 +674,25 @@ def main():
     parser.add_argument('--output-dir', type=str, default='plots',
                         help='Directory to save visualization plots')
     
-    args = parser.parse_args()
-    
-    # Set random seed
-    np.random.seed(args.seed)
+    args = parser.parse_args(argv)
+    if any(n < 1 for n in args.sizes):
+        parser.error("sizes must be positive")
+    if args.max_powers < 2 or args.tolerance <= 0:
+        parser.error("max-powers must be at least 2 and tolerance positive")
     
     print(f"Analyzing permutation matrices of sizes {args.sizes} with seed {args.seed}")
     if args.verbose:
         print("Verbose mode enabled - showing full details")
     
     # Run the analysis with explicit parameters - avoid global function modification
-    all_results = test_permutation_matrices(args.sizes, verbose=args.verbose, seed=args.seed)
+    all_results = test_permutation_matrices(
+        args.sizes, verbose=args.verbose, seed=args.seed,
+        max_powers=args.max_powers, tolerance=args.tolerance
+    )
     
     # Generate visualizations in the specified output directory
     generate_visualizations(all_results, args.output_dir)
 
-def main():
-    main()
+
 if __name__ == "__main__":
     main()

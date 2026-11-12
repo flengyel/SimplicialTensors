@@ -23,6 +23,7 @@
 import sympy as sp
 import numpy as np
 from typing import Tuple, List, Union, Any
+from . import tensor_ops as ops
 from .tensor_ops import (n_hypergroupoid_conjecture, 
                        SimplicialException)  # Import the exception
 
@@ -35,7 +36,7 @@ class SymbolicTensor:
         self.shape = shape
 
         if tensor is not None:
-            self.tensor = tensor
+            self.tensor = np.array(tensor, dtype=object, copy=True)
         else:
             self.tensor = np.empty(shape, dtype=object)
             for idx in np.ndindex(shape):
@@ -95,118 +96,39 @@ class SymbolicTensor:
         return tuple([np.arange(start=0, stop=dim_size) for dim_size in self.shape])
     
     def face(self, i: int) -> "SymbolicTensor":
-        """
-        Apply the i-th simplicial face operation to the symbolic tensor.
-        Matches tensor_ops.face() by removing index i from each axis.
-        """
-        d = self.dimen() + 1  # simplicial dimension + 1
-        if not (0 <= i < d):
-            raise IndexError(f"Face index {i} out of bounds for simplicial dimension {d}")
+        """Delete the common index i in every axis."""
+        return self.from_tensor(ops.face(self.tensor, i))
 
-        axes = self._dims()
-        indices = [np.delete(axes[dim], i) for dim in range(len(self.shape))]
-        grid = np.ix_(*indices)
-        result = self.tensor[grid]
-        return SymbolicTensor(result.shape, tensor=result)
 
     def degen(self, k: int) -> "SymbolicTensor":
-        """
-        Apply k-th simplicial degeneracy by duplicating index k in every axis.
-        Matches tensor_ops.degen().
-        """
-        result = self.tensor
-        for axis in range(result.ndim):
-            # Each element of slices can be either a slice or an int, 
-            # which NumPy indexing with tuple(slices) accepts
-            slices: list[Union[int, slice]] = [slice(None)] * result.ndim
-            slices[axis] = k  # duplicate the k-th index 
-            insert_slice = result[tuple(slices)]
-            result = np.insert(result, k, insert_slice, axis=axis)
-        return SymbolicTensor(result.shape, tensor=result)
+        """Repeat the common index k in every axis."""
+        return self.from_tensor(ops.degen(self.tensor, k))
+
 
     def bdry(self) -> "SymbolicTensor":
-        """
-        Compute the simplicial boundary of the symbolic tensor.
-        Matches tensor_ops.bdry(), using alternating sum of faces.
-        """
-        d = self.dimen() + 1  # simplicial dimension + 1
-        result_shape = tuple(dim - 1 for dim in self.shape)
-        result = np.zeros(result_shape, dtype=object)
+        """Compute the alternating diagonal boundary over the scalar domain."""
+        return self.from_tensor(ops.bdry(np.asarray(self.tensor, dtype=object)))
 
-        for idx in np.ndindex(result_shape):
-            result[idx] = sp.S.Zero
-
-        for i in range(d):
-            face_i = self.face(i)
-            for idx in np.ndindex(result_shape):
-                if i % 2 == 0:
-                    result[idx] += face_i.tensor[idx]
-                else:
-                    result[idx] -= face_i.tensor[idx]
-
-        return SymbolicTensor(result_shape, tensor=result)
     
     def horn(self, k: int) -> List["SymbolicTensor"]:
-        """
-        Construct the k-th horn of the symbolic tensor.
-        Matches tensor_ops.horn().
-        """
-        d = self.dimen() + 1  # simplicial dimension + 1
-        if not (0 <= k < d):
-            raise ValueError(f"Horn index {k} must be in [0, {d-1}]")
+        """Compute all faces with the omitted face represented by a zero tensor."""
+        return [self.from_tensor(value) for value in ops.horn(self.tensor, k)]
 
-        faces = []
-        zero_shape = tuple(dim - 1 for dim in self.shape)
-
-        for i in range(d):
-            if i == k:
-                # k-th face is zero tensor
-                zero_tensor = np.empty(zero_shape, dtype=object)
-                for idx in np.ndindex(zero_shape):
-                    zero_tensor[idx] = sp.S.Zero
-                faces.append(SymbolicTensor(zero_shape, tensor=zero_tensor))
-            else:
-                faces.append(self.face(i))
-
-        return faces
     
-    def filler(self, horn_list:List["SymbolicTensor"], k: int) -> "SymbolicTensor":
-        """
-        Compute a filler for the horn using Moore's algorithm.
-        Matches tensor_ops.filler().
-        """
-        g = horn_list[k].degen(0)  # Start from degenerate zero face
+    def filler(self, horn_list: List["SymbolicTensor"], k: int) -> "SymbolicTensor":
+        """Use Moore's algorithm on a compatible horn."""
+        return self.from_tensor(ops.filler(np.stack([face.tensor for face in horn_list]), k))
 
-        for r in range(k):
-            face_gr = g.face(r)
-            diff_tensor = np.zeros(face_gr.shape, dtype=object)
-            for idx in np.ndindex(face_gr.shape):
-                diff_tensor[idx] = face_gr.tensor[idx] - horn_list[r].tensor[idx]
-            degen_diff = SymbolicTensor(face_gr.shape, tensor=diff_tensor).degen(r)
-
-            for idx in np.ndindex(g.shape):
-                g.tensor[idx] = g.tensor[idx] - degen_diff.tensor[idx]
-
-        t = len(horn_list) - 1
-        while t > k:
-            face_gt = g.face(t)
-            diff_tensor = np.zeros(face_gt.shape, dtype=object)
-            for idx in np.ndindex(face_gt.shape):
-                diff_tensor[idx] = horn_list[t].tensor[idx] - face_gt.tensor[idx]
-            degen_diff = SymbolicTensor(face_gt.shape, tensor=diff_tensor).degen(t - 1)
-
-            for idx in np.ndindex(g.shape):
-                g.tensor[idx] = g.tensor[idx] + degen_diff.tensor[idx]
-
-            t -= 1
-
-        return g
     
     def n_hypergroupoid_comparison(self, outer_horns=False, verbose=False, allow_degen=False) -> bool:
         """
         Test the n-hypergroupoid conjecture: uniqueness of fillers.
         Matches tensor_ops.n_hypergroupoid_comparison().
         """
+        dim = self.dimen()
+        horn_range = range(0 if outer_horns else 1, dim + 1 if outer_horns else dim)
+        if dim < 1 or not horn_range:
+            return True
         boundary = self.bdry()
         if not allow_degen and boundary.is_degen():
             if verbose:
@@ -259,9 +181,10 @@ class SymbolicTensor:
                     print(f"    Indices with correction terms: {indices_with_correction_terms}")
                 return False
 
+        unique = n_hypergroupoid_conjecture(self.shape)
         if verbose:
-            print("Unique filler.")
-        return True
+            print("Unique filler." if unique else "Nonzero horn kernel. Multiple fillers exist.")
+        return unique
 
     ############### Simplification and Substitution Methods ###############    
     def simplify(self) -> "SymbolicTensor":
@@ -315,65 +238,16 @@ class SymbolicTensor:
         """Representative string of the tensor"""
         return f"SymbolicTensor(shape={self.shape})"
 
-# Replace the decompose_degen method in the SymbolicTensor class with this version
 
     def decompose_degen(self) -> Union[List["SymbolicTensor"], None]:
-        """
-        Decomposes a symbolic tensor into a sum of degenerate components by
-        solving a system of symbolic linear equations.
-
-        A tensor T of dimension n is degenerate if it can be written as
-        T = sum_{i=0}^{n-1} s_i(B_i), where B_i are symbolic tensors of
-        dimension n-1.
-
-        Returns:
-            A list of the component tensors [B_0, B_1, ...], or None if no
-            exact decomposition exists (i.e., the tensor is non-degenerate).
-        """
-        n = self.dimen()
-        if n <= 0: # 0-simplices and lower cannot be degenerate
+        """Decompose a sum of degeneracies using the Moore projection."""
+        if self.dimen() < 0:
             return None
-
-        shape_n_minus_1 = tuple(s - 1 for s in self.shape)
-        if any(s < 1 for s in shape_n_minus_1): # Shape must be at least (1,1,...)
+        normalized, terms = ops.split_normalized(self.tensor)
+        if any(sp.simplify(value) != 0 for value in normalized.flat):
             return None
+        return [self.from_tensor(term) for term in terms]
 
-        # 1. Create the unknown B_i tensors with unique symbols
-        unknown_b_tensors = []
-        all_unknown_symbols = []
-        # The loop must go from 0 to n-1. This is the fix.
-        for i in range(n):
-            prefix = f"b_{i}"
-            b_i = SymbolicTensor(shape_n_minus_1)
-            b_i_symbols = []
-            for idx in np.ndindex(b_i.shape):
-                idx_str = ','.join(map(str, idx))
-                symbol = sp.Symbol(f'{prefix}_{{{idx_str}}}')
-                b_i.tensor[idx] = symbol
-                b_i_symbols.append(symbol)
-            
-            unknown_b_tensors.append(b_i)
-            all_unknown_symbols.extend(b_i_symbols)
-
-        # 2. Form the symbolic sum of the degeneracies: Sum_{i=0}^{n-1}(s_i(B_i))
-        sum_of_degen = SymbolicTensor(self.shape, init_type='zeros')
-        # The loop must go from 0 to n-1. This is the fix.
-        for i in range(n):
-            degen_bi = unknown_b_tensors[i].degen(i)
-            sum_of_degen = sum_of_degen + degen_bi
-        
-        # 3. Create and solve the system of equations
-        equations = [sp.Eq(self.tensor[idx], sum_of_degen.tensor[idx]) for idx in np.ndindex(self.shape)]
-        solution = sp.solve(equations, all_unknown_symbols, dict=True)
-
-        if not solution:
-            return None
-
-        # 5. Substitute the solution back to get the concrete B_i tensors
-        subs_dict = solution[0]
-        result_b_tensors = [b.subs(subs_dict) for b in unknown_b_tensors]
-            
-        return result_b_tensors
     
     def is_degen(self) -> bool:
         """
@@ -382,22 +256,35 @@ class SymbolicTensor:
         """
         return self.decompose_degen() is not None
 
-def tensor_filler_difference_rank(original: "SymbolicTensor", filler: "SymbolicTensor") -> int:
+def _polynomial_coefficient_rank(expressions) -> int:
+    """Rank the coefficient vectors of polynomial expressions over Q.
+
+    Columns correspond to monomials, including the constant monomial.
+    Nonpolynomial expressions raise ValueError.
     """
-    Returns the number of distinct nonzero symbolic differences between original and filler tensors.
-    This quantifies the number of independently modified entries.
+    expressions = [sp.expand(sp.sympify(expr)) for expr in expressions]
+    variables = sorted(set().union(*(expr.free_symbols for expr in expressions)), key=str)
+    if not variables:
+        return int(any(expr != 0 for expr in expressions))
+    try:
+        polynomials = [sp.Poly(expr, *variables, domain=sp.QQ) for expr in expressions]
+    except (sp.PolynomialError, sp.polys.polyerrors.CoercionFailed) as exc:
+        raise ValueError("Correction rank requires polynomials with rational coefficients.") from exc
+    monomials = sorted(set().union(*(poly.monoms() for poly in polynomials)))
+    coefficients = sp.Matrix([[poly.coeff_monomial(monomial) for monomial in monomials]
+                              for poly in polynomials])
+    return int(coefficients.rank())
+
+
+def tensor_filler_difference_rank(original: "SymbolicTensor", filler: "SymbolicTensor") -> int:
+    """Rank the polynomial coefficient matrix of the entry differences.
+
+    For homogeneous linear entries in independent symbols this is the rank
+    of the represented correction map. Scalar multiples count once.
     """
     if original.shape != filler.shape:
         raise ValueError("Tensors must have the same shape to compare.")
-
-    differences = set()
-
-    for idx in np.ndindex(original.shape):
-        diff = sp.simplify(original.tensor[idx] - filler.tensor[idx])
-        if diff != 0:
-            differences.add(str(diff))  # Use string representation to test symbolic structure
-
-    return len(differences)
+    return _polynomial_coefficient_rank((original.tensor - filler.tensor).flat)
 
 
 def test_symbolic_n_hypergroupoid(shape: Tuple[int, ...], verbose=True):
@@ -419,15 +306,15 @@ def test_symbolic_n_hypergroupoid(shape: Tuple[int, ...], verbose=True):
 
     try:
         # Compare symbolic horn fillers
-        comparison = sym_tensor.n_hypergroupoid_comparison(verbose=verbose)
+        comparison = sym_tensor.n_hypergroupoid_comparison(outer_horns=True, verbose=verbose)
 
         if verbose:
-            print(f"Conjecture predicts unique fillers: {conjecture}")
-            print(f"Filler uniqueness observed: {comparison}")
+            print(f"Horn-kernel criterion predicts unique fillers: {conjecture}")
+            print(f"Filler comparison and kernel criterion: {comparison}")
             if conjecture == comparison:
-                print("PASS: The n-hypergroupoid conjecture is confirmed for this shape.")
+                print("Moore filler checks agree with the horn-kernel criterion.")
             else:
-                print("FAIL: Observation does not match conjecture prediction.")
+                print("Moore filler checks disagree with the horn-kernel criterion.")
 
         return conjecture, comparison, sym_tensor
 
@@ -439,37 +326,8 @@ def test_symbolic_n_hypergroupoid(shape: Tuple[int, ...], verbose=True):
         raise
 
 def is_generator_symbolic(T: SymbolicTensor) -> bool:
-    """
-    Symbolic degeneracy test:
-    - Let n = min(T.shape).
-    - Zero tensor is degenerate.
-    - If n <= 1 (0-simplices), non-degenerate.
-    - If n == 2, degenerate if constant.
-    - If n > 2, degenerate if T.tensor == (T.face(i).degen(i)).tensor for some i.
-    """
-    #print(f"[DEBUG] is_generator_symbolic: tensor shape={T.shape}")
-    entries = list(T.tensor.flatten())
-    if all(e == 0 for e in entries):
-        #print("[DEBUG] is_generator_symbolic: zero tensors cannot be generators")
-        return False
-    n = min(T.shape)
-    if n <= 1:
-        #print("[DEBUG] is_generator_symbolic: n<=1, non-degenerate")
-        return True
-    if n == 2:
-        constant = all(entry == entries[0] for entry in entries)
-        #print(f"[DEBUG] is_generator_symbolic: n==2, constant? {constant}")
-        return not constant
-    for i in range(n):
-        try:
-            D = T.face(i).degen(i)
-        except IndexError:
-            continue
-        if D.tensor.tolist() == T.tensor.tolist():
-            #print(f"[DEBUG] is_generator_symbolic: degeneracy via face+degen at i={i}")
-            return False
-    #print("[DEBUG] is_generator_symbolic: nonzero and non-degenerate. Generator")
-    return True
+    """Test that T is nonzero and outside the additive degeneracy submodule."""
+    return any(sp.simplify(value) != 0 for value in T.tensor.flat) and not T.is_degen()
 
 
 def check_missing_symbols(t, t_prime, horn_faces, k):

@@ -1,23 +1,15 @@
 # Tensor-product horn examples
 
-[experiments/Gemini_hallicination.py](../experiments/Gemini_hallicination.py) constructs two integer tensor products and compares them with fillers of selected horns. The executable calculation uses the package's numeric operations.
+[The experiment](../experiments/Gemini_hallicination.py) constructs two integer tensor products, checks their horn fillers, and evaluates full-module filler uniqueness. All simplicial operations use the package implementation with exact integer coefficients.
 
-## Inputs and output
+The first product is $[0,1,2]\otimes[3,4]\otimes[5,6]$. Its shape is `(3, 2, 2)` and its simplicial degree is one. It has no inner horns. The program checks both outer horns and finds nonunique fillers. It also constructs the filler for the horn with omitted face zero and checks its included faces.
 
-The first input has shape (3, 2, 2) and simplicial degree 1. It has two outer horns and no inner horns. The script prints the tensor, shape predicate, degeneracy checks, and a comparison with outer horns enabled. It fills the horn with missing face 0 and compares the included faces and full tensors.
+The second product has factors `range(6)`, `range(3, 10)`, `range(5, 11)`, and `range(7, 14)`. Its shape is `(6, 7, 6, 7)`, with four axes and simplicial degree five. The inner horns have unique fillers. The selected filler with omitted face two equals the original tensor.
 
-The second input has shape (6, 7, 6, 7), four axes, and simplicial degree 5. It checks the inner horns and explicitly fills the horn with missing face 2. Output includes Kan compatibility, equality of the reconstructed included faces, and equality of the full tensor with that filler.
-
-The source comments misstate the second degree and confuse the absence of inner horns in degree 1 with the absence of outer horns. The degrees above follow from `min(shape) - 1`.
-
-## Running the examples
-
-From an installed checkout:
-
-~~~sh
+```sh
 python experiments/Gemini_hallicination.py
-~~~
+```
 
-The script uses fixed integer arrays and writes no files. The second case invokes a dense degeneracy system with 1,764 rows and 4,500 columns, so it can require substantial time and memory. The comparison can raise `SimplicialException` if the package detects a degenerate boundary.
+Run from an installed checkout with NumPy. The program prints shapes, degrees, degeneracy tests, horn compatibility, equality of included faces, and equality with a selected filler. Both comparisons pass `allow_degen=True`; degeneracy membership is computed by the Moore projection. The script writes no files and importing it runs no examples. Failure of a checked compatibility or uniqueness identity gives exit status one.
 
-Comparison with the algorithm's selected filler tests that pair of fillers. The general uniqueness result is the coordinate horn-kernel calculation in §3 of [the current manuscript](../tex/dstm_short.tex). For k axes, fillers in degree p are unique precisely when p > k. Tensor rank is a separate quantity.
+The full-module uniqueness criterion is $p>k$ for positive degree $p$ and $k$ axes, as proved by the horn-kernel calculation in §3 of [the manuscript](../tex/dstm_short.tex). Agreement with one selected filler alone does not establish uniqueness.

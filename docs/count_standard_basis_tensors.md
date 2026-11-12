@@ -7,7 +7,10 @@ mkdir -p logs
 python experiments/count_standard_basis_tensors.py
 ```
 
-Run from the repository root. The program logs to the console and a timestamped file under `logs/`. Its configured cases include matrices through size 8 and three-axis arrays. Each coordinate test solves a dense degeneracy system, so larger cases can be expensive.
+Run from the repository root. The program logs to the console and a
+timestamped file under `logs/`. Its configured cases include matrices
+through size 8 and three-axis arrays. Each coordinate test computes a
+Moore projection with exact coefficients.
 
 For a smaller calculation, import `count_basis_tensors_for_shape` from `experiments.count_standard_basis_tensors` and call it on `(3, 3)` and `(4, 4)`. These report respectively 2 degenerate and 7 nondegenerate coordinate tensors, then 16 degenerate and no nondegenerate tensors.
 

@@ -2,28 +2,20 @@
 
 [tests/test_symbolic_tensor_ops.py](../tests/test_symbolic_tensor_ops.py) tests [simplicial_tensors.symbolic_tensor_ops](../src/simplicial_tensors/symbolic_tensor_ops.py) with NumPy object arrays and SymPy expressions. Pytest skips the module if either dependency cannot be imported.
 
-## Coverage
+The tests cover entry names, face and degeneracy shapes, boundary construction, agreement between included horn faces and a filler, the five families of simplicial identities, and boundary squared equal to zero. Two tests check comparison control flow. A `(2, 2)` tensor has no inner horns, so the default comparison returns `True` vacuously. A monkeypatch changes an earlier inner-horn filler while preserving a later one and checks that the discrepancy is reported.
 
-The fourteen tests cover entry names, face and degeneracy shapes, boundary construction, agreement between included horn faces and a filler, and the type and nonnegativity of tensor_filler_difference_rank.
+[tests/test_tensor_coefficients.py](../tests/test_tensor_coefficients.py) checks additive degeneracy membership in both symbolic backends, zero in degree zero, and a zero tensor whose selected filler is itself despite a nonzero horn kernel. It also checks correction rank on linearly dependent expressions. Differences `x`, `2*x`, `y`, and `3*y` have coefficient rank two.
 
-Two tests check comparison control flow. A (2, 2) tensor has no inner horns, so the default comparison returns True. A monkeypatch changes one earlier inner-horn filler while preserving a later one and checks that the method reports the discrepancy.
+Run the SymPy tests and coefficient regressions with
 
-The remaining tests check the five families of simplicial identities and boundary squared equal to zero. They use bounded random shapes and seed Python's random module from tensor_ops.___SEED___.
+```sh
+python -m pytest -q tests/test_symbolic_tensor_ops.py tests/test_tensor_coefficients.py
+```
 
-The function tensor_filler_difference_rank counts distinct simplified difference expressions. Its test does not establish their linear independence.
+SageMath-specific tests are in [tests/test_sagemath_compatible_tensor_ops.py](../tests/test_sagemath_compatible_tensor_ops.py) and require SageMath. The coefficient regressions exercise the compatible module's selected backend, including its SymPy fallback.
 
-## Running the tests
-
-From the repository root after installing the package and pytest:
-
-~~~sh
-python -m pytest -q tests/test_symbolic_tensor_ops.py
-~~~
-
-The current module passes all fourteen tests with the SymPy backend. Output goes to the pytest console, with no experiment data files.
-
-~~~sh
+```sh
 python -m pytest -q
-~~~
+```
 
-The second command runs the repository suite.
+The last command runs the repository suite.

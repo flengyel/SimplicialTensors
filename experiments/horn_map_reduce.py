@@ -1,30 +1,34 @@
-import dask.bag as db
 import itertools
 from typing import Set, Tuple
 from functools import reduce
+from numbers import Integral
 
 def compute_missing_indices_dask(shape: Tuple[int, ...], horn_j: int) -> Set[Tuple[int, ...]]:
-    """
-    FIXED: Computes the set of missing multi-indices using Dask.
-    This version now correctly handles the k < N case.
+    """Return coordinates killed by every included horn face.
+
+    Nonempty shapes must have positive integer axis lengths. The horn
+    index is checked before the dimension bound or Dask computation.
     """
     if not shape:
         return set()
+    if any(not isinstance(size, Integral) or size <= 0 for size in shape):
+        raise ValueError("shape must have positive integer axis lengths")
     
     order_k = len(shape)
     dim_n = min(shape) - 1
 
-    # If k < n, the number of missing indices must be 0.
-    if order_k < dim_n:
-        return set()
-
     if not (0 <= horn_j <= dim_n):
         raise ValueError(f"horn_j must be between 0 and {dim_n}, but got {horn_j}")
+
+    if order_k < dim_n:
+        return set()
 
     horn_faces = [k for k in range(dim_n + 1) if k != horn_j]
 
     if not horn_faces:
         return set(itertools.product(*(range(s) for s in shape)))
+
+    import dask.bag as db
 
     all_indices_iterator = itertools.product(*(range(s) for s in shape))
     first_face = horn_faces[0]

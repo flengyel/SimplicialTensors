@@ -1,6 +1,7 @@
 # Manuscript sources
 
 The current manuscript is *Computations with simplicial tensor modules*.
+The [compiled manuscript](dstm_short.pdf) has ten pages.
 Build it from the repository root:
 
 ```sh
@@ -11,7 +12,7 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error dstm_short.tex
 The driver is `dstm_short.tex`. Its inputs are `generated_section.tex`,
 `dendroidal_section.tex` and `dstm_short.bib`. The `anc/` directory contains
 the two example scripts and instructions for running them against the
-software revisions cited in the paper.
+package in this checkout.
 
 To package the current source for arXiv, build the manuscript first and
 run the following from `tex/`:

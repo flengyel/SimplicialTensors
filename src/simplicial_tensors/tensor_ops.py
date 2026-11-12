@@ -29,15 +29,14 @@ import random
 # logging.basicConfig(level=logging.WARNING)
 
 ___SEED___ = 123  # Set the seed value for reproducibility
-random.seed(___SEED___)  # Set the seed value for random library 
-np.random.seed(___SEED___)  # Set the seed value for np.random library
 rng = np.random.default_rng(___SEED___)  # Create a random number generator with the seed
 
 ## Tensor construction functions
 
 def random_tensor(shape: Tuple[int, ...], low: int = 1, high: int = 10, seed: Optional[int] = None) -> np.ndarray:
+    """Sample reproducible signed 64-bit integers in ``[low, high)``."""
     rng_to_use = rng if seed is None else np.random.default_rng(seed)
-    return rng_to_use.integers(low=low, high=high, size=shape, dtype=np.int16)
+    return rng_to_use.integers(low=low, high=high, size=shape, dtype=np.int64)
 
 def random_real_tensor(shape: Tuple[int, ...], mean: float = 0.0, std: float = 1.0, seed: Optional[int] = None) -> np.ndarray:
     rng_to_use = rng if seed is None else np.random.default_rng(seed)
@@ -97,13 +96,13 @@ def _dims(m: np.ndarray) -> Tuple[np.ndarray, ...]:
 
 # Généralisation de l'opération face aux tenseurs
 def _face(m: np.ndarray, axes: Tuple[np.ndarray, ...], i: int) -> np.ndarray:
-    rows, cols = axes[0], axes[1]
-    indices: List[np.ndarray] = [np.delete(axis, i) if len(axis) > i else axis for axis in axes]
+    indices: List[np.ndarray] = [np.delete(axis, i) for axis in axes]
     grid = np.ix_(*indices)
     return m[grid]
 
 # i-ème face d'une matrice
 def face(m: np.ndarray, i: int) -> np.ndarray:
+    """Delete index ``i`` along every axis, including for vectors."""
     num_faces = min(m.shape) if m.ndim > 0 else 0
     if not (0 <= i < num_faces):
         raise IndexError(f"Face index {i} out of bounds for tensor shape {m.shape}.")
@@ -147,6 +146,8 @@ def degen_matrix(z: np.ndarray, j: int) -> np.ndarray:
 
 # k-ème dégénérescence d'un tenseur
 def degen(z: np.ndarray, k: int) -> np.ndarray:
+    if z.ndim == 0 or not 0 <= k < min(z.shape):
+        raise IndexError(f"Degeneracy index {k} out of bounds for tensor shape {z.shape}.")
     # Parcourez chaque dimension et dupliquez la k-ème hypercolonne
     for axis in range(z.ndim):
         # Each element of slices can be either a slice or an int, 
@@ -170,15 +171,15 @@ def _get_degeneracy_system_matrix(a: np.ndarray) -> np.ndarray:
     size_n_minus_1 = np.prod(shape_n_minus_1)
 
     if size_n_minus_1 <= 0:
-        return np.zeros((size_n, 0))
+        return np.zeros((size_n, 0), dtype=np.int64)
 
     num_degen_ops = n
-    S_combined: np.ndarray = np.zeros((size_n, num_degen_ops * size_n_minus_1), dtype=float)
+    S_combined: np.ndarray = np.zeros((size_n, num_degen_ops * size_n_minus_1), dtype=np.int64)
 
     for i in range(num_degen_ops):
         for j in range(size_n_minus_1):
-            b = np.zeros(size_n_minus_1)
-            b[j] = 1.0
+            b = np.zeros(size_n_minus_1, dtype=np.int64)
+            b[j] = 1
             b = b.reshape(shape_n_minus_1)
             
             degen_b = degen(b, i)
@@ -199,11 +200,13 @@ def decompose_degen_numpy(a: np.ndarray) -> Optional[List[np.ndarray]]:
     If 'a' is not degenerate, returns None.
     The decomposition is not unique; this function returns one valid solution.
     """
-    n = dimen(a)
-    if n <= 0:
+    if a.ndim == 0 or min(a.shape) == 0:
         return None
+    n = dimen(a)
+    if n == 0:
+        return [] if not np.any(a) else None
 
-    v_a: np.ndarray = a.flatten().astype(float)
+    v_a: np.ndarray = a.flatten().astype(complex if np.iscomplexobj(a) else float)
     S_combined = _get_degeneracy_system_matrix(a)
 
     if S_combined.shape[1] == 0:
@@ -231,56 +234,52 @@ def decompose_degen_numpy(a: np.ndarray) -> Optional[List[np.ndarray]]:
     except np.linalg.LinAlgError:
         return None
 
+def split_normalized(a: np.ndarray) -> tuple[np.ndarray, list[np.ndarray]]:
+    """Return the Moore projection and the components of the discarded sum.
+
+    For a tensor in degree p, the returned pair (u, terms) satisfies
+    d_i(u)=0 for 1 <= i <= p and a=u+sum_i s_i(terms[i]).
+    Computation uses the input arithmetic, with Boolean arrays over F_2.
+    Use object arrays of Python integers or exact scalars to avoid overflow.
+    """
+    if a.ndim == 0 or min(a.shape) == 0:
+        raise ValueError("Normalization needs nonempty tensor axes.")
+    normalized = a
+    terms: list[np.ndarray] = []
+    for i in range(min(a.shape) - 1, 0, -1):
+        term = face(normalized, i)
+        terms.append(term)
+        correction = degen(term, i - 1)
+        if a.dtype.kind == "b":
+            normalized = np.logical_xor(normalized, correction)
+        else:
+            normalized = normalized - correction
+    terms.reverse()
+    return normalized, terms
+
+
+
 def decompose_degen(a: np.ndarray) -> Optional[List[np.ndarray]]:
+    """Decompose a tensor in the additive span of the degeneracy images.
+
+    Integer and rational entries use exact arithmetic. Finite floating-point
+    entries are interpreted as their exact binary rational values. Boolean
+    arrays use F_2. In degree zero only zero is an empty sum of degeneracies.
     """
-    Decomposes a degenerate tensor 'a'. This final version handles
-    underdetermined systems by substituting 0 for all free parameters to
-    return the simplest particular solution.
-    """
-    n = dimen(a)
-    if n <= 0:
+    if a.ndim == 0 or min(a.shape) == 0:
         return None
+    if a.dtype.kind == "b":
+        exact = a
+    else:
+        try:
+            entries = [sp.Rational(*v.as_integer_ratio()) if isinstance(v, np.floating)
+                       else sp.Rational(v) for v in a.ravel().tolist()]
+            exact = np.array(entries, dtype=object).reshape(a.shape)
+        except (OverflowError, TypeError, ValueError):
+            return None
+    normalized, terms = split_normalized(exact)
+    return terms if not np.any(normalized) else None
 
-    try:
-        v_a_sympy = sp.Matrix([sp.Rational(val) for val in a.flatten()])
-        S_numpy = _get_degeneracy_system_matrix(a)
-        S_sympy = sp.Matrix(S_numpy)
-    except ValueError:
-        return None
-
-    if S_sympy.cols == 0:
-        return None if v_a_sympy.norm() != 0 else []
-
-    augmented_matrix = S_sympy.row_join(v_a_sympy)
-    rref_matrix, pivots = augmented_matrix.rref()
-
-    if S_sympy.cols in pivots:
-        return None
-
-    # --- Handle Underdetermined Systems ---
-    
-    # 1. Solve the system. The solution `x` may contain `tau` parameters.
-    x, params = S_sympy.gauss_jordan_solve(v_a_sympy)
-
-    # 2. Find all free parameters (tau_i) in the symbolic solution
-    free_params = x.free_symbols
-    
-    # 3. Substitute 0 for all free parameters to get the simplest numerical solution
-    if free_params:
-        subs_dict = {param: 0 for param in free_params}
-        x = x.subs(subs_dict)
-    
-    # 4. Now, x is guaranteed to be numerical. Reconstruct the tensors.
-    shape_n_minus_1 = tuple(s - 1 for s in a.shape)
-    size_n_minus_1 = np.prod(shape_n_minus_1)
-
-    b_tensors = []
-    for i in range(n):
-        b_flat = x[i * size_n_minus_1 : (i + 1) * size_n_minus_1]
-        b_array = np.array(b_flat).reshape(shape_n_minus_1)
-        b_tensors.append(b_array)
-        
-    return b_tensors
 
 def is_degen(a: np.ndarray) -> bool:
     """
@@ -306,51 +305,81 @@ def find_degen(a: np.ndarray) -> Union[Tuple[np.ndarray, int], None]:
 
 
 # Frontière d'un tenseur
-def bdry(m: np.ndarray) -> np.ndarray:
+def bdry(m: np.ndarray, *, exact: bool = False) -> np.ndarray:
+    """Return the alternating sum of faces.
+
+    By default the input dtype supplies the arithmetic. For integer arrays,
+    ``exact=True`` uses Python integers and returns an object array without
+    overflow. Boolean arrays use F_2. Degree zero has an empty output array.
+    """
+    if m.ndim == 0 or min(m.shape) == 0:
+        raise ValueError("Boundary needs nonempty tensor axes.")
+    if exact and m.dtype.kind in "iu":
+        m = m.astype(object)
     d: int = int(np.min(m.shape))
     axes = _dims(m)
     #  soustraire 1 de chaque dimension
     a = np.zeros(np.subtract(m.shape, np.array([1])), dtype=m.dtype)
     for i in range(d):
-       if i % 2 == 0:
+       if m.dtype.kind == "b":
+           a = np.logical_xor(a, _face(m, axes, i))
+       elif i % 2 == 0:
            a = np.add(a, _face(m, axes, i))
        else:
            a = np.subtract(a, _face(m, axes, i))
     return a
 
 #  Frontière horizontale d'une matrice
-def hbdry(m: np.ndarray) -> np.ndarray:
+def hbdry(m: np.ndarray, *, exact: bool = False) -> np.ndarray:
+    if m.ndim != 2 or min(m.shape) == 0:
+        raise ValueError("Horizontal boundary needs a nonempty matrix.")
+    if exact and m.dtype.kind in "iu":
+        m = m.astype(object)
     d = m.shape[0]
     axes = _dims(m)
     # soustraire 1 de la dimension zéro
-    a = np.zeros(np.subtract(m.shape,np.array([1,0])))
+    a = np.zeros((m.shape[0] - 1, m.shape[1]), dtype=m.dtype)
     for i in range(d):
-        if i % 2 == 0:
+        if m.dtype.kind == "b":
+            a = np.logical_xor(a, _hface(m, axes, i))
+        elif i % 2 == 0:
             a = np.add(a, _hface(m, axes, i))
         else:
             a = np.subtract(a, _hface(m, axes, i))
     return a
 
 #  Frontière verticale d'une matrice
-def vbdry(m: np.ndarray) -> np.ndarray:
+def vbdry(m: np.ndarray, *, exact: bool = False) -> np.ndarray:
+    if m.ndim != 2 or min(m.shape) == 0:
+        raise ValueError("Vertical boundary needs a nonempty matrix.")
+    if exact and m.dtype.kind in "iu":
+        m = m.astype(object)
     d = m.shape[1]
     axes = _dims(m)
     # soustraire 1 de la première dimension
-    a = np.zeros(np.subtract(m.shape,np.array([0,1])))
+    a = np.zeros((m.shape[0], m.shape[1] - 1), dtype=m.dtype)
     for i in range(d):
-        if i % 2 == 0:
+        if m.dtype.kind == "b":
+            a = np.logical_xor(a, _vface(m, axes, i))
+        elif i % 2 == 0:
             a = np.add(a, _vface(m, axes, i))
         else:
             a = np.subtract(a, _vface(m, axes, i))  
     return a
 
-# cobord d'une matrice. Cela donnera toujours une cohomologie nulle
-def cobdry(m: np.ndarray) -> np.ndarray:
+def cobdry(m: np.ndarray, *, exact: bool = False) -> np.ndarray:
+    """Return the historical alternating sum of degeneracies."""
+    if m.ndim == 0 or min(m.shape) == 0:
+        raise ValueError("The alternating degeneracy operator needs nonempty axes.")
+    if exact and m.dtype.kind in "iu":
+        m = m.astype(object)
     d: int = int(np.min(m.shape))
     # Ajoutez 1 à chaque dimension
-    a = np.zeros(np.add(m.shape,np.array([1])))
+    a = np.zeros(tuple(length + 1 for length in m.shape), dtype=m.dtype)
     for i in range(d):
-       if i % 2 == 0:
+       if m.dtype.kind == "b":
+           a = np.logical_xor(a, degen(m, i))
+       elif i % 2 == 0:
            a = np.add(a, degen(m, i))
        else:
            a = np.subtract(a, degen(m, i))
@@ -360,10 +389,13 @@ def cobdry(m: np.ndarray) -> np.ndarray:
 # Ceci retourne la liste des faces diagonales de M en ordre à l'exception de la k-ème.
 # La k-ème matrice est la matrice zéro de dimension (M.shape[0]-1)x(M.shape[1]-1)
 def horn(m: np.ndarray, k: int) -> np.ndarray:
-    d = dimen(m)+1 
+    """Return a positive-degree horn with a zero in the omitted slot."""
+    if m.ndim == 0 or min(m.shape) < 2:
+        raise ValueError("A horn requires a positive-degree tensor.")
+    d = dimen(m) + 1
     if k < 0 or k >= d:
         raise ValueError(k, "must be nonnegative and less than dim+1", d)
-    return np.array([face(m,i) if i != k else np.zeros(np.subtract(m.shape, np.array([1]))) for i in range(d)])
+    return np.array([face(m,i) if i != k else np.zeros(tuple(s - 1 for s in m.shape), dtype=m.dtype) for i in range(d)])
 
 # check the Kan condition
 def kan_condition(w: np.ndarray, k: int) -> bool:
@@ -380,18 +412,24 @@ def kan_condition(w: np.ndarray, k: int) -> bool:
 # The function filler() computes a hypermatrix, 
 # given a horn H which omits the k-th face
 # Here a k-horn has a zero matrix at the k-th position
-def filler(horn: np.ndarray, k: int) -> np.ndarray:
-    if not (0 <= k < len(horn)):
+def filler(horn: np.ndarray, k: int, *, exact: bool = False) -> np.ndarray:
+    """Fill a compatible horn, optionally using exact integer arithmetic."""
+    if exact and horn.dtype.kind in "iu":
+        horn = horn.astype(object)
+    if horn.ndim < 2 or len(horn) < 2 or not (0 <= k < len(horn)):
         raise ValueError(f"Horn index {k} out of bounds for horn of length {len(horn)}.")
-    g = degen(horn[k],0) # zero matrix at k-th position in Horn
+    if len(horn) != min(horn.shape[1:]) + 1:
+        raise ValueError("Horn length must be one more than the shortest face axis.")
+    g = degen(np.zeros_like(horn[k]),0)
+    add, subtract = (np.logical_xor, np.logical_xor) if g.dtype.kind == "b" else (np.add, np.subtract)
     for r in range(k):
-        u = np.subtract(face(g, r), horn[r])
-        g = np.subtract(g, degen(u, r))
+        u = subtract(face(g, r), horn[r])
+        g = subtract(g, degen(u, r))
     # begin the downward induction
     t = len(horn)-1
     while t > k:
-        z = degen(np.subtract(horn[t], face(g,t)), t-1)
-        g = np.add(g, z)
+        z = degen(subtract(horn[t], face(g,t)), t-1)
+        g = add(g, z)
         t -= 1
     return g
 
@@ -405,10 +443,8 @@ def standard_basis_matrix(m: int, n: int, i: int, j: int) -> np.ndarray:
 
 # Definition: the order of a tensor t is the number of dimensions of t.
 
-# The n-hypergroupoid conjecture. Let t be a (non-degenerate?) hypermatrix
-# with non-degenerate boundary (necessary). Then the (inner) horns of t are unique 
-# if and only if the order of t is less than its dimension: order(t) < dimen(t).
 def n_hypergroupoid_conjecture(shape: Tuple[int, ...], verbose: bool = False) -> bool:
+    """Test the full-module horn-kernel threshold in the specified degree."""
     _order = len(shape)
     _dimension = min(shape)-1 # simplicial dimension
     conjecture = _order < _dimension
@@ -420,15 +456,24 @@ def n_hypergroupoid_conjecture(shape: Tuple[int, ...], verbose: bool = False) ->
 class SimplicialException(Exception):
     pass
 
-# Conjecture. Suppose that bdry(a) is non-degenerate.
-# Then every inner horn of a has a unique filler if and only if deg(a) < dimen(a)
-# We added the parameter outer_horns to allow for the comparison of outer horns as well.
 def n_hypergroupoid_comparison(a: np.ndarray, outer_horns: bool = False, verbose: bool = False, allow_degen=False) -> bool:
+    """Validate Moore fillers and decide uniqueness for the selected horns.
+
+    Equality with a selected filler alone does not prove uniqueness. After
+    checking the fillers, this routine uses the full-module horn-kernel
+    criterion ``len(a.shape) < dimen(a)``. With no selected horns it returns
+    True vacuously. ``allow_degen`` retains the legacy boundary filter.
+    """
+    dim = dimen(a)
+    selected = range(0 if outer_horns else 1, dim + 1 if outer_horns else dim)
+    if dim < 1 or not selected:
+        return True
+    if a.dtype.kind in "iu":
+        a = a.astype(object)
     if not allow_degen and is_degen(bdry(a)):
         raise SimplicialException("Degenerate boundary.")
-    dim = dimen(a)
     # if outer_horns is True, then we need to check the outer horns as well
-    for i in range(0 if outer_horns else 1, dim+1 if outer_horns else dim):
+    for i in selected:
         h = horn(a, i)
         b = filler(h, i)
         hprime = horn(b, i)
@@ -438,9 +483,10 @@ def n_hypergroupoid_comparison(a: np.ndarray, outer_horns: bool = False, verbose
             if verbose:
                 print(f"There exist at least two fillers for omitted face {i}.")
             return False
+    unique = n_hypergroupoid_conjecture(a.shape)
     if verbose:
-        print("Unique filler.")
-    return True
+        print("Unique filler." if unique else "Nonzero horn kernel. Multiple fillers exist.")
+    return unique
 
 # max norm of a hypermatrix
 def max_norm(hyp : np.ndarray) -> Union[int, float]:

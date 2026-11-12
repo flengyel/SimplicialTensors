@@ -1,172 +1,144 @@
+"""Compare paired reconstruction losses under seeded weight initializations."""
+
+import argparse
+from typing import Tuple
 
 import numpy as np
 from scipy import stats
-import logging
-from typing import Tuple
-from scipy.stats import truncnorm
 
-# Set up logging
-logging.basicConfig(level=logging.WARNING)
+from simplicial_tensors.tensor_ops import bdry, degen
 
-# ----------------------------
-# Tensor Construction Functions
-# ----------------------------
 
-def random_tensor(shape: Tuple[int], low: int = 1, high: int = 10) -> np.ndarray:
-    return np.random.randint(low, high, size=shape)
+def random_tensor(shape: Tuple[int, ...], low=1, high=10, rng=None):
+    rng = np.random.default_rng() if rng is None else rng
+    return rng.integers(low, high, size=shape)
 
-def random_real_tensor(shape: Tuple[int], mean: float = 0.0, std: float = 1.0) -> np.ndarray:
-    return np.random.normal(loc=mean, scale=std, size=shape)
 
-# ----------------------------
-# Boundary, Face, and Degeneracy Operations
-# ----------------------------
+def random_real_tensor(shape: Tuple[int, ...], mean=0.0, std=1.0, rng=None):
+    rng = np.random.default_rng() if rng is None else rng
+    return rng.normal(mean, std, size=shape)
 
-def s_dim(t: np.ndarray) -> int:
-    return min(t.shape) - 1
 
-def degree(t: np.ndarray) -> int:
-    return len(t.shape)
-
-def _dims(m: np.ndarray) -> Tuple[np.ndarray]:
-    return tuple([np.arange(dim_size) for dim_size in m.shape])
-
-def _face(m: np.ndarray, axes: Tuple[np.ndarray], i: int) -> np.ndarray:
-    indices = [np.delete(axis, i) if len(axis) > i else axis for axis in axes]
-    grid = np.ix_(*indices)
-    return m[grid]
-
-def face(m: np.ndarray, i: int) -> np.ndarray:
-    axes = _dims(m)
-    return _face(m, axes, i)
-
-def degen(z: np.ndarray, k: int) -> np.ndarray:
-    for axis in range(z.ndim):
-        slices = [slice(None)] * z.ndim
-        slices[axis] = k
-        z = np.insert(z, k, z[tuple(slices)], axis=axis)
-    return z
-
-def bdry(m: np.ndarray) -> np.ndarray:
-    d = np.min(m.shape)
-    axes = _dims(m)
-    a = np.zeros(np.subtract(m.shape, np.array([1])))
-    for i in range(d):
-       if i % 2 == 0:
-           a = np.add(a, _face(m, axes, i))
-       else:
-           a = np.subtract(a, _face(m, axes, i))
-    return a
-
-# ----------------------------
-# Penalty Adjustment and Loss Computation
-# ----------------------------
-
-def compute_penalty(S: np.ndarray) -> float:
+def compute_penalty(S):
     return 1 + np.linalg.norm(bdry(S))
 
-def compute_loss(T: np.ndarray, S: np.ndarray) -> float:
+
+def compute_loss(T, S):
+    """Return the Frobenius distance after normalizing each nonzero array."""
     T_norm = T / np.linalg.norm(T) if np.linalg.norm(T) != 0 else T
     S_norm = S / np.linalg.norm(S) if np.linalg.norm(S) != 0 else S
-    return np.linalg.norm(T_norm - S_norm)
+    return float(np.linalg.norm(T_norm - S_norm))
 
-# ----------------------------
-# Weight Initialization Methods
-# ----------------------------
 
-def glorot_init(shape):
+def glorot_init(shape, rng=None):
+    rng = np.random.default_rng() if rng is None else rng
     fan_in, fan_out = shape[0], shape[1]
     limit = np.sqrt(6 / (fan_in + fan_out))
-    return np.random.uniform(-limit, limit, size=shape)
+    return rng.uniform(-limit, limit, size=shape)
 
-def he_init(shape):
-    fan_in = shape[0]
-    stddev = np.sqrt(2 / fan_in)
-    return np.random.normal(0, stddev, size=shape)
 
-def orthogonal_init(shape):
-    flat_shape = (shape[0], np.prod(shape[1:]))
-    a = np.random.normal(0, 1, flat_shape)
-    u, _, v = np.linalg.svd(a, full_matrices=False)
-    orthogonal_matrix = u if u.shape == flat_shape else v
-    return orthogonal_matrix.reshape(shape)
+def he_init(shape, rng=None):
+    rng = np.random.default_rng() if rng is None else rng
+    return rng.normal(0, np.sqrt(2 / shape[0]), size=shape)
 
-def initialize_weights(shape, method='glorot'):
-    if method == 'glorot':
-        return glorot_init(shape)
-    elif method == 'he':
-        return he_init(shape)
-    elif method == 'orthogonal':
-        return orthogonal_init(shape)
-    else:
-        raise ValueError(f"Unknown initialization method: {method}")
 
-# ----------------------------
-# Experiment Setup
-# ----------------------------
+def orthogonal_init(shape, rng=None):
+    rng = np.random.default_rng() if rng is None else rng
+    flat_shape = (shape[0], int(np.prod(shape[1:])))
+    u, _, v = np.linalg.svd(rng.normal(0, 1, flat_shape), full_matrices=False)
+    return (u if u.shape == flat_shape else v).reshape(shape)
 
-def permutation_test(losses_S_adjusted, losses_boundary):
-    observed_diff = np.mean(losses_S_adjusted) - np.mean(losses_boundary)
-    return observed_diff, 0.0  # Placeholder for p-value
+
+def n01_init(shape, rng=None):
+    return random_real_tensor(shape, rng=rng)
+
+
+def initialize_weights(shape, method='glorot', rng=None):
+    methods = {'glorot': glorot_init, 'he': he_init,
+               'orthogonal': orthogonal_init, 'n01': n01_init}
+    if method not in methods:
+        raise ValueError(f'Unknown initialization method: {method}')
+    return methods[method](shape, rng=rng)
+
+
+def permutation_test(losses_S_adjusted, losses_boundary, *, seed=123, n_resamples=9999):
+    """Test the paired mean difference by swapping conditions within trials.
+
+    The two-sided p-value uses exact enumeration when possible and otherwise
+    seeded Monte Carlo resampling with SciPy's add-one correction.
+    """
+    x, y = np.asarray(losses_S_adjusted), np.asarray(losses_boundary)
+    if x.ndim != 1 or x.shape != y.shape or x.size < 2:
+        raise ValueError('Paired one-dimensional samples of length at least two are required')
+    if not np.all(np.isfinite(x)) or not np.all(np.isfinite(y)):
+        raise ValueError('Samples must be finite')
+    if n_resamples < 1:
+        raise ValueError('n_resamples must be positive')
+    result = stats.permutation_test(
+        (x, y), lambda a, b, axis: np.mean(a - b, axis=axis),
+        permutation_type='samples', vectorized=True, alternative='two-sided',
+        n_resamples=n_resamples, random_state=np.random.default_rng(seed), batch=256,
+    )
+    return float(result.statistic), float(result.pvalue)
+
 
 def ks_test(losses_S_adjusted, losses_boundary):
+    """Return a descriptive two-sample KS comparison of the marginal losses."""
     return stats.ks_2samp(losses_S_adjusted, losses_boundary)
+
 
 def calculate_effect_size(losses_S_adjusted, losses_boundary):
     mean_diff = np.mean(losses_S_adjusted) - np.mean(losses_boundary)
     pooled_std = np.sqrt((np.std(losses_S_adjusted) ** 2 + np.std(losses_boundary) ** 2) / 2)
-    return mean_diff / pooled_std if pooled_std != 0 else np.inf
+    if pooled_std == 0:
+        return 0.0 if mean_diff == 0 else float(np.copysign(np.inf, mean_diff))
+    return float(mean_diff / pooled_std)
 
-def run_experiment_with_initialization(tensor_shape: Tuple[int, ...], init_method: str, num_trials: int = 100) -> dict:
-    logging.info(f"Running experiment with {init_method} initialization for shape {tensor_shape}")
 
-    losses_S_adjusted = []
-    losses_boundary = []
-
-    for trial in range(num_trials):
-        T = initialize_weights(tensor_shape, method=init_method)
+def run_experiment_with_initialization(tensor_shape: Tuple[int, ...], init_method: str,
+                                      num_trials=100, *, seed=123, n_resamples=9999):
+    if num_trials < 2 or len(tensor_shape) < 2 or min(tensor_shape) < 2:
+        raise ValueError('Use at least two trials and at least two axes of length two or greater')
+    rng = np.random.default_rng(seed)
+    losses_S_adjusted, losses_boundary = [], []
+    for _ in range(num_trials):
+        T = initialize_weights(tensor_shape, method=init_method, rng=rng)
         bdry_T = bdry(T)
-        S = initialize_weights(bdry_T.shape, method=init_method)
-        S_reconstructed = degen(S, 0)
-        penalty = compute_penalty(S)
-        loss_S_adjusted = compute_loss(T, S_reconstructed) * penalty
-        loss_boundary = compute_loss(T, degen(bdry_T, 0))
-
-        losses_S_adjusted.append(loss_S_adjusted)
-        losses_boundary.append(loss_boundary)
-
-    observed_diff, perm_p_value = permutation_test(losses_S_adjusted, losses_boundary)
-    ks_stat, ks_p_value = ks_test(losses_S_adjusted, losses_boundary)
-    cohen_d = calculate_effect_size(np.array(losses_S_adjusted), np.array(losses_boundary))
-
-    results = {
-        "Tensor Shape": tensor_shape,
-        "Initialization Method": init_method,
-        "Permutation Test": {"Observed Difference": observed_diff, "p-value": perm_p_value},
-        "KS Test": {"KS Statistic": ks_stat, "p-value": ks_p_value},
-        "Cohen's d": cohen_d
+        S = initialize_weights(bdry_T.shape, method=init_method, rng=rng)
+        losses_S_adjusted.append(compute_loss(T, degen(S, 0)) * compute_penalty(S))
+        losses_boundary.append(compute_loss(T, degen(bdry_T, 0)))
+    observed_diff, perm_p_value = permutation_test(
+        losses_S_adjusted, losses_boundary, seed=seed, n_resamples=n_resamples)
+    ks_stat, _ = ks_test(losses_S_adjusted, losses_boundary)
+    return {
+        'Tensor Shape': tensor_shape, 'Initialization Method': init_method,
+        'Seed': seed, 'Trials': num_trials, 'Permutation Resamples': n_resamples,
+        'Permutation Test': {'Observed Difference': observed_diff, 'p-value': perm_p_value},
+        'KS Distance': float(ks_stat),
+        "Cohen's d": calculate_effect_size(losses_S_adjusted, losses_boundary),
     }
 
-    return results
-
-# ----------------------------
-# Main Experiment
-# ----------------------------
 
 initialization_methods = ['glorot', 'he', 'orthogonal']
 selected_tensor_shapes_final = [(128, 64), (32, 3, 3, 3)]
 
-def main():
-    penalty_adjusted_results_with_initializations = []
 
-    for method in initialization_methods:
-        for shape in selected_tensor_shapes_final:
-            result = run_experiment_with_initialization(shape, method, num_trials=200)
-            penalty_adjusted_results_with_initializations.append(result)
-    
-    return penalty_adjusted_results_with_initializations
+def main(argv=None, *, methods=None, shapes=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--trials', type=int, default=200)
+    parser.add_argument('--seed', type=int, default=123)
+    parser.add_argument('--resamples', type=int, default=9999)
+    parser.add_argument('--shape', action='append', help='Comma-separated axis lengths; repeat for several shapes')
+    args = parser.parse_args(argv)
+    methods = initialization_methods if methods is None else methods
+    shapes = selected_tensor_shapes_final if shapes is None else shapes
+    if args.shape:
+        shapes = [tuple(int(n) for n in shape.split(',')) for shape in args.shape]
+    return [run_experiment_with_initialization(
+        shape, method, args.trials, seed=args.seed, n_resamples=args.resamples)
+        for method in methods for shape in shapes]
 
-if __name__ == "__main__":
-    results = main()
-    for res in results:
-        print(res)
+
+if __name__ == '__main__':
+    for result in main():
+        print(result)

@@ -1,133 +1,102 @@
+"""Train Gaussian regression prototypes with an additive boundary perturbation."""
+
+import argparse
+
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torch.nn.functional as F
-from simplicial_tensors.tensor_ops import bdry, degen  # Ensure tensor_ops.py is correctly implemented and accessible
 
-# ----------------------------
-# Original Network Class
-# ----------------------------
+from simplicial_tensors.tensor_ops import bdry, degen
+
 
 class OriginalNet(nn.Module):
     def __init__(self, input_size, hidden_sizes, output_size):
-        super(OriginalNet, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_sizes[0])
-        self.fc2 = nn.Linear(hidden_sizes[0], hidden_sizes[1])
-        self.fc3 = nn.Linear(hidden_sizes[1], hidden_sizes[2])
-        self.fc4 = nn.Linear(hidden_sizes[2], hidden_sizes[3])
-        self.fc5 = nn.Linear(hidden_sizes[3], output_size)
+        super().__init__()
+        if len(hidden_sizes) != 4:
+            raise ValueError('Four hidden layer widths are required')
+        widths = [input_size, *hidden_sizes, output_size]
+        for i in range(5):
+            setattr(self, f'fc{i + 1}', nn.Linear(widths[i], widths[i + 1]))
 
     def forward(self, x):
-        # Layer 1
-        x = torch.relu(self.fc1(x))
-        # Layer 2
-        x = torch.relu(self.fc2(x))
-        # Layer 3
-        x = torch.relu(self.fc3(x))
-        # Layer 4
-        x = torch.relu(self.fc4(x))
-        # Final Layer (fc5)
-        x = self.fc5(x)
-        return x
+        for layer in (self.fc1, self.fc2, self.fc3, self.fc4):
+            x = torch.relu(layer(x))
+        return self.fc5(x)
 
-# ----------------------------
-# Boundary-Augmented Network Class
-# ----------------------------
 
-class BoundaryAugmentedNet(nn.Module):
-    def __init__(self, input_size, hidden_sizes, output_size):
-        super(BoundaryAugmentedNet, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_sizes[0], bias=True)
-        self.fc2 = nn.Linear(hidden_sizes[0], hidden_sizes[1], bias=True)
-        self.fc3 = nn.Linear(hidden_sizes[1], hidden_sizes[2], bias=True)
-        self.fc4 = nn.Linear(hidden_sizes[2], hidden_sizes[3], bias=True)
-        self.fc5 = nn.Linear(hidden_sizes[3], output_size, bias=True)
+def _as_parameter_tensor(array, parameter):
+    return torch.as_tensor(np.ascontiguousarray(array), device=parameter.device,
+                           dtype=parameter.dtype)
 
-    def forward(self, x):
-        # Layer 1
-        x = torch.relu(self.fc1(x))
-        # Layer 2
-        x = torch.relu(self.fc2(x))
-        # Layer 3
-        x = torch.relu(self.fc3(x))
-        # Layer 4
-        x = torch.relu(self.fc4(x))
-        # Final Layer
-        x = self.fc5(x)
-        return x
+
+def _relative_update(parameter, direction, scale):
+    """Apply a direction with prescribed norm relative to the parameter."""
+    direction = _as_parameter_tensor(direction, parameter)
+    if direction.shape != parameter.shape:
+        raise ValueError(f'Update shape {direction.shape} does not match {parameter.shape}')
+    norm = torch.linalg.vector_norm(direction)
+    if norm > 0:
+        parameter.add_(direction * (scale * torch.linalg.vector_norm(parameter) / norm))
+
+
+class BoundaryAugmentedNet(OriginalNet):
+    def __init__(self, input_size, hidden_sizes, output_size, boundary_scale=1e-3):
+        super().__init__(input_size, hidden_sizes, output_size)
+        if boundary_scale < 0:
+            raise ValueError('boundary_scale must be nonnegative')
+        self.boundary_scale = boundary_scale
 
     def integrate_boundary(self):
-        """
-        Integrate boundary tensors into the network's weights.
-        This method should be called after gradients have been computed.
-        """
+        """Apply a detached NumPy boundary update after the optimizer step."""
         with torch.no_grad():
             for name, param in self.named_parameters():
-                if 'weight' in name:
-                    # Compute boundary tensor
-                    boundary = bdry(param.data)
-                    # Degenerate the boundary tensor
-                    boundary_degen = degen(boundary, 0)
-                    # Ensure shapes are compatible
-                    assert param.data.shape == boundary_degen.shape, f"Shape mismatch for {name}: {param.data.shape} vs {boundary_degen.shape}"
-                    # Update weights by adding boundary_degen
-                    param.data += boundary_degen
-                    # Since bdry(bdry(T))=0, no further action is needed
+                if name.endswith('weight') and min(param.shape) >= 2:
+                    weights = param.detach().cpu().numpy()
+                    direction = degen(bdry(weights), 0)
+                    _relative_update(param, direction, self.boundary_scale)
 
-# ----------------------------
-# Training Function
-# ----------------------------
 
-def train_network(net, criterion, optimizer, num_epochs=10):
+def train_network(net, criterion, optimizer, num_epochs=10, *, batch_size=32, seed=123):
+    if num_epochs < 1 or batch_size < 1:
+        raise ValueError('epochs and batch size must be positive')
+    generator = torch.Generator().manual_seed(seed)
+    parameter = next(net.parameters())
+    history = []
     for epoch in range(num_epochs):
-        # Generate random input data
-        inputs = torch.randn(32, 64)  # Batch size of 32, input size of 64
-        labels = torch.randn(32, 10)  # Random labels for demonstration
-
-        # Forward pass
-        outputs = net(inputs)
-        loss = criterion(outputs, labels)
-
-        # Backward and optimize
+        inputs = torch.randn(batch_size, net.fc1.in_features, generator=generator).to(parameter)
+        labels = torch.randn(batch_size, net.fc5.out_features, generator=generator).to(parameter)
         optimizer.zero_grad()
+        loss = criterion(net(inputs), labels)
         loss.backward()
         optimizer.step()
-
-        # Integrate boundary tensors after weight update
         if isinstance(net, BoundaryAugmentedNet):
             net.integrate_boundary()
+        history.append(float(loss.detach()))
+        print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {history[-1]:.6f}')
+    return history
 
-        # Print loss for each epoch
-        print(f"Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item()}")
 
-# ----------------------------
-# Main Experiment
-# ----------------------------
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--epochs', type=int, default=10)
+    parser.add_argument('--batch-size', type=int, default=32)
+    parser.add_argument('--seed', type=int, default=123)
+    parser.add_argument('--boundary-scale', type=float, default=1e-3)
+    parser.add_argument('--small', action='store_true', help='Use widths 8, 12, 10, 8, 6, 3')
+    args = parser.parse_args(argv)
+    widths = (8, [12, 10, 8, 6], 3) if args.small else (64, [256, 128, 64, 32], 10)
+    histories = {}
+    for name, cls in [('baseline', OriginalNet), ('boundary', BoundaryAugmentedNet)]:
+        torch.manual_seed(args.seed)
+        net = cls(*widths, **({'boundary_scale': args.boundary_scale} if name == 'boundary' else {}))
+        optimizer = optim.Adam(net.parameters(), lr=0.001, weight_decay=0.01)
+        print(f'Training {name}, seed={args.seed}, widths={widths}, batch_size={args.batch_size}, '
+              f'boundary_scale={args.boundary_scale}')
+        histories[name] = train_network(net, nn.MSELoss(), optimizer, args.epochs,
+                                        batch_size=args.batch_size, seed=args.seed)
+    return histories
 
-def main():
-    # Define network parameters
-    input_size = 64
-    hidden_sizes = [256, 128, 64, 32]
-    output_size = 10
 
-    # Loss function
-    criterion = nn.MSELoss()
-
-    # ----------------------------
-    # Training Original Network
-    # ----------------------------
-    print("Training Original Network:")
-    original_net = OriginalNet(input_size, hidden_sizes, output_size)
-    original_optimizer = optim.Adam(original_net.parameters(), lr=0.001, weight_decay=0.01)
-    train_network(original_net, criterion, original_optimizer)
-
-    # ----------------------------
-    # Training Boundary-Augmented Network
-    # ----------------------------
-    print("\nTraining Boundary-Augmented Network:")
-    boundary_augmented_net = BoundaryAugmentedNet(input_size, hidden_sizes, output_size)
-    boundary_augmented_optimizer = optim.Adam(boundary_augmented_net.parameters(), lr=0.001, weight_decay=0.01)
-    train_network(boundary_augmented_net, criterion, boundary_augmented_optimizer)
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

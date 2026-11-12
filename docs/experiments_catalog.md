@@ -8,7 +8,7 @@ its dependencies, output, and known execution or interpretation limits.
 
 - `experiments/Gemini_hallicination.py` — Tensor-product examples comparing selected Moore fillers with their input tensors. See [Gemini_hallicination](Gemini_hallicination.md).
 - `experiments/atlas_cospectral_scan.py` — Graph-atlas spectral grouping and mod-two deletion-boundary rank enumeration. See [atlas_cospectral_scan](atlas_cospectral_scan.md).
-- `experiments/bdry_network_experiment1.py` — Unseeded PyTorch prototype with additive boundary perturbations. See [bdry_network_experiment1](bdry_network_experiment1.md).
+- `experiments/bdry_network_experiment1.py` — Seeded PyTorch training with boundary perturbations after optimizer steps. See [bdry_network_experiment1](bdry_network_experiment1.md).
 - `experiments/boundary_augmented_network.py` — PyTorch prototype comparing boundary and random weight perturbations. See [boundary_augmented_network](boundary_augmented_network.md).
 - `experiments/boundary_observer_study.py` — Controlled forecasting and copied-weight interventions using boundary observations. See [boundary_observer_study](boundary_observer_study.md).
 - `experiments/clayworth_simplicial_regression.py` — Finite regression checks for proposed simplicial-object constructions. See [clayworth_simplicial_regression](clayworth_simplicial_regression.md).
@@ -23,24 +23,24 @@ its dependencies, output, and known execution or interpretation limits.
 - `experiments/filler_combinatorics.py` — Symbolic comparison of uncovered horn coordinates and Moore filler corrections. See [filler_combinatorics](filler_combinatorics.md).
 - `experiments/fixed_index_face_independence.py` — Floating-point rank checks on surviving coordinate images of each face. See [fixed_index_face_independence](fixed_index_face_independence.md).
 - `experiments/g115_g117_full_enumeration.py` — Exact mod-two boundary-rank histograms for all 720 labelings of each graph. See [g115_g117_full_enumeration](g115_g117_full_enumeration.md).
-- `experiments/homology_basis.py` — Counts of coordinate tensors failing the degeneracy test. See [homology_basis](homology_basis.md).
+- `experiments/homology_basis.py` — Exact normalized homology of tensor-generated submodules and sparse graph representations. See [homology_basis](homology_basis.md).
 - `experiments/homotopy_constraint_verification.py` — Comparison of horn-support tuples with the common kernel of included faces. See [homotopy_constraint_verification](homotopy_constraint_verification.md).
 - `experiments/homotopy_constraint_verification_with_independence_test.py` — The horn-support diagnostic with separate face-image independence tests. See [homotopy_constraint_verification_with_independence_test](homotopy_constraint_verification_with_independence_test.md).
 - `experiments/horn_map_reduce.py` — Dask enumeration of coordinates absent from the included horn faces. See [horn_map_reduce](horn_map_reduce.md).
 - `experiments/loss_experiment.py` — Reconstruction-loss distributions over 10,000 random-matrix trials. See [loss_experiment](loss_experiment.md).
-- `experiments/matrix_boundary_homotopy_identity.py` — A permutation-boundary diagnostic with a failing action convention. See [matrix_boundary_homotopy_identity](matrix_boundary_homotopy_identity.md).
+- `experiments/matrix_boundary_homotopy_identity.py` — Signed and mod-two boundary checks under induced vertex permutations. See [matrix_boundary_homotopy_identity](matrix_boundary_homotopy_identity.md).
 - `experiments/n_cycle_conjugation.py` — Cyclic relabeling and signed or mod-two boundary comparisons. See [n_cycle_conjugation](n_cycle_conjugation.md).
-- `experiments/n_hypergroupoid_conjecture.py` — Shape predicates and comparisons with the algorithm's chosen horn fillers. See [n_hypergroupoid_conjecture](n_hypergroupoid_conjecture.md).
+- `experiments/n_hypergroupoid_conjecture.py` — Checked Moore fillers and the full-module horn-kernel criterion on seeded tensor samples. See [n_hypergroupoid_conjecture](n_hypergroupoid_conjecture.md).
 - `experiments/neural_boundary_study.py` — Paired-seed digits models with validation tuning and neural symmetry controls. See [neural_boundary_study](neural_boundary_study.md).
-- `experiments/normalized_moore_complex_homology.py` — An exploratory floating-point construction with documented homology limitations. See [normalized_moore_complex_homology](normalized_moore_complex_homology.md).
+- `experiments/normalized_moore_complex_homology.py` — Exact homology of normalized quotients by the included horn faces. See [normalized_moore_complex_homology](normalized_moore_complex_homology.md).
 - `experiments/notebooks/petersen_coset_enumeration.ipynb` — SageMath notebook and script for Petersen permutation cosets. See [petersen_coset_enumeration](petersen_coset_enumeration.md).
 - `experiments/notebooks/petersen_coset_enumeration.sage` — SageMath notebook and script for Petersen permutation cosets. See [petersen_coset_enumeration](petersen_coset_enumeration.md).
-- `experiments/permutation_statistics.py` — Callable cycle statistics and plots, with a broken command-line entry point. See [permutation_statistics](permutation_statistics.md).
+- `experiments/permutation_statistics.py` — Command-line cycle statistics and plots with bounded power tests. See [permutation_statistics](permutation_statistics.md).
 - `experiments/petersen_brd_right_cosets.py` — Exact Petersen deletion-boundary ranks from 30,240 distinct adjacency matrices. See [petersen_brd_right_cosets](petersen_brd_right_cosets.md).
-- `experiments/random_zero_one_mask_cocycle_test.py` — A masking diagnostic requiring an external cochain helper. See [random_zero_one_mask_cocycle_test](random_zero_one_mask_cocycle_test.md).
+- `experiments/random_zero_one_mask_cocycle_test.py` — Seeded checks of boundary linearity and cycles after masking and relabeling. See [random_zero_one_mask_cocycle_test](random_zero_one_mask_cocycle_test.md).
 - `experiments/sagemath_compatible_tensor_ops.py` — Demonstration of the package's SageMath or SymPy symbolic backend. See [sagemath_compatible_tensor_ops](sagemath_compatible_tensor_ops.md).
-- `experiments/sagemath_normalized_tensor_homology.py` — An exploratory SymPy complex on encountered tensors. See [sagemath_normalized_tensor_homology](sagemath_normalized_tensor_homology.md).
-- `experiments/shape_generator.py` — Shape enumeration ordered by dimension, axis count, and offset sum. See [shape_generator](shape_generator.md).
+- `experiments/sagemath_normalized_tensor_homology.py` — Exact tensor and relative horn homology over rational or prime fields using SymPy. See [sagemath_normalized_tensor_homology](sagemath_normalized_tensor_homology.md).
+- `experiments/shape_generator.py` — Bounded shape enumeration ordered by degree, axis count, and offset sum. See [shape_generator](shape_generator.md).
 - `experiments/simplicial_permutation_group.py` — Finite checks of cycle deletion under vertex removal. See [simplicial_permutation_group](simplicial_permutation_group.md).
 - `experiments/verify_degenerate_preference.py` — Finite checks of the algorithm's degenerate filler selection. See [verify_degenerate_preference](verify_degenerate_preference.md).
 - `experiments/verify_injective_face_map.py` — Injectivity checks on coordinate tensors surviving a fixed face. See [verify_injective_face_map](verify_injective_face_map.md).
@@ -63,7 +63,7 @@ its dependencies, output, and known execution or interpretation limits.
 ## Other artifacts
 
 - `experiments/boundary_observer_report.md` — Protocol, stored results, validity checks, and interpretation of the observer study.
-- `experiments/experiment_results.csv` — Stored shape, reconstruction-loss, and test statistics from the loss experiment.
+- `experiments/experiment_results.csv` — Historical shape, reconstruction-loss, and test statistics from the earlier loss experiment with a fixed comparison array per shape.
 - `experiments/output.txt` — Stored symbolic horn and filler comparisons beginning with shape (3,3).
 - `experiments/plots/Training and Validation Accuracy Figure_1.png` — Stored plot. Consult the associated experiment page for the generating workflow.
 - `experiments/plots/Training and Validation Accuracy Figure_2.png` — Stored plot. Consult the associated experiment page for the generating workflow.

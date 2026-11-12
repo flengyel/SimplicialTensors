@@ -1,8 +1,10 @@
 # SimplicialTensors
 
 SimplicialTensors implements simplicial operations on matrices and
-hypermatrices using NumPy and SymPy. Its research scripts study horn
-fillers, ordered graph boundaries, and boundary-based neural diagnostics.
+hypermatrices using NumPy and SymPy. It computes horn fillers,
+normalized homology of generated submodules, and graph homology through
+sparse tensor representations. Research scripts also study ordered
+graph boundaries and boundary-based neural diagnostics.
 
 For a hypermatrix of shape $(n_1,\ldots,n_k)$, the numeric module defines
 its order as $k$ and its simplicial degree as $\min_a n_a-1$.
@@ -53,34 +55,33 @@ print(all(np.array_equal(face(u, i), h[i]) for i in (1, 2)))
 
 The face is `[[0, 2], [6, 8]]`, the degeneracy has shape `(4, 4)`,
 the boundary has shape `(2, 2)`, and the final comparison is `True`.
-The horn array contains a zero placeholder at the omitted face. That
-placeholder can promote integer inputs to floating point.
+The horn array contains a zero placeholder at the omitted face and
+preserves the input dtype.
 `filler` constructs one filler and checks the omitted-face index.
 Call `kan_condition(h, k)` to check compatibility before filling.
 
-The boundary is the alternating sum of diagonal faces. `bdry` preserves
-the input dtype, so fixed-width integer arithmetic can overflow.
-`random_tensor` returns `int16` values. Use an appropriate coefficient
-representation for the calculation.
+The boundary is the alternating sum of faces. `face` and `bdry` support
+one-axis arrays. By default, arithmetic uses the input dtype. For
+integer arrays, `bdry(t, exact=True)` uses Python integers to avoid
+overflow. Boolean arrays use arithmetic over $\mathbb F_2$.
+`random_tensor` samples signed 64-bit integers. At degree zero, the raw
+boundary has each axis shortened by one and therefore has no entries.
+The homology routines use the unaugmented convention $\partial_0=0$.
 
-The current numeric implementation has two relevant limitations.
-
-- `face` and `bdry` raise `IndexError` on one-axis arrays because the
-  internal face routine accesses a second axis.
-- At degree zero, `bdry` returns an array with each axis shortened by
-  one. The manuscript uses an unaugmented chain complex with zero
-  outgoing differential in degree zero. Code that constructs that
-  complex must apply the degree-zero convention explicitly.
-
-`is_degen` tests membership in the sum of degeneracy images.
-`decompose_degen` uses SymPy to solve a system whose columns are first
-built as floating-point arrays. `decompose_degen_numpy` uses least
-squares and a numerical reconstruction check.
+`split_normalized(t)` returns the Moore projection and the components
+of a degeneracy decomposition. `is_degen` tests whether that projection
+vanishes. `decompose_degen` uses exact rational arithmetic for integer
+and rational inputs, interprets finite floats as binary rationals, and
+uses $\mathbb F_2$ for Boolean inputs. The zero tensor in degree zero is
+the empty sum of degeneracies. `decompose_degen_numpy` supplies a
+separate least-squares calculation with a numerical reconstruction check.
 
 The legacy name `n_hypergroupoid_conjecture(shape)` evaluates
-`len(shape) < min(shape) - 1`. `n_hypergroupoid_comparison` compares an
-input with selected horn fillers and may reject degenerate boundaries.
-Its return value alone does not establish uniqueness of every filler.
+`len(shape) < min(shape) - 1`, the horn-uniqueness threshold in the
+current degree. `n_hypergroupoid_comparison` compares an
+input with selected horn fillers and checks the full-module horn kernel.
+Its default precondition rejects degenerate boundaries. The empty
+family of inner horns in degree at most one is a vacuous comparison.
 See [the comparison experiment](docs/n_hypergroupoid_conjecture.md).
 
 ## Library modules
@@ -94,15 +95,19 @@ See [the comparison experiment](docs/n_hypergroupoid_conjecture.md).
 | `adjoint_ops` | Frobenius adjoints, boundary energy gradients, cycle and range projections, a boundary pseudoinverse, and spectral filters. |
 | `introspection_ops` | Boundary analysis, target projection, synthesis, and controller or projector feedback. |
 | `architecture_ops` | Hidden-node balance diagnostics, ReLU equi-normalization, path products, and path-diamond energy. |
+| `homology` | Exact normalized chain dimensions, boundary ranks, and homology dimensions of tensor-generated submodules and relative horn quotients over $\mathbb Q$ or a prime field. |
+| `rank_shifted` | Sparse rational tensors in a declared simplicial degree, graph representations, and a circle generator. |
+| `graph_ops` | Graph incidence homology from tensor faces, deletion-chain homology over $\mathbb F_2$, and ordered boundary-rank distributions. |
 
 Import these modules through `simplicial_tensors`, for example
 `from simplicial_tensors.adjoint_ops import face_adjoint`.
-The package root lazily exports `adjoint_ops`, `architecture_ops`,
-`introspection_ops`, `tensor_ops`, and `symbolic_tensor_ops`.
+The package root lazily exports the numeric, symbolic, adjoint,
+architecture, introspection, homology, graph, and rank-shifted modules.
 The other modules are available through their full submodule paths.
 
-Importing `tensor_ops` resets Python's and NumPy's global random seeds
-to 123 and creates a shared generator. Supplying `seed` to
+`tensor_ops` has a private generator initialized with seed 123.
+Importing it leaves Python's and NumPy's global random states unchanged.
+Supplying `seed` to
 `random_tensor` or `random_real_tensor` creates a generator for that
 call. Calls with `seed=None` advance the shared generator.
 
@@ -110,6 +115,7 @@ call. Calls with `seed=None` advance the shared generator.
 
 The current manuscript is *Computations with simplicial tensor modules*.
 Its driver is [tex/dstm_short.tex](tex/dstm_short.tex).
+The compiled [ten-page manuscript](tex/dstm_short.pdf) accompanies the source.
 The [manuscript instructions](tex/README.md) describe the build and
 arXiv source package.
 
@@ -119,19 +125,41 @@ For example, the off-diagonal matrix unit $E_{01}$ generates a submodule
 with one-dimensional first homology, although it is a boundary in the
 full square-matrix complex.
 
+```python
+from simplicial_tensors.homology import generated_homology
+from simplicial_tensors.graph_ops import graph_chain_homology
+from simplicial_tensors.rank_shifted import graph_embedding
+
+circle = np.array([[0, 1], [0, 0]])
+assert generated_homology(circle).homology_dimensions == (0, 1)
+
+triangle = graph_embedding(3, [(1, 2), (2, 3), (3, 1)])
+assert graph_chain_homology(triangle).homology_dimensions == (1, 1)
+```
+
+Graph vertices have labels $1,\ldots,v$. The graph representation gives
+each edge an independent normalized tensor generator whose boundary is
+target minus source. This realizes the incidence complex of the graph.
+Deleting matching rows and columns of its adjacency matrix gives a
+different complex.
+
+The exact homology functions return dimensions over $\mathbb Q$ by
+default. A prime `modulus=p` selects $\mathbb F_p$. They retain linear
+relations among tensor entries and subtract both incoming and outgoing
+boundary ranks. They do not compute integral torsion or homology bases.
+See [the homology examples](docs/homology_basis.md) and
+[sparse tensor representations](docs/rank_shifted.md).
+
 The scripts in [tex/anc](tex/anc) reproduce that example, a matrix horn,
 and the Petersen graph incidence calculation. Their
-[instructions](tex/anc/README.txt) pin the software revisions they
-require. The pinned revisions include fixes and modules absent from the current
-default-branch package. Follow the ancillary instructions to reproduce
-these calculations.
+[instructions](tex/anc/README.txt) give the commands for an installed
+checkout.
 
 ## Experiments
 
 [The experiment catalog](docs/experiments_catalog.md) links every
 tracked script and result artifact. Experiment pages give the source,
-dependencies, command, output, and applicable qualifications. Several
-scripts run substantial computations at import time.
+dependencies, command, output, and interpretation.
 
 Useful starting points include the
 [range-tensor examples](docs/examples_range_tensors.md),
@@ -156,9 +184,9 @@ python -m pytest -q
 ```
 
 The tests cover the maintained numeric, symbolic, adjoint, architecture,
-and feedback APIs, along with package metadata and experiment
-documentation coverage. Sage-specific tests are skipped when SageMath
-is unavailable.
+feedback, exact homology, and sparse graph APIs, along with experiment
+entry points and documentation coverage. Sage-specific and optional
+experiment tests are skipped when their dependencies are unavailable.
 
 GitHub Actions runs Ruff, selected Mypy checks, Bandit, and a pytest
 matrix for Python 3.10, 3.11, and 3.12. The exact commands are in

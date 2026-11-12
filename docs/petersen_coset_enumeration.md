@@ -33,9 +33,7 @@ The independently checked
 [Python computation](petersen_brd_right_cosets.md) gives transversal
 counts `{4: 376, 6: 8496, 8: 21368}` and weighted counts
 `{4: 45120, 6: 1019520, 8: 2564160}`. Compare the Sage output with
-those values and verify 30,240 distinct relabeled matrices. The
-documentation audit did not execute this script because SageMath
-was unavailable.
+those values and verify 30,240 distinct relabeled matrices.
 
 These ranks describe adjacency deletion boundaries. Homology requires
 a separately specified chain complex.

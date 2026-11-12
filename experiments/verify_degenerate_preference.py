@@ -24,21 +24,12 @@ def verify_degenerate_preference(non_degenerate_base, degeneracy_index, horn_ind
     print(f"Base (non-degenerate) tensor shape: {non_degenerate_base.shape}")
     print(f"Applying degeneracy s_{degeneracy_index}, creating horn Lambda_{horn_index}")
 
-    # 1. Create the known degenerate tensor. This is our target solution.
-    try:
-        T_degen = degen(non_degenerate_base, degeneracy_index)
-        print(f"Constructed degenerate tensor of shape: {T_degen.shape}")
-    except IndexError as e:
-        print(f"Skipping: Cannot apply degeneracy s_{degeneracy_index}. {e}")
-        return True # Vacuously true
+    T_degen = degen(non_degenerate_base, degeneracy_index)
+    print(f"Constructed degenerate tensor of shape: {T_degen.shape}")
 
     # 2. Create the horn from this degenerate tensor.
     #    By construction, this horn has a known degenerate filler (T_degen).
-    try:
-        the_horn = horn(T_degen, horn_index)
-    except ValueError as e:
-        print(f"Skipping: Cannot create horn Lambda_{horn_index}. {e}")
-        return True # Vacuously true
+    the_horn = horn(T_degen, horn_index)
 
     # 3. Run the filler algorithm on this horn.
     filler_result = filler(the_horn, horn_index)
@@ -102,8 +93,11 @@ def main():
     
     print("\n-------------------------------------------")
     if all_passed:
-        print("PASS: Overall Result: The filler algorithm appears to be degenerate-preferring.")
+        print("PASS: All tested individual degeneracies were recovered.")
     else:
-        print("FAIL: Overall Result: The filler algorithm is NOT degenerate-preferring.")
+        print("FAIL: At least one tested individual degeneracy was not recovered.")
+    return all_passed
+
+
 if __name__ == "__main__":
-    main()
+    raise SystemExit(0 if main() else 1)

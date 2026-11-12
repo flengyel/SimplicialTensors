@@ -1,13 +1,39 @@
 # Permutation formula for matrix boundaries
 
-[Source](../experiments/matrix_boundary_homotopy_identity.py) compares the signed deletion boundary of a relabeled matrix with a sum of individually relabeled principal faces.
+[The experiment](../experiments/matrix_boundary_homotopy_identity.py)
+verifies the deletion-boundary formula under simultaneous relabeling of
+matrix rows and columns.
+
+For a permutation $\sigma$ of $\{0,\ldots,n-1\}$, define the permutation
+matrix $P$ by $P_{\sigma(j),j}=1$. The relabeled matrix is $PAP^T$.
+Let $Q_i$ be the submatrix of $P$ obtained by deleting row $i$ and column
+$\sigma^{-1}(i)$. Its rows use the surviving new labels in increasing order,
+and its columns use the surviving old labels in increasing order. Then
+
+$$
+d_i(PAP^T)=Q_i\,d_{\sigma^{-1}(i)}(A)\,Q_i^T,
+$$
+
+so the signed boundary satisfies
+
+$$
+\partial(PAP^T)=\sum_{i=0}^{n-1}(-1)^i
+Q_i\,d_{\sigma^{-1}(i)}(A)\,Q_i^T.
+$$
+
+Each summand relabels one principal face. The matrix $Q_i$ depends on the
+deleted vertex.
 
 ```sh
 python experiments/matrix_boundary_homotopy_identity.py
 ```
 
-It defines `P[sigma[j], j] = 1` and compares `bdry(P @ A @ P.T)` with the sum of `(-1)**i * Q_i.T @ face(A, sigma_inverse[i]) @ Q_i`, using `induced_subperm_matrix`. The default loops request 100 directed zero-diagonal matrices of size 7 over the integers and after reduction modulo 2. The seeds are `123 + t`. A loop prints its first mismatch and stops.
+The default run checks 100 directed zero-diagonal matrices of size 7 over
+the integers and 100 after reduction modulo 2. Trial $t$ uses seed
+`123 + t`. A failed comparison prints the input, permutation, and both
+sides and exits with status 1. `run_many_trials` returns a Boolean result
+and accepts `trials`, `n`, `directed`, `mod2`, and `seed`.
 
-The current implementation fails this comparison. A run with seeds 0 through 9 returned `False` in every signed and mod-two trial. The convention for `Q_i` and its use on the right side require reconciliation.
-
-This is a diagnostic for ordered face maps under vertex relabeling. It constructs no chain homotopy. Each `Q_i` depends on the deleted vertex, so the formula involves more than a single conjugation of the boundary.
+The script uses NumPy and the package face and boundary operations. It
+writes no files. The historical filename refers to a homotopy, but the
+calculation verifies the displayed permutation identity.

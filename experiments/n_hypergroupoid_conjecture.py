@@ -19,147 +19,196 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+"""Check full-module horn uniqueness on reproducible random tensors."""
+
+import argparse
+
 import numpy as np
-import random
-from typing import Tuple # , List, Union, Any
-from simplicial_tensors.tensor_ops import (n_hypergroupoid_conjecture, n_hypergroupoid_comparison, 
-                        bdry, degen, is_degen, ___SEED___, random_tensor, order, dimen, face) 
+
+from simplicial_tensors.tensor_ops import (
+    ___SEED___,
+    bdry,
+    degen,
+    dimen,
+    face,
+    is_degen,
+    n_hypergroupoid_comparison,
+    n_hypergroupoid_conjecture,
+    order,
+    random_tensor,
+)
 
 
-random.seed(___SEED___) # Set seed for reproducibility
+def random_shape(n, *, rng=None):
+    """Sample a shape with 2 through n//2 axes and lengths 3 through n."""
+    if not isinstance(n, (int, np.integer)) or n < 4:
+        raise ValueError("n must be an integer at least four")
+    rng = np.random.default_rng(___SEED___) if rng is None else rng
+    axes = int(rng.integers(2, n // 2 + 1))
+    return tuple(int(value) for value in rng.integers(3, n + 1, size=axes))
 
-# random_shape: generates a random shape for a hypermatrix
-def random_shape(n: int) -> Tuple[int]:
-    # The order of a hypermatrix is its number of dimensions. Defined as len(S.shape). 
-    order = random.randint(2, n // 2)  # Length of at least two and bounded by n // 2
-    return tuple(random.randint(3, n) for _ in range(order))  # number of elements per axis >= 3 and bounded by n
+
+def _attempt_limit(max_attempts):
+    if not isinstance(max_attempts, (int, np.integer)) or max_attempts < 1:
+        raise ValueError("max_attempts must be a positive integer")
+    return max_attempts
 
 
-def generate_tensor(shape: Tuple[int], force_degeneracy: bool, skip_degeneracies: bool) -> np.ndarray:
-    A = random_tensor(shape, low=1, high=10)  # Generate random integers
-    if force_degeneracy:
-        A = degen(A, 0)
-        shape = A.shape
-    if not force_degeneracy and skip_degeneracies:
-        while is_degen(bdry(A)):
-            print(f"Regenerating random tensor of shape: {A.shape}")
-            A = random_tensor(shape, low=1, high=10)  # Generate random integers
-    return A
+def _sample_tensor(shape, rng):
+    seed = int(rng.integers(0, np.iinfo(np.int64).max))
+    return random_tensor(shape, low=1, high=10, seed=seed)
 
-# force_degeneracy: if True, force random tensor A to be a degeneracy
-# skip_degeneracies: if True, skip degeneracies. No effect if force_degeneracy is True.
-def run_n_hypergroupoid_conjecture(tests: int, 
-                        maxdim:int, 
-                        force_degeneracy:bool=False, 
-                        skip_degeneracies:bool=False, 
-                        outer_horns:bool = False,
-                        single_shape: Tuple[int] = (0,0)) -> bool:    
-    non_unique_horns = 0
-    unique_horns = 0
 
-    shape = single_shape
-    for i in range(tests):
-        print(f"{i+1}: generating random hypermatrix")    
-        if single_shape == (0,0):
-            shape = random_shape(maxdim)
+def _check_nondegenerate_boundary_possible(shape):
+    degree = min(shape) - 1
+    if degree > len(shape):
+        raise ValueError(
+            f"Cannot sample a nondegenerate boundary for shape {shape}: "
+            f"simplicial degree {degree} exceeds {len(shape)} axes"
+        )
 
-        A = generate_tensor(shape, force_degeneracy, skip_degeneracies)
 
-        conjecture = n_hypergroupoid_conjecture(shape, verbose=True)
-        comparison = n_hypergroupoid_comparison(A, outer_horns=outer_horns, verbose=True)
-        
-        if comparison != conjecture:
-            print(f"Counterexample of shape: {A.shape} with tensor: {A}")
-            print(f"Conjecture: {conjecture} Comparison: {comparison}")
-            print(f"A is a degeneracy: {is_degen(A)}")
-            print(f"bdry(A): {bdry(A)}")
-            print(f"boundary is a degeneracy: {is_degen(bdry(A))}")
+def generate_tensor(shape, force_degeneracy, skip_degeneracies, *, max_attempts=100, rng=None):
+    """Sample a tensor, with at most max_attempts boundary rejections.
+
+    Forced degeneracy applies s_0 once and takes precedence over the
+    optional rejection of degenerate boundaries.
+    """
+    max_attempts = _attempt_limit(max_attempts)
+    if skip_degeneracies and not force_degeneracy:
+        _check_nondegenerate_boundary_possible(shape)
+    rng = np.random.default_rng(___SEED___) if rng is None else rng
+    for _ in range(max_attempts):
+        tensor = _sample_tensor(shape, rng)
+        if force_degeneracy:
+            return degen(tensor, 0)
+        if not skip_degeneracies or not is_degen(bdry(tensor)):
+            return tensor
+    raise RuntimeError(f"No tensor with a nondegenerate boundary in {max_attempts} attempts for shape {shape}")
+
+
+def run_n_hypergroupoid_conjecture(
+    tests,
+    maxdim,
+    force_degeneracy=False,
+    skip_degeneracies=False,
+    outer_horns=False,
+    single_shape=(0, 0),
+    *,
+    max_attempts=100,
+    seed=___SEED___,
+    verbose=True,
+):
+    """Compare checked horn uniqueness with the shape criterion.
+
+    ``single_shape=None`` and the legacy sentinel ``(0, 0)`` select random
+    shapes. The prediction always uses the sampled tensor's final shape.
+    """
+    if not isinstance(tests, (int, np.integer)) or tests < 0:
+        raise ValueError("tests must be a nonnegative integer")
+    _attempt_limit(max_attempts)
+    rng = np.random.default_rng(seed)
+    random_shapes = single_shape is None or tuple(single_shape) == (0, 0)
+    if not random_shapes and (not single_shape or min(single_shape) < 3):
+        raise ValueError("shape lengths must be at least three")
+    unique = 0
+    for trial in range(tests):
+        shape = random_shape(maxdim, rng=rng) if random_shapes else tuple(single_shape)
+        tensor = generate_tensor(
+            shape, force_degeneracy, skip_degeneracies,
+            max_attempts=max_attempts, rng=rng,
+        )
+        predicted = n_hypergroupoid_conjecture(tensor.shape, verbose=verbose)
+        comparison = n_hypergroupoid_comparison(
+            tensor, outer_horns=outer_horns, verbose=verbose, allow_degen=True,
+        )
+        if comparison != predicted:
+            print(f"Mismatch at trial {trial + 1}, shape {tensor.shape}, seed {seed}")
+            print(f"Shape criterion={predicted}, checked uniqueness={comparison}")
             return False
-        
-        if comparison:
-            unique_horns += 1
-        else:
-            non_unique_horns += 1
-    print(f"Conjecture verified for {tests} shapes.") 
-    print(f"Horns w/ unique fillers: {unique_horns}") 
-    print(f"Horns w/ non-unique fillers: {non_unique_horns}")
+        unique += bool(comparison)
+    print(f"Checked {tests} tensors with seed {seed}.")
+    print(f"Tensors with unique checked horn fillers: {unique}")
+    print(f"Tensors with nonunique checked horn fillers: {tests - unique}")
     return True
 
-def verify_unique_down_to_order(shape: Tuple[int] = (19, 18, 17, 19), outer_horns:bool = False) -> bool:
-    
-    A = random_tensor(shape, low=1, high=10)  
-    
-    # ensure nondegeneracy of A and bdry(A)
-    while is_degen(A) or is_degen(bdry(A)):
-        A = random_tensor(shape, low=1, high=10)  # Generate random integers
 
-    # force A to be a degeneracy of a degeneracy of a degeneracy
+def verify_unique_down_to_order(
+    shape=(4, 4, 4), outer_horns=False, *, max_attempts=100,
+    seed=___SEED___, verbose=True,
+):
+    """Check the degree threshold after three degeneracies and successive d_0."""
+    max_attempts = _attempt_limit(max_attempts)
+    _check_nondegenerate_boundary_possible(shape)
+    rng = np.random.default_rng(seed)
+    for _ in range(max_attempts):
+        tensor = _sample_tensor(shape, rng)
+        if not is_degen(tensor) and not is_degen(bdry(tensor)):
+            break
+    else:
+        raise RuntimeError(f"No tensor with nondegenerate tensor and boundary in {max_attempts} attempts for shape {shape}")
+
     for _ in range(3):
-        A = degen(A, 0)
-    print(f"A is a degeneracy: {is_degen(A)}")
-
-    initial_shape = A.shape
-    shape = A.shape # update shape of the tensor after adding degeneracies
-  
-    _order = initial_order = order(A)
-    dim = top_dim = dimen(A)
-
-    print(f"Initial tensor has shape: {initial_shape}, order: {initial_order}, and s-dimension: {top_dim}.")
-
-    conjecture = n_hypergroupoid_conjecture(shape, verbose=True)
-    print(f"Unique filler for order {_order}and s-dimension {dim}")
-            
-    comparison = n_hypergroupoid_comparison(A, outer_horns=outer_horns, verbose=True, allow_degen=True)
-    print(f"Checking comparison for tensor of shape: {A.shape}: {comparison}")
-    
-    if not conjecture:
-        print(f"Random tensor has non-unique filler for shape: {A.shape}. Start over.")
-        return False
-
-    if comparison != conjecture:
-        print(f"Counterexample of shape: {A.shape} with tensor: {A}")
-        print(f"Conjecture: {conjecture} Comparison: {comparison}")
-        print(f"A is a degeneracy: {is_degen(A)}")
-        print(f"bdry(A): {bdry(A)}")
-        print(f"boundary is a degeneracy: {is_degen(bdry(A))}")
-        return False
-
-    # the comparison and conjecture are both True
-    # so that _order < dim and the dimension can be reduced 
-    while _order < dim:
-        A = face(A, 0)
-        _order = order(A)
-        dim = dimen(A) # reduce dimension
-        shape = A.shape
-
-        conjecture = n_hypergroupoid_conjecture(shape, verbose=True)
-        if conjecture:
-            print(f"Unique filler for order {_order} and dimension {dim}")
-            comparison = n_hypergroupoid_comparison(A, outer_horns=outer_horns, verbose=True, allow_degen=True)
-            print(f"Checking comparison for tensor of shape: {A.shape}: {comparison}")
-            if not comparison:
-                print(f"CRAP! Comparison failed for tensor of shape: {A.shape}")
-                return False
-        else:
-            print(f"non-unique filler for order {_order} and s-dimension {dim}")
-            print(f"Tensor of shape {initial_shape} generates unique fillers from dimension {_order+1} to dimension {top_dim} and beyond.")    
+        tensor = degen(tensor, 0)
+    initial_shape = tensor.shape
+    while True:
+        predicted = n_hypergroupoid_conjecture(tensor.shape, verbose=verbose)
+        comparison = n_hypergroupoid_comparison(
+            tensor, outer_horns=outer_horns, verbose=verbose, allow_degen=True,
+        )
+        if comparison != predicted:
+            print(f"Degree-threshold mismatch for shape {tensor.shape}, seed {seed}")
+            return False
+        if not predicted:
+            print(f"Checked descent from shape {initial_shape} to degree {dimen(tensor)} with {order(tensor)} axes.")
             return True
-        
+        tensor = face(tensor, 0)
 
-def main():
-    run_n_hypergroupoid_conjecture(750, 12, 
-                                   force_degeneracy=False, 
-                                   skip_degeneracies=True, 
-                                   outer_horns=False,
-                                   single_shape=(8,10, 12))
-    #run_n_hypergroupoid_conjecture(750, 12, 
-    #                               force_degeneracy=False, 
-    #                               skip_degeneracies=False, 
-    #                               outer_horns=True,
-    #                               single_shape=(6,6,6))
-    
-    verify_unique_down_to_order(shape=(4,4,4), outer_horns=False)
-    verify_unique_down_to_order(shape=(8,10,12), outer_horns=True)
-    verify_unique_down_to_order(shape=(7,7,7,7,7), outer_horns=False)   
+
+def _shape_argument(value):
+    try:
+        shape = tuple(int(part) for part in value.split(","))
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("use comma-separated axis lengths") from exc
+    if not shape or min(shape) < 3:
+        raise argparse.ArgumentTypeError("axis lengths must be at least three")
+    return shape
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--tests", type=int, default=10)
+    parser.add_argument("--maxdim", type=int, default=6, help="maximum axis length for random shapes")
+    shapes = parser.add_mutually_exclusive_group()
+    shapes.add_argument("--shape", type=_shape_argument, default=(3, 3))
+    shapes.add_argument("--random-shapes", action="store_true")
+    parser.add_argument("--force-degeneracy", action="store_true")
+    parser.add_argument("--skip-degeneracies", action="store_true")
+    parser.add_argument("--outer-horns", action="store_true")
+    parser.add_argument("--max-attempts", type=int, default=100)
+    parser.add_argument("--seed", type=int, default=___SEED___)
+    parser.add_argument("--verify-descent", action="store_true")
+    parser.add_argument("--verbose", action="store_true")
+    args = parser.parse_args(argv)
+    try:
+        success = run_n_hypergroupoid_conjecture(
+            args.tests, args.maxdim,
+            force_degeneracy=args.force_degeneracy,
+            skip_degeneracies=args.skip_degeneracies,
+            outer_horns=args.outer_horns,
+            single_shape=None if args.random_shapes else args.shape,
+            max_attempts=args.max_attempts, seed=args.seed, verbose=args.verbose,
+        )
+        if success and args.verify_descent:
+            success = verify_unique_down_to_order(
+                shape=args.shape, outer_horns=args.outer_horns,
+                max_attempts=args.max_attempts, seed=args.seed, verbose=args.verbose,
+            )
+    except (ValueError, RuntimeError) as exc:
+        parser.error(str(exc))
+    if not success:
+        raise SystemExit(1)
+
+
 if __name__ == "__main__":
     main()

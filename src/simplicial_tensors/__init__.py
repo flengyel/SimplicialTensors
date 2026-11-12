@@ -6,7 +6,10 @@ from typing import TYPE_CHECKING
 __all__ = [
     "adjoint_ops",
     "architecture_ops",
+    "graph_ops",
+    "homology",
     "introspection_ops",
+    "rank_shifted",
     "tensor_ops",
     "symbolic_tensor_ops",
 ]

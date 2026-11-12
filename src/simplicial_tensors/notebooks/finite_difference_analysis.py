@@ -8,7 +8,7 @@ from functools import reduce
 import dask.bag as db
 
 # --- Import the primary algorithm from the dedicated module ---
-from ..horn_map_reduce import compute_missing_indices_dask
+from .horn_map_reduce import compute_missing_indices_dask
 
 # --- Caches for memoization ---
 _wrapper_cache = {}

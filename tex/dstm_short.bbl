@@ -28,16 +28,15 @@ Paul~G Glenn.
 Florian Lengyel.
 \newblock {SimplicialTensors}.
 \newblock \url{https://github.com/flengyel/SimplicialTensors}, 2026.
-\newblock Software repository, commit
-  \href{https://github.com/flengyel/SimplicialTensors/commit/da5626bfeefd2796c44a8f00e04717d873d52335}{\texttt{da5626bfeefd}}.
+\newblock Python package and computational examples.
 
 \bibitem{SparseShiftedTensors}
 Florian Lengyel.
 \newblock Sparse rank-shifted tensor examples.
 \newblock
-  \href{https://github.com/flengyel/SimplicialTensors/blob/1995740d13e66d33a74285269a7342ab85bed2d6/experiments/rank_shifted_homology.py}{\texttt{rank\_shifted\_homology.py}},
+  \href{https://github.com/flengyel/SimplicialTensors/blob/main/tex/anc/rank_shifted_homology.py}{\texttt{rank\_shifted\_homology.py}},
   2026.
-\newblock Software repository, commit \texttt{1995740d13e6}.
+\newblock Ancillary computation in the SimplicialTensors repository.
 
 \bibitem{MoerdijkWeissDendroidal}
 Ieke Moerdijk and Ittay Weiss.

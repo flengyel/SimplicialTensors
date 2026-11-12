@@ -1,17 +1,24 @@
 # Initialization and reconstruction losses
 
-[The script](../experiments/consolidated_experiment.py) compares two normalized Frobenius reconstruction errors for a random tensor $T$.
+[The script](../experiments/consolidated_experiment.py) compares two approximations to a random tensor $T$. Write $\widehat X=X/\|X\|_F$ for nonzero $X$ and $\widehat 0=0$. The boundary error is
 
-- The boundary reconstruction duplicates index zero of $\partial T$.
-- The comparison duplicates index zero of an independently initialized array $S$ with the boundary shape and multiplies its error by $1+\|\partial S\|_F$.
+$$
+\|\widehat T-\widehat{s_0\partial T}\|_F.
+$$
 
-It runs 200 trials for each combination of shapes `(128, 64)` and `(32, 3, 3, 3)` with Glorot, He, and orthogonal initialization. Random sampling uses NumPy's global generator without an explicit script-level seed.
+For an independently initialized array $S$ with the shape of $\partial T$, the comparison error is
+
+$$
+(1+\|\partial S\|_F)\|\widehat T-\widehat{s_0S}\|_F.
+$$
+
+Here $s_0$ duplicates index zero along every axis. Both operations use the installed package. These approximations do not recover the cycle component of $T$.
 
 ```sh
-python -m pip install numpy scipy
-python experiments/consolidated_experiment.py
+python -m pip install -e .
+python experiments/consolidated_experiment.py --shape 3,3 --trials 6 --resamples 64 --seed 123
 ```
 
-The script prints one result dictionary per shape and initialization. It reports the difference of mean errors, a two-sample Kolmogorov–Smirnov statistic and p-value, and an effect-size calculation.
+The default run uses 200 trials for each of `(128, 64)` and `(32, 3, 3, 3)`, with Glorot, He, and orthogonal initialization. Repeat `--shape` for several shapes. A local generator samples new arrays $T$ and $S$ on every trial. Glorot uses the first two axis lengths as its fan parameters. He uses the first axis length. Orthogonal initialization flattens all axes except the first before taking an SVD.
 
-The reported permutation-test p-value is hard-coded to `0.0`. The function computes only the observed mean difference and performs no permutation test. Interpret that field as an unimplemented output. The file also defines its own face, boundary, and degeneracy routines, so these results exercise its local implementation rather than the installed package API.
+Each result records the shape, initialization, seed, trial count, mean error difference, and two-sided paired permutation p-value. Permutations exchange the two conditions within trials. The test enumerates all exchanges for small samples and otherwise uses seeded resampling. Its null hypothesis is paired-label exchangeability. The output also includes the Kolmogorov–Smirnov distance between the empirical marginal distributions and a mean difference standardized by their pooled marginal standard deviations. It does not report an independence-based KS p-value for the paired observations.

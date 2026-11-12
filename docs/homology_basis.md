@@ -1,26 +1,29 @@
-# Coordinate-counting prototype
+# Exact tensor and graph homology examples
 
-[experiments/homology_basis.py](../experiments/homology_basis.py) counts coordinate tensors that fail the package's degeneracy test. Its printed `homology_dim` label does not describe a homology calculation.
+[experiments/homology_basis.py](../experiments/homology_basis.py) computes normalized homology of tensor-generated simplicial modules. It also computes ordinary graph homology from the shifted tensor representation of vertices and edges.
 
-For a supplied shape, it sets `n = min(shape) - 1` and enumerates the coordinate units of the cube with n + 1 labels on every axis. This discards rectangular offsets. It applies `tensor_ops.is_degen` to each unit, which solves a degeneracy-span linear system.
-
-The parameter `j` is unused by `get_normalized_basis`. For n ≥ 1, every enumerated tuple satisfies the condition in `get_missing_indices`, so `compute_homology_dimension` returns the count of units accepted by the earlier filter. Selecting units outside the degeneracy submodule does not construct a normalized basis. The script constructs no differential or quotient by boundaries.
-
-Run it from an installed checkout:
+Run from an installed checkout with NumPy and SymPy.
 
 ~~~sh
 python experiments/homology_basis.py
+python experiments/homology_basis.py --modulus 2
 ~~~
 
-The current fixed examples produce these counts on each reported axis.
+The default coefficient field is $\mathbb Q$. The optional modulus must be prime. All ranks use exact arithmetic. The script prints normalized chain dimensions, differential ranks indexed by source degree, and Betti numbers in ascending degrees.
 
-| Shape | Count |
-|---|---:|
-| (3, 3) | 7 |
-| (4, 4) | 0 |
-| (5, 5) | 0 |
-| (3, 4, 5) | 25 |
+| Example | Normalized dimensions over $\mathbb Q$ | Betti numbers |
+|---|---|---|
+| Zero $3\times3$ tensor | $(0,0,0)$ | $(0,0,0)$ |
+| Nonzero vertex | $(1)$ | $(1)$ |
+| $E_{01}$ | $(0,1)$ | $(0,1)$ |
+| Tensor `[[0,1,0],[0,1,1],[1,1,2]]` | $(1,3,1)$ | $(0,1,0)$ |
+| Path on three vertices | $(3,2)$ | $(1,0)$ |
+| Cycle on three vertices | $(3,3)$ | $(1,1)$ |
+| Two disjoint edges | $(4,2)$ | $(2,0)$ |
+| Petersen graph | $(10,15)$ | $(1,6)$ |
 
-The degeneracy solver is called separately for each unit, so the examples can take time.
+The helper `compute_homology_dimension(tensor, degree=None, *, modulus=None)` takes an integer or rational tensor. The default degree is `min(tensor.shape)-1`. It returns zero above the normalized complex. `standard_basis_tensor(idx, shape)` constructs a coordinate tensor.
 
-For a verified generated-submodule example, follow [the pinned ancillary instructions](../tex/anc/README.txt). The finite normalized-chain construction is given in §6 of [the current manuscript source](../tex/generated_section.tex).
+The library [homology implementation](homology.md) takes linear relations among face images into account and preserves rectangular offsets. Its normalization projects face images into the intersection of the positive face kernels. Counting coordinate units outside the degeneracy span would not compute this quotient.
+
+The graph examples use `graph_embedding` and `graph_chain_homology`, documented in [rank-shifted tensors and graph chains](rank_shifted.md). Their differential is the oriented incidence matrix obtained from normalized tensor faces. Applying simplicial deletion directly to an adjacency matrix gives a different complex.
