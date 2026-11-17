@@ -54,6 +54,16 @@ Stefano Ronchi and Chenchang Zhu.
 \newblock Duals of higher vector spaces.
 \newblock \href{https://arxiv.org/abs/2407.03306v2}{arXiv:2407.03306v2}, 2025.
 
+\bibitem{Shrikhande1959}
+S.~S. Shrikhande.
+\newblock The uniqueness of the {$L_2$} association scheme.
+\newblock {\em Annals of Mathematical Statistics}, 30:781--798, 1959.
+
+\bibitem{StanleyPaths}
+Richard~P. Stanley.
+\newblock A matrix for counting paths in acyclic digraphs.
+\newblock {\em Journal of Combinatorial Theory, Series A}, 74:169--172, 1996.
+
 \bibitem{StanleyEC1}
 Richard~P. Stanley.
 \newblock {\em Enumerative Combinatorics, Volume 1}, volume~49 of {\em

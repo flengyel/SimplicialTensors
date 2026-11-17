@@ -29,6 +29,7 @@ its dependencies, output, and known execution or interpretation limits.
 - `experiments/homotopy_constraint_verification_with_independence_test.py` — The horn-support diagnostic with separate face-image independence tests. See [homotopy_constraint_verification_with_independence_test](experiments/homotopy_constraint_verification_with_independence_test.md).
 - `experiments/horn_map_reduce.py` — Dask enumeration of coordinates absent from the included horn faces. See [horn_map_reduce](experiments/horn_map_reduce.md).
 - `experiments/hypergraph_homology.py` — Exact embedded and closure homology of fixed hypergraphs, with optional lifted representatives. See [hypergraph_homology](experiments/hypergraph_homology.md).
+- `experiments/interleaved_graph_paths.py` — Counts vertex orders giving an interleaved adjacency boundary of full rank for the Petersen, rook, and Shrikhande graphs. See [interleaved_graph_paths](experiments/interleaved_graph_paths.md).
 - `experiments/kernel_sequences.py` — Universal kernel matrices, sparse kernel realization, quotient-isomorphism lifts, and capacity obstructions. See [kernel_sequences](experiments/kernel_sequences.md).
 - `experiments/loss_experiment.py` — Reconstruction-loss distributions over 10,000 random-matrix trials. See [loss_experiment](experiments/loss_experiment.md).
 - `experiments/matrix_boundary_homotopy_identity.py` — Signed and mod-two boundary checks under induced vertex permutations. See [matrix_boundary_homotopy_identity](experiments/matrix_boundary_homotopy_identity.md).

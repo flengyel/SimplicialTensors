@@ -33,7 +33,9 @@ quotient complexes lifts to an automorphism of the normalized simplex
 complex. Ordinary cycle and boundary dimensions determine which kernels
 are realized in the tensor module. A $3\times3$ family exhibits a
 homology jump, and one-entry tensors realize every positive homology degree.
-Three-axis tensors realize the incidence complex of any finite graph. Over an infinite
+Three-axis tensors realize the incidence complex of any finite graph.
+After interleaving isolated vertices, boundary ranks distinguish the
+$4\times4$ rook graph from the cospectral Shrikhande graph. Over an infinite
 field, generic kernel families have rational image closures in products
 of Grassmannians. The full module associated to a shape is contractible.
 With $k$ axes, its horn fillers are unique precisely above degree $k$.
@@ -80,8 +82,10 @@ has one-dimensional first homology except at a single acyclic member
 with $q+1$ axes generates the normalized complex $K[q]$
 (Example~\ref{ex:sparse-higher-cycle}). Encoding the vertices and edges
 of a graph in matrix slices of hypermatrices with three axes gives the
-graph's incidence complex (Proposition~\ref{prop:graph}). For the
-Petersen graph the computation gives first Betti number six.
+graph's incidence complex (Proposition~\ref{prop:graph}). For an ordered
+adjacency matrix, inserting isolated vertices between successive vertices
+makes full boundary rank equivalent to the order tracing a Hamiltonian
+path (Proposition~\ref{prop:ordered-graph-ranks}).
 
 A coordinate basis gives the full module's horn kernels and disk
 decomposition (Theorem~\ref{thm:hornbasis} and Proposition~\ref{prop:disks}).

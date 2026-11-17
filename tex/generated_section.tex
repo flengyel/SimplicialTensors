@@ -320,6 +320,56 @@ The two-axis cycle module in degree one has basis $E_{(0,1)}$ and
 $E_{(1,0)}$ by \eqref{eq:cycles}. Over a field, this bounds first
 homology of every two-axis simplicial submodule by dimension two.
 
+\subsection{Boundary ranks of ordered adjacency matrices}
+
+Let $H$ be a simple graph on $n\geq2$ vertices. For each order
+$\pi=(v_0,\ldots,v_{n-1})$, insert one isolated vertex between successive
+vertices. Write $B_\pi$ for the simplicial boundary of the resulting
+$(2n-1)\times(2n-1)$ adjacency matrix over $\mathbb F_2$.
+Let $N_\pi$ be the adjacency matrix of $H$ with each edge oriented forward
+in the order $\pi$.
+Let $p(H)$ be the least number of vertex-disjoint paths covering $V(H)$.
+A path may have chords or consist of a single vertex.
+
+\begin{proposition}\label{prop:ordered-graph-ranks}
+For each order, $\rank B_\pi=2\rank N_\pi$.
+The maximum of $\rank B_\pi$ over all orders is $2(n-p(H))$.
+An order gives rank $2n-2$ precisely when it traces a Hamiltonian path.
+\end{proposition}
+\begin{proof}
+Write $N=N_\pi$. For an edge $v_i v_j$
+with $i<j$, there are $2i$ deletions before its endpoints,
+$2(j-i)-1$ between them, and $2(n-1-j)$ after them. Thus only the
+entry at $(2i,2j-1)$ and its transpose survive in the boundary.
+Grouping even indices before odd ones gives off-diagonal blocks $U,U^\top$
+and zero diagonal blocks, where $U$ is $N$ without its zero first column
+and zero last row. Hence $\rank B_\pi=2\rank N$. The diagonal of the
+upper triangular matrix $U$ records the $n-1$ consecutive pairs of $\pi$,
+which proves the full-rank assertion.
+
+A nonzero minor of $N$ of order $r$ has a determinant term selecting $r$
+edges with distinct tails and distinct heads. Since all edges point forward,
+they give a cover by $n-r$ paths, including singletons. Conversely,
+concatenate the paths of a minimum cover, listing each in traversal order.
+Their $n-p(H)$ edges join successive vertices. Taking their tails as rows
+and their heads as columns gives an upper triangular minor with diagonal
+entries $1$.
+\end{proof}
+
+For the integer adjacency matrix $N_\pi$, the coefficient of $t^j$ in
+$\det(I+t(J-N_\pi))$ counts directed paths on $j$ vertices, where $J$ is
+the all-ones matrix \cite{StanleyPaths}. Over $\mathbb F_2$, subtracting the last
+row of $J-N_\pi$ from every earlier row gives $\rank(J-N_\pi)=1+\rank N_\pi$.
+
+The $4\times4$ rook graph and the Shrikhande graph are strongly regular
+with parameters $(16,6,2,2)$ and common adjacency spectrum
+$6^1,2^6,(-2)^9$ \cite{Shrikhande1959}. Yet rank~$30$ occurs in
+$22{,}394{,}880$ orders for the rook graph and $22{,}230{,}528$ for the
+Shrikhande graph. Thus the adjacency spectrum does not determine the
+distribution of $\rank B_\pi$. For the Petersen graph, $240$ orders give
+rank~$18$. The repository script \path{interleaved_graph_paths.py} counts
+paths by endpoint and vertex subset, counting both directions.
+
 \input{dendroidal_section}
 
 \appendix

@@ -21,6 +21,9 @@ run `python experiments/kernel_sequences.py` for their exact kernel,
 quotient, realization, and lifting calculations; see
 [the example guide](../docs/experiments/kernel_sequences.md).
 
+The [ordered graph experiment](../docs/experiments/interleaved_graph_paths.md)
+reproduces the full boundary rank frequencies for the Petersen, rook and
+Shrikhande graphs in Section 6.
 
 To package the current source for arXiv, build the manuscript first and
 run the following from `tex/`:
