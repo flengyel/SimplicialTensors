@@ -372,6 +372,8 @@ edges, so $\rank B_\pi=4$ over $\mathbb F_2$.}
 For each order, $\rank B_\pi=2\rank N_\pi$.
 The maximum of $\rank B_\pi$ over all orders is $2(n-p(H))$.
 An order gives rank $2n-2$ precisely when it traces a Hamiltonian path.
+Thus the multiplicity of full rank among the $n!$ orders counts Hamiltonian
+paths, with each path and its reverse counted separately.
 \end{proposition}
 \begin{proof}
 Write $N=N_\pi$. For an edge $v_i v_j$
@@ -405,7 +407,13 @@ $22{,}394{,}880$ orders for the rook graph and $22{,}230{,}528$ for the
 Shrikhande graph. Thus the adjacency spectrum does not determine the
 distribution of $\rank B_\pi$. For the Petersen graph, $240$ orders give
 rank~$18$. The repository script \path{interleaved_graph_paths.py} counts
-paths by endpoint and vertex subset, counting both directions.
+paths by endpoint and vertex subset.
+
+Without interleaving, the boundary-rank distribution does not determine the
+Hamiltonian path count. Every order gives the zero boundary for both $K_4$
+and the edgeless graph on four vertices, since the four deletion faces of
+$K_4$ coincide and cancel over $\mathbb F_2$. The two graphs have $24$ and
+$0$ Hamiltonian orders, respectively.
 
 \input{dendroidal_section}
 
