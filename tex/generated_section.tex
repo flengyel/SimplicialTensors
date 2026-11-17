@@ -326,10 +326,47 @@ Let $H$ be a simple graph on $n\geq2$ vertices. For each order
 $\pi=(v_0,\ldots,v_{n-1})$, insert one isolated vertex between successive
 vertices. Write $B_\pi$ for the simplicial boundary of the resulting
 $(2n-1)\times(2n-1)$ adjacency matrix over $\mathbb F_2$.
+Figure~\ref{fig:interleaved-path} shows the construction for a path on three vertices.
 Let $N_\pi$ be the adjacency matrix of $H$ with each edge oriented forward
 in the order $\pi$.
 Let $p(H)$ be the least number of vertex-disjoint paths covering $V(H)$.
 A path may have chords or consist of a single vertex.
+
+\begin{figure}[htb]
+\centering
+\begin{tikzpicture}[
+  font=\small,
+  vertex/.style={circle,draw,fill=black,inner sep=0pt,minimum size=4pt},
+  isolated/.style={vertex,fill=white},
+  every label/.style={font=\small,inner sep=1pt},
+  edge line/.style={semithick}]
+  \begin{scope}
+    \node at (1,0.8) {Path $P_3$};
+    \draw[edge line] (0,0) -- (2,0);
+    \foreach \i in {0,1,2}
+      \node[vertex,label=below:$v_{\i}$] at (\i,0) {};
+  \end{scope}
+  \begin{scope}[xshift=3.8cm,x=0.8cm]
+    \node at (2,0.8) {Interleaved order};
+    \draw[edge line] (0,0) to[bend left=34] (2,0)
+                           to[bend left=34] (4,0);
+    \foreach \i in {0,1,2}
+      \node[vertex,label=below:$v_{\i}$] at (2*\i,0) {};
+    \foreach \i in {1,2}
+      \node[isolated,label=below:$z_{\i}$] at (2*\i-1,0) {};
+  \end{scope}
+  \begin{scope}[xshift=9cm,x=0.73cm]
+    \node at (1.7,0.8) {Graph with adjacency matrix $B_\pi$};
+    \draw[edge line] (0,0) -- (1,0) (2.4,0) -- (3.4,0);
+    \foreach \i/\x in {0/0,1/1,2/2.4,3/3.4}
+      \node[vertex,label=below:$\i$] at (\x,0) {};
+  \end{scope}
+\end{tikzpicture}
+\caption{The open circles are the inserted isolated vertices. For
+$\pi=(v_0,v_1,v_2)$ the boundary is the adjacency matrix of two disjoint
+edges, so $\rank B_\pi=4$ over $\mathbb F_2$.}
+\label{fig:interleaved-path}
+\end{figure}
 
 \begin{proposition}\label{prop:ordered-graph-ranks}
 For each order, $\rank B_\pi=2\rank N_\pi$.
