@@ -1,28 +1,28 @@
 \section{Horns on rooted trees}\label{sec:tree-horns}
-In the dendroidal category $\Omega$, morphisms of finite rooted trees
-are morphisms of their free symmetric coloured operads \cite[\S3]{MoerdijkWeissDendroidal}.
-The colours of $T$ are its edges $E(T)$. Fix finite sets $C_a$ and put
-$I(T)=\prod_{a=1}^k(E(T)\sqcup C_a)$. Extending the colour map of $f:S\to T$
-by the identity on each $C_a$ gives $I(f):I(S)\to I(T)$.
-Define $D:\Omega^{\mathrm{op}}\to\mathbf{Mod}_A$ by $D(T)=A^{I(T)}$ and
-$D(f)(u)=u\circ I(f)$. The linear tree $L_p$ has $p$ unary vertices and $p+1$ edges.
-Its edge maps are ordinal maps. Numbering each $C_a$ from $1$ to $c_a=|C_a|$
-identifies the restriction of $D$ to linear trees with $X^{\mathbf c}(A)$.
+A morphism $f:S\to T$ of rooted trees in $\Omega$ is a morphism of their
+free symmetric coloured operads \cite[\S3]{MoerdijkWeissDendroidal}.
+Its colour map is $E(f):E(S)\to E(T)$ on edges. For finite sets $C_a$, put
+$I(T)=\prod_{a=1}^k(E(T)\sqcup C_a)$ and $I(f)=\prod_a(E(f)\sqcup 1_{C_a})$.
+Precomposition defines $D:\Omega^{\mathrm{op}}\to\mathbf{Mod}_A$, with $D(T)=A^{I(T)}$.
+Number the edges of the linear tree $L_p$ from $0$ at the leaf to $p$ at the root.
+Morphisms of linear trees then act by ordinal maps. Numbering each $C_a$ in a
+fixed order from $p+1$ to $p+c_a$, where $c_a=|C_a|$, gives $D|_\Delta\cong X^{\mathbf c}(A)$.
 
 Contracting an inner edge $e$ gives an elementary inner face $T/e\to T$.
-Pruning a vertex incident to just one inner edge gives an elementary
-outer face. The pruned tree retains that edge. The elementary faces of
-a one-vertex tree are the inclusions of its edges. In the representable
-$\Omega[T]=\Omega(-,T)$, the horn omitting $F:S\to T$ is the union of
-the images of all other elementary faces $G:S_G\to T$.
-A map from this horn to the underlying dendroidal set of $D$ is a family
-$z_G\in D(S_G)$ with $i^*z_G=j^*z_{G'}$ on each common subface $Gi=G'j$,
-since every dendroidal morphism is a composite of degeneracies, an
-isomorphism and faces, in that order \cite[Lemma~3.1]{MoerdijkWeissDendroidal}.
-These families form an $A$-module $M_{T,F}$. A filler is a preimage under
-restriction $\rho_{T,F}:D(T)\to M_{T,F}$. Write $K_F(T)=\ker\rho_{T,F}$
-and let $K(T)$ consist of the tensors vanishing on every elementary face.
-Identify each face index set with its image in $I(T)$.
+Pruning a vertex incident to just one inner edge gives an elementary outer
+face and retains that edge. The elementary faces of a one-vertex tree are its
+edge inclusions. Regard faces as subobjects
+of $\Omega[T]=\Omega(-,T)$. The horn omitting $F:S\to T$ is the union of the
+other elementary faces $G:S_G\to T$. A map from the horn to the underlying
+dendroidal set of $D$ is a family $z_G\in D(S_G)$ with $i^*z_G=j^*z_{G'}$
+on each common subface $Gi=G'j$. A morphism $u$ in an intersection factors as
+$m\sigma$, with $m$ a face up to isomorphism and $\sigma$ a composite of
+degeneracies \cite[Lemma~3.1]{MoerdijkWeissDendroidal}. Degeneracies have
+sections, so $m=us$ for a section $s$ of $\sigma$ and $m$ factors through both faces.
+Write $M_{T,F}$ for the module of compatible families. Fillers are preimages
+under $\rho_{T,F}:D(T)\to M_{T,F}$. Put $K_F(T)=\ker\rho_{T,F}$ and
+$K(T)=\bigcap_G\ker G^*$ over all elementary faces. Identify $I(S_G)$
+with its image in $I(T)$.
 
 \begin{proposition}\label{prop:tree-lifts}
 Let $F:S\to T$ be an elementary face and $U=\bigcup_{G\ne F} I(S_G)$.
@@ -33,97 +33,99 @@ splits the map onto its image.
 \begin{proof}
 Every elementary subface of $F$ factors through an included face
 \cite[Lemma~2.1]{BasicNikolaus}, so $F^*K_F(T)\subseteq K(S)$.
-A tensor in $K_F(T)$ vanishes on $U$. Restriction to $I(S)$ and
-extension by zero give the image and section. The kernel consists
-of tensors vanishing on every face.
+Since $K_F(T)$ consists of tensors vanishing on $U$, restriction to $I(S)$
+has the stated kernel, image and section.
 \end{proof}
 
-Take the tree with vertices $a\to e$ and $(e,b)\to r$. Omit the
-contraction $F$ of $e$. The included faces have colours $\{a,e\}$ and
-$\{e,b,r\}$ and share the single-edge face on $e$. Their index sets
-intersect in the index set of this face. Extending compatible tensors by
-zero off the union proves that $\rho_{T,F}$ is surjective. On two axes with $C_1=C_2=\varnothing$,
-$K(S)$ for the contracted corolla $(a,b)\to r$ has the six off-diagonal
-matrix units as basis. Of these six pairs, only $(b,r)$ and $(r,b)$ lie in
-an included face. Their matrix units give a basis of $\operatorname{coker}(F^*:K_F(T)\to K(S))$.
-The script \program{experiments/two_vertex_tensor_horn.py}{two_vertex_tensor_horn.py}
-computes the ranks of both restrictions from these face index sets.
+For the tree $a\to e$, $(e,b)\to r$, omit the contraction $F$ of $e$.
+The included faces have colours $\{a,e\}$ and $\{e,b,r\}$. Their index
+sets intersect in that of the single-edge face on $e$, so each compatible
+family extends by zero off their union. With $k=2$ and $C_1=C_2=\varnothing$, $\rho_{T,F}$
+has rank $2^2+3^2-1=12$ and kernel rank $4$. The six off-diagonal matrix units
+span $K(S)$ on the contracted corolla $(a,b)\to r$. Of these six pairs,
+only $(b,r)$ and $(r,b)$ occur in an included face. Thus $F^*:K_F(T)\to K(S)$
+is injective and the classes of $E_{(b,r)}$ and $E_{(r,b)}$ form a basis
+of its cokernel (\program{experiments/two_vertex_tensor_horn.py}{two_vertex_tensor_horn.py}).
 
 \begin{theorem}\label{thm:tree-cutoff}
-For any finite sets $C_1,\ldots,C_k$, the restriction $\rho_{T,F}$ is an
-isomorphism for every elementary face $F$ of a tree $T$ with at least
-$k+2$ vertices.
-For each $k\geq2$, some tree with $k+1$ vertices has an inner face $F$
-with $\operatorname{coker}\rho_{T,F}\cong A^{k!}$ for every choice of the $C_a$.
-Suppose $k=1$. Every inner horn fills uniquely. On a two-vertex tree,
-$\rho_{T,F}$ is an isomorphism unless $C_1\ne\varnothing$ and $F$
-prunes a nullary vertex. In that case it is injective with cokernel $A^{C_1}$.
+Let $T$ have $n$ vertices and let $F$ be an elementary face.
+For any finite sets $C_1,\ldots,C_k$, the horn restriction $\rho_{T,F}$ is
+injective if $n\geq k+1$ and is an isomorphism if $n\geq k+2$.
+For each $k\geq2$ there is a tree with $k+1$ vertices and an inner face $F$
+such that $\operatorname{coker}\rho_{T,F}\cong A^{k!}$ for all $C_a$.
+For $k=1$ every inner horn fills uniquely. At two vertices $\rho_{T,F}$ is
+an isomorphism unless $F$ prunes a nullary vertex and $C_1\ne\varnothing$,
+in which case its cokernel is $A^{C_1}$.
 \end{theorem}
 \begin{proof}
-For $x\in I(T)$, take as vertices the included faces whose index sets contain $x$.
-Join two if the index set of a common subface contains $x$. If this graph
-has $c_x$ components, a compatible family has one value at $x$ per component.
-Restriction at $x$ is the diagonal $A\to A^{c_x}$, independently for each
-tuple. Thus $c_x=0$ contributes one kernel coordinate and $c_x>0$ contributes
-$c_x-1$ cokernel coordinates.
+For each $x\in I(T)$ form a graph on the included faces whose index sets
+contain $x$. Join two if a common subface also contains $x$ in its index set.
+A compatible family has one value at $x$ on each of the $c_x$ components.
+Thus $\rho_{T,F}$ is the product of the diagonals $A\to A^{c_x}$.
+Each $x$ with $c_x=0$ contributes $A$ to the kernel, and each $x$ with
+$c_x>0$ contributes $A^{c_x-1}$ to the cokernel.
 
-Suppose $T$ has $n\geq3$ vertices. Its $n-1$ inner edges join the
+Suppose $n\geq3$. The $n-1$ inner edges join the
 vertices in a tree with $o\geq2$ endpoints, one per outer face.
 Each contraction deletes its inner edge, each pruning the outer edges at
 its vertex. Thus the $n+o-2$ included faces delete pairwise disjoint
-sets of colours. If $c_x=0$, $x$ meets all these sets, so $k\geq n$.
+sets of colours. If $c_x=0$, the tuple $x$ meets all $n+o-2\geq n$ sets,
+so $k\geq n$.
 
-Two contractions commute, as do two prunings or a pruning and a
-nonincident contraction. Their common face retains every shared colour.
-Only a pruning and its incident contraction can therefore fail to be
-adjacent. These pairs are disjoint since $n\geq3$. A third face containing
-$x$ would join both members of a nonadjacent pair. Thus if $c_x\geq2$,
-only the pruning of an endpoint $v$ and the contraction of its incident edge $e$ contain $x$.
+Two contractions, two prunings, or a pruning and a nonincident contraction
+commute. Their common face retains every shared colour. Only a pruning
+and its incident contraction can fail to be adjacent. These pairs are
+disjoint for $n\geq3$, so a third face containing $x$ would join both.
+If $c_x\geq2$, the only faces containing $x$ are the pruning of an endpoint
+$v$ and the contraction of its incident edge $e$.
 
 Each of the other $n+o-4$ included faces deletes a different colour of $x$,
 so $k\geq n-1$ if $o\geq3$. If $o=2$, the vertices form a path. Pruning
 $v$ and then its neighbour gives the same face as contracting $e$ and pruning
-the merged vertex. It retains the other inner edges and the outer edges at
-the opposite endpoint, hence all $n-2$ colours just counted. Disconnection
-requires a further edge of $x$ outside this face, again giving $k\geq n-1$.
+the merged vertex. This common face retains the other inner edges, the
+outer edges at the opposite endpoint and all $C_a$. It contains the $n-2$
+colours just counted, so disconnection requires a further tree edge in $x$.
+Again $k\geq n-1$.
 Thus every $c_x=1$ when $n\geq k+2$.
 
-For $k\geq2$, take $k+1$ vertices on a path, all unary except the second
-from the top, which has an extra leaf $b$. Omit the contraction of the inner
-edge $h$ incident to the root vertex. If $c_x\geq2$, only the top pruning
-and the contraction of the inner edge $e$ at the top vertex can contain $x$.
+For $k\geq2$, take a chain of $k+1$ unary vertices and give the second vertex
+from the top an extra leaf $b$. Omit the contraction of the inner edge $h$
+at the root vertex. This removes the contraction paired with the root pruning.
+Hence if $c_x\geq2$, only the top pruning and the contraction of the inner
+edge $e$ at the top vertex contain $x$.
 Every other included face must delete an entry of $x$, so $x$ contains the
 root edge $r$ and the $k-2$ inner edges other than $e,h$. Pruning the top
 two vertices retains every shared colour except $b$, so $x$ also contains $b$.
 
-Each permutation of these $k$ edges lies on just those two faces. In a
-common subface containing $b$ and $r$, composing all vertices would give an
-operation with input $b$ and output $r$. After contraction of $e$ such an
-operation also requires the top leaf, which the pruning removes. Thus
-$c_x=2$ for each permutation. The $k!$ families taking value $1$ at such
-a tuple on the contraction and $0$ elsewhere represent a basis of the cokernel.
+Each permutation of these edges lies on just those two faces. A common
+subface containing $b$ and $r$ would have leaf $b$ and root $r$. Composing
+its vertices would give an operation with output $r$ and $b$ among its inputs.
+In $T/e$ the other input of the vertex at $b$ is the top leaf, which the
+pruning removes. Thus each permutation contributes $A^2/\mathrm{diag}(A)\cong A$
+to the cokernel, with coordinate the difference of its two face values.
 
-For $k=1$ it remains to consider two vertices. Any two included faces
-cover the edges, and their labels agree on each shared edge by restriction
-to its single-edge face. Such a face also identifies the two functions
-on $C_1$. The two prunings share the inner edge. The contraction shares
+For $k=1$ and two vertices, any two included faces cover the edges.
+Restriction to a shared edge identifies its two labels and the two functions
+on $C_1$. The prunings share the inner edge. The contraction shares
 the root edge with the pruning of the upper vertex, and the inputs of
-the upper vertex with the pruning of the root vertex. Thus the included
-faces have no common edge exactly when $F$ prunes a nullary upper vertex.
-They then have no common subface. On $C_1$ restriction is the diagonal
+the upper vertex with the pruning of the root vertex. Only when $F$ prunes
+a nullary upper vertex is there no common edge and hence no common subface.
+Restriction on $C_1$ is then the diagonal
 $A^{C_1}\to A^{C_1}\times A^{C_1}$, with cokernel $A^{C_1}$.
 \end{proof}
 
-At $k+1$ vertices, every horn on the linear tree $L_{k+1}$ fills uniquely by
-Theorem~\ref{thm:hornbasis}. For $k\geq2$, the proof above shows that on every tree
-with $k+1$ vertices each horn has at most one filler. On the branching tree in
-the proof, the cokernel $A^{k!}$ obstructs existence. With $k+2$ or more
-vertices every compatible horn has a filler.
+Every horn on $L_{k+1}$ fills uniquely by Theorem~\ref{thm:hornbasis}.
+For $k=2$ the branching example is $a\to e$, $(e,b)\to h$, $h\to r$, with
+the contraction of $h$ omitted. For empty $C_a$ the horn restriction is
+$A^{25}\hookrightarrow A^{27}$, with cokernel coordinates at $(b,r)$ and $(r,b)$
+(\href{https://github.com/flengyel/SimplicialTensors/blob/30478d42b758cd0a559c72ac6535725055e2e59e/experiments/three_vertex_tensor_horn.py}{\nolinkurl{three_vertex_tensor_horn.py}}).
 
-For $k=1$ the underlying dendroidal set is the nerve of the operad with
-colours $(a,\lambda)\in A\times A^{C_1}$ and one operation for each list
-of inputs and output with a common $\lambda$. A labelling of $T$ is
-therefore a function $E(T)\to A$ and one $\lambda$ for the tree.
-A morphism acts by precomposition on edge labels and fixes $\lambda$.
+For $k=1$ the sharp bound for unique filling of all horns is two vertices if
+$C_1=\varnothing$ and three otherwise, since a horn on $L_1$ leaves one edge label free.
+Take the operad with colours $(a,\lambda)\in A\times A^{C_1}$ and one operation
+for each list of inputs and output sharing $\lambda$, and none otherwise.
+A labelling of $T$ amounts to a function $E(T)\to A$ and a single $\lambda$,
+since $T$ is connected. Under precomposition these bijections identify the
+nerve of the operad with the underlying dendroidal set of $D$.
 For $k\geq2$ the inner horn without a filler excludes an operadic nerve
 \cite[Example~7.1]{MoerdijkWeissDendroidal}.
