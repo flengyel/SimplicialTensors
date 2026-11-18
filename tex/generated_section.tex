@@ -65,6 +65,8 @@ $\Delta^n$ to $1$.
 
 \subsection{Quotients and automorphisms}
 
+To classify the generated modules after forgetting their generators, it suffices
+by Dold--Kan to classify the quotients $C/L(T)$ up to chain isomorphism.
 Write $\operatorname{Ch}_{\geq0}(K)$ for the category of chain complexes of
 $K$-vector spaces concentrated in nonnegative degrees. A complex is finite
 if the direct sum of its chain groups is finite-dimensional. For a complex $E$,
@@ -148,11 +150,9 @@ The tensor
  T'=f_{T,n}\bigl(\widetilde a_n(\operatorname{id}_{[n]})\bigr)\in X_n
 \]
 satisfies $f_{T'}=f_T\widetilde a$ by the representing property of $P$.
-Hence $L(T')=a^{-1}L(T)$ and
-$\langle T'\rangle=\langle T\rangle$. By
-\eqref{eq:generated-normalization}, Dold--Kan and
-Proposition~\ref{prop:quotient-lift}, the orbits of this action on
-$\{L(T):T\in X_n\}$ classify the generated modules up to simplicial isomorphism.
+Thus $\langle T'\rangle=\langle T\rangle$, and $L(T)\cdot a=L(T')=a^{-1}L(T)$
+defines a right action on $\{L(T):T\in X_n\}$. By Proposition~\ref{prop:quotient-lift},
+its orbits classify the generated modules up to simplicial isomorphism.
 By \eqref{eq:finite-chain-splitting}, the chain dimensions $r_p(T)$ and
 differential ranks $\delta_p(T)$ determine this isomorphism class.
 Since $C$ is finite and $\dim C_p$ bounds both ranks, there are finitely many orbits.
@@ -322,16 +322,15 @@ with edge $j$ having boundary $a_{w_j}-a_{u_j}$. Hence $H_*(Y_G)\cong H_*(G;A)$.
 The $a_t$ are distinct basis vectors of $X_0$. The normalized edges
 $b_j=T_j-s_0a_{u_j}$ satisfy $d_0b_j=a_{w_j}-a_{u_j}$ and are linearly
 independent because at $(0,1,j+1)$ only $b_j$ has a nonzero entry, equal to $1$.
-In degree one the remaining generators are degeneracies of vertices.
-In higher degrees all generators are degenerate, so their normalized
-projections vanish.
+In degree one the degeneracies of vertices project to zero. For $p>1$,
+every map $[p]\to[0]$ or $[p]\to[1]$ factors through a codegeneracy,
+so $N_p(Y_G)=0$.
 \end{proof}
 
-In their respective degrees $p$, the vertex and edge tensors use only
-first-axis indices in $[p]$. Extension by zero on the additional
-first-axis indices commutes with simplicial operators, so $Y_G$ lies in the copy of
-$X^{(0,r,r)}(A)$ of shape $(1,r+1,r+1)$ in degree zero. Its normalized complex
-is contractible by Proposition~\ref{prop:disks}.
+The generators in degrees $p=0,1$ use only first-axis indices in $[p]$.
+Extension by zero on the additional first-axis indices commutes with simplicial
+operators. Thus $Y_G$ lies in $X^{(0,r,r)}(A)$, of shape $(1,r+1,r+1)$ in degree
+zero. The ambient complex $N(X^{(0,r,r)}(A))$ is contractible by Proposition~\ref{prop:disks}.
 
 On each component, the boundaries of the edges of a spanning tree form
 a basis of the kernel of the augmentation $a_t\mapsto 1$.
@@ -383,8 +382,10 @@ For both $K_4$ and its edgeless complement, the four deletion faces coincide,
 so $\partial C_\pi=0$ for every order. Their numbers of oriented Hamiltonian
 paths are $24$ and $0$, respectively
 (\program{experiments/interleaved_graph_paths.py\#L94}{small_examples}).
-Figure~\ref{fig:interleaved-path} illustrates the insertion of isolated
-vertices for the path $P_3$.
+Thus the boundary ranks of the original matrices do not determine the path count.
+Insert one isolated vertex between successive vertices of $\pi$, retaining
+the edges of $H$, and let $A_\pi$ be the adjacency matrix in this order.
+Figure~\ref{fig:interleaved-path} shows the construction for $P_3$.
 
 \begin{figure}[htb]
 \centering
@@ -426,10 +427,14 @@ edges, so $\rank(\partial A_\pi)=4$ over $\mathbb F_2$
 \begin{samepage}
 \begin{proposition}[Hamiltonian paths and the mod-$2$ boundary]\label{prop:ordered-graph-ranks}
 Let $H$ be a finite simple graph on $n\geq2$ vertices, with adjacency entries
-$a_{uv}$. For each vertex order $\pi=(v_0,\ldots,v_{n-1})$, let $A_\pi$
-be the adjacency matrix in the order $v_0,z_1,v_1,\ldots,z_{n-1},v_{n-1}$,
-where the $z_i$ are new isolated vertices. Over $\mathbb F_2$,
+$a_{uv}$. For a vertex order $\pi=(v_0,\ldots,v_{n-1})$, adjoin $n-1$ isolated
+vertices to $H$ and let $A_\pi$ be the adjacency matrix in the order
+$v_0,z_1,v_1,\ldots,z_{n-1},v_{n-1}$. Let $N_\pi$ be the adjacency matrix of $H$
+with its vertices ordered by $\pi$ and its edges oriented from earlier to later.
+Deleting each row and its matching column in turn and summing over $\mathbb F_2$
+gives a boundary matrix $\partial A_\pi$ satisfying
 \[
+ \rank(\partial A_\pi)=2\rank N_\pi,\qquad
  \det(\partial A_\pi)=\prod_{i=0}^{n-2}a_{v_i v_{i+1}}.
 \]
 Thus $\partial A_\pi$ has full rank $2n-2$ exactly when $\pi$ traces a
@@ -442,8 +447,7 @@ Then $\max_\pi\rank(\partial A_\pi)=2(n-p(H))$.
 \end{proposition}
 \end{samepage}
 \begin{proof}
-Let $N_\pi$ be the strictly upper triangular part of $C_\pi$, the adjacency
-matrix of $H$ in the order $\pi$. For an edge $v_iv_j$ with $i<j$, deleting either
+For an edge $v_iv_j$ with $i<j$, deleting either
 endpoint removes the edge. There are $2i$ deletions before both endpoints,
 $2(j-i)-1$ between them, and $2(n-1-j)$ after both.
 Only the deletions between the endpoints contribute modulo $2$,
@@ -465,10 +469,10 @@ order, gives an upper triangular submatrix with diagonal entries $1$,
 so this order attains the bound.
 \end{proof}
 
-Let $J$ be the all-ones matrix. Over $\mathbb Z$, Stanley's formula
-identifies the coefficient of $t^j$ in $\det(I+t(J-N_\pi))$ with the
-number of directed paths on $j$ vertices, $1\leq j\leq n$
-\cite{StanleyPaths}. For $j=n$ only $\pi$ can be such a path, so
+Let $J$ be the all-ones matrix. By Stanley's formula
+\cite[Corollary, p.~171]{StanleyPaths}, the coefficient of $t^j$ in
+$\det(I+t(J-N_\pi))$ over $\mathbb Z$ counts the directed paths on $j$ vertices
+in the forward orientation, $1\leq j\leq n$. For $j=n$ only $\pi$ can be such a path, so
 $\det(J-N_\pi)\bmod 2=\det(\partial A_\pi)$. Subtracting the last row of $J-N_\pi$
 from each earlier row gives $\rank(J-N_\pi)=1+\rank N_\pi$ over
 $\mathbb F_2$, since the first column of $N_\pi$ is zero.
@@ -489,12 +493,14 @@ evaluates the sum by grouping paths by endpoint and set of unused vertices.
 Table~\ref{tab:interleaved-ranks} gives the distribution of
 $\rank(\partial A_\pi)$ over all orders. The program
 \program{experiments/interleaved_rank_distributions.py}{interleaved_rank_distributions.py}
-extends orders one vertex at a time. For each prefix with vertex set $S$,
-write the rows of $N_\pi$ indexed by $S$ as $(P\mid Q)$, with $P$ on
-the prefix columns and $Q$ on the unused vertices. The program groups
-prefixes by $S$, $\rank P$, and the space $\{xQ:xP=0\}$ on the unused
-vertices. Appending a vertex $v$ increases $\rank P$ by one precisely
-when some vector in this space has a nonzero $v$-coordinate.
+extends orders one vertex at a time. Write the prefix rows of $N_\pi$ as
+$(P\mid Q)$, with $P$ on the prefix columns and $Q$ on the unused vertices $R$.
+Group prefixes by $R$, $\rank P$, and $W=\{xQ:xP=0\}$.
+Appending $v\in R$ raises $\rank P$ by one exactly when some $w\in W$ has $w_v=1$.
+On $R'=R\setminus\{v\}$ the new space is spanned by the restrictions of the
+$w\in W$ with $w_v=0$ and the adjacency row of $v$ on $R'$.
+The program carries each unused set to an orbit representative under graph
+automorphisms, permutes its subspace by the same automorphism, and adds multiplicities.
 
 \begin{table}[htb]
 \centering\small
