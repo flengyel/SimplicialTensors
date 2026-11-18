@@ -58,6 +58,12 @@ Ieke Moerdijk and Ittay Weiss.
 \newblock {\em Algebraic \& Geometric Topology}, 7:1441--1470, 2007.
 \newblock \url{https://arxiv.org/abs/math/0701293}.
 
+\bibitem{OEISRook}
+{OEIS Foundation Inc.}
+\newblock Sequence {A096970}.
+\newblock The On-Line Encyclopedia of Integer Sequences,
+  \url{https://oeis.org/A096970}.
+
 \bibitem{Quillen1966}
 Daniel Quillen.
 \newblock Spectral sequences of a double semi-simplicial group.
