@@ -47,11 +47,3 @@ mkdir -p submissions
 tar -czf submissions/dstm_v3_arxiv_source.tar.gz dstm_short.tex generated_section.tex \
   dendroidal_section.tex dstm_short.bib dstm_short.bbl anc
 ```
-
-## Previous submission
-
-The driver [dstm.tex](dstm.tex) and its section files correspond to [arXiv:2512.10281v2](https://arxiv.org/abs/2512.10281v2). The submission PDF is titled *Diagonal Simplicial Tensor Modules and Algebraic n-Hypergroupoids*.
-
-- [submission_7069953-20251210-2314.tar.gz](submissions/submission_7069953-20251210-2314.tar.gz)
-- [submission_7069953-20251210-2342.tar.gz](submissions/submission_7069953-20251210-2342.tar.gz)
-- [Submission 7069953 PDF, dated 11 December 2025](submissions/arXiv_submission.pdf)

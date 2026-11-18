@@ -12,7 +12,6 @@ its dependencies, output, and known execution or interpretation limits.
 - `experiments/bdry_network_experiment1.py` — Seeded PyTorch training with boundary perturbations after optimizer steps. See [bdry_network_experiment1](experiments/bdry_network_experiment1.md).
 - `experiments/boundary_augmented_network.py` — PyTorch prototype comparing boundary and random weight perturbations. See [boundary_augmented_network](experiments/boundary_augmented_network.md).
 - `experiments/boundary_observer_study.py` — Controlled forecasting and copied-weight interventions using boundary observations. See [boundary_observer_study](experiments/boundary_observer_study.md).
-- `experiments/clayworth_simplicial_regression.py` — Finite regression checks for proposed simplicial-object constructions. See [clayworth_simplicial_regression](experiments/clayworth_simplicial_regression.md).
 - `experiments/consolidated_experiment.py` — Random-matrix comparisons of boundaries, degeneracy, and distribution summaries. See [consolidated_experiment](experiments/consolidated_experiment.md).
 - `experiments/consolidated_experiment_with_n01.py` — The random-matrix study with an additional Gaussian input family. See [consolidated_experiment_with_n01](experiments/consolidated_experiment_with_n01.md).
 - `experiments/convex_boundary_study.py` — Validation-tuned matrix regression with boundary and matched penalty controls. See [convex_boundary_study](experiments/convex_boundary_study.md).
