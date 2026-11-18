@@ -1,4 +1,4 @@
-Examples for Computations with simplicial tensor modules
+Examples for Computations with diagonal simplicial tensor modules
 
 Use Python 3.10 or later. From the repository root, install the package
 in a virtual environment and run:
@@ -17,3 +17,7 @@ product of two simplicial circles.
 
 For a source-only manuscript package, first clone the repository and
 install its package. The scripts in this directory require that package.
+
+Commands for the graph boundary rank distributions, the kernel calculations,
+and the two-vertex tree are listed in the repository at
+https://github.com/flengyel/SimplicialTensors/blob/7c756d853d5a361a386a572998ddbc9759eb6ec9/tex/README.md

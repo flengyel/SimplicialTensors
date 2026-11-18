@@ -1,6 +1,6 @@
 # Further work on simplicial tensor modules
 
-The current manuscript is [Computations with simplicial tensor modules](dstm_short.tex). It includes normalized contractions, quotient-automorphism and kernel-realizability criteria, generic (3, 3) kernel geometry, homology jumps, sparse higher-degree cycles, graph incidence realizations, and an extension to rooted trees. The following questions concern work beyond those results.
+The current manuscript is [Computations with diagonal simplicial tensor modules](dstm_short.tex). It includes normalized contractions, quotient-automorphism and kernel-realizability criteria, generic (3, 3) kernel geometry, homology jumps, sparse higher-degree cycles, graph incidence realizations, and an extension to rooted trees. The following questions concern work beyond those results.
 
 ## Exact computations for generated submodules
 

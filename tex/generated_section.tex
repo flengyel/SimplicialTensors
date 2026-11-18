@@ -26,6 +26,8 @@ to the columns $\nu_p X(\alpha)(T)$ spanning $N_p(\langle T\rangle)$.
 Let $r_p(T)$ be their rank. For $p>0$ let $\delta_p(T)$ be the rank of their
 images under $d_0$, and put $\delta_0(T)=0$.
 The $p$th Betti number is $r_p(T)-\delta_p(T)-\delta_{p+1}(T)$.
+The function \program{src/simplicial_tensors/homology.py}{generated_homology}
+computes these ranks over $\mathbb Q$ or a prime field.
 For $p>n$ there are no columns. For $p>k$, $N_p(X)=0$ by
 Theorem~\ref{thm:hornbasis}.
 
@@ -151,6 +153,8 @@ $\{L(T):T\in X_n\}$ classify the generated modules up to simplicial isomorphism.
 By \eqref{eq:finite-chain-splitting}, the chain dimensions $r_p(T)$ and
 differential ranks $\delta_p(T)$ determine this isomorphism class.
 Since $C$ is finite and $\dim C_p$ bounds both ranks, there are finitely many orbits.
+The \texttt{lifting} case of \program{experiments/kernel_sequences.py}{kernel_sequences.py}
+constructs a lift and checks the commutative square in each degree.
 
 \subsection{Realizable kernels}
 
@@ -209,6 +213,8 @@ of $\mathcal D$ are $(4,2,0)$ and its boundary dimensions are $(3,2,0)$.
 The complex $Q=D^1(K^4)$ is a quotient of $N(K[\Delta^4])$ by
 \eqref{eq:simplex-projective}. It satisfies the cycle inequalities,
 but $\dim B_0(Q)=4>3=\dim B_0(\mathcal D)$, so it does not embed.
+The \texttt{obstruction} case of \program{experiments/kernel_sequences.py}{kernel_sequences.py}
+checks this inequality. The \texttt{realize} case constructs a tensor from a prescribed kernel.
 
 \subsection{Matrix examples and homology in higher degrees}
 
@@ -279,10 +285,10 @@ $Z_q(N(X))=0$. Hence $q+1$ is the least number of axes on which a simplicial
 submodule can have nonzero $q$th homology.
 \end{example}
 
-The script \path{experiments/kernel_sequences.py} computes kernels,
-quotients and Betti numbers for $T(t)$ at integer values of $t$ and
-for $T_q$ with $\mathbf c=0$. For $q=2$ it gives the reduced Betti numbers
-$(0,0,1)$ of the simplicial $2$-sphere.
+In \program{experiments/kernel_sequences.py}{kernel_sequences.py},
+\texttt{jump} computes the ranks for integral $t$ over $\mathbb Q$ or a prime field,
+and \texttt{spheres} computes the reduced Betti numbers of the spheres above
+with $\mathbf c=0$.
 
 \subsection{Encoding graph homology by tensors}
 
@@ -329,17 +335,52 @@ These differences form a basis of the cycle module.
 Thus $H_0(Y_G)\cong A^b$ and $H_1(Y_G)\cong A^{e-v+b}$, where $b$
 is the number of components. The Petersen graph has ten vertices,
 fifteen edges, and one component, so its first homology is $A^6$.
-The script \path{rank_shifted_homology.py} computes its incidence
-rank from the normalized tensor faces over $\mathbb Q$
-\cite{SparseShiftedTensors}.
+Over $\mathbb Q$,
+\program{tex/anc/rank_shifted_homology.py}{rank_shifted_homology.py}
+computes rank nine for the incidence map from the normalized tensor faces.
 
 For a two-axis module $X'=X^{(c_1,c_2)}(A)$, the cycles in $N_1(X')$ have basis $E_{(0,1)}$ and
 $E_{(1,0)}$ by \eqref{eq:cycles}. Over a field, every simplicial
-submodule of $X'$ therefore has first Betti number at most two.
+submodule of $X'$ therefore has first Betti number at most two. In particular,
+the Petersen incidence complex cannot occur on two axes over a field.
 
 \subsection{Boundary ranks of ordered adjacency matrices}
 
-Let $H$ be a simple graph on $n\geq2$ vertices. Adjoin $n-1$ isolated vertices $z_1,\ldots,z_{n-1}$ to $H$.
+For a vertex order $\pi$ of a finite simple graph $H$, let $C_\pi$ be its
+adjacency matrix in that order. We compute $\rank_{\mathbb F_2}\partial C_\pi$
+for two Cayley graphs on $V=(\mathbb Z/4\mathbb Z)^2$. The connection
+set for the $4\times4$ rook graph consists of the six nonzero multiples of
+the standard basis vectors $e_1,e_2$. For the Shrikhande graph it is
+$\{\pm e_1,\pm e_2,\pm(e_1+e_2)\}$. Apply each affine bijection
+$x\mapsto Mx+t$ of $V$ to the lexicographic order on $\{0,1,2,3\}^2$.
+There are $96$ choices of $M$ and $16$ translations.
+The program \program{experiments/affine_boundary_ranks.py}{affine_boundary_ranks.py}
+computes Table~\ref{tab:affine-ranks} by summing the principal deletion faces of $C_\pi$.
+
+\begin{table}[htb]
+\centering\small
+\caption{Boundary ranks of the original adjacency matrices over $\mathbb F_2$.
+Each row counts the $1{,}536$ affine orders of the specified Cayley graph.}
+\label{tab:affine-ranks}
+\begin{tabular}{l|rrrr}
+Rank of $\partial C_\pi$ & 8 & 10 & 12 & 14 \\ \hline
+$4\times4$ rook & 512 & 256 & 512 & 256 \\
+Shrikhande & 1,536 & 0 & 0 & 0
+\end{tabular}
+\end{table}
+
+For the Petersen graph, over all $10!$ orders, the ranks $4,6,8$ occur
+$45{,}120$, $1{,}019{,}520$, and $2{,}564{,}160$ times, respectively
+(\program{experiments/petersen_brd_right_cosets.py}{petersen_brd_right_cosets.py}).
+
+The ranks of $\partial C_\pi$ alone do not determine the number of
+Hamiltonian paths. Every order of $K_4$ gives zero boundary over
+$\mathbb F_2$, since the four deletion faces coincide. The edgeless graph
+on four vertices also gives zero boundary. The two graphs have $24$ and
+$0$ oriented Hamiltonian paths, respectively.
+
+To count such paths in $H$, adjoin $n-1$ isolated vertices
+$z_1,\ldots,z_{n-1}$, where $n=|V(H)|\geq2$.
 For each order $\pi=(v_0,\ldots,v_{n-1})$ of $H$, let $A_\pi$ be the adjacency
 matrix of $H\sqcup(n-1)K_1$ in the order
 $v_0,z_1,v_1,\ldots,z_{n-1},v_{n-1}$. Put $B_\pi=\partial A_\pi$ over $\mathbb F_2$.
@@ -433,21 +474,48 @@ over all orders $\pi=(v_0,\ldots,v_{15})$, with the sum in $\mathbb Z$, gives
  =\sum_\pi\prod_{i=0}^{14}a_{v_i v_{i+1}}=22{,}394{,}880.
 \]
 This agrees with the fourth term of OEIS A096970 \cite{OEISRook},
-which counts each path and its reverse separately. The script
-\path{interleaved_graph_paths.py} evaluates the sum by grouping paths
-by endpoint and set of unused vertices.
+which counts each path and its reverse separately. The program
+\program{experiments/interleaved_graph_paths.py}{interleaved_graph_paths.py}
+evaluates the sum by grouping paths by endpoint and set of unused vertices.
 
-The Shrikhande graph has the same strongly regular parameters $(16,6,2,2)$
-and adjacency spectrum $6^1,2^6,(-2)^9$ as the rook graph
-\cite{Shrikhande1959}, but rank~$30$ occurs in $22{,}230{,}528$ of its
-orders. Thus the adjacency spectrum does not determine the distribution
-of $\rank B_\pi$. For the Petersen graph, rank~$18$ occurs in $240$ orders.
+Table~\ref{tab:interleaved-ranks} gives the distribution of
+$\rank B_\pi$ over all orders. The program
+\program{experiments/interleaved_rank_distributions.py}{interleaved_rank_distributions.py}
+extends orders one vertex at a time. For each prefix with vertex set $S$,
+write the rows of $N_\pi$ indexed by $S$ as $(P\mid Q)$, with $P$ on
+the prefix columns and $Q$ on the unused vertices. The program groups
+prefixes by $S$, $\rank P$, and the space $\{xQ:xP=0\}$ on the unused
+vertices. Appending a vertex $v$ increases $\rank P$ by one precisely
+when some vector in this space has a nonzero $v$-coordinate.
 
-Without the inserted isolated vertices, the distribution of boundary ranks does not determine the
-Hamiltonian path count. Every order gives the zero boundary for both $K_4$
-and the edgeless graph on four vertices, since the four deletion faces of
-$K_4$ coincide and cancel over $\mathbb F_2$. The two graphs have $24$ and
-$0$ oriented Hamiltonian paths, respectively.
+\begin{table}[htb]
+\centering\small
+\caption{Boundary ranks over $\mathbb F_2$ after insertion of isolated vertices.
+Each column counts all orders of the original vertices. Omitted ranks have frequency zero.}
+\label{tab:interleaved-ranks}
+\begin{tabular}{r|rrr}
+Rank & Petersen & $4\times4$ rook & Shrikhande \\ \hline
+10 & 491,760 & 0 & 0\\
+12 & 1,411,440 & 337,305,600 & 56,217,600\\
+14 & 1,542,480 & 6,880,444,416 & 940,732,416\\
+16 & 182,880 & 97,908,092,928 & 10,947,044,544\\
+18 & 240 & 686,780,916,480 & 99,538,907,904\\
+20 & 0 & 2,664,866,534,400 & 707,161,639,680\\
+22 & 0 & 5,946,216,414,336 & 3,206,911,138,752\\
+24 & 0 & 7,325,845,130,880 & 7,994,269,948,608\\
+26 & 0 & 4,058,989,516,800 & 8,666,847,059,520\\
+28 & 0 & 134,943,137,280 & 236,094,968,448\\
+30 & 0 & 22,394,880 & 22,230,528\\ \hline
+Total & $10!$ & $16!$ & $16!$
+\end{tabular}
+\end{table}
+
+The rook and Shrikhande graphs share the strongly regular parameters
+$(16,6,2,2)$ and adjacency spectrum $6^1,2^6,(-2)^9$
+\cite{Shrikhande1959}. The Shrikhande graph has $22{,}230{,}528$
+orders of rank $30$, so the adjacency spectrum does not determine the
+distribution of $\rank B_\pi$. For the Petersen graph the $240$ orders
+of rank $18$ give its oriented Hamiltonian paths.
 
 \input{dendroidal_section}
 
@@ -555,4 +623,7 @@ Proposition~\ref{prop:quotient-lift} gives the orbit assertion.
 
 Outside $U$, the all-ones matrix has kernel tuple $(\ker(1,1,1),C_1,C_2)$.
 It generates the constant simplicial module $K$, with homology $K$ in
-degree zero alone.
+degree zero alone. Over $\mathbb F_2$,
+\program{experiments/three_by_three_kernels.py}{three_by_three_kernels.py}
+enumerates all $512$ matrices. Exactly $144$ lie in $U$, with $24$ above
+each of its six kernel planes.
