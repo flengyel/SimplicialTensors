@@ -22,6 +22,7 @@ both histograms, and the weighted total. The companion notebook runs
 this same entry point.
 
 Writing $P$ for the Petersen graph, the group sizes are
+
 $$
 |\operatorname{Aut}(P)|=120,\qquad
 [S_{10}:\operatorname{Aut}(P)]=30{,}240.

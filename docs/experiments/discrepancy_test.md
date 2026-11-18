@@ -1,9 +1,11 @@
 # Matrix multiplication and the deletion boundary
 
 [The script](../../experiments/discrepancy_test.py) computes
+
 $$
 D(A)=\partial(A^2)-(\partial A)^2
 $$
+
 for square matrices. It compares this matrix with each principal-deletion face of $A$ using cosine similarity, a Frobenius norm ratio, and a least-squares scalar fit.
 
 The default run examines random square matrices of sizes 3, 9, 11, and 23. It also examines seeded permutation matrices, tests powers of their faces for nilpotence, idempotence and finite cycles, and summarizes 100 random matrices of size 5.

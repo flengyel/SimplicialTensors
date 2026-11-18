@@ -11,9 +11,11 @@ For a tensor $W$ in degree $p$, the diagonal boundary $\partial_pW$ deletes the 
 [adjoint_ops.py](../../src/simplicial_tensors/adjoint_ops.py) defines the entrywise Euclidean adjoint and the lower Hodge operator $L=\partial^*\partial$. The gradient of $\frac12\|\partial W-H\|_F^2$ is $\partial^*(\partial W-H)$. The weight-penalty methods use this gradient. The Sobolev methods apply $(I+\mu L/\lambda_{\max})^{-1}$ to the gradient, where $\lambda_{\max}$ is the largest eigenvalue of $L$.
 
 The finite spectral formulas in [exact_boundary_spectrum.md](exact_boundary_spectrum.md) give polynomial implementations of the orthogonal cycle projector and Moore–Penrose inverse. [introspection_ops.py](../../src/simplicial_tensors/introspection_ops.py) uses them to analyze and synthesize weights,
+
 $$
 W=P_{\ker\partial}W+\partial^\dagger\partial W.
 $$
+
 A controller can replace the boundary signal by a realizable target while preserving the cycle component. A fixed target or fixed binary spectral projector gives an idempotent update. The stored studies did not train such a controller.
 
 [architecture_ops.py](../../src/simplicial_tensors/architecture_ops.py) instead treats layers as typed maps in a directed network. It computes incidence balance and path-product diagnostics. The balance penalty is invariant under hidden-neuron permutation and changes under positive gauge rescaling. Path-product diagnostics are invariant under both transformations in the implemented tests.

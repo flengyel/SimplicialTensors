@@ -1,9 +1,11 @@
 # Deleting elements from permutation matrices
 
 [The experiment](../../experiments/simplicial_permutation_group.py) checks that cycle deletion maps permutation matrices to permutation matrices. For a permutation matrix $P$ and standard basis column $e_i$, it forms
+
 $$
 P+(Pe_i)(e_i^{\mathsf T}P)
 $$
+
 and deletes row and column $i$. The correction reconnects the predecessor and successor of the deleted element in its permutation cycle. The matrix convention is $P_{j,\sigma(j)}=1$.
 
 The script requires NumPy.

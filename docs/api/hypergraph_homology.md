@@ -21,9 +21,11 @@ span of the hyperedges with $q+1$ vertices, for $q\geq0$. The ambient simplicial
 sum of vertex deletions. Put $D_{-1}=0$ and $\partial_0=0$.
 
 The infimum complex is
-\[
+
+$$
 I_q=D_q\cap\partial_q^{-1}(D_{q-1}).
-\]
+$$
+
 For $q\geq1$, if $x\in I_q$, then $\partial_qx\in D_{q-1}$ and
 $\partial_{q-1}\partial_qx=0$, so $\partial_qx\in I_{q-1}$.
 Its homology is the embedded homology of $H$.
@@ -39,11 +41,13 @@ chain basis vectors as linear combinations of those hyperedges.
 Let $d_q$ be the number of $q$-hyperedges. Write $A_q$ for the ambient boundary
 restricted to their columns and $M_q$ for its rows corresponding to absent
 $(q-1)$-hyperedges. Then
-\[
+
+$$
 \dim I_q=d_q-\operatorname{rank}M_q,\qquad
 \operatorname{rank}(\partial_q|_{I_q})=
 \operatorname{rank}A_q-\operatorname{rank}M_q.
-\]
+$$
+
 The second equality follows from
 $\ker A_q\subseteq\ker M_q$ and rank-nullity. The dimension-only routine uses
 these ranks, with $A_0=M_0$ the zero matrix of shape $(0,d_0)$. The
@@ -54,9 +58,11 @@ hyperedges.
 For example, take all singleton hyperedges on $0,1,2,3$, the pairs
 $01,12,23,03$, and the triples $012,023$, omitting the pair $02$. Neither triple
 alone belongs to $I_2$, but their sum does:
-\[
+
+$$
 \partial([012]+[023])=[01]+[12]+[23]-[03].
-\]
+$$
+
 This is a linear constraint on combinations of hyperedges.
 
 ```python

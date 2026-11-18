@@ -28,10 +28,12 @@ Dimensions are listed in ascending degrees, including the zero differential out 
 ## Faces and representatives
 
 For a one-vertex operation with root colour $r$ and input colours $a_1,\ldots,a_m$, its boundary is $\sum_i[a_i]-[r]$. In the two-vertex example, write $u:a\to e$, $v:(e,b)\to r$, and $w:(a,b)\to r$ for the composite. Root pruning, top pruning, and inner contraction give
+
 $$
 \partial[T]=[u]+[v]-[w],\qquad
 \partial^2[T]=(a-e)+(e+b-r)-(a+b-r)=0.
 $$
+
 The full matrices and their bases are given in the [dendroidal research note](../research/dendroidal_homology.md#finite-representable-examples).
 
 The relative models retain the top generator after quotienting out the proper faces. Their lift matrices express chosen representatives in the absolute bases. The chosen lift of the top generator has nonzero absolute boundary, which lies in the boundary subcomplex. Its image in the quotient is a cycle.

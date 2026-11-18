@@ -24,9 +24,11 @@ strings. `--parameter t` adds an integer value to the matrix-family calculation.
 ## Matrix kernels and a homology jump
 
 The family is
-\[
+
+$$
 T(t)=\begin{pmatrix}0&1&0\\0&1&1\\1&1&t\end{pmatrix}.
-\]
+$$
+
 Its normalized degree-one realization determinant is $t-1$. If $t\ne1$ in the
 selected field, the kernel dimensions are $(2,0,0)$, quotient dimensions are
 $(1,3,1)$, boundary ranks are $(0,1,1)$, and Betti numbers are $(0,1,0)$.

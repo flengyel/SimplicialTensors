@@ -6,9 +6,11 @@ It then compares pairs that NetworkX identifies as nonisomorphic.
 The spectral grouping produces candidates for cospectrality.
 
 For an ordered $N\times N$ adjacency matrix $A$, it forms
+
 $$
 B(A)=\sum_{i=0}^{N-1}d_i(A)\quad\text{over }\mathbb F_2,
 $$
+
 where $d_i$ deletes row and column $i$. Binary Gaussian elimination
 computes the matrix rank of $B(A)$, which is counted across vertex
 relabelings. This is a statistic of boundary matrices. Computing homology

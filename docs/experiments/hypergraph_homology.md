@@ -19,9 +19,11 @@ columns lifting a basis of each embedded homology group.
 The triangle, filled triangle, missing-face, and cancellation examples specify
 singleton hyperedges explicitly. The field-dependent example contains every face
 of these ten triples on vertices $0,\ldots,5$:
-\[
+
+$$
 012,\ 013,\ 024,\ 035,\ 045,\ 125,\ 134,\ 145,\ 234,\ 235.
-\]
+$$
+
 Its chain dimensions are $(6,15,10)$. Its Betti numbers are $(1,0,0)$ over
 $\mathbb Q$ and $\mathbb F_3$, and $(1,1,1)$ over $\mathbb F_2$.
 The calculation records dimensions over fields; it does not identify an integral
