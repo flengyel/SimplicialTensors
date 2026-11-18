@@ -401,12 +401,11 @@ the required simplicial isomorphism.
 \end{proof}
 
 \section{Chain contractions and ordinal sums}\label{sec:contractions}
-Inserting a zero on each axis gives a chain homotopy before normalization.
-For $A$-modules $E,W$, let $V_A(E,W)$ be the \v{C}ech nerve of the split
-projection $E\oplus W\to W$ \cite[Tag 019P]{StacksCech}. In degree $p$
-it is $E^{p+1}\oplus W$. Faces delete and degeneracies repeat
-$E$-coordinates, fixing $W$. Form $V=\bigotimes_a V_A(E_a,W_a)$ over
-$A$ degreewise. The projections and zero sections give
+The \v{C}ech nerve $V_A(E,W)$ of a split projection of $A$-modules
+$E\oplus W\to W$ has degree-$p$ term $E^{p+1}\oplus W$
+\cite[Tag 019P]{StacksCech}. Faces delete and degeneracies repeat
+$E$-coordinates, fixing $W$. In the degreewise tensor product
+$V=\bigotimes_a V_A(E_a,W_a)$ over $A$, the projections and zero sections give
 $\epsilon:V\to\underline B$ and $\eta:\underline B\to V$, where
 $B=\bigotimes_a W_a$. With $E_a=A$ and $W_a=A^{c_a}$ the coordinate
 bases identify $V$ with $X^{\mathbf c}(A)$.
@@ -415,14 +414,14 @@ Let $H_p:V_p\to V_{p+1}$ insert a zero before the first $E_a$-coordinate in each
 With $H_{-1}=\eta_0$ and $d_0=\epsilon_0$ on $V_0$, deleting the
 inserted coordinate gives $d_0H_p=1$. Deleting any other gives
 $d_iH_p=H_{p-1}d_{i-1}$ for $1\leq i\leq p+1$.
-On unaugmented chains the alternating sum gives $\partial H+H\partial=1$
-in positive degrees and $\partial_1H_0=1-\eta_0\epsilon_0$ in degree
-zero. Thus $\epsilon_0$ and $\eta_0$, extended by zero in positive
-degrees, are chain homotopy inverses between this complex and $B[0]$.
-Projection along $D_{p+1}(V)$ gives the homotopy on $N(V)$.
-For excesses computed from a shape, some $c_a=0$, so $B=0$
-and the chain complex of $X^{\mathbf c}(A)$ is contractible. For square matrices,
-\program{tex/anc/dstm_examples.py\#L164}{square_matrix_example} checks $\partial H+H\partial=1$ on every matrix unit in degrees zero through two.
+Taking alternating sums gives $\partial H+H\partial=1$ in positive degrees
+and $\partial_1H_0=1-\eta_0\epsilon_0$ in degree zero. Thus the unaugmented
+complex retracts by chain homotopy onto $B[0]$. Since $H_ps_i=s_{i+1}H_{p-1}$
+for $0\leq i<p$, $H_p$ preserves degenerate chains. The induced homotopy on
+$N_p(V)$ is $H_p|_{N_p(V)}$ followed by projection along $D_{p+1}(V)$.
+For excesses computed from a shape, some $c_a=0$, so $B=0$ and $H$ is a
+contraction. For square matrices \program{tex/anc/dstm_examples.py\#L164}{square_matrix_example}
+checks the identity on every matrix unit in degrees zero through two.
 
 For $X^{\mathbf c}(A)$, $H_pE_m=E_{m+\mathbf1}$. If $E_m\in N_p(X)$,
 its image is normalized when $0\in\im(m)$ and equals $s_0E_m$
@@ -440,28 +439,33 @@ and $H$ contracts each quotient $F^tX_\bullet/F^{t+1}X_\bullet$.
 The homology groups of these quotients form the $E^1$-page of the
 associated spectral sequence, so $E^1=0$.
 
-Adjoin the empty ordinal $[-1]$ to $\Delta$ to obtain $\Delta_+$.
-Let $X^+$ denote $X$ augmented by $\epsilon_0:X_0\to B$.
-For $p,q\geq-1$ put
+For arbitrary excesses, write $X^+$ for $X$ augmented by $\epsilon_0$ and
+$\Delta_+$ for $\Delta$ with the empty ordinal $[-1]$ adjoined. For $p,q\geq-1$ put
 \[
  I_{p,q}=\prod_a\bigl([p]\oplus[c_a-1]\oplus[q]\bigr),\qquad
  Y_{p,q}=A^{I_{p,q}}.
 \]
-For $\alpha,\beta$ in $\Delta_+$, the operator $Y(\alpha,\beta)$ acts by precomposition
-with $\prod_a(\alpha\oplus1_{[c_a-1]}\oplus\beta)$. Exchanging the last two
-summands as sets identifies $Y_{p,q}$ with $X^+_{p+q+1}$ and $Y(\alpha,\beta)$
-with $X^+(\alpha\oplus\beta)$. At fixed $q$, the summand $[q]$ contributes $q+1$ indices
-on each axis, so the excess on axis $a$ of the horizontal row is $c_a+q+1$.
-Substituting in Proposition~\ref{prop:disks} gives the unaugmented row homology
-$A^{\prod_a(c_a+q+1)}$ in degree zero and zero in positive degrees.
+Precomposition with $\prod_a(\alpha\oplus1_{[c_a-1]}\oplus\beta)$ gives
+$Y(\alpha,\beta)$ for morphisms $\alpha,\beta$ in $\Delta_+$. Exchanging
+the last two summands as sets identifies $Y_{p,q}$ with $X^+_{p+q+1}$ and
+$Y(\alpha,\beta)$ with $X^+(\alpha\oplus\beta)$. In nonnegative bidegrees this is the
+total d\'ecalage of $X$ \cite[Lemma~3.1]{StevensonDecalage}.
+At fixed $q$, the horizontal row has excess $c_a+q+1$ on axis $a$.
+For the unaugmented row, Proposition~\ref{prop:disks} gives $H_p=0$ for
+$p>0$, and the augmentation identifies $H_0$ with
+$Y_{-1,q}\cong A^{\prod_a(c_a+q+1)}$.
+For $\mathbf c=(0,0)$ the vertical faces on $Y_{-1,9}$ are the ten
+principal deletions used in the Petersen computation
+(\program{experiments/petersen_brd_right_cosets.py\#L105}{vertical_face_rows}).
 
-Include the horizontal augmentation $Y_{0,q}\to Y_{-1,q}$. For
-$p\geq-1$, extension by zero along the coface $[p]\to[p+1]$ skipping $0$
-in the first ordinal summand on each axis gives $H_{p,q}:Y_{p,q}\to Y_{p+1,q}$. Then
-$\partial_hH+H\partial_h=1$, and $H$ commutes with $\partial_v$ since
-vertical maps act only on $[q]$. For the total differential
-$\partial=\partial_h+(-1)^p\partial_v$ the vertical terms in
-$\partial H+H\partial$ cancel, so $H$ contracts the total complex.
+Take $\mathrm{Tot}_n Y=\bigoplus_{p+q=n,\;p,q\geq-1}Y_{p,q}$ with
+both augmentations and with each differential zero out of index $-1$.
+Extension by zero along the first horizontal coface gives
+$H_{p,q}:Y_{p,q}\to Y_{p+1,q}$ and
+$\partial_hH+H\partial_h=1$, including at $p=-1$.
+The vertical faces commute with $H$. Since $H$ raises $p$ by one, the
+vertical terms for $\partial=\partial_h+(-1)^p\partial_v$ cancel in
+$\partial H+H\partial$, giving the identity on $\mathrm{Tot}_\bullet Y$.
 
 \input{generated_section}
 
@@ -472,6 +476,7 @@ mathematical arguments, write and test code for the computations,
 and revise the manuscript.
 
 \small
+\AddToHookNext{cmd/bibitem/before}{\setlength{\itemsep}{1pt plus 0.5pt minus 0.5pt}}
 \bibliographystyle{plain}
 \bibliography{dstm_short}
 \end{document}
