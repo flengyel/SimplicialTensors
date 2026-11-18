@@ -32,8 +32,7 @@ The checks below concern that implementation tree.
   remain supported.
 - Added hypergraph examples, checked finite dendroidal representables, API guides,
   and [a dendroidal research note](../research/dendroidal_homology.md). The active
-  manuscript sources and PDF were not changed. `FutureDirections.md` gained one
-  reader link to the research note.
+  manuscript sources and PDF were not changed.
 - Extended selected Mypy coverage and the isolated installed-wheel smoke test.
   Git-dependent metadata tests now skip explicitly when the executable is absent.
 

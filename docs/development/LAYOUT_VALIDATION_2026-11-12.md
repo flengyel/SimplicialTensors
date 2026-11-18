@@ -87,13 +87,9 @@ Research notes retain their mathematical organization. Navigation and directory
 labels state purpose. Definitions and formulas in relocated API and research
 pages retain their order and content.
 
-The substantive correction is in [Further work](../../tex/FutureDirections.md):
-the three homology scripts already compute exact normalized field homology
-dimensions. The author approved the exact replacement after automatic approval
-review initially treated it as beyond the layout task. The revised text matches
-the shared implementation and distinguishes tensor-generated submodules from
-the full ambient module. The active manuscript sources and PDF retain their
-original contents.
+The three homology scripts use the same implementation to compute homology
+dimensions for tensor-generated submodules over a field.
+[Homology API](../api/homology.md)
 
 ## Scoped mathematical review
 
@@ -103,11 +99,9 @@ No remaining blocker was confirmed in the changed mathematics.
 
 ### (B) Major weaknesses
 
-The claim in the base revision's “Exact computations for generated submodules”
-subsection of [Further work](../../tex/FutureDirections.md), that the scripts
-“do not provide that calculation,” was corrected with the approved wording. The source constructs
-normalized face spans with their ambient linear relations and computes exact
-field ranks, chain dimensions, and homology dimensions.
+The earlier documentation understated what the scripts compute. They form
+the spans of the normalized faces with their ambient linear relations and
+compute the boundary ranks, chain dimensions, and homology dimensions.
 
 ### (C) Minor issues
 
