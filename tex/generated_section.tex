@@ -1,7 +1,7 @@
 \section{Generated submodules}
 \label{sec:generated}
 Fix a field $K$, $n\geq0$ and $\mathbf c\in\mathbb Z_{\geq0}^k$.
-Put $X=X(\mathbf c;K)$ and let $P=K[\Delta^n]$ be the free simplicial
+Put $X=X^{\mathbf c}(K)$ and let $P=K[\Delta^n]$ be the free simplicial
 $K$-module on the standard $n$-simplex. A basis of $P_p$ consists of
 the nondecreasing maps $[p]\to[n]$.
 For $T\in X_n$, the representing property of $P$ gives
@@ -159,7 +159,7 @@ Put $\mathcal D=N(X)$. A subcomplex $L\subseteq C$ is
 
 \begin{proposition}\label{prop:kernel-realizability}
 Let $K$ be a field, $n\geq0$, $C=N(K[\Delta^n])$, and
-$X=X(\mathbf c;K)$ with $\mathbf c\in\mathbb Z_{\geq0}^k$.
+$X=X^{\mathbf c}(K)$ with $\mathbf c\in\mathbb Z_{\geq0}^k$.
 For a subcomplex $L\subseteq C$ and $Q=C/L$, the following are equivalent:
 \begin{enumerate}
 \item $L$ is realizable in $X$.
@@ -258,7 +258,7 @@ first Betti number one over $\mathbb Q$ and zero over $\mathbb F_3$.
 
 \begin{example}\label{ex:sparse-higher-cycle}
 Fix $q\geq1$, $k=q+1$ and $\mathbf c\in\mathbb Z_{\geq0}^k$,
-and take $T_q=E_{(0,1,\ldots,q)}\in X_q(\mathbf c;K)$.
+and take $T_q=E_{(0,1,\ldots,q)}\in X^{\mathbf c}_q(K)$.
 Every face of $T_q$ is zero, since its index tuple contains $[q]$.
 If $\alpha:[p]\to[q]$ misses a vertex, it factors through a coface,
 so $X(\alpha)T_q=0$. A surjection $[p]\to[q]$ is the identity for
@@ -287,7 +287,7 @@ Let $A$ be a nonzero commutative ring with identity.
 Number the vertices of a finite graph $G$ from $1$ to $v$ and its edges from
 $1$ to $e$. Loops and parallel edges are allowed. Orient edge $j$ from
 $u_j$ to $w_j$.
-Take $X=X((r,r,r);A)$ with $r\geq\max(v,e)$. Assign to each
+Take $X=X^{(r,r,r)}(A)$ with $r\geq\max(v,e)$. Assign to each
 vertex $t$ and each edge $j$ the tensors
 \[
  a_t=E_{(0,t,t)}\in X_0,\qquad
@@ -314,7 +314,7 @@ projections vanish.
 In their respective degrees $p$, the vertex and edge tensors use only
 first-axis indices in $[p]$. Extension by zero on the additional
 first-axis indices commutes with simplicial operators, so $Y_G$ lies in
-$X((0,r,r);A)$, whose normalized complex is contractible by Proposition~\ref{prop:disks}.
+the module of shape $(1,r+1,r+1)$, whose normalized complex is contractible by Proposition~\ref{prop:disks}.
 
 On each component, the boundaries of the edges of a spanning tree form
 a basis of the kernel of the augmentation $a_t\mapsto 1$.
@@ -328,16 +328,16 @@ The script \path{rank_shifted_homology.py} computes its incidence
 rank from the normalized tensor faces over $\mathbb Q$
 \cite{SparseShiftedTensors}.
 
-For a two-axis module $X'=X((c_1,c_2);A)$, the cycles in $N_1(X')$ have basis $E_{(0,1)}$ and
+For a two-axis module $X'=X^{(c_1,c_2)}(A)$, the cycles in $N_1(X')$ have basis $E_{(0,1)}$ and
 $E_{(1,0)}$ by \eqref{eq:cycles}. Over a field, every simplicial
 submodule of $X'$ therefore has first Betti number at most two.
 
 \subsection{Boundary ranks of ordered adjacency matrices}
 
-Let $H$ be a simple graph on $n\geq2$ vertices. For each order
-$\pi=(v_0,\ldots,v_{n-1})$, insert one isolated vertex between successive
-vertices. Write $B_\pi$ for the simplicial boundary of the resulting
-$(2n-1)\times(2n-1)$ adjacency matrix over $\mathbb F_2$.
+Let $H$ be a simple graph on $n\geq2$ vertices. Adjoin $n-1$ isolated vertices $z_1,\ldots,z_{n-1}$ to $H$.
+For each order $\pi=(v_0,\ldots,v_{n-1})$ of $H$, let $A_\pi$ be the adjacency
+matrix of $H\sqcup(n-1)K_1$ in the order
+$v_0,z_1,v_1,\ldots,z_{n-1},v_{n-1}$. Put $B_\pi=\partial A_\pi$ over $\mathbb F_2$.
 Figure~\ref{fig:interleaved-path} shows the construction for a path on three vertices.
 Let $N_\pi$ be the adjacency matrix of $H$ with each edge oriented forward
 in the order $\pi$.
@@ -450,7 +450,7 @@ $0$ oriented Hamiltonian paths, respectively.
 \section{Kernel families in a product of Grassmannians}
 \label{app:kernel-families}
 Fix a field $K$, a degree $n$ and a tuple $\mathbf c$ as in Section~\ref{sec:generated}.
-For $T$ in the affine space $W=X_n(\mathbf c;K)$, write
+For $T$ in the affine space $W=X^{\mathbf c}_n(K)$, write
 $L_p(T)=\ker(g_{T,p}:C_p\to N_p(X))$.
 
 For a finite-dimensional $K$-vector space $V$ and $0\leq r\leq\dim V$,

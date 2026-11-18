@@ -59,6 +59,12 @@ Florian Lengyel.
   2026.
 \newblock Ancillary computation in the SimplicialTensors repository.
 
+\bibitem{MacLaneCategories}
+Saunders {Mac Lane}.
+\newblock {\em \href{https://doi.org/10.1007/978-1-4757-4721-8}{Categories for
+  the Working Mathematician}}, volume~5 of {\em Graduate Texts in Mathematics}.
+\newblock Springer-Verlag, New York, second edition, 1998.
+
 \bibitem{MoerdijkWeissDendroidal}
 Ieke Moerdijk and Ittay Weiss.
 \newblock Dendroidal sets.
