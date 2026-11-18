@@ -26,8 +26,10 @@ to the columns $\nu_p X(\alpha)(T)$ spanning $N_p(\langle T\rangle)$.
 Let $r_p(T)$ be their rank. For $p>0$ let $\delta_p(T)$ be the rank of their
 images under $d_0$, and put $\delta_0(T)=0$.
 The $p$th Betti number is $r_p(T)-\delta_p(T)-\delta_{p+1}(T)$.
-The function \program{src/simplicial_tensors/homology.py}{generated_homology}
-computes these ranks over $\mathbb Q$ or a prime field.
+Over $\mathbb Q$ or a finite prime field,
+\program{src/simplicial_tensors/homology.py\#L132}{generated_homology} takes a hypermatrix in the simplicial dimension of its shape.
+For a tensor with specified degree and shifts, use
+\program{src/simplicial_tensors/tensor_chain_complex.py\#L130}{sparse_generated_homology}.
 For $p>n$ there are no columns. For $p>k$, $N_p(X)=0$ by
 Theorem~\ref{thm:hornbasis}.
 
@@ -44,7 +46,8 @@ By Dold--Kan the subspaces $L_p(T)$ determine $\ker f_T$. For
 $T,T'\in X_n$, $L(T)=L(T')$ holds precisely when there is a simplicial
 isomorphism $\langle T\rangle\to\langle T'\rangle$ sending $T$ to $T'$.
 In shape $(2,2)$ the generators $E_{01}$ and $E_{10}$ have the same
-kernel ($L_0=C_0$, $L_1=0$) and span distinct lines in degree one.
+kernel ($L_0=C_0$, $L_1=0$) and span distinct lines in degree one
+(\program{tex/anc/dstm_examples.py\#L54}{generated_homology_example}).
 
 Since $H_0(C)=K$ and
 $H_j(C)=0$ for $j>0$, the short exact sequence
@@ -209,7 +212,8 @@ only in degree zero and only if every $c_a>0$. For a module associated to a
 shape, some $c_a=0$, so the cycle inequalities suffice.
 
 For example, when $\mathbf c=(1,1)$, the cycle dimensions
-of $\mathcal D$ are $(4,2,0)$ and its boundary dimensions are $(3,2,0)$.
+of $\mathcal D$ are $(4,2,0)$ and its boundary dimensions are $(3,2,0)$
+(\program{tex/anc/dstm_examples.py\#L195}{shifted_matrix_example}).
 The complex $Q=D^1(K^4)$ is a quotient of $N(K[\Delta^4])$ by
 \eqref{eq:simplex-projective}. It satisfies the cycle inequalities,
 but $\dim B_0(Q)=4>3=\dim B_0(\mathcal D)$, so it does not embed.
@@ -260,6 +264,8 @@ lie in one orbit by Proposition~\ref{prop:quotient-lift}. At $t=1$,
 $L_1$ is spanned by $\alpha-s_0d_1\alpha$, where $\alpha:[1]\to[2]$
 is the increasing injection with image $\{1,2\}$, and $L_2=0$. For example, $T(4)$ has
 first Betti number one over $\mathbb Q$ and zero over $\mathbb F_3$.
+The \texttt{jump} case of \program{experiments/kernel_sequences.py}{kernel_sequences.py}
+computes the ranks at integral values of $t$ over either field.
 \end{example}
 
 \begin{example}[The simplicial sphere]\label{ex:sparse-higher-cycle}
@@ -285,10 +291,9 @@ $Z_q(N(X))=0$. Hence $q+1$ is the least number of axes on which a simplicial
 submodule can have nonzero $q$th homology.
 \end{example}
 
-In \program{experiments/kernel_sequences.py}{kernel_sequences.py},
-\texttt{jump} computes the ranks for integral $t$ over $\mathbb Q$ or a prime field,
-and \texttt{spheres} computes the reduced Betti numbers for $\mathbf c=0$.
-For the simplicial $2$-sphere it gives $(0,0,1)$ in degrees $0,1,2$.
+For $\mathbf c=0$, the \texttt{spheres} case of
+\program{experiments/kernel_sequences.py}{kernel_sequences.py} computes the
+reduced Betti numbers. For the $2$-sphere it gives $(0,0,1)$ in degrees $0,1,2$.
 
 \subsection{Encoding graph homology by tensors}
 
@@ -377,7 +382,8 @@ The ranks of $\partial C_\pi$ alone do not determine the number of
 Hamiltonian paths. Every order of $K_4$ gives zero boundary over
 $\mathbb F_2$, since the four deletion faces coincide. The edgeless graph
 on four vertices also gives zero boundary. The two graphs have $24$ and
-$0$ oriented Hamiltonian paths, respectively.
+$0$ oriented Hamiltonian paths, respectively
+(\program{experiments/interleaved_graph_paths.py\#L94}{small_examples}).
 
 To count such paths in $H$, adjoin $n-1$ isolated vertices
 $z_1,\ldots,z_{n-1}$, where $n=|V(H)|\geq2$.
@@ -422,7 +428,8 @@ The paths need not be induced, and single vertices are allowed.
 \end{tikzpicture}
 \caption{The open circles are the inserted isolated vertices. For
 $\pi=(v_0,v_1,v_2)$ the boundary is the adjacency matrix of two disjoint
-edges, so $\rank B_\pi=4$ over $\mathbb F_2$.}
+edges, so $\rank B_\pi=4$ over $\mathbb F_2$
+(\program{experiments/interleaved_graph_paths.py\#L94}{small_examples}).}
 \label{fig:interleaved-path}
 \end{figure}
 
@@ -512,7 +519,8 @@ Total & $10!$ & $16!$ & $16!$
 
 The rook and Shrikhande graphs share the strongly regular parameters
 $(16,6,2,2)$ and adjacency spectrum $6^1,2^6,(-2)^9$
-\cite{Shrikhande1959}. The Shrikhande graph has $22{,}230{,}528$
+\cite{Shrikhande1959}. The program \program{experiments/interleaved_graph_paths.py}{interleaved_graph_paths.py}
+checks $A^2=4I+2J$ over $\mathbb Z$ for both adjacency matrices. The Shrikhande graph has $22{,}230{,}528$
 orders of rank $30$, so the adjacency spectrum does not determine the
 distribution of $\rank B_\pi$. For the Petersen graph the $240$ orders
 of rank $18$ give its oriented Hamiltonian paths.
