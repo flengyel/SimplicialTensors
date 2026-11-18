@@ -385,58 +385,64 @@ the required simplicial isomorphism.
 \end{proof}
 
 \section{Chain contractions and ordinal sums}\label{sec:contractions}
-For $A$-modules $E,W$, put $V_A(E,W)_p=E^{p+1}\oplus W$.
-Faces delete and degeneracies repeat $E$-coordinates, fixing $W$.
-This is the \v{C}ech nerve of $E\oplus W\to W$ \cite[Tag 019P]{StacksCech}.
-On $V=\bigotimes_a V_A(E_a,W_a)$ the split projections give simplicial
-morphisms $\epsilon:V\to\underline{B}$ and $j:\underline{B}\to V$,
-where $B=\bigotimes_a W_a$. Taking $E_a=A$ and $W_a=A^{c_a}$
-recovers $X(\mathbf c;A)$.
+Inserting a zero on each axis gives a chain homotopy before normalization.
+For $A$-modules $E,W$, let $V_A(E,W)$ be the \v{C}ech nerve of the split
+projection $E\oplus W\to W$ \cite[Tag 019P]{StacksCech}. In degree $p$
+it is $E^{p+1}\oplus W$. Faces delete and degeneracies repeat
+$E$-coordinates, fixing $W$. Form $V=\bigotimes_a V_A(E_a,W_a)$ over
+$A$ degreewise. The projections and zero sections give
+$\epsilon:V\to\underline B$ and $\eta:\underline B\to V$, where
+$B=\bigotimes_a W_a$. With $E_a=A$ and $W_a=A^{c_a}$ the coordinate
+bases identify $V$ with $X(\mathbf c;A)$.
 
-Let $H_p:V_p\to V_{p+1}$ be the tensor product of the maps
-$(e_0,\ldots,e_p,w)\mapsto(0,e_0,\ldots,e_p,w)$. In degree $-1$
-take $H_{-1}=j_0:B\to V_0$. Then $d_0H_p=1$ and
-$d_iH_p=H_{p-1}d_{i-1}$ for $1\leq i\leq p+1$, using
-$d_0=\epsilon_0$ on $V_0$ in the latter identity. Summing with signs gives
-$\partial_{p+1}H_p+H_{p-1}\partial_p=1$ for $p\geq1$ and
-$\partial_1H_0=1-j_0\epsilon_0$. Hence the unaugmented complex
-deformation retracts onto $B[0]$. Projecting $H$ to the normalized
-summand gives the same retraction on $N(V)$. For $\mathbf c=\mathbf c(\vec s)$,
-some $c_a=0$, so $B=0$ and the full complex is contractible.
+Let $H_p:V_p\to V_{p+1}$ insert a zero before the first $E_a$-coordinate in each factor.
+With $H_{-1}=\eta_0$ and $d_0=\epsilon_0$ on $V_0$, deleting the
+inserted coordinate gives $d_0H_p=1$. Deleting any other gives
+$d_iH_p=H_{p-1}d_{i-1}$ for $1\leq i\leq p+1$.
+On unaugmented chains the alternating sum gives $\partial H+H\partial=1$
+in positive degrees and $\partial_1H_0=1-\eta_0\epsilon_0$ in degree
+zero. Thus $\epsilon_0$ and $\eta_0$, extended by zero in positive
+degrees, are chain homotopy inverses between this complex and $B[0]$.
+Projection along $D_{p+1}(V)$ gives the homotopy on $N(V)$.
+For $\mathbf c=\mathbf c(\vec s)$ some $c_a=0$, so $B=0$ and the full
+complex is contractible.
 
-On the standard basis, $H_p(E_m)=E_{m+\mathbf1}$. This homotopy and its
-normalized counterpart commute with every permutation $\sigma$ of the axes
-such that $c_{\sigma(a)}=c_a$ for all $a$. They therefore preserve the
-submodules on which these permutations act trivially or by their signs.
-For square complex matrices they commute with conjugate transpose on
-the underlying real complexes. If some $c_a=0$, the filtration
-spanned by $E_m$ with $\min_a m_a\geq p+t$, indexed by $t\in\mathbb Z$,
-is decreasing and finite in each degree. If $d_iE_m\ne0$, its smallest
-index is at least $\min_a m_a-1$, and $H_p$ raises the minimum by one.
-The induced contraction on the associated
-graded complex gives zero homology.
+For $X(\mathbf c;A)$, $H_pE_m=E_{m+\mathbf1}$. If $E_m\in N_p(X)$,
+its image is normalized when $0\in\im(m)$ and equals $s_0E_m$
+otherwise. The projection thus gives the homotopy of
+Section~\ref{sec:normalized}. Both homotopies commute with the axis
+permutations preserving $\mathbf c$, so they preserve the fixed submodule
+and the submodule on which each permutation acts by its sign. For square
+complex matrices they commute with conjugate transpose over $\mathbb R$.
 
-To replace every $c_a$ by $c_a+r$ for $r\geq0$, adjoin $[-1]$ to
-$\Delta$ to obtain the augmented simplex category $\Delta_+$. For
-$p,q\geq-1$ put
+Suppose some $c_a=0$. For $t\in\mathbb Z$ let $F^tX_p$ be the span
+of the $E_m$ with $\min_a m_a\geq p+t$. A nonzero face lowers the
+minimum by at most one, and $H_p$ raises it by one. Thus $\partial$
+and $H$ preserve this decreasing filtration, finite in each degree,
+and $H$ contracts each quotient $F^tX_\bullet/F^{t+1}X_\bullet$.
+
+Adjoin the empty ordinal $[-1]$ to $\Delta$ to obtain $\Delta_+$.
+Let $X^+$ denote $X$ augmented by $\epsilon_0:X_0\to B$.
+For $p,q\geq-1$ put
 \[
- I_{p,q}=\prod_{a=1}^k\bigl(([p]\oplus[c_a-1])\oplus[q]\bigr).
+ I_{p,q}=\prod_a\bigl([p]\oplus[c_a-1]\oplus[q]\bigr),\qquad
+ Y_{p,q}=A^{I_{p,q}}.
 \]
-On a pair of morphisms
-$(\alpha,\beta):([p],[q])\to([p'],[q'])$, each factor uses
-$\alpha\oplus 1_{[c_a-1]}\oplus\beta$. Pullback gives a functor
-$(\Delta_+\times\Delta_+)^{\mathrm{op}}\to\mathbf{Mod}_A$.
-Fixing $q$ gives the augmented simplicial module with parameters
-$c_a+r$, where $r=q+1$. Exchanging the summands $[c_a-1]$ and $[q]$
-as sets gives a natural isomorphism with the pullback of the augmented
-$X$ along ordinal sum. A face from degree zero to degree $-1$
-restricts to the indices in the other two summands.
-The horizontal and vertical maps commute, since they act on $[p]$
-and $[q]$, respectively. The total differential
-on bidegree $(p,q)$ is $\partial_h+(-1)^p\partial_v$.
-The horizontal contraction inserts a zero before the coordinates indexed by
-$[p]$ on each axis and commutes with every vertical map. It contracts the total complex
-when the horizontal augmentation is included.
+For $\alpha,\beta$ in $\Delta_+$, pull back along
+$\alpha\oplus1_{[c_a-1]}\oplus\beta$ on each axis. Exchanging the last two
+summands as sets identifies $Y_{p,q}$ with $X^+_{p+q+1}$ and the pullback
+with $X^+(\alpha\oplus\beta)$. The horizontal row at $q$ has parameters
+$c_a+r$, where $r=q+1$. By
+Proposition~\ref{prop:disks} the unaugmented row has homology
+$A^{\prod_a(c_a+r)}$ in degree zero and zero in positive degrees.
+
+Include the horizontal augmentation $Y_{0,q}\to Y_{-1,q}$. For
+$p\geq-1$, extension by zero along the inclusion skipping $0$ in $[p+1]$
+on each axis gives $H_{p,q}:Y_{p,q}\to Y_{p+1,q}$. Then
+$\partial_hH+H\partial_h=1$, and $H$ commutes with $\partial_v$ since
+vertical maps act only on $[q]$. For the total differential
+$\partial=\partial_h+(-1)^p\partial_v$ the vertical terms in
+$\partial H+H\partial$ cancel, so $H$ contracts the total complex.
 
 \input{generated_section}
 
