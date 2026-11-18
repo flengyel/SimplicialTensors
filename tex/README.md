@@ -28,6 +28,15 @@ From the repository root, install the package with `python -m pip install -e .` 
 | Appendix A. [Kernel planes of two matrices and the excluded plane on the locus of maximal ranks](../experiments/kernel_sequences.py) | `python experiments/kernel_sequences.py --case marked --matrices` and `python experiments/kernel_sequences.py --case obstruction` |
 | Appendix A. [Degree-zero kernel planes for all $3\times3$ binary matrices with maximal ranks](../experiments/three_by_three_kernels.py) | `python experiments/three_by_three_kernels.py` |
 
+For an independent check of the full-rank entries in Table 2, evaluate the following in the Wolfram Language.
+
+```wolfram
+GraphData[#, "HamiltonianPathCount"] & /@
+  {"PetersenGraph", {"Rook", {4, 4}}, "ShrikhandeGraph"}
+```
+
+[GraphData](https://reference.wolfram.com/language/ref/GraphData.html) returns `{120, 11197440, 11115264}`, counting paths up to reversal. Doubling each count gives the number of vertex orders of full boundary rank.
+
 The [Petersen coset calculation](../experiments/petersen_brd_right_cosets.py) also gives the boundary rank distribution of the original adjacency matrix over all $10!$ orders. Run `python experiments/petersen_brd_right_cosets.py`. The [experiment catalogue](../docs/experiments_catalog.md) lists the other computations in the repository.
 
 For a dense hypermatrix, [`generated_homology`](../src/simplicial_tensors/homology.py) uses the simplicial dimension of its shape. For a [`SparseTensor`](../src/simplicial_tensors/rank_shifted.py) with a specified degree and shifts, [`sparse_generated_homology`](../src/simplicial_tensors/tensor_chain_complex.py) uses that grading. Both functions return the chain dimensions, differential ranks and Betti numbers over the rationals or the specified prime field. [API and examples](../docs/api/chain_complex.md)
