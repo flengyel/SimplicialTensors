@@ -10,20 +10,26 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error dstm_short.tex
 ```
 
 The driver is `dstm_short.tex`. Its inputs are `generated_section.tex`,
-`dendroidal_section.tex` and `dstm_short.bib`. The `anc/` directory contains
-the two example scripts and instructions for running them against the
-package in this checkout.
+`dendroidal_section.tex` and `dstm_short.bib`.
 
-Section 6 proves quotient-isomorphism lifting and the criterion for realizing
-a normalized kernel. It includes a matrix-family homology jump and sparse
-coordinate generators in higher degrees. From an installed repository checkout,
-run `python experiments/kernel_sequences.py` for their exact kernel,
-quotient, realization, and lifting calculations; see
-[the example guide](../docs/experiments/kernel_sequences.md).
+From the repository root, install the package and run the four programs.
 
-The [ordered graph experiment](../docs/experiments/interleaved_graph_paths.md)
-reproduces the full boundary rank frequencies for the Petersen, rook and
-Shrikhande graphs in Section 6.
+```sh
+python -m pip install -e .
+python tex/anc/dstm_examples.py
+python tex/anc/rank_shifted_homology.py
+python experiments/kernel_sequences.py
+python experiments/interleaved_graph_paths.py
+```
+
+The two scripts in `tex/anc/` compute the matrix and horn examples and the
+homology of the Petersen graph from its incidence complex. The
+[kernel experiment](../docs/experiments/kernel_sequences.md) computes the
+homology jump, higher-degree cycles, and lifts of quotient isomorphisms.
+The [graph experiment](../docs/experiments/interleaved_graph_paths.md) counts
+vertex orders attaining full boundary rank for the Petersen, rook, and
+Shrikhande graphs. Both experiments are in the
+[cited software revision](https://github.com/flengyel/SimplicialTensors/tree/68d68fd7f36d895fa2e11baba8727e0d2713e468/experiments).
 
 To package the current source for arXiv, build the manuscript first and
 run the following from `tex/`:

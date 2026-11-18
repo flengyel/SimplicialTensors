@@ -12,15 +12,21 @@ $c_a=|C_a|$.
 An elementary inner face contracts an inner edge. For a tree with
 at least two vertices, an elementary outer face prunes an endpoint
 of the tree of vertices, retaining its one incident inner edge.
-The faces of a one-vertex tree are its individual edges. For a face
-$F:S\to T$, the horn omitting $F$ is the union of the representables
-of the other elementary faces of $T$. Its data are tensors on those
-faces agreeing on common subfaces. This description follows by
-factoring dendroidal morphisms into degeneracies, isomorphisms and
-faces \cite[Lemma~2.3]{BasicNikolaus}.
-Write $K_F(T)$ for the tensors that vanish on the included faces and
-$K(T)$ for those that vanish on all elementary faces. Identify face
-index sets with their images in $I(T)$.
+The elementary faces of a one-vertex tree are its individual edges.
+For an elementary face $F:S\to T$, the horn omitting $F$ is the union
+of the representables of the other elementary faces $G:S_G\to T$.
+Let $M_{T,F}$ be the $A$-module of families of tensors on these faces
+that agree on common subfaces. Such families give the horn data by the
+factorization of dendroidal morphisms into degeneracies, isomorphisms
+and faces \cite[Lemma~2.3]{BasicNikolaus}. The restriction map is
+\[
+ \rho_{T,F}:D(T)\longrightarrow M_{T,F},\qquad
+ z\longmapsto (G^*z)_{G\ne F}.
+\]
+The class of a family $m$ in $\operatorname{coker}\rho_{T,F}$
+vanishes precisely when $m$ has a filler. Put $K_F(T)=\ker\rho_{T,F}$,
+and let $K(T)$ consist of the tensors vanishing on all elementary faces.
+Identify face index sets with their images in $I(T)$.
 
 \begin{proposition}\label{prop:tree-lifts}
 Let $F:S\to T$ be an elementary face. The pullback
@@ -45,34 +51,37 @@ as well as on the included faces.
 Take the two-vertex tree with vertices $u:a\to e$ and
 $v:(e,b)\to r$, and omit the contraction of $e$. Its two included faces have colour
 sets $\{a,e\}$ and $\{e,b,r\}$, meeting in the single-edge tree on $e$.
-Every such inner horn fills by gluing the two arrays on their common
-index set. With two axes and empty tails, $S$ is the corolla
+The two tensors agree on their common index set and extend by zero
+off their union, so $\rho_{T,F}$ is surjective. With two axes and empty tails, $S$ is the corolla
 $(a,b)\to r$ and $K(S)$ is spanned by its six off-diagonal units.
-The omitted-face map reaches the four ordered pairs joining $a$
-to $b$ or $r$. The units at $(b,r)$ and $(r,b)$ are visible on the
-face with colours $\{e,b,r\}$ and have no lifts in $K_F(T)$.
+The image of $F^*$ is spanned by the units at $(a,b),(b,a),(a,r),(r,a)$.
+Every tensor in the image vanishes at $(b,r)$ and $(r,b)$ because
+both pairs lie in the included face with colours $\{e,b,r\}$.
 
 \begin{theorem}\label{thm:tree-cutoff}
-For $k$ axes and arbitrary fixed tails, all horns on trees with at
-least $k+2$ vertices fill uniquely. For each $k\geq2$, there is an
-inner horn on a tree with $k+1$ vertices whose restriction has
-cokernel free of rank $k!$. For $k=1$, every inner horn fills uniquely.
+For $k$ axes and arbitrary fixed tails, $\rho_{T,F}$ is an isomorphism
+for every elementary face $F$ of a tree $T$ with at least $k+2$ vertices.
+For each $k\geq2$ there are a tree $T$ with $k+1$ vertices and an
+inner face $F$ such that $\operatorname{coker}\rho_{T,F}\cong A^{k!}$.
+For $k=1$, every inner horn fills uniquely.
 \end{theorem}
 \begin{proof}
-For an ambient index tuple, join two included faces that contain it
-when a common subface contains it. Compatible data assign one value
-to each connected component of this graph, whereas a filler assigns
-one value to all copies of the tuple. Hence a horn fills for all
-compatible data if every nonempty graph is connected.
+For $x\in I(T)$, form a graph on the included faces whose index sets
+contain $x$. Join two faces if the index set of a common subface contains
+$x$. If this graph has $c_x$ connected components, a compatible family
+assigns one value to $x$ on each component. At $x$, the map
+$\rho_{T,F}$ is the diagonal $A\to A^{c_x}$. For $c_x=0$ this gives
+one copy of $A$ in the kernel. For $c_x\geq1$ it gives a copy of
+$A^{c_x-1}$ in the cokernel.
 
 Let $T$ have $n\geq3$ vertices and $o$ outer faces. The outer vertices
 are the endpoints of the tree of vertices, so $o\geq2$. The included
 contractions form a clique among the faces containing a tuple, as
 do the included prunings. A contraction and a pruning also give
-adjacent copies when the contracted edge is away from the pruned
+adjacent vertices when the contracted edge is not incident to the pruned
 vertex. In each case the two moves commute, and the common face
-retains their common colours. If a tuple has a disconnected graph,
-exactly two included faces retain it. They are the pruning of an
+retains their common colours. If $c_x\geq2$, exactly two included
+faces retain $x$. They are the pruning of an
 outer vertex $v$ and the contraction of its incident inner edge $e$.
 Indeed, an outer vertex has only one incident inner edge, and for
 $n\geq3$ an inner edge has at most one outer endpoint.
@@ -84,11 +93,11 @@ of vertices is a path. Pruning $v$ and then its neighbour, or
 contracting $e$ and then pruning the merged vertex, gives the same
 common face. It contains the edges deleted by every other included
 contraction and, if the other pruning is included, all the edges
-deleted by that pruning. A disconnected tuple must contain an
+deleted by that pruning. A tuple with $c_x\geq2$ must contain an
 additional edge outside this common face. In either case it contains
 at least $n-1$ distinct edges. Thus $n\geq k+2$ gives existence.
-For uniqueness, a coordinate of $K_F(T)$ must hit the deletion
-sets of all $n+o-2$ included faces, so $K_F(T)=0$ if $n>k$.
+For uniqueness, a tuple with $c_x=0$ must meet the deletion sets
+of all $n+o-2$ included faces, so $K_F(T)=0$ if $n>k$.
 
 For sharpness, take $k+1$ vertices on a path, all unary except the
 second vertex from the top, which has an extra leaf $b$. Let $e$
@@ -100,18 +109,18 @@ contracting $e$ an operation using the merged vertex has the
 top leaf as an input, and that leaf is absent from the pruned tree.
 On pruning the top vertex an operation using the second vertex
 has $e$ as an input, and $e$ is absent from the contracted tree.
-The colour $b$ is therefore isolated from the root in their common
-subfaces. The two copies of the tuple may take distinct values,
-which prevents a filler. For this tree the obstructing tuples are
-exactly the permutations of the one just described. At the top
+No common subface contains both $b$ and the root. Thus $c_x=2$ for
+each permutation of this tuple. Conversely, suppose $c_x\geq2$. At the top
 endpoint the forced inner edges and the root require one further
 colour, which must be $b$. At the root endpoint, if its incident
 contraction is included, the common face contains every shared
 colour, since the neighbour of the root vertex is unary. The
-cokernel of the horn restriction is therefore free of rank $k!$.
+cokernel of $\rho_{T,F}$ is therefore free of rank $k!$. For $k=2$ its
+two coordinates are indexed by $(b,r)$ and $(r,b)$, where $r$ is the
+root edge.
 
 For one axis the bound covers all trees with at least three
 vertices. On a two-vertex tree the two faces in the inner horn
 meet in their connecting edge, so the horn fills by gluing.
-Their deletion sets give uniqueness.
+Their index sets cover $I(T)$, which gives uniqueness.
 \end{proof}

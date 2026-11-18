@@ -2,9 +2,22 @@
 
 \bibitem{BasicNikolaus}
 Matija Ba{\v s}i{\'c} and Thomas Nikolaus.
-\newblock Homology of dendroidal sets.
+\newblock \href{https://doi.org/10.4310/HHA.2017.v19.n1.a6}{Homology of
+  dendroidal sets}.
 \newblock {\em Homology, Homotopy and Applications}, 19(1):111--134, 2017.
-\newblock \url{https://arxiv.org/abs/1509.00702}.
+
+\bibitem{Bass1964}
+Hyman Bass.
+\newblock \href{https://doi.org/10.1007/BF02684689}{{$K$}-theory and stable
+  algebra}.
+\newblock {\em Publications Math\'ematiques de l'IH\'ES}, 22:5--60, 1964.
+
+\bibitem{Canfell1992}
+M.~J. Canfell.
+\newblock \href{https://doi.org/10.1017/S1446788700032924}{A note on right
+  equivalence of module presentations}.
+\newblock {\em Journal of the Australian Mathematical Society, Series A},
+  52(1):141--142, 1992.
 
 \bibitem{Dold1958}
 Albrecht Dold.
@@ -27,14 +40,15 @@ Paul~G Glenn.
 \bibitem{SimplicialTensors}
 Florian Lengyel.
 \newblock {SimplicialTensors}.
-\newblock \url{https://github.com/flengyel/SimplicialTensors}, 2026.
-\newblock Python package and computational examples.
+\newblock
+  \href{https://github.com/flengyel/SimplicialTensors/tree/68d68fd7f36d895fa2e11baba8727e0d2713e468}{Python
+  package and examples, commit \texttt{68d68fd}}, 2026.
 
 \bibitem{SparseShiftedTensors}
 Florian Lengyel.
 \newblock Sparse rank-shifted tensor examples.
 \newblock
-  \href{https://github.com/flengyel/SimplicialTensors/blob/main/tex/anc/rank_shifted_homology.py}{\texttt{rank\_shifted\_homology.py}},
+  \href{https://github.com/flengyel/SimplicialTensors/blob/68d68fd7f36d895fa2e11baba8727e0d2713e468/tex/anc/rank_shifted_homology.py}{\texttt{rank\_shifted\_homology.py}},
   2026.
 \newblock Ancillary computation in the SimplicialTensors repository.
 
