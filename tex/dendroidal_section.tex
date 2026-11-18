@@ -4,9 +4,10 @@ are morphisms of their free symmetric coloured operads \cite[\S3]{MoerdijkWeissD
 The colours of $T$ are its edges $E(T)$. Fix finite sets $C_a$ and put
 $I(T)=\prod_{a=1}^k(E(T)\sqcup C_a)$. Extending the colour map of $f:S\to T$
 by the identity on each $C_a$ gives $I(f):I(S)\to I(T)$.
-Pullback along $I(f)$ defines $D:\Omega^{\mathrm{op}}\to\mathbf{Mod}_A$,
-$D(T)=A^{I(T)}$. On linear trees the edge maps are ordinal maps, so numbering
-each $C_a$ from $1$ to $c_a=|C_a|$ recovers $X^{\mathbf c}(A)$.
+Define $D:\Omega^{\mathrm{op}}\to\mathbf{Mod}_A$ by $D(T)=A^{I(T)}$ and
+$D(f)(u)=u\circ I(f)$. The linear tree $L_p$ has $p$ unary vertices and $p+1$ edges.
+Its edge maps are ordinal maps. Numbering each $C_a$ from $1$ to $c_a=|C_a|$
+identifies the restriction of $D$ to linear trees with $X^{\mathbf c}(A)$.
 
 Contracting an inner edge $e$ gives an elementary inner face $T/e\to T$.
 Pruning a vertex incident to just one inner edge gives an elementary
@@ -25,7 +26,7 @@ Identify each face index set with its image in $I(T)$.
 
 \begin{proposition}\label{prop:tree-lifts}
 Let $F:S\to T$ be an elementary face and $U=\bigcup_{G\ne F} I(S_G)$.
-The pullback $F^*:K_F(T)\to K(S)$ has kernel $K(T)$ and image the
+The restriction $F^*:K_F(T)\to K(S)$ has kernel $K(T)$ and image the
 tensors supported on $I(S)\setminus U$. Extension by zero to $I(T)$
 splits the map onto its image.
 \end{proposition}
@@ -113,10 +114,16 @@ They then have no common subface. On $C_1$ restriction is the diagonal
 $A^{C_1}\to A^{C_1}\times A^{C_1}$, with cokernel $A^{C_1}$.
 \end{proof}
 
+At $k+1$ vertices, every horn on the linear tree $L_{k+1}$ fills uniquely by
+Theorem~\ref{thm:hornbasis}. For $k\geq2$, the proof above shows that on every tree
+with $k+1$ vertices each horn has at most one filler. On the branching tree in
+the proof, the cokernel $A^{k!}$ obstructs existence. With $k+2$ or more
+vertices every compatible horn has a filler.
+
 For $k=1$ the underlying dendroidal set is the nerve of the operad with
 colours $(a,\lambda)\in A\times A^{C_1}$ and one operation for each list
 of inputs and output with a common $\lambda$. A labelling of $T$ is
 therefore a function $E(T)\to A$ and one $\lambda$ for the tree.
-Pullback of these data gives the action of $D$ on morphisms.
+A morphism acts by precomposition on edge labels and fixes $\lambda$.
 For $k\geq2$ the inner horn without a filler excludes an operadic nerve
 \cite[Example~7.1]{MoerdijkWeissDendroidal}.
