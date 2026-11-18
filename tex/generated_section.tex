@@ -422,15 +422,25 @@ $\det(J-N_\pi)\bmod 2=\det B_\pi$. Subtracting the last row of $J-N_\pi$
 from each earlier row gives $\rank(J-N_\pi)=1+\rank N_\pi$ over
 $\mathbb F_2$, since the first column of $N_\pi$ is zero.
 
-The $4\times4$ rook graph and the Shrikhande graph are strongly regular
-with parameters $(16,6,2,2)$ and common adjacency spectrum
-$6^1,2^6,(-2)^9$ \cite{Shrikhande1959}. The script
-\path{interleaved_graph_paths.py} counts Hamiltonian paths in both
-orientations by endpoint and vertex subset. Rank~$30$ occurs in
-$22{,}394{,}880$ orders of the rook graph \cite{OEISRook} and
-$22{,}230{,}528$ orders of the Shrikhande graph. Thus the adjacency
-spectrum does not determine the distribution of $\rank B_\pi$. For the
-Petersen graph, rank~$18$ occurs in $240$ orders.
+For the $4\times4$ rook graph, counting full-rank mod-$2$ boundaries
+recovers the number of oriented Hamiltonian paths. Let $a_{uv}$ be $1$
+if $u$ and $v$ are adjacent and $0$ otherwise. For each vertex order
+$\pi=(v_0,\ldots,v_{15})$, the product below is the integer $0$ or $1$
+represented by $\det_{\mathbb F_2}B_\pi$. Summing over all orders gives
+\[
+ \#\{\pi:\rank_{\mathbb F_2}B_\pi=30\}
+ =\sum_\pi\prod_{i=0}^{14}a_{v_i v_{i+1}}=22{,}394{,}880.
+\]
+This agrees with the fourth term of OEIS A096970 \cite{OEISRook},
+which counts each path and its reverse separately. The script
+\path{interleaved_graph_paths.py} evaluates the sum by grouping paths
+by endpoint and set of unused vertices.
+
+The Shrikhande graph has the same strongly regular parameters $(16,6,2,2)$
+and adjacency spectrum $6^1,2^6,(-2)^9$ as the rook graph
+\cite{Shrikhande1959}, but rank~$30$ occurs in $22{,}230{,}528$ of its
+orders. Thus the adjacency spectrum does not determine the distribution
+of $\rank B_\pi$. For the Petersen graph, rank~$18$ occurs in $240$ orders.
 
 Without the inserted isolated vertices, the distribution of boundary ranks does not determine the
 Hamiltonian path count. Every order gives the zero boundary for both $K_4$
