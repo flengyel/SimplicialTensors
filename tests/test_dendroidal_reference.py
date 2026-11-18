@@ -1,4 +1,4 @@
-"""Exact finite representable chains with Basic--Nikolaus face signs."""
+"""Finite dendroidal chain and horn calculations."""
 
 from pathlib import Path
 import runpy
@@ -9,6 +9,16 @@ import sympy as sp
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPERIMENT = runpy.run_path(str(ROOT / "experiments/dendroidal_representable_chains.py"))
+
+
+def test_three_vertex_horn_requires_agreement_only_on_common_subfaces():
+    experiment = runpy.run_path(str(ROOT / "experiments/three_vertex_tensor_horn.py"))
+    result = experiment["three_vertex_tensor_horn"]()
+    assert result["domain_rank"] == result["image_rank"] == 25
+    assert result["matching_rank"] == 27
+    assert result["kernel_rank"] == 0
+    assert result["cokernel_rank"] == 2
+    assert result["tuples_with_disconnected_faces"] == [("b", "r"), ("r", "b")]
 
 
 @pytest.mark.parametrize("modulus", [None, 2, 3])

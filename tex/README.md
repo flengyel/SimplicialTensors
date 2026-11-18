@@ -24,6 +24,7 @@ From the repository root, install the package with `python -m pip install -e .` 
 | §6.5. [Full boundary rank after insertion of isolated vertices, counted by oriented Hamiltonian paths in the Petersen, rook, and Shrikhande graphs](../experiments/interleaved_graph_paths.py) | `python experiments/interleaved_graph_paths.py` |
 | §6.5. [Entire mod-2 boundary rank distribution after insertion, over all vertex orders of each of the three graphs](../experiments/interleaved_rank_distributions.py) | `python experiments/interleaved_rank_distributions.py` |
 | §7. [Two-vertex tree with two tensor axes, including the kernel and cokernel of restriction to the omitted face](../experiments/two_vertex_tensor_horn.py) | `python experiments/two_vertex_tensor_horn.py` |
+| §7. [Three-vertex tree with two tensor axes, including the two coordinates obstructing a horn filler](../experiments/three_vertex_tensor_horn.py) | `python experiments/three_vertex_tensor_horn.py` |
 | Appendix A. [Kernel planes of two matrices and the excluded plane on the locus of maximal ranks](../experiments/kernel_sequences.py) | `python experiments/kernel_sequences.py --case marked --matrices` and `python experiments/kernel_sequences.py --case obstruction` |
 | Appendix A. [Degree-zero kernel planes for all $3\times3$ binary matrices with maximal ranks](../experiments/three_by_three_kernels.py) | `python experiments/three_by_three_kernels.py` |
 

@@ -53,6 +53,7 @@ its dependencies, output, and known execution or interpretation limits.
 - `experiments/shape_generator.py` — Bounded shape enumeration ordered by degree, axis count, and offset sum. See [shape_generator](experiments/shape_generator.md).
 - `experiments/simplicial_permutation_group.py` — Finite checks of cycle deletion under vertex removal. See [simplicial_permutation_group](experiments/simplicial_permutation_group.md).
 - `experiments/three_by_three_kernels.py` — Enumerates all 512 binary three-by-three matrices and counts the degree-zero kernel planes on the maximal-rank locus. See [three_by_three_kernels](experiments/three_by_three_kernels.md).
+- `experiments/three_vertex_tensor_horn.py` — Computes the rank and cokernel of an inner horn restriction on a three-vertex tree. See [three_vertex_tensor_horn](experiments/three_vertex_tensor_horn.md).
 - `experiments/two_vertex_tensor_horn.py` — Computes the two-axis tensor horn on a two-vertex tree and the kernel and cokernel of restriction to the omitted face. See [two_vertex_tensor_horn](experiments/two_vertex_tensor_horn.md).
 - `experiments/verify_degenerate_preference.py` — Finite checks of the algorithm's degenerate filler selection. See [verify_degenerate_preference](experiments/verify_degenerate_preference.md).
 - `experiments/verify_injective_face_map.py` — Injectivity checks on coordinate tensors surviving a fixed face. See [verify_injective_face_map](experiments/verify_injective_face_map.md).
