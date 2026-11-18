@@ -28,7 +28,7 @@ images under $d_0$, and put $\delta_0(T)=0$.
 The $p$th Betti number is $r_p(T)-\delta_p(T)-\delta_{p+1}(T)$.
 Over $\mathbb Q$ or a finite prime field,
 \program{src/simplicial_tensors/homology.py\#L132}{generated_homology} takes a hypermatrix in the simplicial dimension of its shape.
-For a tensor with specified degree and shifts, use
+For a tensor with specified degree and excesses, use
 \program{src/simplicial_tensors/tensor_chain_complex.py\#L130}{sparse_generated_homology}.
 For $p>n$ there are no columns. For $p>k$, $N_p(X)=0$ by
 Theorem~\ref{thm:hornbasis}.
@@ -208,8 +208,8 @@ dimension $b_p$ by Corollary~\ref{cor:ranks}. In degree zero,
  \dim_K B_0(\mathcal D)=\prod_a(c_a+1)-\prod_a c_a.
 \]
 Since $B_p(Q)\subseteq Z_p(Q)$, the boundary inequality adds a condition
-only in degree zero and only if every $c_a>0$. For a module associated to a
-shape, some $c_a=0$, so the cycle inequalities suffice.
+only in degree zero and only if every $c_a>0$. In particular, the cycle
+inequalities suffice when the excesses are computed from a shape in its simplicial dimension.
 
 For example, when $\mathbf c=(1,1)$, the cycle dimensions
 of $\mathcal D$ are $(4,2,0)$ and its boundary dimensions are $(3,2,0)$
@@ -329,8 +329,9 @@ projections vanish.
 
 In their respective degrees $p$, the vertex and edge tensors use only
 first-axis indices in $[p]$. Extension by zero on the additional
-first-axis indices commutes with simplicial operators, so $Y_G$ lies in
-the module of shape $(1,r+1,r+1)$, whose normalized complex is contractible by Proposition~\ref{prop:disks}.
+first-axis indices commutes with simplicial operators, so $Y_G$ lies in the copy of
+$X^{(0,r,r)}(A)$ of shape $(1,r+1,r+1)$ in degree zero. Its normalized complex
+is contractible by Proposition~\ref{prop:disks}.
 
 On each component, the boundaries of the edges of a spanning tree form
 a basis of the kernel of the augmentation $a_t\mapsto 1$.
