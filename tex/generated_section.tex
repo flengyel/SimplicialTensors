@@ -1,7 +1,7 @@
 \section{Generated submodules}
 \label{sec:generated}
-Let $K$ be a field, fix $n\geq0$ and nonnegative tail lengths
-$\mathbf c=(c_1,\ldots,c_k)$, and put $X=X(\mathbf c;K)$.
+Let $K$ be a field, $n\geq0$ and $\mathbf c\in\mathbb Z_{\geq0}^k$.
+Put $X=X(\mathbf c;K)$.
 Let $P=K[\Delta^n]$ be the free simplicial $K$-module on the standard
 $n$-simplex, so $P_p$ has basis the nondecreasing maps $[p]\to[n]$.
 For $T\in X_n$, the representing property of $P$ gives
@@ -17,9 +17,9 @@ To compute its normalized chains, use the projection $\nu_p:X_p\to N_p(X)$,
  \nu_0=1,\qquad
  \nu_p=(1-s_0d_1)\cdots(1-s_{p-1}d_p)\quad(p>0).
 \]
-Apply the factors from right to left. Each $1-s_{i-1}d_i$ kills the
-$i$th face, preserves $\ker d_j$ for $j>i$, and changes the tensor by
-a degeneracy. Since $X_p=N_p(X)\oplus D_p(X)$, the product is the
+Apply the factors from right to left. Each $1-s_{i-1}d_i$ has image in
+$\ker d_i$, preserves $\ker d_j$ for $j>i$, and induces the identity
+modulo $D_p(X)$. Since $X_p=N_p(X)\oplus D_p(X)$, the product is the
 projection along $D_p(X)$. The columns $\nu_p X(\alpha)(T)$ for
 increasing injections $\alpha:[p]\hookrightarrow[n]$ span
 $N_p(\langle T\rangle)$, since noninjective maps give degeneracies.
@@ -74,8 +74,9 @@ inside cycles, and of cycles inside each chain group, gives
 \end{equation}
 for every finite complex $E$. Indeed, the differential maps the chosen
 complement of $Z_p^{\mathrm{ord}}(E)$ isomorphically onto $B_{p-1}(E)$.
-These choices also show that homology dimensions and differential ranks
-determine the chain isomorphism class and admit cancellation under direct sums.
+Thus the homology dimensions and differential ranks determine the
+isomorphism class of a finite complex. Their additivity gives cancellation
+under direct sums.
 
 For the normalized simplex complex, the dimensions of its chain groups
 and its homology give
@@ -137,9 +138,9 @@ $\pi_M=\varphi\pi_Lg=\varphi\lambda r$, so $V'\subseteq M$.
 
 Cancellation in \eqref{eq:finite-chain-splitting} gives a chain
 isomorphism $a:V\to V'$. Define $u$ by $u|_U=f|_U$ and $u|_V=a$.
-The two direct sums show that $u$ is invertible. Its quotient map
-agrees with $\varphi\pi_L$ on $U$ and vanishes on $V$, proving the
-specified lifting identity. Taking kernels gives $u(L)=M$.
+The two direct sums show that $u$ is invertible. On $U$, $\pi_Mu$
+agrees with $\varphi\pi_L$. Both maps vanish on $V$, so
+$\pi_Mu=\varphi\pi_L$. Taking kernels gives $u(L)=M$.
 Conversely, such an automorphism induces an isomorphism of quotients.
 \end{proof}
 
@@ -154,7 +155,7 @@ Hence $L(T')=a^{-1}L(T)$ and
 $\langle T'\rangle=\langle T\rangle$. Thus the set
 $\{L(T):T\in X_n\}$ is invariant under the automorphism group.
 Equation~\eqref{eq:generated-normalization}, Dold--Kan and
-Proposition~\ref{prop:quotient-lift} identify its orbits with the abstract
+Proposition~\ref{prop:quotient-lift} identify its orbits with the
 simplicial isomorphism classes of the generated modules.
 There are only finitely many such orbits: the chain dimensions and
 differential ranks of $C/L$ are bounded integers.
@@ -166,7 +167,7 @@ Put $\mathcal D=N(X(\mathbf c;K))$. A subcomplex $L\subseteq C$ is
 
 \begin{proposition}\label{prop:kernel-realizability}
 Let $K$ be a field, $n\geq0$, $C=N(K[\Delta^n])$, and
-$X=X(\mathbf c;K)$ for arbitrary nonnegative tail lengths $\mathbf c$.
+$X=X(\mathbf c;K)$ with $\mathbf c\in\mathbb Z_{\geq0}^k$.
 For a subcomplex $L\subseteq C$ and $Q=C/L$, the following are equivalent:
 \begin{enumerate}
 \item $L$ is realizable in $X$.
@@ -208,16 +209,15 @@ property of $P$ identifies it with $f_T$ for the image $T$ of the
 identity $n$-simplex. Its normalized kernel is $L$, so $L=L(T)$.
 \end{proof}
 
-Proposition~\ref{prop:disks} identifies $B_p(\mathcal D)$ with the
-coordinate module $Z_p$ of Section~\ref{sec:normalized} for every $p\geq0$.
+By Proposition~\ref{prop:disks}, $B_p(\mathcal D)=Z_p$ for every $p\geq0$,
+with $Z_p$ as in Section~\ref{sec:normalized}.
 For $p>0$, $Z_p^{\mathrm{ord}}(\mathcal D)=Z_p$, whereas
 \[
  Z_0^{\mathrm{ord}}(\mathcal D)=B\oplus Z_0,\qquad
  \dim_K Z_0^{\mathrm{ord}}(\mathcal D)=\prod_a(c_a+1),\qquad
  \dim_K B_0(\mathcal D)=\prod_a(c_a+1)-\prod_a c_a.
 \]
-In particular, positive tails contribute ordinary degree-zero cycles
-through the summand $B$. The remaining dimensions in
+The summand $B$ is nonzero precisely when every $c_a>0$. The remaining dimensions in
 \eqref{eq:realizability-inequalities} are given by Corollary~\ref{cor:ranks}.
 
 For example, when $\mathbf c=(1,1)$, the ordinary cycle dimensions
@@ -226,15 +226,15 @@ The complex $Q=D^1(K^4)$ is a quotient of $N(K[\Delta^4])$ by
 \eqref{eq:simplex-projective}. It satisfies the cycle inequalities,
 but $\dim B_0(Q)=4>3=\dim B_0(\mathcal D)$, so it does not embed.
 
-\subsection{Matrix and sparse coordinate examples}
+\subsection{Matrix examples and homology in higher degrees}
 
 \begin{example}\label{ex:parameter-jump}
-For $t\in K$, take empty tails and
+For $\mathbf c=(0,0)$ and $t\in K$, let
 \[
  T(t)=\begin{pmatrix}0&1&0\\0&1&1\\1&1&t\end{pmatrix}\in X_2,
  \qquad Y_t=\langle T(t)\rangle.
 \]
-In $N_1(X)$, use coordinates $(E_{01},E_{10},E_{11})$.
+Use the ordered basis $(E_{01},E_{10},E_{11})$ of $N_1(X)$.
 Restriction to vertices $1,2$ gives
 $y=\left(\begin{smallmatrix}1&1\\1&t\end{smallmatrix}\right)$ with $d_1y=1$. Subtracting the all-ones matrix
 $s_0(1)$ gives $\nu_1y=(t-1)E_{11}$.
@@ -243,9 +243,9 @@ The three normalized restrictions are
  v_{01}=(1,0,1),\qquad v_{02}=(0,1,t),\qquad
  v_{12}=(0,0,t-1).
 \]
-Their determinant is $t-1$. The normalized image of the top simplex
+The matrix with these columns has determinant $t-1$. The normalized image of the top simplex
 is $E_{12}-E_{21}$, whose differential is $E_{01}-E_{10}$.
-The differential out of $N_1(X)$ reads the $E_{11}$ coordinate.
+The differential $N_1(X)\to K$ sends $(a,b,c)$ to $c$.
 Thus the differential ranks of the generated complex are $(0,1,1)$,
 indexed by source degree, and
 \[
@@ -274,10 +274,10 @@ first Betti number one over $\mathbb Q$ and zero over $\mathbb F_3$.
 \end{example}
 
 \begin{example}\label{ex:sparse-higher-cycle}
-Fix $q\geq1$, use $k=q+1$ axes and any nonnegative tail lengths,
+Fix $q\geq1$, $k=q+1$ and $\mathbf c\in\mathbb Z_{\geq0}^k$,
 and take $T_q=E_{(0,1,\ldots,q)}\in X_q(\mathbf c;K)$.
 Every face of $T_q$ is zero, since its index tuple contains every
-active label. Hence $T_q$ is normalized. All lower-degree generators
+element of $[q]$. Hence $T_q$ is normalized. All lower-degree generators
 of $\langle T_q\rangle$ vanish. In higher degrees, every nondecreasing
 map to $[q]$ is noninjective, so its image is a degeneracy of a
 lower-degree generator. Consequently
@@ -286,29 +286,26 @@ lower-degree generator. Consequently
  H_q(\langle T_q\rangle)\cong K,\qquad
  H_p(\langle T_q\rangle)=0\quad(p\ne q).
 \]
-For $q=2$ and empty tails this uses one nonzero entry in a
-$3\times3\times3$ tensor. For $q=3$ it uses one entry in shape
-$(4,4,4,4)$ and gives one-dimensional third homology.
+When all $c_a=0$, $T_2$ has one nonzero entry in a $3\times3\times3$
+tensor, and $T_3$ has one nonzero entry in shape $(4,4,4,4)$.
 In the full module,
 \[
  \partial_{q+1}E_{(1,2,\ldots,q+1)}=T_q.
 \]
-Thus the same cycle is an ambient boundary. The number of axes is
-minimal: \eqref{eq:cycles} gives $Z_q(X)=0$ for $k\leq q$, so
+The number of axes is minimal. Equation~\eqref{eq:cycles} gives
+$Z_q(X)=0$ for $k\leq q$, so
 no simplicial submodule of such an $X$ has nonzero $q$th homology.
 \end{example}
 
 The repository script \path{experiments/kernel_sequences.py} computes
 the kernel, quotient and homology data in these examples.
 
-\subsection{Graph chains in shifted matrix slices}
+\subsection{The incidence complex of a graph}
 
 Let a finite graph have $v$ vertices and $e$ oriented edges, each
 numbered separately starting at $1$. Write $u_j\to w_j$ for edge $j$.
-Take $X=X(\mathbf c;A)$ with tail lengths $\mathbf c=(r,r,r)$,
-where $r\geq\max(v,e)$. Write a tensor as a
-family of matrices, with its third coordinate specifying the slice.
-The following generators are supported in fixed tail slices:
+Take $X=X((r,r,r);A)$ with $r\geq\max(v,e)$. Assign to each
+vertex $t$ and each edge $j$ the tensors
 \[
  a_t=E_{(0,t,t)}\in X_0,\qquad
  T_j=E_{(0,u_j+1,u_j+1)}+E_{(1,w_j+1,w_j+1)}
@@ -323,7 +320,7 @@ has normalized complex $A^e\to A^v$ in degrees $1,0$, with
 differential sending edge $j$ to its target minus its source.
 \end{proposition}
 \begin{proof}
-The vertex tensors are distinct coordinate units. The normalized
+The vertex tensors are distinct standard basis vectors of $X_0$. The normalized
 edges $b_j=T_j-s_0a_{u_j}$ are linearly independent because the
 coordinate $(0,1,j+1)$ occurs with coefficient $1$ in $b_j$ and
 vanishes on the other normalized edges. Also
@@ -332,9 +329,10 @@ degeneracies of vertices, and every generator in higher degrees
 is a degeneracy. The normalization projection kills these terms.
 \end{proof}
 
-The boundaries of the edges of a spanning forest form a basis
-of the kernel of the vertex-sum morphism on each component. Subtracting
-forest paths from the remaining edges gives a basis of cycles.
+On each component, the boundaries of the edges of a spanning tree form
+a basis of the kernel of the augmentation $a_t\mapsto 1$.
+From each remaining edge subtract the $1$-chain of the tree path from its
+source to its target. These differences form a basis of the cycle module.
 Thus $H_0(Y_G)\cong A^b$ and $H_1(Y_G)\cong A^{e-v+b}$, where $b$
 is the number of components. The Petersen graph has ten vertices,
 fifteen edges, and one component, so its first homology is $A^6$.
@@ -342,9 +340,9 @@ The script \path{rank_shifted_homology.py} computes its incidence
 rank from the normalized tensor faces over $\mathbb Q$
 \cite{SparseShiftedTensors}.
 
-The two-axis cycle module in degree one has basis $E_{(0,1)}$ and
-$E_{(1,0)}$ by \eqref{eq:cycles}. Over a field, this bounds first
-homology of every two-axis simplicial submodule by dimension two.
+For $k=2$, the module of degree-one cycles has basis $E_{(0,1)}$ and
+$E_{(1,0)}$ by \eqref{eq:cycles}. Over a field, every simplicial
+submodule of $X$ then has first Betti number at most two.
 
 \subsection{Boundary ranks of ordered adjacency matrices}
 
@@ -413,11 +411,11 @@ upper triangular matrix $U$ records the $n-1$ consecutive pairs of $\pi$,
 which proves the full-rank assertion.
 
 A nonzero minor of $N$ of order $r$ has a determinant term selecting $r$
-edges with distinct tails and distinct heads. Since all edges point forward,
+edges with distinct initial vertices and distinct terminal vertices. Since all edges point forward,
 they give a cover by $n-r$ paths, including singletons. Conversely,
 concatenate the paths of a minimum cover, listing each in traversal order.
-Their $n-p(H)$ edges join successive vertices. Taking their tails as rows
-and their heads as columns gives an upper triangular minor with diagonal
+Their $n-p(H)$ edges join successive vertices. Taking their initial vertices as rows
+and their terminal vertices as columns gives an upper triangular submatrix with diagonal
 entries $1$.
 \end{proof}
 
@@ -436,11 +434,11 @@ distribution of $\rank B_\pi$. For the Petersen graph, $240$ orders give
 rank~$18$. The repository script \path{interleaved_graph_paths.py} counts
 paths by endpoint and vertex subset.
 
-Without interleaving, the boundary-rank distribution does not determine the
+Without the inserted isolated vertices, the distribution of boundary ranks does not determine the
 Hamiltonian path count. Every order gives the zero boundary for both $K_4$
 and the edgeless graph on four vertices, since the four deletion faces of
 $K_4$ coincide and cancel over $\mathbb F_2$. The two graphs have $24$ and
-$0$ Hamiltonian orders, respectively.
+$0$ oriented Hamiltonian paths, respectively.
 
 \input{dendroidal_section}
 
@@ -465,13 +463,13 @@ nonempty open subset. Constant-rank kernels define a morphism
  \Psi:U\longrightarrow G=\prod_{p=0}^n\operatorname{Gr}(\ell_p,C_p),
  \qquad T\longmapsto(L_p(T))_p.
 \end{equation}
-The tuples of kernels are chain subcomplexes of $C$, since $g_T$
-is a chain morphism. Chevalley's theorem \cite[Tag 054K]{Stacks}
-makes the image $\mathcal M=\Psi(U)$ constructible. Let $Y$ be its
+Each $L(T)$ is a subcomplex of $C$ because $g_T$
+is a chain map. By Chevalley's theorem \cite[Tag 054K]{Stacks},
+the image $\mathcal M=\Psi(U)$ is constructible. Let $Y$ be its
 reduced Zariski closure.
 
 \begin{proposition}\label{prop:kernel-rationality}
-The reduced closure $Y$ of the kernel image is rational over $K$,
+The reduced closure $Y$ of $\Psi(U)$ is rational over $K$,
 that is, birational over $K$ to an affine space.
 \end{proposition}
 \begin{proof}
@@ -490,7 +488,7 @@ Let $F=K(Y)$ be the function field of $Y$, let $\eta$ be its generic
 point, and write $W_F,U_F$ for base change from $K$ to $F$.
 Let $V_\eta\subset W_F$ be the linear subspace defined by the incidence
 conditions at $\eta$. Its intersection with $U_F$
-is nonempty, since $\Psi$ is dominant onto its image closure. Put
+is nonempty, since $\Psi:U\to Y$ is dominant. Put
 $d=\dim_F V_\eta$. Choose $d$ coordinate functions on $W$ whose
 restriction gives an isomorphism $V_\eta\to F^d$, and denote their
 joint map by $\pi:W\to K^d$. Solving the defining linear equations
@@ -513,12 +511,12 @@ Identify $\operatorname{Gr}(2,K^3)$ with $\mathbb P_K^2$ by sending
 the plane $\ker(a,b,c)$ to the point $[a:b:c]$.
 
 \begin{proposition}\label{prop:three-by-three}
-For shape $(3,3)$, the generic normalized kernel has dimensions
-$2,0,0$ in degrees $0,1,2$. Under this identification the kernel image is
+For shape $(3,3)$ and every $T\in U$, the dimensions of $L_p(T)$ in
+degrees $0,1,2$ are $2,0,0$. Under this identification the image of $\Psi$ is
 \[
  \mathcal M=\mathbb P_K^2\setminus\{[1:1:1]\}.
 \]
-For every $T\in U$,
+The generated submodule has homology
 \[
  H_1(\langle T\rangle)\cong K,
  \qquad H_j(\langle T\rangle)=0\quad(j\ne1).
@@ -552,9 +550,9 @@ is injective, the chain-map identity makes $g_{T,2}$ injective as
 well. These are maximal ranks in all degrees, and
 $U=\{T:\det B_T\ne0\}$. Thus on $U$ the kernel
 complex is $\ker(a,b,c)$ in degree zero and zero elsewhere.
-Conversely, every nonconstant projective diagonal is realized by
-choosing the first two rows of the displayed matrix to complete its
-last row to a basis. This construction works over every residue field.
+Conversely, for every $[a:b:c]\ne[1:1:1]$ the first two rows of $B_T$
+can be chosen to complete its last row to a basis. This construction
+works over every residue field.
 Under the identification of $\operatorname{Gr}(2,K^3)$ with
 $\mathbb P_K^2$, the kernel map therefore has exactly the stated image.
 

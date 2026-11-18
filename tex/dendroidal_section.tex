@@ -6,12 +6,12 @@ edge set $E(T)$, put $I(T)=\prod_{a=1}^k(E(T)\sqcup C_a)$, where each
 $C_a$ is a fixed finite set. Pullback along colour maps, extended by
 the identity on the $C_a$, defines $D:\Omega^{\mathrm{op}}\to
 \mathbf{Mod}_A$, with $D(T)=A^{I(T)}$. On linear trees the colour maps
-are the ordinal maps, so this restricts to $X(\mathbf c;A)$ for
-$c_a=|C_a|$.
+are ordinal maps. Numbering the elements of each $C_a$ from $1$ to
+$c_a=|C_a|$ identifies this restriction with $X(\mathbf c;A)$.
 
 An elementary inner face contracts an inner edge. For a tree with
-at least two vertices, an elementary outer face prunes an endpoint
-of the tree of vertices, retaining its one incident inner edge.
+at least two vertices, an elementary outer face removes a vertex
+incident to just one inner edge and retains that edge.
 The elementary faces of a one-vertex tree are its individual edges.
 For an elementary face $F:S\to T$, the horn omitting $F$ is the union
 of the representables of the other elementary faces $G:S_G\to T$.
@@ -51,16 +51,18 @@ as well as on the included faces.
 Take the two-vertex tree with vertices $u:a\to e$ and
 $v:(e,b)\to r$, and omit the contraction of $e$. Its two included faces have colour
 sets $\{a,e\}$ and $\{e,b,r\}$, meeting in the single-edge tree on $e$.
-The two tensors agree on their common index set and extend by zero
-off their union, so $\rho_{T,F}$ is surjective. With two axes and empty tails, $S$ is the corolla
-$(a,b)\to r$ and $K(S)$ is spanned by its six off-diagonal units.
-The image of $F^*$ is spanned by the units at $(a,b),(b,a),(a,r),(r,a)$.
+Compatible tensors agree on the intersection and extend by zero off the
+union, so $\rho_{T,F}$ is surjective. The domain $S$ of the omitted face is the corolla
+$(a,b)\to r$. For $k=2$ and $C_1=C_2=\varnothing$, the six off-diagonal
+matrix units form a basis of $K(S)$. The image of $F^*$ has basis
+$E_{(a,b)},E_{(b,a)},E_{(a,r)},E_{(r,a)}$.
 Every tensor in the image vanishes at $(b,r)$ and $(r,b)$ because
 both pairs lie in the included face with colours $\{e,b,r\}$.
 
 \begin{theorem}\label{thm:tree-cutoff}
-For $k$ axes and arbitrary fixed tails, $\rho_{T,F}$ is an isomorphism
-for every elementary face $F$ of a tree $T$ with at least $k+2$ vertices.
+For any finite sets $C_1,\ldots,C_k$, the restriction $\rho_{T,F}$ is an
+isomorphism for every elementary face $F$ of a tree $T$ with at least
+$k+2$ vertices.
 For each $k\geq2$ there are a tree $T$ with $k+1$ vertices and an
 inner face $F$ such that $\operatorname{coker}\rho_{T,F}\cong A^{k!}$.
 For $k=1$, every inner horn fills uniquely.
@@ -74,8 +76,9 @@ $\rho_{T,F}$ is the diagonal $A\to A^{c_x}$. For $c_x=0$ this gives
 one copy of $A$ in the kernel. For $c_x\geq1$ it gives a copy of
 $A^{c_x-1}$ in the cokernel.
 
-Let $T$ have $n\geq3$ vertices and $o$ outer faces. The outer vertices
-are the endpoints of the tree of vertices, so $o\geq2$. The included
+Let $T$ have $n\geq3$ vertices and $o$ outer faces. The inner edges join
+the vertices of $T$ in a tree whose endpoints are the outer vertices,
+so $o\geq2$. The included
 contractions form a clique among the faces containing a tuple, as
 do the included prunings. A contraction and a pruning also give
 adjacent vertices when the contracted edge is not incident to the pruned
@@ -88,8 +91,8 @@ $n\geq3$ an inner edge has at most one outer endpoint.
 
 The remaining included faces delete pairwise disjoint sets of
 edges. The tuple must contain at least one edge from each such set,
-so it contains at least $n+o-4$ distinct edges. If $o=2$, the tree
-of vertices is a path. Pruning $v$ and then its neighbour, or
+so it contains at least $n+o-4$ distinct edges. If $o=2$, the inner
+edges form a path. Pruning $v$ and then its neighbour, or
 contracting $e$ and then pruning the merged vertex, gives the same
 common face. It contains the edges deleted by every other included
 contraction and, if the other pruning is included, all the edges
