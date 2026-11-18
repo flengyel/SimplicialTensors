@@ -2,6 +2,9 @@
 
 The current manuscript is *Computations with simplicial tensor modules*.
 The [compiled manuscript](dstm_short.pdf) has fourteen pages.
+The [arXiv replacement source archive](submissions/dstm_v3_arxiv_source.tar.gz)
+contains the LaTeX source, the BibTeX database, the compiled bibliography,
+and the two ancillary scripts with their instructions.
 Build it from the repository root:
 
 ```sh
@@ -36,7 +39,7 @@ run the following from `tex/`:
 
 ```sh
 mkdir -p submissions
-tar -czf submissions/dstm_arxiv_source.tar.gz dstm_short.tex generated_section.tex \
+tar -czf submissions/dstm_v3_arxiv_source.tar.gz dstm_short.tex generated_section.tex \
   dendroidal_section.tex dstm_short.bib dstm_short.bbl anc
 ```
 
