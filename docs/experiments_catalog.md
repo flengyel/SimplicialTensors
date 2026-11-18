@@ -7,6 +7,7 @@ its dependencies, output, and known execution or interpretation limits.
 ## Scripts and notebooks
 
 - `experiments/Gemini_hallicination.py` — Tensor-product examples comparing selected Moore fillers with their input tensors. See [Gemini_hallicination](experiments/Gemini_hallicination.md).
+- `experiments/affine_boundary_ranks.py` — Counts adjacency boundary ranks over all 1,536 affine orders for the rook and Shrikhande graphs. See [affine_boundary_ranks](experiments/affine_boundary_ranks.md).
 - `experiments/atlas_cospectral_scan.py` — Graph-atlas spectral grouping and mod-two deletion-boundary rank enumeration. See [atlas_cospectral_scan](experiments/atlas_cospectral_scan.md).
 - `experiments/bdry_network_experiment1.py` — Seeded PyTorch training with boundary perturbations after optimizer steps. See [bdry_network_experiment1](experiments/bdry_network_experiment1.md).
 - `experiments/boundary_augmented_network.py` — PyTorch prototype comparing boundary and random weight perturbations. See [boundary_augmented_network](experiments/boundary_augmented_network.md).
@@ -30,6 +31,7 @@ its dependencies, output, and known execution or interpretation limits.
 - `experiments/horn_map_reduce.py` — Dask enumeration of coordinates absent from the included horn faces. See [horn_map_reduce](experiments/horn_map_reduce.md).
 - `experiments/hypergraph_homology.py` — Exact embedded and closure homology of fixed hypergraphs, with optional lifted representatives. See [hypergraph_homology](experiments/hypergraph_homology.md).
 - `experiments/interleaved_graph_paths.py` — Counts vertex orders giving an interleaved adjacency boundary of full rank for the Petersen, rook, and Shrikhande graphs. See [interleaved_graph_paths](experiments/interleaved_graph_paths.md).
+- `experiments/interleaved_rank_distributions.py` — Counts all vertex orders by the mod-two adjacency boundary rank after insertion of isolated vertices for the Petersen, rook, and Shrikhande graphs. See [interleaved_rank_distributions](experiments/interleaved_rank_distributions.md).
 - `experiments/kernel_sequences.py` — Universal kernel matrices, sparse kernel realization, quotient-isomorphism lifts, and capacity obstructions. See [kernel_sequences](experiments/kernel_sequences.md).
 - `experiments/loss_experiment.py` — Reconstruction-loss distributions over 10,000 random-matrix trials. See [loss_experiment](experiments/loss_experiment.md).
 - `experiments/matrix_boundary_homotopy_identity.py` — Signed and mod-two boundary checks under induced vertex permutations. See [matrix_boundary_homotopy_identity](experiments/matrix_boundary_homotopy_identity.md).
@@ -51,6 +53,8 @@ its dependencies, output, and known execution or interpretation limits.
 - `experiments/sagemath_normalized_tensor_homology.py` — Exact tensor and relative horn homology over rational or prime fields using SymPy. See [sagemath_normalized_tensor_homology](experiments/sagemath_normalized_tensor_homology.md).
 - `experiments/shape_generator.py` — Bounded shape enumeration ordered by degree, axis count, and offset sum. See [shape_generator](experiments/shape_generator.md).
 - `experiments/simplicial_permutation_group.py` — Finite checks of cycle deletion under vertex removal. See [simplicial_permutation_group](experiments/simplicial_permutation_group.md).
+- `experiments/three_by_three_kernels.py` — Enumerates all 512 binary three-by-three matrices and counts the degree-zero kernel planes on the maximal-rank locus. See [three_by_three_kernels](experiments/three_by_three_kernels.md).
+- `experiments/two_vertex_tensor_horn.py` — Computes the two-axis tensor horn on a two-vertex tree and the kernel and cokernel of restriction to the omitted face. See [two_vertex_tensor_horn](experiments/two_vertex_tensor_horn.md).
 - `experiments/verify_degenerate_preference.py` — Finite checks of the algorithm's degenerate filler selection. See [verify_degenerate_preference](experiments/verify_degenerate_preference.md).
 - `experiments/verify_injective_face_map.py` — Injectivity checks on coordinate tensors surviving a fixed face. See [verify_injective_face_map](experiments/verify_injective_face_map.md).
 
