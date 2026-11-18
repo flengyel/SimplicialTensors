@@ -537,76 +537,71 @@ of rank $18$ give its oriented Hamiltonian paths.
 \appendix
 \section{Kernel families in a product of Grassmannians}
 \label{app:kernel-families}
-Fix a field $K$, a degree $n$ and a tuple $\mathbf c$ as in Section~\ref{sec:generated}.
-For $T$ in the affine space $W=X^{\mathbf c}_n(K)$, write
-$L_p(T)=\ker(g_{T,p}:C_p\to N_p(X))$.
+Fix a field $K$, a degree $n$ and excesses $\mathbf c$ as in
+Section~\ref{sec:generated}. Let $W$ be the affine $K$-space of degree-$n$
+tensors, so that $W(F)=X^{\mathbf c}_n(F)$ for every field extension $F/K$.
+Write $C_F$ and $\mathcal D_F$ for the scalar extensions of $C=N(K[\Delta^n])$
+and $\mathcal D=N(X^{\mathbf c}(K))$. By representability and Dold--Kan,
+$T\mapsto g_T$ identifies $W(F)$ with the space of chain maps $C_F\to\mathcal D_F$.
 
-For a finite-dimensional $K$-vector space $V$ and $0\leq r\leq\dim V$,
-write $\operatorname{Gr}(r,V)$ for the Grassmannian of $r$-dimensional
-subspaces of $V$. Its points over an extension $F/K$ correspond to the
-$r$-planes in $V\otimes_K F$. The fiber of its tautological subbundle
-at such a point is the corresponding plane.
-
-For $0\leq p\leq n$, let $r_p$ be the rank of $g_{T,p}$ over the
-function field $K(W)$ and put $\ell_p=\dim C_p-r_p$.
-Let $U\subseteq W$ be the locus where, for each $p$, some minor of order
-$r_p$ is nonzero. This open set contains the generic point of $W$.
-The kernels on $U$ define a morphism
+Let $r_p$ be the rank of $g_{T,p}$ at the generic point of $W$,
+and put $\ell_p=\dim C_p-r_p$. The locus $U$ where these ranks are attained
+simultaneously is dense and open. On $U$ the kernels define a morphism to
+the product of Grassmannians of $\ell_p$-planes in $C_p$,
 \begin{equation}\label{eq:kernel-map}
  \Psi:U\longrightarrow G=\prod_{p=0}^n\operatorname{Gr}(\ell_p,C_p),
- \qquad T\longmapsto(L_p(T))_p.
+ \qquad T\longmapsto (\ker g_{T,p})_p.
 \end{equation}
-The image $\mathcal M=\Psi(U)$ in the underlying space of $G$ is
-constructible by Chevalley's theorem \cite[Tag 054K]{Stacks}.
-Let $Y$ be its reduced Zariski closure.
+The image of $\Psi$ in the underlying space of $G$ is constructible by
+Chevalley's theorem \cite[Tag 054K]{Stacks}. Its reduced closure $Y$ is integral since $U$ is irreducible.
 
 \begin{proposition}\label{prop:kernel-rationality}
-If $K$ is infinite, the reduced closure $Y$ of the kernel family
-$\Psi(U)$ is birational over $K$ to an affine space.
+Over any field $K$, the reduced closure of the kernel family $\Psi(U)$ is
+birational to an affine space over $K$.
 \end{proposition}
 \begin{proof}
-Since $U$ is irreducible, $Y$ is integral. In $W\times Y$ let $\mathcal E$
-be the incidence scheme defined by $g_{T,p}(L_p)=0$ on the tautological
-subbundles. These equations are linear in $T$. Over $U$ the inclusion
-$L_p\subseteq\ker g_{T,p}$ is an equality because both are subbundles of the
-same trivial bundle, of rank $\ell_p$. Thus $\mathcal E\cap(U\times Y)$
-is the graph of $\Psi$.
+Let $\eta$ be the generic point of $W$ and $F=K(W)$. By
+\eqref{eq:finite-chain-splitting}, $\im g_\eta$ is isomorphic to $Q_F$ for a
+complex $Q$ over $K$ with the same disk and sphere multiplicities.
+By the proof of Proposition~\ref{prop:kernel-realizability}, cycle and boundary
+dimensions determine whether one complex embeds in another. Scalar extension
+preserves these dimensions, so $Q_F\hookrightarrow\mathcal D_F$ gives an embedding
+$Q\hookrightarrow\mathcal D$ over $K$. Applied to the duals with degrees reversed,
+the same criterion gives $C\twoheadrightarrow Q$ from $C_F\twoheadrightarrow Q_F$.
+The composite $C\to Q\to\mathcal D$ is $g_{T_0}$ for some $T_0\in U(K)$.
 
-Choose bases of the tautological subbundles near the generic point of $Y$.
-In the matrix of the incidence equations choose a nonzero minor of maximal
-order $m$. Let $\pi:W\to\mathbb A_K^d$ project onto the $d=\dim W-m$
-coordinates outside its columns. On the nonempty open $Y^\circ$ where
-this minor is invertible, solving for the other $m$ coordinates identifies
-$\mathcal E|_{Y^\circ}$ with $Y^\circ\times\mathbb A_K^d$.
-The graph is open in $\mathcal E$, so $(\Psi,\pi)$ identifies
-$\Psi^{-1}(Y^\circ)$ with an open subset of this product.
+In $W\times Y$ let $\mathcal E$ be defined by the incidence equations
+$g_{T,p}(L_p)=0$ on the tautological subbundles $L_p$.
+Over $U$ the inclusion $L_p\subseteq\ker g_{T,p}$ is an equality of subbundles
+of the same rank, so $\mathcal E\cap(U\times Y)$ is the graph of $\Psi$.
+At $y_0=\Psi(T_0)$ the solutions are the chain maps $Q\to\mathcal D$,
+since $C/\ker g_{T_0}\cong Q$. At $\Psi(\eta)$ the solutions over $F$ are the
+chain maps $Q_F\to\mathcal D_F$. The solution spaces have the same dimension, so
+the incidence equations have their generic rank $m$ at $y_0$.
 
-The nonempty open $\Psi^{-1}(Y^\circ)\subseteq W$ contains a $K$-point
-$T_0$ because $K$ is infinite. Put $c=\pi(T_0)$ and $S=\pi^{-1}(c)$.
-Restricting the isomorphism to $\pi=c$ identifies $S\cap\Psi^{-1}(Y^\circ)$,
-a nonempty open subset of $S\cong\mathbb A_K^{\dim W-d}$, with an open
-subset of $Y^\circ$.
+In local bases at $y_0$ choose a nonzero minor of order $m$ and let $Y^\circ$
+be the open set where it is invertible. Since $Y$ is integral, all larger
+minors vanish there. Projection $\pi$ onto the $d=\dim W-m$ coordinates
+outside the minor's columns identifies $\mathcal E|_{Y^\circ}$ with
+$Y^\circ\times\mathbb A_K^d$ by solving the linear equations in $T$.
+Intersect the open graph with $\pi(T)=\pi(T_0)$. This identifies an open
+neighborhood of $T_0$ in the affine $m$-plane $\pi^{-1}(\pi(T_0))$
+with an open neighborhood of $y_0$ in $Y$. In particular,
+$\dim Y=m=\dim W-\dim_K\operatorname{Hom}_{\mathrm{Ch}}(Q,\mathcal D)$.
 \end{proof}
 
-Identify $\operatorname{Gr}(2,K^3)$ with the dual projective plane by sending
-the plane $\ker(a,b,c)$ to the point $[a:b:c]$.
-
 \begin{proposition}\label{prop:three-by-three}
-For shape $(3,3)$ over any field $K$, the kernel dimensions on $U$ in
-degrees $0,1,2$ are $2,0,0$. The image of $\Psi$ is
-\[
- \mathcal M=\mathbb P_K^2\setminus\{[1:1:1]\}.
-\]
-Its $K$-points form one orbit under chain automorphisms of $C$.
-For each $T\in U(K)$ the generated submodule has homology
-\[
- H_1(\langle T\rangle)\cong K,
- \qquad H_j(\langle T\rangle)=0\quad(j\ne1).
-\]
+Let $n=2$ and $\mathbf c=(0,0)$, so $T$ is a $3\times3$ matrix. On $U$
+the kernel dimensions in degrees $0,1,2$ are $2,0,0$. Identify a plane
+$\ker(a,b,c)$ with $[a:b:c]$ in the dual projective plane $G$. For every
+field extension $F/K$, the image $\Psi(U(F))=G(F)\setminus\{[1:1:1]\}$
+is one orbit under chain automorphisms of $C_F$.
+For each $T\in U(F)$, $H_1(\langle T\rangle)\cong F$ and
+$H_j(\langle T\rangle)=0$ for $j\ne1$.
 \end{proposition}
 \begin{proof}
-Write $T=(t_{ij})$ and $(a,b,c)=(t_{00},t_{11},t_{22})$.
-In degree zero $g_{T,0}$ is the row $(a,b,c):K^3\to K$.
+Over $F$, write $T=(t_{ij})$ and $(a,b,c)=(t_{00},t_{11},t_{22})$.
+In degree zero $g_{T,0}$ is the row $(a,b,c):F^3\to F$.
 In degree one, normalization subtracts $t_{ii}$ from every entry of
 the restriction to $i,j$, for $i<j$. In the basis $(E_{01},E_{10},E_{11})$
 of $N_1(X)$ the normalized restrictions to $01,02,12$ are the columns of
@@ -617,28 +612,30 @@ of $N_1(X)$ the normalized restrictions to $01,02,12$ are the columns of
  b-a&c-a&c-b
  \end{pmatrix}.
 \]
-For fixed $a,b,c$ the first two rows are arbitrary. Over any extension
-of $K$ they can complete the last row to a basis exactly when $a,b,c$
-are not all equal. If $\det B_T\ne0$, then $g_{T,0}$ has rank one
-and $g_{T,1}$ is injective. Since the top simplex of $\Delta^2$ has
-nonzero boundary and spans $C_2$, the chain-map identity makes $g_{T,2}$ injective.
+For fixed $a,b,c$ the first two rows are arbitrary. They can complete the
+last row to a basis exactly when $a,b,c$ are not all equal. If $\det B_T\ne0$,
+then $g_{T,0}$ has rank one and $g_{T,1}$ is injective. The top simplex
+spans $C_2$ and has nonzero boundary, so $g_{T,2}$ is also injective.
 Thus the maximal ranks are $(1,3,1)$ and $U=\{T:\det B_T\ne0\}$.
-The kernel tuple on $U$ is $(\ker(a,b,c),0,0)$. The choice of rows over
-each residue field gives the stated image. Above $[a:b:c]\in\mathcal M$
-the fiber is the open subset $\det B_T\ne0$ of the seven-dimensional
-linear space of matrices whose diagonal lies on the line spanned by $(a,b,c)$.
+The kernel tuple is $(\ker(a,b,c),0,0)$. The row construction works over
+every $F$, so it gives the asserted image and $Y=G$. The fiber over each such
+plane is the open set $\det B_T\ne0$ in the seven-dimensional space of matrices
+whose diagonals lie on the line spanned by $(a,b,c)$.
 
-The restriction of the augmentation $(1,1,1)$ to $\ker(a,b,c)$
-is surjective with one-dimensional kernel, since $(a,b,c)$ is
-nonconstant. Formula \eqref{eq:generated-homology} gives the homology.
-The quotient complexes have the same chain dimensions and differential
-ranks, so \eqref{eq:finite-chain-splitting} makes them isomorphic.
+The augmentation $(1,1,1)$ restricts to a nonzero linear form on
+$\ker(a,b,c)$, with one-dimensional kernel. The homology follows from
+\eqref{eq:generated-homology}. Each quotient has chain dimensions $(1,3,1)$
+and differential ranks $(0,1,1)$, so they are all isomorphic by \eqref{eq:finite-chain-splitting}.
 Proposition~\ref{prop:quotient-lift} gives the orbit assertion.
 \end{proof}
 
-Outside $U$, the all-ones matrix has kernel tuple $(\ker(1,1,1),C_1,C_2)$.
-It generates the constant simplicial module $K$, with homology $K$ in
-degree zero alone. Over $\mathbb F_2$,
-\program{experiments/three_by_three_kernels.py}{three_by_three_kernels.py}
-enumerates all $512$ matrices. Exactly $144$ lie in $U$, with $24$ above
-each of its six kernel planes.
+Over $\mathbb F_q$ there are $q^2+q$ such planes. For each one, $q-1$
+diagonals represent its normal. Given the nonzero last row of $B_T$, there
+are $q^3-q$ choices for the first row outside its span, then $q^3-q^2$
+choices for the second outside the span of the other two. Hence each plane
+occurs for $(q-1)(q^3-q)(q^3-q^2)$ matrices.
+For $q=2$, \program{experiments/three_by_three_kernels.py}{three_by_three_kernels.py}
+computes the kernel of each of the $512$ matrices and finds $24$ above each
+of six planes, $144$ in all. Over any $K$, the all-ones matrix lies outside $U$. Its kernel is
+$(\ker(1,1,1),C_1,C_2)$, and it generates the constant simplicial module with homology
+$K$ in degree zero alone.

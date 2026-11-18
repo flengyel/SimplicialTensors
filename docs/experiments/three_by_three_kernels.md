@@ -20,4 +20,6 @@ Of the 512 labelled matrices, 144 attain the maximal ranks $(1,3,1)$ in degrees 
 | $(1,1,0)$ | 24 |
 | $(1,1,1)$ | 0 |
 
+Over $\mathbb F_q$, every plane except the one with normal $[1:1:1]$ occurs on the maximal-rank locus. Each of these $q^2+q$ planes has $q-1$ choices of diagonal representing its normal. For each diagonal the last row of the degree-one matrix is fixed and nonzero. The other two rows complete it to an ordered basis in $(q^3-q)(q^3-q^2)$ ways. At $q=2$ this gives the six counts of 24 in the table. [Proposition A.2 and the finite-field count](../../tex/generated_section.tex#L593)
+
 The remaining 368 matrices include the all-ones matrix. Its kernel in degree zero is the plane with normal $(1,1,1)$, and its kernels in degrees one and two equal the full source spaces. Its generated submodule has Betti numbers $(1,0,0)$. [Appendix A](../../tex/generated_section.tex)
