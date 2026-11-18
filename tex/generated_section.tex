@@ -379,23 +379,12 @@ For the Petersen graph, over all $10!$ orders, the ranks $4,6,8$ occur
 $45{,}120$, $1{,}019{,}520$, and $2{,}564{,}160$ times, respectively
 (\program{experiments/petersen_brd_right_cosets.py}{petersen_brd_right_cosets.py}).
 
-The ranks of $\partial C_\pi$ alone do not determine the number of
-Hamiltonian paths. Every order of $K_4$ gives zero boundary over
-$\mathbb F_2$, since the four deletion faces coincide. The edgeless graph
-on four vertices also gives zero boundary. The two graphs have $24$ and
-$0$ oriented Hamiltonian paths, respectively
+For both $K_4$ and its edgeless complement, the four deletion faces coincide,
+so $\partial C_\pi=0$ for every order. Their numbers of oriented Hamiltonian
+paths are $24$ and $0$, respectively
 (\program{experiments/interleaved_graph_paths.py\#L94}{small_examples}).
-
-To count such paths in $H$, adjoin $n-1$ isolated vertices
-$z_1,\ldots,z_{n-1}$, where $n=|V(H)|\geq2$.
-For each order $\pi=(v_0,\ldots,v_{n-1})$ of $H$, let $A_\pi$ be the adjacency
-matrix of $H\sqcup(n-1)K_1$ in the order
-$v_0,z_1,v_1,\ldots,z_{n-1},v_{n-1}$. Put $B_\pi=\partial A_\pi$ over $\mathbb F_2$.
-Figure~\ref{fig:interleaved-path} shows the construction for a path on three vertices.
-Let $N_\pi$ be the adjacency matrix of $H$ with each edge oriented forward
-in the order $\pi$.
-Let $p(H)$ be the least number of vertex-disjoint paths covering $V(H)$.
-The paths need not be induced, and single vertices are allowed.
+Figure~\ref{fig:interleaved-path} illustrates the insertion of isolated
+vertices for the path $P_3$.
 
 \begin{figure}[htb]
 \centering
@@ -421,7 +410,7 @@ The paths need not be induced, and single vertices are allowed.
       \node[isolated,label=below:$z_{\i}$] at (2*\i-1,0) {};
   \end{scope}
   \begin{scope}[xshift=9cm,x=0.73cm]
-    \node at (1.7,0.8) {Graph with adjacency matrix $B_\pi$};
+    \node at (1.7,0.8) {Graph with adjacency matrix $\partial A_\pi$};
     \draw[edge line] (0,0) -- (1,0) (2.4,0) -- (3.4,0);
     \foreach \i/\x in {0/0,1/1,2/2.4,3/3.4}
       \node[vertex,label=below:$\i$] at (\x,0) {};
@@ -429,56 +418,67 @@ The paths need not be induced, and single vertices are allowed.
 \end{tikzpicture}
 \caption{The open circles are the inserted isolated vertices. For
 $\pi=(v_0,v_1,v_2)$ the boundary is the adjacency matrix of two disjoint
-edges, so $\rank B_\pi=4$ over $\mathbb F_2$
+edges, so $\rank(\partial A_\pi)=4$ over $\mathbb F_2$
 (\program{experiments/interleaved_graph_paths.py\#L94}{small_examples}).}
 \label{fig:interleaved-path}
 \end{figure}
 
-\begin{proposition}\label{prop:ordered-graph-ranks}
-For every order $\pi$ of a finite simple graph $H$ on $n\geq2$ vertices,
-$\rank B_\pi=2\rank N_\pi$ over $\mathbb F_2$.
-The maximum of $\rank B_\pi$ over all orders is $2(n-p(H))$.
-An order gives rank $2n-2$ precisely when it traces a Hamiltonian path.
-Thus the multiplicity of full rank among the $n!$ orders counts Hamiltonian
-paths, with each path and its reverse counted separately.
+\begin{samepage}
+\begin{proposition}[Hamiltonian paths and the mod-$2$ boundary]\label{prop:ordered-graph-ranks}
+Let $H$ be a finite simple graph on $n\geq2$ vertices, with adjacency entries
+$a_{uv}$. For each vertex order $\pi=(v_0,\ldots,v_{n-1})$, let $A_\pi$
+be the adjacency matrix in the order $v_0,z_1,v_1,\ldots,z_{n-1},v_{n-1}$,
+where the $z_i$ are new isolated vertices. Over $\mathbb F_2$,
+\[
+ \det(\partial A_\pi)=\prod_{i=0}^{n-2}a_{v_i v_{i+1}}.
+\]
+Thus $\partial A_\pi$ has full rank $2n-2$ exactly when $\pi$ traces a
+Hamiltonian path of $H$. The frequency of full rank among the $n!$ orders
+counts each Hamiltonian path in both orientations.
+
+Let $p(H)$ be the minimum number of vertex-disjoint paths covering $V(H)$.
+Single vertices are allowed, and the paths need not be induced.
+Then $\max_\pi\rank(\partial A_\pi)=2(n-p(H))$.
 \end{proposition}
+\end{samepage}
 \begin{proof}
-Write $N=N_\pi$. For an edge $v_iv_j$ with $i<j$, deleting either
+Let $N_\pi$ be the strictly upper triangular part of $C_\pi$, the adjacency
+matrix of $H$ in the order $\pi$. For an edge $v_iv_j$ with $i<j$, deleting either
 endpoint removes the edge. There are $2i$ deletions before both endpoints,
 $2(j-i)-1$ between them, and $2(n-1-j)$ after both.
 Only the deletions between the endpoints contribute modulo $2$,
 at $(2i,2j-1)$ and its transpose.
 Grouping even indices before odd ones gives off-diagonal blocks $U,U^\top$
-and zero diagonal blocks, where $U$ is $N$ without its zero first column
-and zero last row. Hence $\rank B_\pi=2\rank N$. Since $U$ is upper
-triangular, $\det B_\pi=(\det U)^2=\prod_{i=0}^{n-2}N_{i,i+1}$ in
-$\mathbb F_2$. This product is $1$ precisely when consecutive vertices
-of $\pi$ are adjacent.
+and zero diagonal blocks, where $U$ is $N_\pi$ without its zero first column
+and zero last row. Hence $\rank(\partial A_\pi)=2\rank N_\pi$.
+The upper triangular matrix $U$ has diagonal entries $a_{v_i v_{i+1}}$,
+so $\det(\partial A_\pi)=(\det U)^2$ is their product in $\mathbb F_2$.
 
-Expanding a nonzero minor of $N$ of order $r$ gives a choice of
+Expanding a nonzero minor of $N_\pi$ of order $r$ gives a choice of
 $r$ edges with distinct initial vertices and distinct terminal
 vertices. All edges point forward, so they give a cover by $n-r$ paths,
-including singletons. Hence $\rank N\leq n-p(H)$. Conversely,
+including singletons. Hence $\rank N_\pi\leq n-p(H)$. Conversely,
 concatenate the paths of a minimum cover, listing each in traversal order.
 Their $n-p(H)$ edges join consecutive vertices in this order. Taking
 their initial vertices as rows and their terminal vertices as columns, in
-order, gives an upper triangular submatrix with diagonal entries $1$.
+order, gives an upper triangular submatrix with diagonal entries $1$,
+so this order attains the bound.
 \end{proof}
 
 Let $J$ be the all-ones matrix. Over $\mathbb Z$, Stanley's formula
 identifies the coefficient of $t^j$ in $\det(I+t(J-N_\pi))$ with the
 number of directed paths on $j$ vertices, $1\leq j\leq n$
 \cite{StanleyPaths}. For $j=n$ only $\pi$ can be such a path, so
-$\det(J-N_\pi)\bmod 2=\det B_\pi$. Subtracting the last row of $J-N_\pi$
+$\det(J-N_\pi)\bmod 2=\det(\partial A_\pi)$. Subtracting the last row of $J-N_\pi$
 from each earlier row gives $\rank(J-N_\pi)=1+\rank N_\pi$ over
 $\mathbb F_2$, since the first column of $N_\pi$ is zero.
 
 For the $4\times4$ rook graph, counting full-rank mod-$2$ boundaries
-recovers the number of oriented Hamiltonian paths. Write $a_{uv}$ for
-its adjacency entries in $\{0,1\}$. Summing the determinant formula
-over all orders $\pi=(v_0,\ldots,v_{15})$, with the sum in $\mathbb Z$, gives
+recovers the number of oriented Hamiltonian paths. Summing the $0$--$1$
+values of $\det(\partial A_\pi)$ as integers over all vertex orders gives
 \[
- \#\{\pi:\rank_{\mathbb F_2}B_\pi=30\}
+ \#\{\pi:\rank_{\mathbb F_2}(\partial A_\pi)=30\}
+ =\sum_\pi\det(\partial A_\pi)
  =\sum_\pi\prod_{i=0}^{14}a_{v_i v_{i+1}}=22{,}394{,}880.
 \]
 This agrees with the fourth term of OEIS A096970 \cite{OEISRook},
@@ -487,7 +487,7 @@ which counts each path and its reverse separately. The program
 evaluates the sum by grouping paths by endpoint and set of unused vertices.
 
 Table~\ref{tab:interleaved-ranks} gives the distribution of
-$\rank B_\pi$ over all orders. The program
+$\rank(\partial A_\pi)$ over all orders. The program
 \program{experiments/interleaved_rank_distributions.py}{interleaved_rank_distributions.py}
 extends orders one vertex at a time. For each prefix with vertex set $S$,
 write the rows of $N_\pi$ indexed by $S$ as $(P\mid Q)$, with $P$ on
@@ -502,7 +502,7 @@ when some vector in this space has a nonzero $v$-coordinate.
 Each column counts all orders of the original vertices. Omitted ranks have frequency zero.}
 \label{tab:interleaved-ranks}
 \begin{tabular}{r|rrr}
-Rank & Petersen & $4\times4$ rook & Shrikhande \\ \hline
+Rank of $\partial A_\pi$ & Petersen & $4\times4$ rook & Shrikhande \\ \hline
 10 & 491,760 & 0 & 0\\
 12 & 1,411,440 & 337,305,600 & 56,217,600\\
 14 & 1,542,480 & 6,880,444,416 & 940,732,416\\
@@ -523,7 +523,7 @@ $(16,6,2,2)$ and adjacency spectrum $6^1,2^6,(-2)^9$
 \cite{Shrikhande1959}. The program \program{experiments/interleaved_graph_paths.py}{interleaved_graph_paths.py}
 checks $A^2=4I+2J$ over $\mathbb Z$ for both adjacency matrices. The Shrikhande graph has $22{,}230{,}528$
 orders of rank $30$, so the adjacency spectrum does not determine the
-distribution of $\rank B_\pi$. For the Petersen graph the $240$ orders
+distribution of $\rank(\partial A_\pi)$. For the Petersen graph the $240$ orders
 of rank $18$ give its oriented Hamiltonian paths.
 
 \input{dendroidal_section}

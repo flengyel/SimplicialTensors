@@ -1,6 +1,6 @@
 # Interleaved adjacency boundary ranks
 
-For each order of a graph's $n$ vertices, insert an isolated vertex between each successive pair. Let $B$ be the sum over $\mathbb F_2$ of the principal deletion faces of the resulting adjacency matrix. The experiment computes the rank distribution of $B$ over all $n!$ orders.
+For each order $\pi$ of a graph's $n$ vertices, insert an isolated vertex between each successive pair. Let $A_\pi$ be the adjacency matrix in the resulting order. Its mod-2 boundary $\partial A_\pi$ is the sum over $\mathbb F_2$ of its principal deletion faces. The experiment computes the distribution of the rank of $\partial A_\pi$ over all $n!$ orders.
 
 From the repository root, run
 
@@ -8,7 +8,7 @@ From the repository root, run
 PYTHONPATH=src python experiments/interleaved_rank_distributions.py
 ```
 
-| Rank of $B$ | Petersen | $4\times4$ rook | Shrikhande |
+| Rank of $\partial A_\pi$ | Petersen | $4\times4$ rook | Shrikhande |
 |---:|---:|---:|---:|
 | 10 | 491,760 | 0 | 0 |
 | 12 | 1,411,440 | 337,305,600 | 56,217,600 |
