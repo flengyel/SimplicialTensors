@@ -527,10 +527,13 @@ Total & $10!$ & $16!$ & $16!$
 The rook and Shrikhande graphs share the strongly regular parameters
 $(16,6,2,2)$ and adjacency spectrum $6^1,2^6,(-2)^9$
 \cite{Shrikhande1959}. The program \program{experiments/interleaved_graph_paths.py}{interleaved_graph_paths.py}
-checks $A^2=4I+2J$ over $\mathbb Z$ for both adjacency matrices. The Shrikhande graph has $22{,}230{,}528$
-orders of rank $30$, so the adjacency spectrum does not determine the
-distribution of $\rank(\partial A_\pi)$. For the Petersen graph the $240$ orders
-of rank $18$ give its oriented Hamiltonian paths.
+checks $A^2=4I+2J$ over $\mathbb Z$ for both adjacency matrices. The different
+frequencies at rank $30$ in Table~\ref{tab:interleaved-ranks} show that the adjacency
+spectrum does not determine the distribution of $\rank(\partial A_\pi)$.
+Counting Hamiltonian paths up to reversal, Wolfram's \texttt{GraphData}
+\cite{WolframGraphData} gives $120$, $11{,}197{,}440$ and $11{,}115{,}264$
+for the Petersen, $4\times4$ rook and Shrikhande graphs, respectively.
+Doubling these counts gives the three full-rank frequencies in the table.
 
 \input{dendroidal_section}
 
@@ -589,6 +592,18 @@ neighborhood of $T_0$ in the affine $m$-plane $\pi^{-1}(\pi(T_0))$
 with an open neighborhood of $y_0$ in $Y$. In particular,
 $\dim Y=m=\dim W-\dim_K\operatorname{Hom}_{\mathrm{Ch}}(Q,\mathcal D)$.
 \end{proof}
+
+Over $\mathbb C$, $Y$ is isomorphic to a Schubert variety.
+The subcomplexes $L\subseteq C$ with $\dim L_p=\ell_p$ form a quiver Grassmannian.
+Cerulli Irelli, Feigin and Reineke embed this Grassmannian in a partial flag variety
+\cite[Example~1.3, Proposition~2.1 and Theorem~2.2]{SchubertQuiver}.
+In this embedding $C_p=V_p/S_p$, where a common Borel subgroup $B$ preserves
+both flags $V_\bullet$ and $S_\bullet$. The inclusions $V_p\subseteq V_{p-1}$
+induce the differentials, so each $b\in B$ induces a chain automorphism
+$u_b$ of $C$. Precomposition by $u_b^{-1}$ preserves the ranks of
+$g_T$ and sends its kernel to $u_b(\ker g_T)$. Hence $Y$ is $B$-stable.
+The $B$-orbits of the flag variety are its finitely many Schubert cells.
+Since $Y$ is closed and irreducible, it is the closure of one such cell.
 
 \begin{proposition}\label{prop:three-by-three}
 Let $n=2$ and $\mathbf c=(0,0)$, so $T$ is a $3\times3$ matrix. On $U$

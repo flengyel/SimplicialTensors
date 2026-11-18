@@ -26,10 +26,22 @@ M.~J. Canfell.
 \newblock {\em Journal of the Australian Mathematical Society, Series A},
   52(1):141--142, 1992.
 
+\bibitem{SchubertQuiver}
+Giovanni Cerulli~Irelli, Evgeny Feigin, and Markus Reineke.
+\newblock \href{https://doi.org/10.1007/s10468-016-9634-3}{{Schubert} quiver
+  {Grassmannians}}.
+\newblock {\em Algebras and Representation Theory}, 20(1):147--161, 2017.
+
 \bibitem{Dold1958}
 Albrecht Dold.
 \newblock Homology of symmetric products and other functors of complexes.
 \newblock {\em Annals of Mathematics}, 68(1):54--80, 1958.
+
+\bibitem{DoldPuppe}
+Albrecht Dold and Dieter Puppe.
+\newblock \href{https://doi.org/10.5802/aif.114}{Homologie nicht-additiver
+  {Funktoren}. {Anwendungen}}.
+\newblock {\em Annales de l'Institut Fourier}, 11:201--312, 1961.
 
 \bibitem{Duskin1979}
 John Duskin.
@@ -63,6 +75,12 @@ Ieke Moerdijk and Ittay Weiss.
 \newblock {\em Algebraic \& Geometric Topology}, 7:1441--1470, 2007.
 \newblock \url{https://arxiv.org/abs/math/0701293}.
 
+\bibitem{MoerdijkWeissInnerKan}
+Ieke Moerdijk and Ittay Weiss.
+\newblock \href{https://doi.org/10.1016/j.aim.2008.12.015}{On inner {Kan}
+  complexes in the category of dendroidal sets}.
+\newblock {\em Advances in Mathematics}, 221(2):343--389, 2009.
+
 \bibitem{OEISRook}
 {OEIS Foundation Inc.}
 \newblock Sequence {A096970}.
@@ -79,6 +97,12 @@ Stefano Ronchi and Chenchang Zhu.
 \newblock \href{https://doi.org/10.1016/j.geomphys.2026.105971}{Duals of higher
   vector spaces}.
 \newblock {\em Journal of Geometry and Physics}, 230:105971, 2026.
+
+\bibitem{SatkurunathKock}
+Ramesh Satkurunath and Bernhard K{\"o}ck.
+\newblock \href{https://doi.org/10.4310/HHA.2010.v12.n1.a15}{An algorithmic
+  approach to {Dold}--{Puppe} complexes}.
+\newblock {\em Homology, Homotopy and Applications}, 12(1):301--326, 2010.
 
 \bibitem{Shrikhande1959}
 S.~S. Shrikhande.
@@ -120,5 +144,12 @@ Charles~A. Weibel.
 \newblock Cambridge University Press, 1994.
 \newblock Author's corrections:
   \url{https://sites.math.rutgers.edu/~weibel/Hbook-corrections.html}.
+
+\bibitem{WolframGraphData}
+{Wolfram Research}.
+\newblock
+  \href{https://reference.wolfram.com/language/ref/GraphData.html}{{GraphData}}.
+\newblock Wolfram Language Documentation, 2007.
+\newblock Updated 2026.
 
 \end{thebibliography}
