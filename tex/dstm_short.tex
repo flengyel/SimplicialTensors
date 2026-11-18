@@ -322,42 +322,45 @@ Let $X=X^{\mathbf c}(A)$. For $p\geq1$ and $0\leq j\leq p$, the sequence
 \]
 is split exact, with section $\iota_j$ of $d_j$ given by extension by
 zero along $\Delta_j$.
-If $D^r(M)$ denotes the identity complex $M\xrightarrow{1}M$
-in degrees $r,r-1$, then
+Write $D^r(M)$ for the complex $M\xrightarrow{1}M$ in degrees $r,r-1$.
+The unaugmented normalized complex decomposes as
 \begin{equation}\label{eq:disks}
  N_\bullet(X)\cong B[0]\oplus\bigoplus_{p=0}^{k-1}D^{p+1}(Z_p).
 \end{equation}
 In particular $H_0(X)\cong A^{\prod_a c_a}$ and $H_p(X)=0$ for $p>0$.
 \end{proposition}
 \begin{proof}
-Partition the basis of $R_{p,j}(X)$ according as the tuple contains
-$j$ or avoids it. The tuples containing $j$ give the basis of $Z_p$.
-Deleting the gap at $j$ sends the other tuples bijectively to the
-basis of $Z_{p-1}$ by \eqref{eq:face}, with inverse $\iota_j$.
-For $j=0$ this gives $N_p(X)=Z_p\oplus\iota_0Z_{p-1}$, with $d_0$
-zero on $Z_p$ and inverse to $\iota_0$ on the second summand. Since
-$X_0=\eta_0(B)\oplus Z_0$, the remaining summand is $B[0]$.
-The sum ends at $p=k-1$ because a tuple of length $k$ cannot contain
-every index in $[p]$ for $p\geq k$.
+The $E_m$ in the basis of $R_{p,j}(X)$ with $j\in\im(m)$ span $Z_p$.
+Deleting the gap at $j$ sends the remaining units bijectively to the basis of
+$Z_{p-1}$ by \eqref{eq:face}, with inverse $\iota_j$.
+For $j=0$ this gives $N_p(X)=Z_p\oplus\iota_0 Z_{p-1}$.
+The differential is zero on $Z_p$ and inverts $\iota_0$ on the second summand.
+In degree zero $X_0=\eta_0(B)\oplus Z_0$, and $Z_p=0$ for $p\geq k$
+since a $k$-tuple cannot contain all of $[p]$.
 \end{proof}
 
-The chain homotopy $h$ sends each basis element $E_m$ of $Z_p$ to
-$\iota_0 E_m=E_{m+\mathbf1}$ and is zero on the complementary summand.
-Thus $\partial h+h\partial=1-\eta\epsilon$ on normalized chains.
-It follows that $N(X)$ retracts onto $B[0]$ and is contractible precisely
-when some $c_a=0$. The coordinate bases of $N_p(X)$, $Z_p$ and
+If $E_m$ is a coordinate unit of $N_p(X)$, then $m$ contains $1,\ldots,p$.
+If $m$ also contains $0$, set
+$h_pE_m=E_{m+\mathbf1}$, where $\mathbf1=(1,\ldots,1)$. Then
+$\partial E_m=0$ and $\partial h_pE_m=E_m$.
+If $m$ omits $0$, set $h_pE_m=0$. For $p>0$ we have
+$\partial E_m=E_{m-\mathbf1}$, and $m-\mathbf1$ contains $0$ since $m$
+contains $1$. Thus $h_{p-1}\partial E_m=E_m$.
+In degree zero the units whose indices omit $0$ span $\eta_0(B)$,
+on which both terms vanish. Hence $\partial h+h\partial=1-\eta\epsilon$.
+If some $c_a=0$, then $B=0$ and $h$ contracts $N(X)$.
+If every $c_a>0$, the retraction onto $B[0]$ gives $H_0(X)\cong B\ne0$.
+The coordinate bases of $N_p(X)$, $Z_p$ and
 $R_{p,j}(X)$ are indexed independently of $A$, so these modules commute
 with arbitrary base change.
 
 \begin{corollary}\label{cor:ranks}
-Let $b_p=\rank Z_p$, the rank of the degree-$p$ boundaries of $N(X)$,
-and put $b_{-1}=0$. For $p\geq0$,
+In the unaugmented complex every $0$-chain is a cycle. Put $b_{-1}=0$ and
+let $b_p=\rank Z_p$ be its boundary rank in degree $p\geq0$. Then
 \[
- \begin{gathered}
  b_p=\sum_{t=0}^{p+1}(-1)^t\binom{p+1}{t}
-          \prod_{a=1}^k(p+c_a+1-t),\\
+          \prod_{a=1}^k(p+c_a+1-t),\qquad
  \rank N_p(X)=b_p+b_{p-1}+\mathbf 1_{p=0}\prod_a c_a.
- \end{gathered}
 \]
 For $c_a=0$ on all axes, $b_p=(p+1)!\SII{k}{p+1}$, where
 $\SII{k}{r}$ is a Stirling number of the second kind.
@@ -376,14 +379,17 @@ $N_\bullet(X)\cong D^1(A)\oplus D^2(A^2)$.
 The normalized ranks are $1,3,2$ in degrees $0,1,2$. In degree one,
 $d_0E_{(1,1)}=E_{(0,0)}$. In degree two, $d_0$ sends $E_{(1,2)}$
 and $E_{(2,1)}$ to $E_{(0,1)}$ and $E_{(1,0)}$, respectively.
+Over a field, $h_1E_{01}=E_{12}$ lies outside the submodule generated
+by $E_{01}$ (Example~\ref{ex:matrix-cycle}).
 The function \program{tex/anc/dstm_examples.py\#L164}{square_matrix_example} computes these ranks and images from the faces.
 \end{example}
 
 \begin{corollary}\label{cor:shape}
 Over a fixed nonzero commutative ring $A$, $X^{\mathbf c}(A)\cong X^{\mathbf c'}(A)$
 if and only if the entries of $\mathbf c$ and $\mathbf c'$ agree up to permutation.
-Thus two input shapes determine isomorphic modules if and only if one is obtained
-from the other by permuting the axis lengths and adding a common integer.
+Two shapes placed in their simplicial dimensions determine isomorphic
+ambient modules if and only if one is obtained from the other by permuting
+the axes and adding the same integer to every axis length.
 \end{corollary}
 \begin{proof}
 Reducing an isomorphism modulo a maximal ideal of $A$ gives equal
@@ -431,6 +437,8 @@ of the $E_m$ with $\min_a m_a\geq p+t$. A nonzero face lowers the
 minimum by at most one, and $H_p$ raises it by one. Thus $\partial$
 and $H$ preserve this decreasing filtration, finite in each degree,
 and $H$ contracts each quotient $F^tX_\bullet/F^{t+1}X_\bullet$.
+The homology groups of these quotients form the $E^1$-page of the
+associated spectral sequence, so $E^1=0$.
 
 Adjoin the empty ordinal $[-1]$ to $\Delta$ to obtain $\Delta_+$.
 Let $X^+$ denote $X$ augmented by $\epsilon_0:X_0\to B$.
