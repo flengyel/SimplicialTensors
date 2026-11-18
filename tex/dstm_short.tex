@@ -190,16 +190,17 @@ The script \path{dstm_examples.py} computes this homology over $\mathbb Q$
 and the free coordinates in Example~\ref{ex:matrix-horn}.
 
 \section{Horn kernels and normalization}
-For any simplicial $A$-module $Y$, put
+For a simplicial $A$-module $Y$, the normalized and degenerate chains in
+degree $p$ are, respectively,
 \[
  N_p(Y)=\bigcap_{i=1}^p\ker d_i,\qquad
  D_p(Y)=\sum_{i=0}^{p-1}\im s_i.
 \]
 Here $N_0(Y)=Y_0$ and $D_0(Y)=0$. The differential on $N(Y)$ is
 $d_0$ in positive degrees and zero in degree zero
-\cite[Exercise 8.3.4]{Weibel}. The splitting
-$Y_p=N_p(Y)\oplus D_p(Y)$ holds in every degree
-\cite[Corollary 1.12]{Dold1958}. The inclusion of normalized chains
+\cite[Exercise 8.3.4]{Weibel}. Reversing the face and degeneracy indices
+in Dold's splitting \cite[Corollary 1.12]{Dold1958} gives
+$Y_p=N_p(Y)\oplus D_p(Y)$. The inclusion of normalized chains
 induces $H_p(N(Y))\cong H_p(Y)$ \cite[Theorem 8.3.8]{Weibel}.
 Normalization gives the Dold--Kan equivalence with nonnegative chain
 complexes \cite[Theorem 8.4.1]{Weibel}.
@@ -207,20 +208,23 @@ complexes \cite[Theorem 8.4.1]{Weibel}.
 For $p\geq1$ and $0\leq j\leq p$, let $R_{p,j}(Y)=
 \bigcap_{0\leq i\leq p,\ i\ne j}\ker d_i$.
 The module $\Lambda_{p,j}(Y)$ of compatible horns consists of tuples
-$(y_i)_{i\ne j}$ with $y_i\in Y_{p-1}$ satisfying $d_i y_\ell=d_{\ell-1}y_i$ for
-$i<\ell$, $i,\ell\ne j$; for $p=1$ there are no compatibility
-conditions. The horn map is
+$(y_i)_{i\ne j}$ with $y_i\in Y_{p-1}$ satisfying $d_i y_\ell=d_{\ell-1}y_i$
+for $i<\ell$, $i,\ell\ne j$. This condition is vacuous for $p=1$.
+The horn map is
 $\Phi_j:Y_p\to\Lambda_{p,j}(Y)$, $y\mapsto(d_i y)_{i\ne j}$.
 Every simplicial module is Kan, so $\Phi_j$ is surjective
-\cite[Lemma 8.2.8]{Weibel}. Its fibers are torsors for $R_{p,j}(Y)$.
+\cite[Lemma 8.2.8]{Weibel}. If $x$ fills a horn, its fillers form the
+coset $x+R_{p,j}(Y)$.
+
+Applied to the underlying simplicial abelian group of $Y$, Ashley's
+theorem \cite[Ch.~3, Theorem~1.5]{Ashley1978} gives a unique filler in
+$D_p(Y)$ for each horn. Ronchi and Zhu give the vector-space formulation
+\cite[Lemma~2.10]{RonchiZhu}.
 
 \begin{lemma}\label{lem:hornsplit}
-For every simplicial $A$-module $Y$, $p\geq1$ and $0\leq j\leq p$,
-\[
- Y_p=R_{p,j}(Y)\oplus D_p(Y).
-\]
-The restriction $\Phi_j|_{D_p(Y)}$ is an isomorphism. Thus every horn
-has a unique filler in the submodule $D_p(Y)$.
+Let $Y$ be a simplicial $A$-module, $p\geq1$ and $0\leq j\leq p$.
+Then $Y_p=R_{p,j}(Y)\oplus D_p(Y)$, and the horn map restricts to an
+isomorphism $D_p(Y)\to\Lambda_{p,j}(Y)$. Each horn has a unique filler in $D_p(Y)$.
 \end{lemma}
 \begin{proof}
 For $0\leq j<p$, the simplicial identities give inverse maps
@@ -242,15 +246,10 @@ The final assertion follows from surjectivity of $\Phi_j$ and
 $\ker\Phi_j=R_{p,j}(Y)$.
 \end{proof}
 
-For simplicial objects in finite-dimensional real vector spaces the horn-space
-isomorphism is also proved in \cite[Lemma 2.10]{RonchiZhu};
-Lemma~\ref{lem:hornsplit} gives an argument over arbitrary $A$.
-
 \begin{theorem}\label{thm:hornbasis}
-Let $X=X(\mathbf c;A)$, $p\geq1$, and $0\leq j\leq p$. Put
-$F_j=[p]\setminus\{j\}$. Then
+Let $X=X(\mathbf c;A)$, $p\geq1$, and $0\leq j\leq p$. Then
 \begin{equation}\label{eq:hornbasis}
- R_{p,j}(X)=\bigoplus_{\substack{m\in I_p\\F_j\subseteq\im(m)}} AE_m,
+ R_{p,j}(X)=\bigoplus_{\substack{m\in I_p\\{}[p]\setminus\{j\}\subseteq\im(m)}} AE_m,
  \qquad
  \rank R_{p,j}(X)=
  \sum_{t=0}^p(-1)^t\binom pt\prod_{a=1}^k(p+c_a+1-t).
@@ -262,9 +261,9 @@ for $p>k$, independently of $j$ and of the offsets.
 \begin{proof}
 By \eqref{eq:face}, $d_iT=0$ exactly when $T$ is supported on
 tuples containing $i$. Intersecting these support conditions gives
-\eqref{eq:hornbasis}. Inclusion--exclusion counts tuples containing
-all $p$ elements of $F_j$: forbidding a specified $t$ of these
-elements leaves $p+c_a+1-t$ choices in coordinate $a$.
+the basis in \eqref{eq:hornbasis}. To count its elements by
+inclusion--exclusion, forbid $t$ of the $p$ required labels.
+This leaves $p+c_a+1-t$ choices in coordinate $a$.
 A tuple of length $k$ cannot contain $p>k$ distinct values. If
 $p\leq k$, assign the $p$ required values to distinct coordinates
 and fill the remaining coordinates arbitrarily in $[p]$.
@@ -273,25 +272,23 @@ This gives a basis element, nonzero because $A\ne0$.
 
 
 \begin{example}\label{ex:matrix-horn}
-For shape $(3,3)$, consider the $2$-horn with missing face $0$ and
-prescribed faces
+For shape $(3,3)$, take the $2$-horn with missing face $0$ and prescribed
+faces $y_1,y_2$ below. They agree in their upper left entry, and their
+fillers are the displayed matrices $T$ as $u,v$ range over $A$.
 \[
- d_1T=\begin{pmatrix}1&3\\7&9\end{pmatrix},\qquad
- d_2T=\begin{pmatrix}1&2\\4&5\end{pmatrix}.
+ y_1=\begin{pmatrix}1&3\\7&9\end{pmatrix},\qquad
+ y_2=\begin{pmatrix}1&2\\4&5\end{pmatrix},\qquad
+ T=\begin{pmatrix}1&2&3\\4&5&u\\7&v&9\end{pmatrix}.
 \]
-Their top left entries agree, so the faces are compatible. Every filler is of the form
-\[
- T=\begin{pmatrix}1&2&3\\4&5&u\\7&v&9\end{pmatrix},
- \qquad u,v\in A.
-\]
-Thus the difference of two fillers lies in
-$R_{2,0}(X)=AE_{(1,2)}\oplus AE_{(2,1)}$, whose basis consists
-of the two index pairs containing both $1$ and $2$.
+The unique filler in $D_2(X)$ is $s_1y_2+s_0(y_1-y_2)$, which gives
+$u=6$ and $v=8$. The coordinate units $E_{(1,2)}$ and $E_{(2,1)}$
+form a basis of $R_{2,0}(X)$.
 \end{example}
 
-An algebraic $r$-hypergroupoid is a simplicial module with unique
-horn fillers in dimensions greater than $r$ \cite{Duskin1979,Glenn1982}.
-By Theorem~\ref{thm:hornbasis}, $X$ is such an object exactly when $r\geq k$.
+For $r\geq0$, a simplicial $A$-module is an $r$-hypergroupoid if its
+underlying Kan complex has unique horn fillers in dimensions greater
+than $r$ \cite{Duskin1979,Glenn1982}. By Theorem~\ref{thm:hornbasis},
+the least such $r$ for $X$ is $k$.
 For the original degree $n=\min_a n_a-1$, the $n$-hypergroupoid
 condition is $k\leq n$, with nonunique $n$-horn fillers when $k=n\geq1$.
 

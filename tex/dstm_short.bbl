@@ -1,5 +1,12 @@
 \begin{thebibliography}{10}
 
+\bibitem{Ashley1978}
+N.~Ashley.
+\newblock {\em
+  \href{https://groupoids.org.uk/pdffiles/ashley1978tComplexes.pdf}{{T}-complexes
+  and crossed complexes}}.
+\newblock PhD thesis, University of Wales, Bangor, 1978.
+
 \bibitem{BasicNikolaus}
 Matija Ba{\v s}i{\'c} and Thomas Nikolaus.
 \newblock \href{https://doi.org/10.4310/HHA.2017.v19.n1.a6}{Homology of
@@ -71,8 +78,9 @@ Daniel Quillen.
 
 \bibitem{RonchiZhu}
 Stefano Ronchi and Chenchang Zhu.
-\newblock Duals of higher vector spaces.
-\newblock \href{https://arxiv.org/abs/2407.03306v2}{arXiv:2407.03306v2}, 2025.
+\newblock \href{https://doi.org/10.1016/j.geomphys.2026.105971}{Duals of higher
+  vector spaces}.
+\newblock {\em Journal of Geometry and Physics}, 230:105971, 2026.
 
 \bibitem{Shrikhande1959}
 S.~S. Shrikhande.
