@@ -1,9 +1,9 @@
 \section{Generated submodules}
 \label{sec:generated}
-Let $K$ be a field, $n\geq0$ and $\mathbf c\in\mathbb Z_{\geq0}^k$.
-Put $X=X(\mathbf c;K)$.
-Let $P=K[\Delta^n]$ be the free simplicial $K$-module on the standard
-$n$-simplex, so $P_p$ has basis the nondecreasing maps $[p]\to[n]$.
+Fix a field $K$, $n\geq0$ and $\mathbf c\in\mathbb Z_{\geq0}^k$.
+Put $X=X(\mathbf c;K)$ and let $P=K[\Delta^n]$ be the free simplicial
+$K$-module on the standard $n$-simplex. A basis of $P_p$ consists of
+the nondecreasing maps $[p]\to[n]$.
 For $T\in X_n$, the representing property of $P$ gives
 \[
  f_T:P_\bullet\longrightarrow X_\bullet,
@@ -26,8 +26,7 @@ to the columns $\nu_p X(\alpha)(T)$ spanning $N_p(\langle T\rangle)$.
 Let $r_p(T)$ be their rank. For $p>0$ let $\delta_p(T)$ be the rank of their
 images under $d_0$, and put $\delta_0(T)=0$.
 The $p$th Betti number is $r_p(T)-\delta_p(T)-\delta_{p+1}(T)$.
-Only degrees $p\leq\min(n,k)$ enter the computation. For $p>n$ there are
-no columns, and for $p>k$ the ambient $N_p(X)$ vanishes by
+For $p>n$ there are no columns. For $p>k$, $N_p(X)=0$ by
 Theorem~\ref{thm:hornbasis}.
 
 Put
@@ -61,8 +60,8 @@ $\Delta^n$ to $1$.
 
 \subsection{Quotients and automorphisms}
 
-We work in the category $\operatorname{Ch}_{\geq0}(K)$ of nonnegative
-chain complexes of $K$-vector spaces and chain maps. A complex is finite
+Write $\operatorname{Ch}_{\geq0}(K)$ for the category of chain complexes of
+$K$-vector spaces concentrated in nonnegative degrees. A complex is finite
 if the direct sum of its chain groups is finite-dimensional. For a complex $E$,
 write
 \[
@@ -77,7 +76,7 @@ inside cycles, and of cycles inside each chain group, gives
  E\cong\bigoplus_{p\geq0}S^p(H_p(E))
        \oplus\bigoplus_{p\geq1}D^p(B_{p-1}(E))
 \end{equation}
-for every finite complex $E$. Indeed, the differential maps the chosen
+for every finite complex $E$. The differential maps the chosen
 complement of $Z_p(E)$ isomorphically onto $B_{p-1}(E)$.
 Thus the homology dimensions and differential ranks determine the
 isomorphism class of a finite complex. Their additivity gives cancellation
@@ -96,7 +95,7 @@ are projective and hence so is $C$.
 
 \begin{proposition}\label{prop:quotient-lift}
 Fix a field $K$ and $n\geq0$, and let $C=N(K[\Delta^n])$.
-For subcomplexes $L,M\subseteq C$, every specified chain isomorphism
+For subcomplexes $L,M\subseteq C$, every chain isomorphism
 $\varphi:C/L\to C/M$ lifts to a chain automorphism $u:C\to C$
 such that the square commutes.
 \[
@@ -130,14 +129,12 @@ Taking kernels gives $u(L)=M$.
 Conversely, such an automorphism induces an isomorphism of quotients.
 \end{proof}
 
-Canfell's theorem on right equivalence of presentations
-\cite[p.~141]{Canfell1992} also gives the lift. Complexes in degrees
-$0,\ldots,n$ are modules over the path algebra of $n\to\cdots\to0$
-modulo paths of length two. This algebra and its opposite are
+Complexes in degrees $0,\ldots,n$ are modules over the path algebra
+of $n\to\cdots\to0$ modulo paths of length two. This algebra and its opposite are
 finite-dimensional and hence semilocal of stable range one
-\cite[Corollary~6.5]{Bass1964}. Thus Canfell's theorem applies to the
-epimorphisms $\varphi\pi_L$ and $\pi_M$ from the finitely generated
-projective module $C$.
+\cite[Corollary~6.5]{Bass1964}. Applied to $\varphi\pi_L$ and $\pi_M$,
+both with finitely generated projective source $C$, Canfell's theorem on right
+equivalence of presentations \cite[p.~141]{Canfell1992} also gives the lift.
 
 For $a\in\operatorname{Aut}_{\operatorname{Ch}_{\geq0}(K)}(C)$,
 let $\widetilde a:P\to P$ be its simplicial automorphism under Dold--Kan.
@@ -147,14 +144,13 @@ The tensor
 \]
 satisfies $f_{T'}=f_T\widetilde a$ by the representing property of $P$.
 Hence $L(T')=a^{-1}L(T)$ and
-$\langle T'\rangle=\langle T\rangle$. Thus the set
-$\{L(T):T\in X_n\}$ is invariant under the automorphism group.
-Equation~\eqref{eq:generated-normalization}, Dold--Kan and
-Proposition~\ref{prop:quotient-lift} identify its orbits with the
-simplicial isomorphism classes of the generated modules.
+$\langle T'\rangle=\langle T\rangle$. By
+\eqref{eq:generated-normalization}, Dold--Kan and
+Proposition~\ref{prop:quotient-lift}, the orbits of this action on
+$\{L(T):T\in X_n\}$ classify the generated modules up to simplicial isomorphism.
 By \eqref{eq:finite-chain-splitting}, the chain dimensions $r_p(T)$ and
 differential ranks $\delta_p(T)$ determine this isomorphism class.
-Since $\dim C_p$ bounds both, there are finitely many orbits.
+Since $C$ is finite and $\dim C_p$ bounds both ranks, there are finitely many orbits.
 
 \subsection{Realizable kernels}
 
@@ -176,9 +172,8 @@ For a subcomplex $L\subseteq C$ and $Q=C/L$, the following are equivalent:
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-A realizing map $g_T:C\to\mathcal D$ induces the required monomorphism
-$C/L(T)\to\mathcal D$. Any chain monomorphism restricts to injections
-on cycles and on boundaries, proving the inequalities.
+If $L=L(T)$, then $g_T$ induces an injection $Q\hookrightarrow\mathcal D$.
+Such an injection restricts to injections on cycles and boundaries.
 
 Conversely, the boundary inequality gives an injection
 $B_p(Q)\hookrightarrow B_p(\mathcal D)$ in each degree. By the cycle
@@ -189,15 +184,14 @@ $j_{p-1}\partial_Q|_{W_p}$ through
 $\partial_{\mathcal D}:\mathcal D_p\to B_{p-1}(\mathcal D)$ to a
 linear map $\ell_p:W_p\to\mathcal D_p$. Set
 $i_p(z+w)=j_p(z)+\ell_p(w)$ and take $i_0=j_0$, since $W_0=0$.
-These maps form a chain map. For $p>0$, if $i_p(z+w)=0$, applying
-the differential gives $j_{p-1}\partial_Qw=0$, hence $w=0$ and then $z=0$.
-The degree-zero map is injective by construction. Thus
-$i:Q\to\mathcal D$ is a monomorphism.
+For $p>0$ we have $\partial_{\mathcal D}i_p(z+w)=j_{p-1}\partial_Qw
+=i_{p-1}\partial_Q(z+w)$, so $i$ is a chain map. If $i_p(z+w)=0$,
+this identity gives $w=0$ and then $z=0$. Since $i_0=j_0$ is injective,
+$i:Q\hookrightarrow\mathcal D$ is a chain monomorphism.
 
-The composite $C\to Q\xrightarrow{i}\mathcal D$ corresponds under
-Dold--Kan to a simplicial map $P=K[\Delta^n]\to X$. The representing
-property of $P$ identifies it with $f_T$ for the image $T$ of the
-identity $n$-simplex. Its normalized kernel is $L$, so $L=L(T)$.
+Under Dold--Kan the composite $C\to Q\xrightarrow{i}\mathcal D$
+corresponds to $f_T:P\to X$, where $T$ is the image of the identity
+$n$-simplex. The kernel of the composite is $L$, so $L=L(T)$.
 \end{proof}
 
 For $p>0$, the cycles and boundaries of $\mathcal D$ coincide and have
@@ -206,9 +200,9 @@ dimension $b_p$ by Corollary~\ref{cor:ranks}. In degree zero,
  \dim_K Z_0(\mathcal D)=\prod_a(c_a+1),\qquad
  \dim_K B_0(\mathcal D)=\prod_a(c_a+1)-\prod_a c_a.
 \]
-Since $B_p(Q)\subseteq Z_p(Q)$, the boundary inequality can add a condition
-only in degree zero when every $c_a>0$. For a module associated to a
-shape, the cycle inequalities suffice.
+Since $B_p(Q)\subseteq Z_p(Q)$, the boundary inequality adds a condition
+only in degree zero and only if every $c_a>0$. For a module associated to a
+shape, some $c_a=0$, so the cycle inequalities suffice.
 
 For example, when $\mathbf c=(1,1)$, the cycle dimensions
 of $\mathcal D$ are $(4,2,0)$ and its boundary dimensions are $(3,2,0)$.
@@ -225,9 +219,8 @@ For $\mathbf c=(0,0)$ and $t\in K$, let
  \qquad Y_t=\langle T(t)\rangle.
 \]
 Use the ordered basis $(E_{01},E_{10},E_{11})$ of $N_1(X)$.
-Restriction to vertices $1,2$ gives
-$y=\left(\begin{smallmatrix}1&1\\1&t\end{smallmatrix}\right)$ with $d_1y=1$. Subtracting the all-ones matrix
-$s_0(1)$ gives $\nu_1y=(t-1)E_{11}$.
+For the restriction $y=\left(\begin{smallmatrix}1&1\\1&t\end{smallmatrix}\right)$
+to vertices $1,2$, we have $\nu_1y=y-s_0(1)=(t-1)E_{11}$.
 The three normalized restrictions are
 \[
  v_{01}=(1,0,1),\qquad v_{02}=(0,1,t),\qquad
@@ -275,15 +268,13 @@ $p=q$ and gives a degeneracy of $T_q$ for $p>q$. Thus
  H_q(\langle T_q\rangle)\cong K,\qquad
  H_p(\langle T_q\rangle)=0\quad(p\ne q).
 \]
-When all $c_a=0$, $T_2$ has one nonzero entry in a $3\times3\times3$
-tensor, and $T_3$ has one nonzero entry in shape $(4,4,4,4)$.
 In the full module,
 \[
  \partial_{q+1}E_{(1,2,\ldots,q+1)}=T_q.
 \]
-The number of axes is minimal. For $k\leq q$ no index tuple contains
-$[q]$, so \eqref{eq:cycles} gives $Z_q(N(X))=0$. Every simplicial
-submodule of such an $X$ therefore has zero $q$th homology.
+For $k\leq q$ no index tuple contains $[q]$, so \eqref{eq:cycles} gives
+$Z_q(N(X))=0$. Hence $q+1$ is the least number of axes on which a simplicial
+submodule can have nonzero $q$th homology.
 \end{example}
 
 The script \path{experiments/kernel_sequences.py} computes kernels,
@@ -312,14 +303,18 @@ has normalized complex $A^e\to A^v$ in degrees $1,0$, with
 differential sending edge $j$ to its target minus its source.
 \end{proposition}
 \begin{proof}
-The vertex tensors are distinct standard basis vectors of $X_0$. The normalized
-edges $b_j=T_j-s_0a_{u_j}$ are linearly independent because the
-coordinate $(0,1,j+1)$ occurs with coefficient $1$ in $b_j$ and
-vanishes on the other normalized edges. Also
-$d_0b_j=a_{w_j}-a_{u_j}$. The other degree-one generators are
-degeneracies of vertices, and every generator in higher degrees
-is a degeneracy. The normalization projection kills these terms.
+The $a_t$ are distinct basis vectors of $X_0$. The normalized edges
+$b_j=T_j-s_0a_{u_j}$ satisfy $d_0b_j=a_{w_j}-a_{u_j}$ and are linearly
+independent because at $(0,1,j+1)$ only $b_j$ has a nonzero entry, equal to $1$.
+In degree one the remaining generators are degeneracies of vertices.
+In higher degrees all generators are degenerate, so their normalized
+projections vanish.
 \end{proof}
+
+In their respective degrees $p$, the vertex and edge tensors use only
+first-axis indices in $[p]$. Extension by zero on the additional
+first-axis indices commutes with simplicial operators, so $Y_G$ lies in
+$X((0,r,r);A)$, whose normalized complex is contractible by Proposition~\ref{prop:disks}.
 
 On each component, the boundaries of the edges of a spanning tree form
 a basis of the kernel of the augmentation $a_t\mapsto 1$.
@@ -347,7 +342,7 @@ Figure~\ref{fig:interleaved-path} shows the construction for a path on three ver
 Let $N_\pi$ be the adjacency matrix of $H$ with each edge oriented forward
 in the order $\pi$.
 Let $p(H)$ be the least number of vertex-disjoint paths covering $V(H)$.
-A path may have chords or consist of a single vertex.
+The paths need not be induced, and single vertices are allowed.
 
 \begin{figure}[htb]
 \centering
@@ -394,10 +389,11 @@ Thus the multiplicity of full rank among the $n!$ orders counts Hamiltonian
 paths, with each path and its reverse counted separately.
 \end{proposition}
 \begin{proof}
-Write $N=N_\pi$. Deleting either endpoint removes the edge $v_iv_j$.
-For $i<j$, there are $2i$ deletions before both endpoints,
-$2(j-i)-1$ between them, and $2(n-1-j)$ after both. Thus only the
-entry at $(2i,2j-1)$ and its transpose survive in the boundary.
+Write $N=N_\pi$. For an edge $v_iv_j$ with $i<j$, deleting either
+endpoint removes the edge. There are $2i$ deletions before both endpoints,
+$2(j-i)-1$ between them, and $2(n-1-j)$ after both.
+Only the deletions between the endpoints contribute modulo $2$,
+at $(2i,2j-1)$ and its transpose.
 Grouping even indices before odd ones gives off-diagonal blocks $U,U^\top$
 and zero diagonal blocks, where $U$ is $N$ without its zero first column
 and zero last row. Hence $\rank B_\pi=2\rank N$. Since $U$ is upper
@@ -405,9 +401,10 @@ triangular, $\det B_\pi=(\det U)^2=\prod_{i=0}^{n-2}N_{i,i+1}$ in
 $\mathbb F_2$. This product is $1$ precisely when consecutive vertices
 of $\pi$ are adjacent.
 
-A nonzero minor of $N$ of order $r$ has a determinant term selecting $r$
-edges with distinct initial vertices and distinct terminal vertices. Since all edges point forward,
-they give a cover by $n-r$ paths, including singletons. Conversely,
+Expanding a nonzero minor of $N$ of order $r$ gives a choice of
+$r$ edges with distinct initial vertices and distinct terminal
+vertices. All edges point forward, so they give a cover by $n-r$ paths,
+including singletons. Hence $\rank N\leq n-p(H)$. Conversely,
 concatenate the paths of a minimum cover, listing each in traversal order.
 Their $n-p(H)$ edges join consecutive vertices in this order. Taking
 their initial vertices as rows and their terminal vertices as columns, in
@@ -423,10 +420,9 @@ from each earlier row gives $\rank(J-N_\pi)=1+\rank N_\pi$ over
 $\mathbb F_2$, since the first column of $N_\pi$ is zero.
 
 For the $4\times4$ rook graph, counting full-rank mod-$2$ boundaries
-recovers the number of oriented Hamiltonian paths. Let $a_{uv}$ be $1$
-if $u$ and $v$ are adjacent and $0$ otherwise. For each vertex order
-$\pi=(v_0,\ldots,v_{15})$, the product below is the integer $0$ or $1$
-represented by $\det_{\mathbb F_2}B_\pi$. Summing over all orders gives
+recovers the number of oriented Hamiltonian paths. Write $a_{uv}$ for
+its adjacency entries in $\{0,1\}$. Summing the determinant formula
+over all orders $\pi=(v_0,\ldots,v_{15})$, with the sum in $\mathbb Z$, gives
 \[
  \#\{\pi:\rank_{\mathbb F_2}B_\pi=30\}
  =\sum_\pi\prod_{i=0}^{14}a_{v_i v_{i+1}}=22{,}394{,}880.
@@ -454,8 +450,8 @@ $0$ oriented Hamiltonian paths, respectively.
 \section{Kernel families in a product of Grassmannians}
 \label{app:kernel-families}
 Fix a field $K$, a degree $n$ and a tuple $\mathbf c$ as in Section~\ref{sec:generated}.
-As $T$ varies in the affine space $W=X_n(\mathbf c;K)$, the kernels
-$L_p(T)=\ker(g_{T,p}:C_p\to N_p(X))$ form families of subspaces of $C_p$.
+For $T$ in the affine space $W=X_n(\mathbf c;K)$, write
+$L_p(T)=\ker(g_{T,p}:C_p\to N_p(X))$.
 
 For a finite-dimensional $K$-vector space $V$ and $0\leq r\leq\dim V$,
 write $\operatorname{Gr}(r,V)$ for the Grassmannian of $r$-dimensional
@@ -472,7 +468,6 @@ The kernels on $U$ define a morphism
  \Psi:U\longrightarrow G=\prod_{p=0}^n\operatorname{Gr}(\ell_p,C_p),
  \qquad T\longmapsto(L_p(T))_p.
 \end{equation}
-Each $L(T)$ is a subcomplex since $g_T$ is a chain map.
 The image $\mathcal M=\Psi(U)$ in the underlying space of $G$ is
 constructible by Chevalley's theorem \cite[Tag 054K]{Stacks}.
 Let $Y$ be its reduced Zariski closure.
@@ -500,9 +495,9 @@ $\Psi^{-1}(Y^\circ)$ with an open subset of this product.
 
 The nonempty open $\Psi^{-1}(Y^\circ)\subseteq W$ contains a $K$-point
 $T_0$ because $K$ is infinite. Put $c=\pi(T_0)$ and $S=\pi^{-1}(c)$.
-Restricting the isomorphism to $\pi=c$ identifies the nonempty open
-$S\cap\Psi^{-1}(Y^\circ)$ in $S$ with an open subset of $Y^\circ$.
-Since $S\cong\mathbb A_K^{\dim W-d}$, this proves the assertion.
+Restricting the isomorphism to $\pi=c$ identifies $S\cap\Psi^{-1}(Y^\circ)$,
+a nonempty open subset of $S\cong\mathbb A_K^{\dim W-d}$, with an open
+subset of $Y^\circ$.
 \end{proof}
 
 Identify $\operatorname{Gr}(2,K^3)$ with the dual projective plane by sending
@@ -553,7 +548,6 @@ ranks, so \eqref{eq:finite-chain-splitting} makes them isomorphic.
 Proposition~\ref{prop:quotient-lift} gives the orbit assertion.
 \end{proof}
 
-The plane $\ker(1,1,1)$ does occur in degree zero outside $U$.
-For the all-ones matrix the kernel tuple is $(\ker(1,1,1),C_1,C_2)$.
-This matrix generates the constant simplicial module $K$, with homology
-$K$ in degree zero alone.
+Outside $U$, the all-ones matrix has kernel tuple $(\ker(1,1,1),C_1,C_2)$.
+It generates the constant simplicial module $K$, with homology $K$ in
+degree zero alone.
