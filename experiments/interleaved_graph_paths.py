@@ -2,10 +2,13 @@
 
 Run with the installed simplicial_tensors package. No arguments are needed.
 The printed counts are Hamiltonian vertex orders, including both directions.
+Use --small-examples for the path in Figure 1 and the two four-vertex graphs.
 """
 
+import argparse
+from collections import Counter
 from functools import cache
-from itertools import combinations
+from itertools import combinations, permutations
 
 import numpy as np
 
@@ -64,13 +67,19 @@ def binary_rank(matrix):
     )
 
 
+def interleaved_boundary(ordered):
+    """Insert isolated vertices and take the mod-two adjacency boundary."""
+    n = len(ordered)
+    padded = np.zeros((2 * n - 1, 2 * n - 1), dtype=bool)
+    padded[::2, ::2] = ordered
+    return bdry(padded)
+
+
 def check_boundary(matrix, order):
     """Compare the actual faces with the two forward-adjacency blocks."""
     ordered = matrix[np.ix_(order, order)]
     n = len(order)
-    padded = np.zeros((2 * n - 1, 2 * n - 1), dtype=bool)
-    padded[::2, ::2] = ordered
-    boundary = bdry(padded)
+    boundary = interleaved_boundary(ordered)
     forward = np.triu(ordered, 1)
     expected = np.zeros_like(boundary)
     expected[::2, 1::2] = forward[:-1, 1:]
@@ -82,7 +91,36 @@ def check_boundary(matrix, order):
     return rank
 
 
-def main():
+def small_examples():
+    """Compute the examples on three and four vertices in the manuscript."""
+    path = np.eye(3, k=1, dtype=bool) | np.eye(3, k=-1, dtype=bool)
+    boundary = interleaved_boundary(path)
+    edges = [(i, j) for i, j in combinations(range(len(boundary)), 2) if boundary[i, j]]
+    rank = binary_rank(boundary)
+    assert edges == [(0, 1), (2, 3)] and rank == 4
+    print(f"P3 after insertion: boundary edges {edges}, rank {rank}")
+
+    complete = ~np.eye(4, dtype=bool)
+    for name, matrix in (("K4", complete), ("Edgeless", np.zeros_like(complete))):
+        ranks = Counter()
+        paths = 0
+        for order in permutations(range(4)):
+            ordered = matrix[np.ix_(order, order)]
+            ranks[binary_rank(bdry(ordered))] += 1
+            if ordered.diagonal(1).all():
+                paths += 1
+        assert ranks == {0: 24}
+        assert paths == hamiltonian_orders(matrix)
+        print(f"{name} without insertion: boundary ranks {dict(ranks)}, oriented paths {paths}")
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--small-examples", action="store_true",
+                        help="Compute the three- and four-vertex examples.")
+    if parser.parse_args(argv).small_examples:
+        small_examples()
+        return
     print("Graph | Full boundary rank | Orders attaining full rank")
     for name, matrix, path in examples():
         vertices = list(range(len(matrix)))

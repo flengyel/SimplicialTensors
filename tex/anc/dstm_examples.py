@@ -1,21 +1,42 @@
-"""Three computations from the diagonal simplicial tensor module note.
+"""Examples from the paper on diagonal simplicial tensor modules.
 
 Run from the repository after ``python -m pip install -e .``:
     python tex/anc/dstm_examples.py
 
-The script imports all simplicial operations from the library. Matrix ranks
-are computed exactly over Q using SymPy; no floating-point rank test is used.
+Matrix ranks are computed exactly over Q.
 """
+
+from itertools import product
+from math import prod
 
 import numpy as np
 from sympy import Matrix
 
+from simplicial_tensors.kernel_sequences import kernel_sequence
+from simplicial_tensors.rank_shifted import SparseTensor
 from simplicial_tensors.tensor_ops import bdry, degen, face, filler, horn
 
 
 def column(tensor):
     """Flatten an integer array into a column for exact linear algebra."""
     return Matrix(tensor.reshape(-1).tolist())
+
+
+def shape_example():
+    """Compute the ranks for shape (3, 5) in degrees zero through three."""
+    shape = (3, 5)
+    n = min(shape) - 1
+    excesses = tuple(length - n - 1 for length in shape)
+    assert n == 2 and excesses == (0, 2)
+    ranks = []
+    for p in range(4):
+        degree_shape = SparseTensor.zero(p, excesses).shape
+        if p == n:
+            assert degree_shape == shape
+        ranks.append(prod(degree_shape))
+    assert ranks == [3, 8, 15, 24]
+    print("Shape (3, 5): simplicial dimension", n, "and axis excesses", excesses)
+    print("Ambient ranks in degrees 0 through 3:", ranks)
 
 
 def vector_example():
@@ -68,6 +89,14 @@ def generated_homology_example():
     print("Boundary of ambient primitive equals T:", primitive_has_boundary)
     print("Ambient primitive lies in Y_2:", primitive_in_y2)
 
+    transposed = tensor.T
+    for generator in (tensor, transposed):
+        sequence = kernel_sequence(generator)
+        assert sequence.source.dimensions == (2, 1)
+        assert sequence.kernel.dimensions == (2, 0)
+    assert Matrix.hstack(column(tensor), column(transposed)).rank() == 2
+    print("E_01 and E_10 have L_0 = C_0 and L_1 = 0 and span distinct lines.")
+
 
 def horn_example():
     """The missing-face-zero 2-horn has free entries in positions 12 and 21."""
@@ -80,6 +109,10 @@ def horn_example():
     computed = filler(prescribed, 0)
     filler_valid = np.array_equal(horn(computed, 0), prescribed)
     assert filler_valid
+    degenerate = degen(prescribed[2], 1) + degen(prescribed[1] - prescribed[2], 0)
+    np.testing.assert_array_equal(computed, degenerate)
+    coordinates = (int(computed[1, 2]), int(computed[2, 1]))
+    assert coordinates == (6, 8)
 
     # Compute the linear map B -> (d_1 B, d_2 B) on the nine matrix units.
     basis = []
@@ -105,13 +138,83 @@ def horn_example():
     print("Horn faces d_1, d_2:", [prescribed[i].tolist() for i in (1, 2)])
     print("Horn kernel dimension:", kernel_dimension)
     print("Computed filler has the prescribed faces:", filler_valid)
+    print("Coordinates (u, v) of the degenerate filler:", coordinates)
     print("All fillers: [[1, 2, 3], [4, 5, u], [7, v, 9]]")
 
 
+def insert_zero(tensor):
+    """Insert index zero on each axis and set the new entries to zero."""
+    entries = {
+        tuple(i + 1 for i in position): value
+        for position, value in tensor.entries.items()
+    }
+    return SparseTensor(tensor.degree + 1, tensor.shifts, entries)
+
+
+def matrix_units(p, shifts):
+    rows, columns = SparseTensor.zero(p, shifts).shape
+    for index in product(range(rows), range(columns)):
+        yield index, SparseTensor.unit(p, shifts, index)
+
+
+def is_normalized(unit):
+    return all(not unit.face(i) for i in range(1, unit.degree + 1))
+
+
+def square_matrix_example():
+    """Compute the normalized basis and check the contraction on matrix units."""
+    ranks = []
+    images = {}
+    for p in range(3):
+        rank = 0
+        for index, unit in matrix_units(p, (0, 0)):
+            contracted = insert_zero(unit).boundary()
+            if p > 0:
+                contracted += insert_zero(unit.boundary())
+            assert contracted == unit
+
+            if is_normalized(unit):
+                rank += 1
+                if p > 0:
+                    image = unit.face(0)
+                    if image:
+                        images[p, index] = dict(image.entries)
+        ranks.append(rank)
+    assert ranks == [1, 3, 2]
+    assert images == {
+        (1, (1, 1)): {(0, 0): 1},
+        (2, (1, 2)): {(0, 1): 1},
+        (2, (2, 1)): {(1, 0): 1},
+    }
+    print("Normalized ranks of square matrices in degrees 0 through 2:", ranks)
+    for (p, index), image in images.items():
+        print(f"Degree {p}: d_0 E{index} = E{next(iter(image))}")
+    print("Verified the chain contraction on every matrix unit in degrees 0 through 2.")
+
+
+def shifted_matrix_example():
+    """Compute cycles and boundaries for the two-axis module with shifts (1, 1)."""
+    cycles = []
+    differential_ranks = []
+    for p in range(4):
+        basis = [unit for _, unit in matrix_units(p, (1, 1)) if is_normalized(unit)]
+        # Each basis vector maps to zero or a matrix unit under d_0.
+        images = {unit.face(0) for unit in basis} if p else set()
+        rank = sum(bool(image) for image in images)
+        differential_ranks.append(rank)
+        cycles.append(len(basis) - rank)
+    boundaries = differential_ranks[1:]
+    assert cycles[:3] == [4, 2, 0] and boundaries == [3, 2, 0]
+    print("Shifts (1, 1), degrees 0 through 2: cycles", cycles[:3], "boundaries", boundaries)
+
+
 def main():
+    shape_example()
     vector_example()
     generated_homology_example()
     horn_example()
+    square_matrix_example()
+    shifted_matrix_example()
 
 
 if __name__ == "__main__":

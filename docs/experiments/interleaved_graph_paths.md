@@ -26,6 +26,19 @@ following counts. Each path and its reverse count as two orders.
 | $4\times4$ rook | 30 | 22,394,880 |
 | Shrikhande | 30 | 22,230,528 |
 
+For Figure 1 and the two examples on four vertices in §6.5, run
+
+```sh
+PYTHONPATH=src python experiments/interleaved_graph_paths.py --small-examples
+```
+
+In the path order $0,1,2$ of $P_3$, insertion gives a boundary with
+edges $\{0,1\}$ and $\{2,3\}$ and rank four. For each of $K_4$ and the
+edgeless graph on four vertices, the program also computes the boundary
+of the original adjacency matrix in all 24 orders. Both graphs give
+rank zero in every order. The numbers of oriented Hamiltonian paths are
+24 and zero, respectively.
+
 ## Computation
 
 For each possible starting vertex the script counts path extensions by
