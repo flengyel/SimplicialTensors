@@ -63,6 +63,12 @@ Florian Lengyel.
   \href{https://github.com/flengyel/SimplicialTensors/tree/a65c869aa5c7cd9d091fc623aa80855f62c0d51a}{Python
   package and examples, commit \texttt{a65c869}}, 2026.
 
+\bibitem{Lim2021}
+Lek-Heng Lim.
+\newblock \href{https://doi.org/10.1017/S0962492921000076}{Tensors in
+  computations}.
+\newblock {\em Acta Numerica}, 30:555--764, 2021.
+
 \bibitem{MacLaneCategories}
 Saunders {Mac Lane}.
 \newblock {\em \href{https://doi.org/10.1007/978-1-4757-4721-8}{Categories for
