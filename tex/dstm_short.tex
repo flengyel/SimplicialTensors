@@ -26,18 +26,17 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-We compute the homology of the simplicial submodule that a hypermatrix $T$ generates in the diagonal simplicial tensor module $X^{\mathbf c}(K)$ over a field $K$.
-The shape $(n_1,\ldots,n_k)$ of $T$ has simplicial dimension $n=\min_a n_a-1$ and excesses $\mathbf c=(n_a-n-1)_a$. Thus $T$ is an $n$-simplex of $X^{\mathbf c}(K)$.
-In degree $p$, axis $a$ has $p+1+c_a$ indices.
-Since some $c_a=0$, the chain complex of $X^{\mathbf c}(K)$ is contractible.
-For each choice of $p+1$ indices in $\{0,\ldots,n\}$, restrict $T$ on each axis $a$ to those indices and the $c_a$ indices above $n$.
-Projecting these restrictions gives columns spanning the degree-$p$ normalized chains of the generated submodule.
-The package \emph{SimplicialTensors} computes the submodule's Betti numbers from the ranks of these columns and their boundaries over $\mathbb Q$ and finite prime fields.
-For $q\geq1$, a submodule with nonzero $H_q$ requires at least $q+1$ axes. The degree-$q$ tensor whose sole nonzero entry is $1$ at $(0,1,\ldots,q)$ attains this bound.
-Three-axis tensors realize the incidence complex of a finite graph and hence its ordinary homology.
-For a simple graph on $m\geq2$ vertices, insert one isolated vertex between each consecutive pair in a given vertex order.
-The mod-$2$ boundary of the resulting adjacency matrix has full rank precisely when the original order traces a Hamiltonian path.
-Counting the orders of full rank gives $22{,}394{,}880$ oriented Hamiltonian paths for the $4\times4$ rook graph and $22{,}230{,}528$ for the cospectral Shrikhande graph.
+In a diagonal simplicial tensor module, a face deletes the same index on every axis of a hypermatrix, and a degeneracy repeats it.
+We use these operations to give coordinate bases for the horn kernels and normalized chains.
+Let $X^{\mathbf c}$ be the module in which axis $a$ has $p+1+c_a$ indices in degree $p$. When $\min_a c_a=0$, its chain complex is contractible, although its simplicial submodules can have nonzero homology.
+Over $\mathbb Q$ and finite prime fields, the package \emph{SimplicialTensors} projects the iterated faces of a hypermatrix $T\in X^{\mathbf c}_n$ to normalized chains and computes the Betti numbers of the simplicial submodule that $T$ generates in $X^{\mathbf c}$.
+For $q\geq1$, the least number of axes on which a simplicial submodule can have nonzero $q$th homology is $q+1$.
+With $k$ axes, simplicial horns fill uniquely from degree $k+1$. In the extension to rooted trees, every horn fills uniquely on trees with at least $k+2$ vertices. For $k\geq2$ a branching tree with $k+1$ vertices has an inner horn without a filler.
+Three-axis tensors assigned to the vertices and edges of a finite graph realize its incidence complex and hence its ordinary homology.
+For a finite simple graph on at least two vertices, insert one isolated vertex between each consecutive pair in a prescribed order of its vertices.
+The mod-$2$ boundary of the resulting adjacency matrix has full matrix rank precisely when the original order traces a Hamiltonian path.
+We compute the complete boundary rank distributions over all vertex orders of the Petersen, $4\times4$ rook and Shrikhande graphs.
+The full-rank frequencies give $22{,}394{,}880$ oriented Hamiltonian paths for the rook graph and $22{,}230{,}528$ for the cospectral Shrikhande graph.
 \end{abstract}
 \setlength{\abovedisplayskip}{6pt plus 2pt minus 3pt}
 \setlength{\belowdisplayskip}{6pt plus 2pt minus 3pt}
@@ -45,36 +44,42 @@ Counting the orders of full rank gives $22{,}394{,}880$ oriented Hamiltonian pat
 \setlength{\belowdisplayshortskip}{4pt plus 2pt minus 2pt}
 
 \section{Introduction}
+The simplices of a diagonal simplicial tensor module are hypermatrices.
+The face $d_i$ deletes index $i$ on every axis and the degeneracy $s_i$ repeats it.
+In particular, $d_i$ kills a coordinate unit exactly when its index tuple contains $i$.
+This gives bases for the horn kernels and for the normalized chains
+(Sections~\ref{sec:horn-kernels} and~\ref{sec:normalized}).
+For a square matrix each face deletes a row and the corresponding column.
+The Hamiltonian path calculation sums these faces over $\mathbb F_2$ for an
+ordered adjacency matrix after insertion of isolated vertices (Proposition~\ref{prop:ordered-graph-ranks}).
+
 Let $T$ be a hypermatrix of shape $(n_1,\ldots,n_k)$ over a field $K$.
 Write $n=\min_a n_a-1$ for the simplicial dimension of the shape and
 $\mathbf c=(n_a-n-1)_{a=1}^k$ for its excesses. Then $T$ is an
 $n$-simplex of the diagonal simplicial tensor module $X^{\mathbf c}(K)$.
-We compute the homology of $\langle T\rangle$, the smallest simplicial
-$K$-submodule of $X^{\mathbf c}(K)$ containing $T$.
-In degree $p$, axis $a$ has $p+1+c_a$ indices. The face $d_i$ deletes index
-$i$ on every axis and the degeneracy $s_i$ repeats it. Since $\min_a c_a=0$,
+In degree $p$, axis $a$ has $p+1+c_a$ indices. Up to permutation, the excesses
+classify the ambient modules (Corollary~\ref{cor:shape}).
+Write $\langle T\rangle$ for the smallest simplicial $K$-submodule of
+$X^{\mathbf c}(K)$ containing $T$. Since $\min_a c_a=0$,
 inserting a zero slice on each axis contracts the chain complex of
 $X^{\mathbf c}(K)$ (Section~\ref{sec:contractions}).
 The contraction need not preserve $\langle T\rangle$. For the $2\times2$ matrix
 unit $T=E_{01}$, $H_1(\langle T\rangle)\cong K$ (Example~\ref{ex:matrix-cycle}).
 
-To compute the normalized chains in degree $p$, retain on each axis $a$ the same
-$p+1$ indices in $\{0,\ldots,n\}$ together with $n+1,\ldots,n+c_a$.
-Project these restrictions to normalized chains.
-Write $r_p$ for the rank of the resulting $\binom{n+1}{p+1}$ columns and
-$\delta_p$ for the rank of their images under the differential, with
-$\delta_0=0$. The $p$th Betti number is $r_p-\delta_p-\delta_{p+1}$.
-The normalized chains vanish for $p>\min(n,k)$ (Section~\ref{sec:generated}).
+In degree $p$, restrict $T$ on each axis $a$ to the same $p+1$ indices in
+$\{0,\ldots,n\}$ together with $n+1,\ldots,n+c_a$. The projections of these
+$\binom{n+1}{p+1}$ faces span $N_p(\langle T\rangle)$. If $r_p$ is their rank
+and $\delta_p$ the rank of their boundaries, with $\delta_0=0$, the $p$th Betti
+number is $r_p-\delta_p-\delta_{p+1}$ (Section~\ref{sec:generated}).
 The Python package \emph{SimplicialTensors} implements this calculation
 over $\mathbb Q$ and prime fields \cite{SimplicialTensors}.
-The repository at \url{https://github.com/flengyel/SimplicialTensors} includes a
-\href{https://github.com/flengyel/SimplicialTensors/blob/a2720e87535d481a5b6057ed99aeba22c496330f/tex/README.md#reproduce-the-calculations}{guide to the programs and commands for the examples and tables}.
+The GitHub repository \href{https://github.com/flengyel/SimplicialTensors}{\texttt{flengyel/SimplicialTensors}} lists the
+\href{https://github.com/flengyel/SimplicialTensors/blob/a2720e87535d481a5b6057ed99aeba22c496330f/tex/README.md#reproduce-the-calculations}{programs and commands for the examples and tables}.
 
-For $q\geq1$, the basis tensor $E_{(0,1,\ldots,q)}$ on $q+1$ axes generates
-the reduced free simplicial $K$-module on the sphere $\Delta^q/\partial\Delta^q$.
-A normalized $q$-cycle is supported on index tuples containing all of $0,\ldots,q$.
-Each tuple has one entry per axis, so on fewer than $q+1$ axes every submodule has
-zero $q$th homology (Example~\ref{ex:sparse-higher-cycle}).
+For $q\geq1$, every index tuple in the support of a normalized $q$-cycle
+contains $0,\ldots,q$. Thus nonzero $q$th homology requires at least $q+1$ axes.
+On $q+1$ axes the unit $E_{(0,1,\ldots,q)}$ generates the reduced free
+simplicial module on $\Delta^q/\partial\Delta^q$ (Example~\ref{ex:sparse-higher-cycle}).
 An integral $3\times3$ matrix
 generates a submodule with first Betti number one over $\mathbb Q$ and zero
 over $\mathbb F_3$ (Example~\ref{ex:parameter-jump}).
@@ -86,10 +91,8 @@ to its target minus its source. Its homology is therefore ordinary graph
 homology (Proposition~\ref{prop:graph}). For the Petersen graph the incidence
 map has rank nine and the first Betti number is six.
 
-Table~\ref{tab:affine-ranks} gives the mod-$2$ boundary ranks of the original
-adjacency matrices of the $4\times4$ rook and Shrikhande graphs for the
-$1{,}536$ affine orders of each Cayley presentation on $(\mathbb Z/4\mathbb Z)^2$.
-For a simple graph $H$ on $m\geq2$ vertices, insert one isolated vertex between
+For an ordered adjacency matrix, the simplicial boundary is itself a matrix.
+We compute its rank over $\mathbb F_2$. For a simple graph $H$ on $m\geq2$ vertices, insert one isolated vertex between
 each consecutive pair in an order $\pi$ of $V(H)$ (Figure~\ref{fig:interleaved-path}).
 Let $A_\pi$ be the adjacency matrix in the resulting order.
 Over $\mathbb F_2$, $\partial A_\pi$ has rank $2m-2$ precisely when $\pi$
@@ -102,25 +105,23 @@ For the cospectral rook and Shrikhande graphs, rank $30$ occurs in
 $22{,}394{,}880$ and $22{,}230{,}528$ orders, respectively.
 The rook count agrees with the number of oriented Hamiltonian paths in OEIS A096970
 \cite{OEISRook}.
+Table~\ref{tab:affine-ranks} gives the ranks before insertion for the
+$1{,}536$ affine orders of each Cayley presentation on $(\mathbb Z/4\mathbb Z)^2$.
 
-Fix the generator degree $n$ and the ambient module. Let $C$ be the normalized
-chains over $K$ of the standard $n$-simplex and $\mathcal D$ the ambient normalized
-chains. Each generator $T$ induces a chain map $g_T:C\to\mathcal D$. Two such
-maps have equal kernels exactly when an isomorphism of the generated modules
-sends one generator to the other. Every chain isomorphism between quotients
-of $C$ lifts to a chain automorphism of $C$ (Proposition~\ref{prop:quotient-lift}).
-Thus, after forgetting the generators, the isomorphism classes correspond to
-the orbits of the kernels under chain automorphisms of $C$.
+Fix $n$ and $\mathbf c$. Each $T\in X^{\mathbf c}_n(K)$ induces a chain map
+$g_T:C\to\mathcal D$ from the normalized chains of the standard $n$-simplex
+to those of $X^{\mathbf c}(K)$. Its kernel determines $\langle T\rangle$ up to
+isomorphism preserving the generator. Every isomorphism between quotients of
+$C$ lifts to a chain automorphism of $C$. Hence the orbits of the kernels
+classify the generated modules up to isomorphism (Proposition~\ref{prop:quotient-lift}).
 
-A subcomplex $L\subseteq C$ is the kernel of some $g_T$ exactly when the
-dimensions of cycles and boundaries of $C/L$ do not exceed the respective
-dimensions for $\mathcal D$ in any degree (Proposition~\ref{prop:kernel-realizability}).
-Where every $g_{T,p}$ has maximal rank, the kernels define a map to a product of
-Grassmannians. The reduced closure of the image is rational over $K$. When $K=\mathbb C$,
-it is isomorphic to a Schubert variety.
-For $3\times3$ matrices in degree two the image is the dual projective plane
-minus $[1:1:1]$. Its $K$-points form one orbit under chain automorphisms of $C$
-(Appendix~\ref{app:kernel-families}).
+A subcomplex $L\subseteq C$ occurs as a kernel exactly when the cycle and boundary
+dimensions of $C/L$ are bounded degree by degree by those of $\mathcal D$
+(Proposition~\ref{prop:kernel-realizability}). Where each $g_{T,p}$ has maximal
+rank, the kernels define a map to a product of Grassmannians. The reduced closure
+of its image is rational over $K$ and is a Schubert variety in a flag embedding
+when $K=\mathbb C$. For $3\times3$ matrices in degree two the image is the dual
+projective plane minus $[1:1:1]$ (Appendix~\ref{app:kernel-families}).
 
 A linear tree with $p$ vertices represents simplicial degree $p$.
 For $k$ tensor axes every simplicial horn in degree $p\geq1$ fills, and the filler is unique exactly when $p\geq k+1$.
@@ -134,7 +135,7 @@ For $k=1$ every inner horn fills uniquely (Theorem~\ref{thm:tree-cutoff}).
 Let $A$ be a nonzero commutative ring with identity and $k\geq1$. The objects of
 $\Delta$ are the ordinals $[p]=\{0,\ldots,p\}$ for $p\geq0$, and its morphisms are the order-preserving maps.
 
-A hypermatrix of \emph{shape} $(n_1,\ldots,n_k)$ has \emph{simplicial dimension}
+A hypermatrix of \emph{shape} $(n_1,\ldots,n_k)$, with each $n_a\geq1$, has \emph{simplicial dimension}
 $n=\min_a n_a-1$ and excesses $\mathbf c=(n_a-n-1)_{a=1}^k$. Thus $\min_a c_a=0$.
 For any tuple $\mathbf c$ of nonnegative integers, put $I_q=\prod_a[q+c_a]$.
 In degree $q$, the \emph{excess on axis $a$} is the number $c_a$ of indices strictly
@@ -209,7 +210,7 @@ Every matrix in $Y_2$ satisfies $x_{02}=x_{12}+x_{01}$, so $E_{12}\notin Y_2$.
 See \program{tex/anc/dstm_examples.py\#L54}{generated_homology_example} for the calculation over $\mathbb Q$.
 \end{example}
 
-\section{Horn kernels and normalization}
+\section{Horn kernels and normalization}\label{sec:horn-kernels}
 For a simplicial $A$-module $Y$, the normalized and degenerate chains in
 degree $p$ are, respectively,
 \[
@@ -369,8 +370,9 @@ $R_{p,j}(X)$ are indexed independently of $A$, so these modules commute
 with arbitrary base change.
 
 \begin{corollary}\label{cor:ranks}
-In the unaugmented complex every $0$-chain is a cycle. Put $b_{-1}=0$ and
-let $b_p=\rank Z_p$ be its boundary rank in degree $p\geq0$. Then
+Put $b_{-1}=0$ and let $b_p=\rank\im\partial_{p+1}$ in the normalized complex
+for $p\geq0$. By Proposition~\ref{prop:disks}, $b_p=\rank Z_p$, with
+$Z_0=\ker\epsilon_0$ in degree zero. Then
 \[
  b_p=\sum_{t=0}^{p+1}(-1)^t\binom{p+1}{t}
           \prod_{a=1}^k(p+c_a+1-t),\qquad
