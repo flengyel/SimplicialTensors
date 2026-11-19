@@ -109,8 +109,8 @@ def horn_example():
     computed = filler(prescribed, 0)
     filler_valid = np.array_equal(horn(computed, 0), prescribed)
     assert filler_valid
-    degenerate = degen(prescribed[2], 1) + degen(prescribed[1] - prescribed[2], 0)
-    np.testing.assert_array_equal(computed, degenerate)
+    sum_of_degeneracies = degen(prescribed[2], 1) + degen(prescribed[1] - prescribed[2], 0)
+    np.testing.assert_array_equal(computed, sum_of_degeneracies)
     coordinates = (int(computed[1, 2]), int(computed[2, 1]))
     assert coordinates == (6, 8)
 
@@ -138,7 +138,7 @@ def horn_example():
     print("Horn faces d_1, d_2:", [prescribed[i].tolist() for i in (1, 2)])
     print("Horn kernel dimension:", kernel_dimension)
     print("Computed filler has the prescribed faces:", filler_valid)
-    print("Coordinates (u, v) of the degenerate filler:", coordinates)
+    print("Coordinates (u, v) of the unique filler in D_2(X):", coordinates)
     print("All fillers: [[1, 2, 3], [4, 5, u], [7, v, 9]]")
 
 
