@@ -3,7 +3,7 @@
 The [manuscript](dstm_short.pdf) is built from [dstm_short.tex](dstm_short.tex),
 [generated_section.tex](generated_section.tex), [dendroidal_section.tex](dendroidal_section.tex),
 and the [bibliography](dstm_short.bib). The [arXiv source archive](submissions/dstm_v3_arxiv_source.tar.gz)
-includes the LaTeX sources, the compiled bibliography, and two [ancillary programs](anc/README.txt).
+contains the three LaTeX files, the BibTeX database, and the compiled bibliography.
 
 ## Reproduce the calculations
 
@@ -55,5 +55,5 @@ To package the current source for arXiv, build the manuscript first and run the 
 ```sh
 mkdir -p submissions
 tar -czf submissions/dstm_v3_arxiv_source.tar.gz dstm_short.tex generated_section.tex \
-  dendroidal_section.tex dstm_short.bib dstm_short.bbl anc
+  dendroidal_section.tex dstm_short.bib dstm_short.bbl
 ```
