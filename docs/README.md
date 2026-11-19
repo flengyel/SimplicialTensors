@@ -31,7 +31,6 @@ outputs, and interpretation. Useful starting points are the
 
 - [Dendroidal homology and the array presheaf](research/dendroidal_homology.md)
 - [Spectrum of the diagonal tensor boundary](research/exact_boundary_spectrum.md)
-- [Boundary operators in neural experiments](research/neural_boundary_research_report.md)
 
 The [manuscript guide](../tex/README.md) identifies the drivers, build commands,
 ancillary computations, and submission packages.

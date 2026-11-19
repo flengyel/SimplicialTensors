@@ -9,9 +9,6 @@ its dependencies, output, and known execution or interpretation limits.
 - `experiments/Gemini_hallicination.py` — Tensor-product examples comparing selected Moore fillers with their input tensors. See [Gemini_hallicination](experiments/Gemini_hallicination.md).
 - `experiments/affine_boundary_ranks.py` — Counts adjacency boundary ranks over all 1,536 affine orders for the rook and Shrikhande graphs. See [affine_boundary_ranks](experiments/affine_boundary_ranks.md).
 - `experiments/atlas_cospectral_scan.py` — Graph-atlas spectral grouping and mod-two deletion-boundary rank enumeration. See [atlas_cospectral_scan](experiments/atlas_cospectral_scan.md).
-- `experiments/bdry_network_experiment1.py` — Seeded PyTorch training with boundary perturbations after optimizer steps. See [bdry_network_experiment1](experiments/bdry_network_experiment1.md).
-- `experiments/boundary_augmented_network.py` — PyTorch prototype comparing boundary and random weight perturbations. See [boundary_augmented_network](experiments/boundary_augmented_network.md).
-- `experiments/boundary_observer_study.py` — Controlled forecasting and copied-weight interventions using boundary observations. See [boundary_observer_study](experiments/boundary_observer_study.md).
 - `experiments/consolidated_experiment.py` — Random-matrix comparisons of boundaries, degeneracy, and distribution summaries. See [consolidated_experiment](experiments/consolidated_experiment.md).
 - `experiments/consolidated_experiment_with_n01.py` — The random-matrix study with an additional Gaussian input family. See [consolidated_experiment_with_n01](experiments/consolidated_experiment_with_n01.md).
 - `experiments/convex_boundary_study.py` — Validation-tuned matrix regression with boundary and matched penalty controls. See [convex_boundary_study](experiments/convex_boundary_study.md).
@@ -36,7 +33,6 @@ its dependencies, output, and known execution or interpretation limits.
 - `experiments/matrix_boundary_homotopy_identity.py` — Signed and mod-two boundary checks under induced vertex permutations. See [matrix_boundary_homotopy_identity](experiments/matrix_boundary_homotopy_identity.md).
 - `experiments/n_cycle_conjugation.py` — Cyclic relabeling and signed or mod-two boundary comparisons. See [n_cycle_conjugation](experiments/n_cycle_conjugation.md).
 - `experiments/n_hypergroupoid_conjecture.py` — Checked Moore fillers and the full-module horn-kernel criterion on seeded tensor samples. See [n_hypergroupoid_conjecture](experiments/n_hypergroupoid_conjecture.md).
-- `experiments/neural_boundary_study.py` — Paired-seed digits models with validation tuning and neural symmetry controls. See [neural_boundary_study](experiments/neural_boundary_study.md).
 - `experiments/normalized_moore_complex_homology.py` — Exact homology of normalized quotients by the included horn faces. See [normalized_moore_complex_homology](experiments/normalized_moore_complex_homology.md).
 - `experiments/notebooks/Homology_calculation.ipynb` — Symbolic matrix boundary, preimage equations, and kernel comparisons. See [the notebook guide](experiments/tensor_boundary_notebooks.md).
 - `experiments/notebooks/cocalc_compatible_tensor_ops.ipynb` — Shared symbolic horn, rank, and degeneracy examples. See [the notebook guide](api/sagemath_compatible_tensor_ops.md).
@@ -60,26 +56,15 @@ its dependencies, output, and known execution or interpretation limits.
 
 ## Stored studies
 
-- `experiments/results/boundary_observer_study/final_metrics.csv` — Per-trajectory final training and held-out task metrics. See [boundary_observer_study](experiments/boundary_observer_study.md).
-- `experiments/results/boundary_observer_study/forecast_metrics.csv` — Held-out forecasting results after observer tuning. See [boundary_observer_study](experiments/boundary_observer_study.md).
-- `experiments/results/boundary_observer_study/shadow_interventions.csv` — Training and validation effects of matched copied-weight interventions. See [boundary_observer_study](experiments/boundary_observer_study.md).
-- `experiments/results/boundary_observer_study/summary.json` — Configuration, diagnostics, aggregate results, and software versions. See [boundary_observer_study](experiments/boundary_observer_study.md).
-- `experiments/results/boundary_observer_study/trajectories.csv` — Measurements at the recorded training checkpoints. See [boundary_observer_study](experiments/boundary_observer_study.md).
 - `experiments/results/convex_boundary_study/signal1.csv` — Per-run results for the indicated signal level. See [convex_boundary_study](experiments/convex_boundary_study.md).
 - `experiments/results/convex_boundary_study/signal1.json` — Protocol, diagnostics, and summaries for the indicated signal level. See [convex_boundary_study](experiments/convex_boundary_study.md).
 - `experiments/results/convex_boundary_study/signal2.csv` — Per-run results for the indicated signal level. See [convex_boundary_study](experiments/convex_boundary_study.md).
 - `experiments/results/convex_boundary_study/signal2.json` — Protocol, diagnostics, and summaries for the indicated signal level. See [convex_boundary_study](experiments/convex_boundary_study.md).
-- `experiments/results/neural_boundary_study/confirmation_runs.csv` — Paired confirmation runs after validation tuning. See [neural_boundary_study](experiments/neural_boundary_study.md).
-- `experiments/results/neural_boundary_study/summary.json` — Selected methods, result summaries, and invariance diagnostics. See [neural_boundary_study](experiments/neural_boundary_study.md).
-- `experiments/results/neural_boundary_study/tuning_runs.csv` — Validation-search results for the evaluated methods. See [neural_boundary_study](experiments/neural_boundary_study.md).
 
 ## Other artifacts
 
-- `experiments/boundary_observer_report.md` — Protocol, stored results, validity checks, and interpretation of the observer study.
 - `experiments/results/loss_experiment/experiment_results.csv` — Shape, reconstruction-loss, and test statistics using one fixed comparison array per shape.
 - `experiments/results/sagemath_compatible_tensor_ops/output.txt` — Stored symbolic horn and filler comparisons beginning with shape (3,3).
-- `experiments/results/training_accuracy/figures/Training and Validation Accuracy Figure_1.png` — Training and validation figure; no generating command or configuration is recorded with the file.
-- `experiments/results/training_accuracy/figures/Training and Validation Accuracy Figure_2.png` — Training and validation figure; no generating command or configuration is recorded with the file.
 - `experiments/results/permutation_statistics/figures/diagonal_vs_properties.png` — Summary figure. See [permutation_statistics](experiments/permutation_statistics.md).
 - `experiments/results/discrepancy_test/figures/discrepancy_analysis.png` — Summary figure. See [discrepancy_test](experiments/discrepancy_test.md).
 - `experiments/results/permutation_statistics/figures/properties_by_size.png` — Summary figure. See [permutation_statistics](experiments/permutation_statistics.md).

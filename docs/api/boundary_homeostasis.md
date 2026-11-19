@@ -98,7 +98,7 @@ The cycle, its boundary, and the decoded signal must have finite norms.
 filters with dense small-matrix references and test analysis–synthesis on
 boundary-visible inputs.
 
-## Coordinate and experimental scope
+## Coordinate conventions
 
 The diagonal tensor boundary identifies index $i$ on every axis. Dense-layer row and column indices usually label different neuron sets, and their independent relabeling changes this operation. A tied square map supplies the same source and target space, while the chosen ordering still affects its boundary.
 
@@ -107,5 +107,3 @@ squared norms, products, and gradient accumulation. Numerical array dtypes use
 at least `float64` or `complex128`; complex biases retain their imaginary
 components. ReLU equi-normalization returns copies in the promoted dtype and
 preserves the real network's represented function up to roundoff.
-
-The [neural study](../experiments/neural_boundary_study.md) tests quadratic penalties and gradient smoothing. The [observer study](../experiments/boundary_observer_study.md) tests passive boundary information on a tied map. Its stored full run did not pass the criterion for adding a learned controller. The separate `architecture_ops` module supplies layer-incidence and path-product diagnostics with explicitly typed neural layers.

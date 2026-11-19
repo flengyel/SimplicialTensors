@@ -5,8 +5,7 @@ hypermatrices using NumPy and SymPy. It computes horn fillers,
 normalized homology of generated submodules, and embedded homology of finite
 hypergraphs. Its graph homology routines use sparse tensor representations,
 and its exact chain models expose differential matrices and representatives.
-Research scripts also study ordered graph boundaries and boundary-based neural
-diagnostics.
+Research scripts also compute boundary ranks of ordered adjacency matrices.
 
 For a hypermatrix of shape $(n_1,\ldots,n_k)$, the numeric module defines
 its order as $k$ and its simplicial degree as $\min_a n_a-1$.
@@ -35,8 +34,8 @@ On Windows PowerShell, activate the environment with
 
 Additional dependencies belong to individual experiments. Graph scripts
 use NetworkX. Plotting and statistical scripts may require Matplotlib,
-pandas, seaborn, or scikit-learn. Distributed and neural scripts may use
-Dask, tqdm, or PyTorch. The Sage notebook and scripts require SageMath.
+pandas, or seaborn. Distributed computations use Dask, and the tensor
+reconstruction experiment can use tqdm. The Sage notebook and scripts require SageMath.
 Each experiment page lists its dependencies and entry point.
 
 ## Numeric operations
@@ -189,19 +188,12 @@ Useful starting points include the
 [Petersen rank distribution](docs/experiments/petersen_brd_right_cosets.md), and
 [boundary adjoints](docs/api/boundary_homeostasis.md).
 
-The neural studies distinguish adjoint energy regularization from
-boundary analysis followed by controller-driven synthesis. The latter
-retains the cycle component and projects the controller's target into
-the realizable boundary range. Numerical adjoint, introspection, and architecture
-operations promote numerical array dtypes to at least `float64` or `complex128`
-before signed arithmetic and products. The spectral formulas are evaluated
-with floating-point arithmetic; synthesis checks cycle residuals relative to
-the cycle and decoded boundary signal. See the
+Numerical adjoint, introspection, and architecture operations promote numerical
+array dtypes to at least `float64` or `complex128` before signed arithmetic and
+products. The spectral formulas use floating-point arithmetic. Synthesis checks
+cycle residuals relative to the cycle and decoded boundary signal. See the
 [numerical API](docs/api/boundary_homeostasis.md) for coefficient and tolerance
 conventions.
-Read the [research report](docs/research/neural_boundary_research_report.md) and
-[observer results](experiments/boundary_observer_report.md) for their
-protocols, measured results, and scope.
 
 ## Tests and development
 

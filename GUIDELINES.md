@@ -48,7 +48,7 @@ keep default runs separate from checked-in result artifacts.
 
 ## Contributions
 
-Read [AGENTS.md](AGENTS.md) for the neural boundary conventions and
+Read [AGENTS.md](AGENTS.md) for the boundary operator conventions and
 required checks. Put new runnable experiments under `experiments/`.
 Do not add new code under `examples/` or create another
 `simplicial_tensors` package.

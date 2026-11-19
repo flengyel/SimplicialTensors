@@ -219,8 +219,8 @@ describe a different calculation. The $E_{01}$-generated module has Betti
 numbers $(0,1)$ although the full shape module is contractible.
 
 Run the ordinary Python suite after shared-library changes, together with
-the quality commands in `.github/workflows/ci.yml`. Optional PyTorch or Dask
-tests may be skipped where those packages are absent; report those skips.
+the quality commands in `.github/workflows/ci.yml`. Report any optional Dask
+tests skipped when Dask is unavailable.
 The dedicated Sage module must execute. Record actual counts in each
 environment instead of copying the earlier total.
 

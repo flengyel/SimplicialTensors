@@ -16,5 +16,3 @@ Add tests:
 - <∂W, Y> = <W, ∂^*Y>
 - boundary_homeostasis_feedback has the same shape as W
 - for H=0, a sufficiently small update reduces ||∂W||_F^2
-
-Do not modify the old neural-network experiments except to mark them superseded.

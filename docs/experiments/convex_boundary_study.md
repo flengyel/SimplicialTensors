@@ -19,4 +19,12 @@ The default prefix is
 `experiments/results/convex_boundary_study/runs/convex_boundary_study_results`;
 `--output-prefix` selects another prefix. The stored [50-seed runs](../../experiments/results/convex_boundary_study/) use signal norms 2 and 1. To reproduce the first, pass `--seeds 50 --output-prefix experiments/results/convex_boundary_study/signal2`. For the second, add `--signal-norm 1` and use the `signal1` prefix.
 
-The DSTM penalty helps the sufficiently strong constructed kernel signal in the stored run. Ridge performs better on the isotropic and coordinate-permuted families. The [research report](../research/neural_boundary_research_report.md) records the paired comparisons.
+For the 50 paired replicates at signal norm 2 and noise standard deviation 0.5, the mean test MSEs were as follows.
+
+| Truth family | DSTM boundary | Ridge | Haar-conjugated control | Grid |
+|---|---:|---:|---:|---:|
+| In the boundary kernel | 1.050 | 1.702 | 2.088 | 1.787 |
+| Isotropic | 2.015 | 1.653 | 2.015 | 1.865 |
+| Coordinate-permuted kernel truth | 2.163 | 1.787 | 2.184 | 1.968 |
+
+For the kernel truth, the paired DSTM-minus-ridge difference was −0.652, with an approximate 95% interval of [−0.794, −0.511]. At signal norm 1 the mean test MSEs for the same truth family were 0.982 for DSTM and 0.759 for ridge. [Signal norm 2 results](../../experiments/results/convex_boundary_study/signal2.json) · [Signal norm 1 results](../../experiments/results/convex_boundary_study/signal1.json)
